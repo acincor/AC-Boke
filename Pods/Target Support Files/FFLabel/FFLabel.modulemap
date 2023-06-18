@@ -1,0 +1,6 @@
+framework module FFLabel {
+  umbrella header "FFLabel-umbrella.h"
+
+  export *
+  module * { export * }
+}
