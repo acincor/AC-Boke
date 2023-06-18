@@ -1,6 +1,0 @@
-framework module Pods_MHC__ {
-  umbrella header "Pods-MHC博客-umbrella.h"
-
-  export *
-  module * { export * }
-}
