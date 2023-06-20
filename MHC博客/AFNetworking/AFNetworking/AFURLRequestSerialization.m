@@ -171,7 +171,7 @@ NSArray * AFQueryStringPairsFromKeyAndValue(NSString *key, id value) {
 
 #pragma mark -
 
-static NSArray * AFHTTPRequestSerializerObservedKeyPaths() {
+static NSArray * AFHTTPRequestSerializerObservedKeyPaths(void) {
     static NSArray *_AFHTTPRequestSerializerObservedKeyPaths = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
