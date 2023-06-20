@@ -21,11 +21,12 @@ class FriendListViewModel {
             guard let arr = array as? [[String:Any]] else {
                 return
             }
+            var dataList = [FriendViewModel]()
                 for n in 0..<arr.count {
                     //print(FriendAccount(dict: dict))
-                    self.friendList.append(FriendViewModel(friend: FriendAccount(dict: arr[n])))
-                    break
+                    dataList.append(FriendViewModel(friend: FriendAccount(dict: arr[n])))
                 }
+            self.friendList = dataList
                 //print(dataList)
                 //print("bool:",dataList.count > self.friendList.count)
                 //print(self.friendList)

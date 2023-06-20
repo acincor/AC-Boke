@@ -12,6 +12,26 @@ let FriendCellNormalId = "FriendCellNormalId"
 let FriendNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{
     var friendListViewModel = FriendListViewModel()
+    private lazy var pullupView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .whiteLarge)
+        indicator.color = .white
+        return indicator
+    }()
+    @objc func loadData() {
+        self.refreshControl?.beginRefreshing()
+        //print(self.pullupView.isAnimating)
+        StatusDAL.clearDataCache()
+        friendListViewModel.loadFriend { (isSuccessed) in
+            self.refreshControl?.endRefreshing()
+            self.pullupView.stopAnimating()
+            if !isSuccessed {
+                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                return
+            }
+            //print(listViewModel.statusList)
+            self.tableView.reloadData()
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         if !userLogon {
@@ -19,14 +39,10 @@ class MessageTableViewController: VisitorTableViewController{
             return
         }
         tableView.register(FriendCell.self, forCellReuseIdentifier: FriendCellNormalId)
-        friendListViewModel.loadFriend { isSuccessed in
-            if isSuccessed {
-                //print("已经结束了呢！")
-                self.tableView.reloadData()
-                return
-            }
-            SVProgressHUD.showInfo(withStatus: "出错了")
-        }
+        refreshControl = WBRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
+        tableView.tableFooterView = pullupView
+        loadData()
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.friendListViewModel.friendList.count

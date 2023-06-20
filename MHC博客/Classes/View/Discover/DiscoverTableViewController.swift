@@ -38,6 +38,9 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         }
         self.listTeams = listViewModel.statusList
         filterContentForSearchText("")
+        refreshControl = WBRefreshControl()
+        refreshControl?.addTarget(self, action: Selector("loadData"), for: .valueChanged)
+        tableView.tableFooterView = pullupView
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")
         prepare()
         // Uncomment the following line to preserve selection between presentations
@@ -45,6 +48,27 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    private lazy var pullupView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .whiteLarge)
+        indicator.color = .white
+        return indicator
+    }()
+    @objc func loadData() {
+        self.refreshControl?.beginRefreshing()
+        //print(self.pullupView.isAnimating)
+        StatusDAL.clearDataCache()
+        listViewModel.loadStatus(isPullup: pullupView.isAnimating) { (isSuccessed) in
+            self.refreshControl?.endRefreshing()
+            self.pullupView.stopAnimating()
+            if !isSuccessed {
+                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                return
+            }
+            self.listFilterTeams = listViewModel.statusList as NSArray
+            //print(listViewModel.statusList)
+            self.tableView.reloadData()
+        }
     }
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -66,7 +90,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         return self.listFilterTeams?.count ?? 0
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return listViewModel.statusList[indexPath.row].rowHeight
+        return (self.listFilterTeams?[indexPath.row] as! StatusViewModel).rowHeight
     }
     /*
     // Override to support conditional editing of the table view.
