@@ -27,7 +27,6 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.listFilterTeams = NSMutableArray(array: tempArray)
         self.tableView.reloadData()
     }
-    
     var listTeams: [StatusViewModel]?
     var listFilterTeams: NSArray?
     override func viewDidLoad() {
@@ -39,6 +38,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.listTeams = listViewModel.statusList
         filterContentForSearchText("")
         refreshControl = WBRefreshControl()
+        //tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .plain)
         refreshControl?.addTarget(self, action: Selector("loadData"), for: .valueChanged)
         tableView.tableFooterView = pullupView
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")

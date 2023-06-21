@@ -21,7 +21,10 @@ class CommentTableViewController: VisitorTableViewController {
         guard let id = id else{
             return
         }
+        StatusDAL.clearDataCache()
+        refreshControl?.beginRefreshing()
          commentlistViewModel.loadComment(id: listViewModel.statusList[id].status.id) { (isSuccessed) in
+             self.refreshControl?.endRefreshing()
              if !isSuccessed {
                  SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                  return
@@ -30,9 +33,18 @@ class CommentTableViewController: VisitorTableViewController {
              self.tableView.reloadData()
          }
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let id = id else{
+            return
+        }
+        let cell = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId2)
+        cell.viewModel = listViewModel.statusList[id]
+        cell.bottomView.removeFromSuperview()
+        tableView.tableHeaderView = cell
+        tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, listViewModel.statusList[id].rowHeight-40)
+        refreshControl = WBRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         if !UserAccountViewModel.sharedUserAccount.userLogon {
             visitorView?.setupInfo(imageName: nil, title: "关注一些人，回这里看看有什么惊喜")
             return
@@ -111,6 +123,7 @@ extension CommentTableViewController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vm = commentlistViewModel.commentList[indexPath.row]
+        id = indexPath.row
         comment_id = vm.comment.id
         comment_comment_id = vm.comment.comment_id
         let vc = CommentCommentTableViewController()

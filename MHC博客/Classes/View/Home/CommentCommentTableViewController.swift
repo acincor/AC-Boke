@@ -59,7 +59,10 @@ class CommentCommentTableViewController: VisitorTableViewController {
             return
         }
         print([id,comment_id])
+        StatusDAL.clearDataCache()
+        refreshControl?.beginRefreshing()
         commentlistViewModel.loadComment(id: id, comment_id: comment_id) { (isSuccessed) in
+            self.refreshControl?.endRefreshing()
              if !isSuccessed {
                  SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                  return
@@ -77,6 +80,8 @@ class CommentCommentTableViewController: VisitorTableViewController {
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))
         navigationItem.rightBarButtonItem?.tintColor = .orange
+        refreshControl = WBRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeLightIt"), object: nil, queue: nil) { n in
             if n.object != nil {
                 let result = ["id":"\(commentlistViewModel.commentCommentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].comment.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
@@ -99,6 +104,15 @@ class CommentCommentTableViewController: VisitorTableViewController {
         loadData()
         //print("loadData")
         prepareTableView()
+        guard let id = id else {
+            return
+        }
+        let cell = CommentCell(style: .default, reuseIdentifier: CommentCellNormalId)
+        cell.viewModel = commentlistViewModel.commentList[id]
+        cell.bottomView.removeFromSuperview()
+        tableView.tableHeaderView = cell
+        tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, listViewModel.statusList[id].rowHeight-40)
+        
     }
     @objc func close() {
         self.dismiss(animated: true)

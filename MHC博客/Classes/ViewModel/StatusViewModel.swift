@@ -18,7 +18,6 @@ class StatusViewModel: CustomStringConvertible {
         let 中文转换过的url = status.portrait?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         return URL(string: 中文转换过的url ?? "")!
     }
-    
     /// 用户默认头像
     var userDefaultIconView: UIImage {
         return UIImage(named: "avatar_default_big")!

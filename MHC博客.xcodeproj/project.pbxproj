@@ -274,7 +274,6 @@
 		2E704C0829FA2977003FE541 /* AFCompatibilityMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFCompatibilityMacros.h; sourceTree = "<group>"; };
 		2E704C0929FA2977003FE541 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		2E738A3529AA33CF0014FA12 /* MHC博客.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MHC博客.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2E738A4D29AA38510014FA12 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		2E738A5029AA38510014FA12 /* UserAccountViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccountViewModel.swift; sourceTree = "<group>"; };
 		2E738A5229AA38510014FA12 /* StatusViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 		2E738A5529AA38510014FA12 /* NetworkTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkTools.swift; sourceTree = "<group>"; };
@@ -665,7 +664,6 @@
 				2E66A5212A416173009C8207 /* SVProgressHUD */,
 				2E66A4FC2A376116009C8207 /* Resource */,
 				2E704BE429FA2977003FE541 /* AFNetworking */,
-				2E738A4D29AA38510014FA12 /* LICENSE */,
 				2EB2922229EAED51009E0439 /* FFLabel.swift */,
 				2EB2920F29EAE979009E0439 /* fmdb */,
 				2EB2903929EAE465009E0439 /* SnapKit */,
@@ -1610,7 +1608,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHC--";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhcinc.MHC--";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1651,7 +1649,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHC--";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhcinc.MHC--";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

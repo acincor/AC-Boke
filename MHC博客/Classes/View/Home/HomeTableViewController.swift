@@ -9,6 +9,7 @@ import UIKit
 
 
 let StatusCellNormalId = "StatusCellNormalId"
+let StatusCellNormalId2 = "StatusCellNormalId2"
 var listViewModel = StatusListViewModel()
 class HomeTableViewController: VisitorTableViewController {
     private lazy var pullupView: UIActivityIndicatorView = {
@@ -22,6 +23,7 @@ class HomeTableViewController: VisitorTableViewController {
     private func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
+        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
