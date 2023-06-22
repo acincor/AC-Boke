@@ -53,6 +53,7 @@ class MainViewController: UITabBarController {
         present(nav, animated: true)
     }
 }
+var discover = DiscoverTableViewController()
 extension MainViewController {
     
     private func addChilds() {
@@ -60,7 +61,7 @@ extension MainViewController {
         addChild(HomeTableViewController(), "首页", "tabbar_home")
         addChild(MessageTableViewController(), "消息", "tabbar_message_center")
         addChild(UIViewController())
-        addChild(DiscoverTableViewController(), "发现", "tabbar_discover")
+        addChild(discover, "发现", "tabbar_discover")
         addChild(ProfileTableViewController(), "我", "tabbar_profile")
     }
     private func addChild(_ vc: UIViewController,_ title: String, _ imageName: String) {

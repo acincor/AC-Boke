@@ -113,6 +113,25 @@ class HomeTableViewController: VisitorTableViewController {
                     self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
                 }
             }
+            if n.userInfo != nil {
+                if n.userInfo!.isEqualTo(["hello":"l"]) {
+                    let result = ["id":"\(listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+                    let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
+                    discover.cell = ((n.object as! [String:Any])["cell"] as! StatusNormalCell)
+                    for s in like_list {
+                        if result.isEqualTo(s) {
+                            
+                            discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
+                            break
+                        } else {
+                            discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+                        }
+                    }
+                    if like_list.isEmpty {
+                        discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+                    }
+                }
+            }
         }
     }
     var cell: StatusCell?

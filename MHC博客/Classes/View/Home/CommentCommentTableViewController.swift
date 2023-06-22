@@ -59,8 +59,8 @@ class CommentCommentTableViewController: VisitorTableViewController {
             return
         }
         print([id,comment_id])
-        StatusDAL.clearDataCache()
         refreshControl?.beginRefreshing()
+        StatusDAL.clearDataCache()
         commentlistViewModel.loadComment(id: id, comment_id: comment_id) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
              if !isSuccessed {
@@ -114,6 +114,7 @@ class CommentCommentTableViewController: VisitorTableViewController {
         tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, listViewModel.statusList[id].rowHeight-40)
         
     }
+    
     @objc func close() {
         self.dismiss(animated: true)
     }

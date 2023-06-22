@@ -22,17 +22,20 @@ class ProfileTableViewController: VisitorTableViewController {
         iv.layer.masksToBounds = true
         return iv
     }()
-    var newMessageTable = MessageTableViewController()
     override func viewDidLoad() {
         super.viewDidLoad()
         if UserAccountViewModel.sharedUserAccount.userLogon == false {
             visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: "登陆后，你的微博，相册、个人资料会显示在这里，展示给别人")
             return
         }
-        
         view.addSubview(Label)
-        
         view.addSubview(iconView)
+        loadData()
+        refreshControl = WBRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
+    }
+    @objc func loadData() {
+        refreshControl?.beginRefreshing()
         iconView.backgroundColor = .yellow
         do {
             let imageView = UIImageView()
@@ -50,6 +53,10 @@ class ProfileTableViewController: VisitorTableViewController {
                     make.width.equalTo(90)
                     make.height.equalTo(90)
                 }
+            Label.removeFromSuperview()
+            Label = UILabel(title: label)
+            
+            view.addSubview(Label)
             Label.snp.makeConstraints { make in
                     make.top.equalTo(iconView.snp.bottom)
                 }
@@ -59,8 +66,8 @@ class ProfileTableViewController: VisitorTableViewController {
             SVProgressHUD.show(withStatus: "图片加载错误")
             return
         }
+        refreshControl?.endRefreshing()
     }
-
     // MARK: - Table view data source
 
     /*

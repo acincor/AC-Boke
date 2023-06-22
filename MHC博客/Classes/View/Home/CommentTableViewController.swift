@@ -21,8 +21,8 @@ class CommentTableViewController: VisitorTableViewController {
         guard let id = id else{
             return
         }
-        StatusDAL.clearDataCache()
         refreshControl?.beginRefreshing()
+        StatusDAL.clearDataCache()
          commentlistViewModel.loadComment(id: listViewModel.statusList[id].status.id) { (isSuccessed) in
              self.refreshControl?.endRefreshing()
              if !isSuccessed {

@@ -23,6 +23,7 @@ class CommentListViewModel {
             //print("id:",id)
             //print("array:",array)
             var dataList = [CommentViewModel]()
+            print(array as! [[String:Any]])
             for dict in array as! [[String:Any]]{
                 dataList.append(CommentViewModel(comment: Comment(dict: dict)))
             }

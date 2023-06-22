@@ -8,7 +8,13 @@
 import UIKit
 
 var MySearchTextField: UISearchController?
-class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUpdating, UISearchBarDelegate, StatusCellDelegate {
+    func statusCellDidClickUrl(url: URL) {
+        let vc = HomeWebViewController(url: url)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func updateSearchResults(for searchController: UISearchController) {
         self.filterContentForSearchText(searchController.searchBar.text! as NSString)
     }
@@ -29,6 +35,86 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     var listTeams: [StatusViewModel]?
     var listFilterTeams: NSArray?
+    @objc func action2(_ sender: UIButton) {
+        NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
+            if Error != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                //print(Error)
+                return
+            }
+            if (Result as! [String:Any])["error"] != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                //print(Error)
+                return
+            }
+            sender.nav.close()
+        }
+    }
+    @objc func action1(_ sender: UIButton) {
+        sender.identifier.bottomView.deleteBlog(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+            //print(listViewModel.statusList[indexPath.row].status.id)
+            //print(UserAccountViewModel.sharedUserAccount.accessToken)
+            if Error != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                print(Error)
+                return
+            }
+            print(Result as! [String:Any])
+            if (Result as! [String:Any])["error"] != nil {
+                SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
+                //print((Result as! [String:String])["error"])
+                return
+            }
+            SVProgressHUD.showInfo(withStatus: "删除成功")
+            self.loadData()
+        }
+    }
+    @objc func action3(_ sender: UIButton) {
+        let nav = CommentViewController()
+        let button = UIButton(title: "发表", color: .orange,backImageName: nil)
+        //print(listViewModel.statusList[indexPath.row].status.id)
+        //print(nav.textView.text!)
+        guard (listViewModel.statusList[sender.tag].status.id > 0) else {
+            SVProgressHUD.showInfo(withStatus: "出错了")
+            return
+        }
+        button.nav = nav
+        button.tag = sender.tag
+        button.addTarget(self, action: #selector(self.action2(_:)), for: .touchUpInside)
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        self.present(UINavigationController(rootViewController: nav), animated: true)
+    }
+    @objc func action4(_ sender: UIButton) {
+        if sender.int == 1 {
+            //print(id ?? 0)
+            NetworkTools.shared.deleteLike(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+                if Error == nil {
+                    //print(Result as! [String:Any])
+                    sender.int = 0
+                    self.loadData()
+                    return
+                }
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                //print(Error)
+                return
+            }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+                NetworkTools.shared.addLike(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+                    if Error == nil {
+                        //print(Result as! [String:Any])
+                        
+                        sender.int = 1
+                        self.loadData()
+                        return
+                    }
+                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    //print(Error)
+                    return
+                }
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，最新、最热微博尽在掌握，不再会与时事潮流擦肩而过")
@@ -72,10 +158,44 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewController", for: indexPath) as! StatusNormalCell
-        cell.viewModel = self.listFilterTeams?[indexPath.row] as? StatusViewModel
+        var cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewController", for: indexPath) as! StatusNormalCell
+        var vm = self.listFilterTeams?[indexPath.row] as? StatusViewModel
+        // Configure the cell...
+        cell.viewModel = vm
+        cell.bottomView.deleteButton.identifier = cell
+        cell.bottomView.deleteButton.tag = indexPath.row
+        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
+        /*
+        cell.bottomView.deleteButton.addAction(UIAction { action in
+            cell.bottomView.deleteBlog(listViewModel.statusList[indexPath.row].status.id) { Result, Error in
+                //print(listViewModel.statusList[indexPath.row].status.id)
+                //print(UserAccountViewModel.sharedUserAccount.accessToken)
+                if Error != nil {
+                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    //print(Error)
+                    return
+                }
+                if (Result as! [String:Any])["error"] != nil {
+                    SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
+                    //print((Result as! [String:String])["error"])
+                    return
+                }
+                SVProgressHUD.showInfo(withStatus: "删除成功")
+            }
+        }, for: .touchUpInside)
+         */
+        cell.bottomView.commentButton.setTitle("\(listViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
+        cell.bottomView.commentButton.tag = indexPath.row
+        cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
+        NotificationCenter.default.post(name: Notification.Name("BKIfLikeIsTrueLightIt"), object: ["cell":cell,"indexPath":indexPath],userInfo: ["hello":"l"])
+        cell = self.cell!
+        cell.bottomView.likeButton.tag = indexPath.row
+        cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
+        cell.cellDelegate = self
         return cell
     }
+    var cell: StatusNormalCell?
     func prepare() {
         MySearchTextField = UISearchController(searchResultsController: nil)
         // 输入框提示内容
@@ -91,6 +211,13 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return (self.listFilterTeams?[indexPath.row] as! StatusViewModel).rowHeight
+    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        id = indexPath.row
+        let vc = CommentTableViewController()
+        let nav = UINavigationController(rootViewController:vc)
+        nav.modalPresentationStyle = .custom
+        self.present(nav, animated: false)
     }
     /*
     // Override to support conditional editing of the table view.
