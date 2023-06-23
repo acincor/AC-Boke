@@ -284,6 +284,19 @@ extension Dictionary where Key: Equatable {
       return NSDictionary(dictionary: left).isEqual(to: right)
     }
 }
+extension UITextField {
+    private struct AssociatedKey {
+        static var identifier = ""
+    }
+    var identifier: String {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.identifier) as? String ?? ""
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.identifier, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
+}
 extension UIButton {
     private struct AssociatedKey {
            static var identifier: StatusCell = StatusCell()

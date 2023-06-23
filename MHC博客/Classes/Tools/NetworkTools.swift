@@ -97,6 +97,15 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/friend.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
+    func rename(rename: String,finished: @escaping HMRequstCallBack) {
+        guard var params = tokenDict else {
+            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
+            return
+        }
+        params["rename"] = rename
+        let urlString = "https://mhc.lmyz6.cn/rename.php"
+        tokenRequest(.POST, urlString, params, finished: finished)
+    }
     func addFriend(_ to_user: String,finished: @escaping HMRequstCallBack) {
         guard var params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))

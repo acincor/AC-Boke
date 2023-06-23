@@ -7,14 +7,15 @@
 
 import UIKit
 
-class ProfileTableViewController: VisitorTableViewController {
+class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegate {
     private var usernameLabel: String {
         return UserAccountViewModel.sharedUserAccount.account?.user ?? "用户未登录"
     }
     private var label: String {
-            var lb = "用户名："+usernameLabel+"\n"
+            var lb = "用户名："
             return lb
     }
+    private var renameButton: UITextField = UITextField()
     private lazy var Label: UILabel = UILabel(title: label)
     private lazy var iconView: StatusPictureView = {
         let iv = StatusPictureView()
@@ -30,6 +31,9 @@ class ProfileTableViewController: VisitorTableViewController {
         }
         view.addSubview(Label)
         view.addSubview(iconView)
+        renameButton = UITextField()
+        renameButton.text = usernameLabel
+        view.addSubview(renameButton)
         loadData()
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
@@ -55,18 +59,50 @@ class ProfileTableViewController: VisitorTableViewController {
                 }
             Label.removeFromSuperview()
             Label = UILabel(title: label)
-            
             view.addSubview(Label)
             Label.snp.makeConstraints { make in
-                    make.top.equalTo(iconView.snp.bottom)
-                }
+                make.top.equalTo(iconView.snp.bottom)
+            }
             Label.sizeToFit()
+            renameButton.removeFromSuperview()
+            renameButton = UITextField()
+            renameButton.text = usernameLabel
+            view.addSubview(renameButton)
+            renameButton.snp.makeConstraints { make in
+                make.left.equalTo(Label.snp.right)
+                make.top.equalTo(iconView.snp.bottom)
+            }
+            renameButton.delegate = self
+            renameButton.sizeToFit()
                 // Do any additional setup after loading the view.
         } catch {
             SVProgressHUD.show(withStatus: "图片加载错误")
             return
         }
         refreshControl?.endRefreshing()
+    }
+    @objc func action1(_ sender: UITextField) -> Bool{
+        NetworkTools.shared.rename(rename: sender.text!) { Result, Error in
+            if Error != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                sender.identifier = "false"
+                return
+            }
+            if(Result as! [String:Any])["msg"] != nil {
+                print(Result)
+                UserAccountViewModel.sharedUserAccount.account = UserAccount(dict: (Result as! [String: Any])["usermsg"] as! [String:Any])
+                UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) {isSuccessed in
+                    if isSuccessed {
+                        SVProgressHUD.showInfo(withStatus: "改名成功")
+                        sender.identifier = "true"
+                    }
+                }
+            }
+        }
+        return sender.identifier == "true" ? true : false
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return action1(textField)
     }
     // MARK: - Table view data source
 

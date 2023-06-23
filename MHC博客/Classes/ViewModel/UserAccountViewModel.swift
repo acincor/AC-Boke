@@ -43,7 +43,7 @@ extension UserAccountViewModel {
             self.loadUserInfo(account: self.account!, finished: finished)
         }
     }
-    private func loadUserInfo(account: UserAccount, finished: @escaping (_ isSuccessed: Bool) -> ()) {
+    func loadUserInfo(account: UserAccount, finished: @escaping (_ isSuccessed: Bool) -> ()) {
         NetworkTools.shared.loadUserInfo { (Result, Error) -> () in
             if Error != nil {
                 //print("加载用户出错了")
