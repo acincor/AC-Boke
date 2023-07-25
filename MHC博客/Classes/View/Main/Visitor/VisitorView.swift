@@ -11,7 +11,7 @@ class VisitorView: UIView {
     private lazy var messageLabel: UILabel = UILabel(title: "关注一些人，回这里看看有什么惊喜关注一些人，回这里看看有什么惊喜")
     private lazy var maskIconView: UIImageView = UIImageView(image: UIImage(named: "visitordiscover_feed_mask_smallicon"))
     /// 注册按钮
-    lazy var registerButton: UIButton = UIButton(title: "注册", color: UIColor.orange, backImageName: "common_button_white_disable")
+    lazy var registerButton: UIButton = UIButton(title: "注册", color: UIColor.red, backImageName: "common_button_white_disable")
     
     /// 登录按钮
     lazy var loginButton: UIButton = UIButton(title: "登录", color: UIColor.darkText, backImageName: "common_button_white_disable")

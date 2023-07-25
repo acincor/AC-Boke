@@ -23,9 +23,9 @@ class NetworkTools: AFHTTPSessionManager{
         case POST = "POST"
     }
     var acceptableContentTypes: [String]?
-    var OAuthURL: URL {
-        let urlString = "https://mhc.lmyz6.cn/login.html"
-        return URL(string: urlString)!
+    enum OAuthURL: String {
+        case 登陆 = "https://mhc.lmyz6.cn/login.html"
+        case 注册 = "https://mhc.lmyz6.cn/register.html"
     }
     typealias HMRequstCallBack = (_ Result: Any?, _ Error: Error?) -> ()
 }
@@ -71,6 +71,10 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/loadBlog.php"
         tokenRequest(.GET, urlString, nil, finished: finished)
     }
+    func loadLive(finished: @escaping HMRequstCallBack) {
+        let urlString = "https://mhc.lmyz6.cn/loadLive.php"
+        tokenRequest(.GET, urlString, nil, finished: finished)
+    }
     func loadComment(id: Int? = nil, comment_id: Int? = nil, finished: @escaping HMRequstCallBack) {
         var params = [String:Int]()
         let urlString = "https://mhc.lmyz6.cn/loadComment.php"
@@ -106,12 +110,28 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/rename.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
-    func addFriend(_ to_user: String,finished: @escaping HMRequstCallBack) {
+    func tokenIsExpires(finished: @escaping HMRequstCallBack) {
         guard var params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
-        params["to_user"] = to_user
+        let urlString = "https://mhc.lmyz6.cn/accessTokenIsExpires.php"
+        tokenRequest(.POST, urlString, params, finished: finished)
+    }
+    func ExpiresTheToken(finished: @escaping HMRequstCallBack) {
+        guard var params = tokenDict else {
+            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
+            return
+        }
+        let urlString = "https://mhc.lmyz6.cn/expiresToken.php"
+        tokenRequest(.POST, urlString, params, finished: finished)
+    }
+    func addFriend(_ to_uid: String,finished: @escaping HMRequstCallBack) {
+        guard var params = tokenDict else {
+            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
+            return
+        }
+        params["to_uid"] = to_uid
         let urlString = "https://mhc.lmyz6.cn/addFriend.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }

@@ -57,7 +57,7 @@ var discover = DiscoverTableViewController()
 extension MainViewController {
     
     private func addChilds() {
-        tabBar.tintColor = UIColor.orange
+        tabBar.tintColor = UIColor.red
         addChild(HomeTableViewController(), "首页", "tabbar_home")
         addChild(MessageTableViewController(), "消息", "tabbar_message_center")
         addChild(UIViewController())

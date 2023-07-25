@@ -14,14 +14,16 @@ class CommentCellTopView: UIView {
     
     /// 姓名
     private lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)
-    private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.orange)
+    private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.red)
     var viewModel: CommentViewModel? {
         didSet {
             // 姓名
             timeLabel.text = viewModel?.createAt
             self.nameLabel.text = viewModel?.comment.user
-            nameLabel.textColor = .systemOrange
+            nameLabel.textColor = .red
             // 头像
+            iconView.layer.cornerRadius = 15
+            iconView.layer.masksToBounds = true
             iconView.sd_setImage(with: viewModel?.userProfileUrl, placeholderImage: viewModel?.userDefaultIconView)
         }
     }

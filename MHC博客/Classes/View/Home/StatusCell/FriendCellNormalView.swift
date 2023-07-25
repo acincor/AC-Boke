@@ -17,18 +17,20 @@ class FriendCellTopView: UIView {
     private lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)
     
     /// 时间标签
-    private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.orange)
+    private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.red)
     
-    /// 来源标签
-    private lazy var sourceLabel: UILabel = UILabel(title: "来源", fontSize: 11)
+    /// 可更改来源标签
+    lazy var sourceLabel: UILabel = UILabel(title: "你的伙伴", fontSize: 11)
     var viewModel: FriendViewModel? {
         didSet {
             // 姓名
             nameLabel.text = viewModel?.friend.user
-            nameLabel.textColor = .systemOrange
+            nameLabel.textColor = .red
             // 头像
             iconView.sd_setImage(with: viewModel?.friendProfileUrl, placeholderImage: viewModel?.friendDefaultIconView)
             iconView.isUserInteractionEnabled = true
+            iconView.layer.cornerRadius = 15
+            iconView.layer.masksToBounds = true
         }
     }
     /*
@@ -50,7 +52,7 @@ class FriendCellTopView: UIView {
 extension FriendCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor.lightGray
+        sepView.backgroundColor = UIColor.white
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)

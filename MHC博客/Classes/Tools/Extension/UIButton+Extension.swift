@@ -25,6 +25,7 @@ extension UIButton {
         if let backImageName = backImageName {
             setBackgroundImage(UIImage(named: backImageName), for: .normal)
         }
+        backgroundColor = backColor
         sizeToFit()
     }
     convenience init(title: String, fontSize: CGFloat, color: UIColor, imageName: String?, backColor: UIColor? = nil) {

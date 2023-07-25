@@ -50,7 +50,7 @@ class CommentTableViewController: VisitorTableViewController {
             return
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))
-        navigationItem.rightBarButtonItem?.tintColor = .orange
+        navigationItem.rightBarButtonItem?.tintColor = .red
         NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeIsTrueLightIt"), object: nil, queue: nil) { n in
             if n.object != nil {
                 let result = ["id":"\(commentlistViewModel.commentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].comment.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
@@ -133,7 +133,7 @@ extension CommentTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发表", color: .orange,backImageName: nil)
+        let button = UIButton(title: "发表", color: .red,backImageName: nil)
         button.tag = sender.tag
         button.nav = nav
         button.vm = sender.vm

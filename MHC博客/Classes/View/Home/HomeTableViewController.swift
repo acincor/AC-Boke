@@ -11,7 +11,7 @@ import UIKit
 let StatusCellNormalId = "StatusCellNormalId"
 let StatusCellNormalId2 = "StatusCellNormalId2"
 var listViewModel = StatusListViewModel()
-class HomeTableViewController: VisitorTableViewController {
+class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .whiteLarge)
         indicator.color = .white
@@ -20,6 +20,7 @@ class HomeTableViewController: VisitorTableViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    let liveView = LiveTableView()
     private func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
@@ -29,6 +30,30 @@ class HomeTableViewController: VisitorTableViewController {
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         tableView.tableFooterView = pullupView
+        liveView.delegate = self
+        liveView.dataSource = self
+        tableView.tableHeaderView = liveView
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return liveListViewModel.liveList.count
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let vm = liveListViewModel.liveList[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! LiveCell
+        cell.viewModel = vm
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vm = liveListViewModel.liveList[indexPath.row]
+        guard let url = ("https://mhc.lmyz6.cn/hls/\(vm.friend.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
+            return
+        }
+        guard let urlEncoded = URL(string:url) else {
+            SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
+            return
+        }
+        present(HomeWebViewController(url: urlEncoded),animated: true)
     }
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
@@ -45,10 +70,18 @@ class HomeTableViewController: VisitorTableViewController {
             self.showPulldownTip()
             self.tableView.reloadData()
         }
+        liveView.loadData()
+        liveView.reloadData()
+        if liveListViewModel.liveList.isEmpty {
+            var textView = UITextView(frame: liveView.frame)
+            textView.text = "暂时无人直播哦..."
+            textView.backgroundColor = .gray.withAlphaComponent(0.1)
+            tableView.tableHeaderView = textView
+        }
     }
     private lazy var pulldownTipLabel: UILabel = {
         let label = UILabel(title: "", fontSize: 18,color: .white)
-        label.backgroundColor = .orange
+        label.backgroundColor = .red
         self.navigationController?.navigationBar.insertSubview(label, at: 0)
         return label
     }()
@@ -215,7 +248,7 @@ extension HomeTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发表", color: .orange,backImageName: nil)
+        let button = UIButton(title: "发表", color: .red,backImageName: nil)
         //print(listViewModel.statusList[indexPath.row].status.id)
         //print(nav.textView.text!)
         guard (listViewModel.statusList[sender.tag].status.id > 0) else {

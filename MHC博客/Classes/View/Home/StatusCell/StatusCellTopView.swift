@@ -16,7 +16,7 @@ class StatusCellTopView: UIView {
     private lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)
     
     /// 时间标签
-    private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.orange)
+    private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.red)
     
     /// 来源标签
     private lazy var sourceLabel: UILabel = UILabel(title: "来源", fontSize: 11)
@@ -25,7 +25,7 @@ class StatusCellTopView: UIView {
             // 姓名
             timeLabel.text = viewModel?.createAt
             self.nameLabel.text = viewModel?.status.user as? String
-            nameLabel.textColor = .systemOrange
+            nameLabel.textColor = .red
             if viewModel?.status.source != nil ? viewModel?.status.source != "unknown": false{
                 sourceLabel.text = viewModel?.status.source
             }else {
@@ -33,34 +33,36 @@ class StatusCellTopView: UIView {
             }
             // 头像
             iconView.sd_setImage(with: viewModel?.userProfileUrl, placeholderImage: viewModel?.userDefaultIconView)
+            iconView.layer.cornerRadius = 15
+            iconView.layer.masksToBounds = true
             iconView.isUserInteractionEnabled = true
             let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
-            g.sender = nameLabel.text ?? ""
+            g.sender = "\(viewModel?.status.uid ?? 0)"
             iconView.addGestureRecognizer(g)
         }
     }
     @objc func action(sender: UITapGestureRecognizer) {
+        print("\(viewModel?.status.uid ?? 0)")
         NetworkTools.shared.addFriend(sender.sender) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 //print("Result出现错误")
-                //print(Error)
+                print(Error)
                 return
             }
             guard let result = Result as? [String:Any] else {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print("result出现转换错误")
+                print("result出现转换错误")
                 return
             }
             if (result["error"] != nil) {
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print("result出现error")
-                ////print(result)
+                SVProgressHUD.showInfo(withStatus: result["error"] as? String)
+                print("result出现error")
                 return
             }
             guard let code = result["code"] as? String else {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print("result出现转换错误")
+                print("result出现转换错误")
                 return
             }
             if (code != "delete") {
@@ -69,7 +71,7 @@ class StatusCellTopView: UIView {
                 ////print(result)
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "成功删除好友")
+            SVProgressHUD.showInfo(withStatus: "成功删除/拉黑好友")
         }
     }
     /*
@@ -91,7 +93,7 @@ class StatusCellTopView: UIView {
 extension StatusCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor.lightGray
+        sepView.backgroundColor = .white
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)

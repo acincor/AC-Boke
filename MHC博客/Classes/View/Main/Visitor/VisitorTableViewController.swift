@@ -17,7 +17,7 @@ class VisitorTableViewController: UITableViewController {
         visitorView = VisitorView()
         view = visitorView
         visitorView?.registerButton.addTarget(self, action: #selector(VisitorTableViewController.visitorViewDidRegister), for: .touchUpInside)
-        //view.backgroundColor = UIColor.orange
+        //view.backgroundColor = UIColor.red
         visitorView?.loginButton.addTarget(self, action: #selector(VisitorTableViewController.visitorViewDidLogin), for: .touchUpInside)
     }
     override func viewDidLoad() {

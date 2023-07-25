@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+let LiveCellNormalId = "LiveCellNormalId"
 /// 微博视图模型 - 处理单条微博的业务逻辑
 class FriendViewModel: CustomStringConvertible {
     
@@ -20,6 +20,11 @@ class FriendViewModel: CustomStringConvertible {
     lazy var rowHeight: CGFloat = {
         var cell: FriendCell
         cell = FriendCell(style: .default, reuseIdentifier: FriendCellNormalId)
+        return cell.rowHeight(self)
+    }()
+    lazy var rowHeightForLive: CGFloat = {
+        var cell: FriendCell
+        cell = FriendCell(style: .default, reuseIdentifier: LiveCellNormalId)
         return cell.rowHeight(self)
     }()
     /// 用户默认头像

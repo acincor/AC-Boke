@@ -25,7 +25,14 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
     convenience init(_ 方式: 登录方式) {
         self.init()
         title = "\(方式.rawValue)Mhc博客"
+        if 方式.rawValue == "注册" {
+            oauthURL = URL(string: NetworkTools.OAuthURL.注册.rawValue)
+        } else {
+            oauthURL = URL(string: NetworkTools.OAuthURL.登陆.rawValue)
+        }
     }
+    //默认注册
+    var oauthURL = URL(string: "https://mhc.lmyz6.cn/register.html")
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment the following line to preserve selection between presentations
@@ -33,8 +40,9 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        webView.loadRequest(URLRequest(url: NetworkTools.shared.OAuthURL))
+        webView.loadRequest(URLRequest(url: oauthURL!))
     }
+    
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
@@ -91,13 +99,12 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
     */
 
 }
-extension OAuthViewController{
+extension OAuthViewController {
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
         guard let url = request.url, url.absoluteString.hasPrefix("https://mhc.lmyz6.cn/?") else {
             return true
         }
-        guard let query = url.query, query.hasPrefix("code=") else {
-            //print("取消授权")
+        guard let query = url.query,query.hasPrefix("code=") else {
             return false
         }
         //print("到这里了")

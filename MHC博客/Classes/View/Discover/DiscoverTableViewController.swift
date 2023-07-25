@@ -71,7 +71,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发表", color: .orange,backImageName: nil)
+        let button = UIButton(title: "发表", color: .red,backImageName: nil)
         //print(listViewModel.statusList[indexPath.row].status.id)
         //print(nav.textView.text!)
         guard (listViewModel.statusList[sender.tag].status.id > 0) else {

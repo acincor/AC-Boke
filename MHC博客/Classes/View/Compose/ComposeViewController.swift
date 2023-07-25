@@ -97,8 +97,8 @@ extension ComposeViewController {
     private func prepare() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: "close")
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "发布", style: .plain, target: self, action: "sendStatus")
-        navigationItem.leftBarButtonItem?.tintColor = .systemOrange
-        navigationItem.rightBarButtonItem?.tintColor = .systemOrange
+        navigationItem.leftBarButtonItem?.tintColor = .red
+        navigationItem.rightBarButtonItem?.tintColor = .red
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 36))
         navigationItem.titleView = titleView
         let titleLabel = UILabel(title: "写博客",fontSize: 15)

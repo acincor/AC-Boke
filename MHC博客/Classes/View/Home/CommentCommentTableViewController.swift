@@ -79,7 +79,7 @@ class CommentCommentTableViewController: VisitorTableViewController {
             return
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))
-        navigationItem.rightBarButtonItem?.tintColor = .orange
+        navigationItem.rightBarButtonItem?.tintColor = .red
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeLightIt"), object: nil, queue: nil) { n in
@@ -166,7 +166,7 @@ extension CommentCommentTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发表", color: .orange,backImageName: nil)
+        let button = UIButton(title: "发表", color: .red,backImageName: nil)
         button.tag = sender.tag
         button.nav = nav
         button.vm2 = sender.vm2

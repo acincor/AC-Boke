@@ -15,8 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
-        window?.rootViewController = defaultRootViewController
         MySearchTextField?.searchBar.resignFirstResponder()
+        
+        window?.rootViewController = defaultRootViewController
         window?.makeKeyAndVisible()
         NotificationCenter.default.addObserver(
             forName: .init(rawValue: WBSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
@@ -28,13 +29,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // 切换控制器
             self?.window?.rootViewController = vc
         }
+        NotificationCenter.default.addObserver(forName: .init("WBSwitchRootViewControllerLogOutNotification"), object: nil, queue: nil) { (notification) in
+            if UserAccountViewModel.sharedUserAccount.userLogon {
+                NetworkTools.shared.tokenIsExpires { Result, Error in
+                    print(Error)
+                    if (Result as! [String:Any])["msg"] as! Int == 1 {
+                        print("有没有一种可能到这里了")
+                        var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
+                        path = (path as NSString).appendingPathComponent("account.plist")
+                        if FileManager.default.fileExists(atPath: path) {
+                            SVProgressHUD.showInfo(withStatus: "退登成功，2秒后自动退出应用...")
+                            try! FileManager.default.removeItem(atPath: path)
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+2) {
+                                exit(0)
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return true
     }
     deinit {
     // 注销通知 - 注销指定的通知
         NotificationCenter.default.removeObserver(self,   // 监听者
                                               name: .init(rawValue: WBSwitchRootViewControllerNotification),           // 监听的通知
-                                                  object: nil)                                            // 发送通知的对象
+                                                  object: nil)
     }
     func applicationDidEnterBackground(_ application: UIApplication) {
         StatusDAL.clearDataCache()

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegate {
     private var usernameLabel: String {
@@ -23,9 +24,12 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
         iv.layer.masksToBounds = true
         return iv
     }()
+    let userAgreementButton = UIButton(title: "用户协议", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
+    let liveButton = UIButton(title: "开始直播", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
+    let expiresUserButton = UIButton(title: "退出登录", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     override func viewDidLoad() {
         super.viewDidLoad()
-        if UserAccountViewModel.sharedUserAccount.userLogon == false {
+        if !userLogon {
             visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: "登陆后，你的微博，相册、个人资料会显示在这里，展示给别人")
             return
         }
@@ -34,6 +38,9 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
         renameButton = UITextField()
         renameButton.text = usernameLabel
         view.addSubview(renameButton)
+        view.addSubview(liveButton)
+        view.addSubview(userAgreementButton)
+        view.addSubview(expiresUserButton)
         loadData()
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
@@ -74,12 +81,69 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
             }
             renameButton.delegate = self
             renameButton.sizeToFit()
-                // Do any additional setup after loading the view.
+            userAgreementButton.removeFromSuperview()
+            view.addSubview(userAgreementButton)
+            userAgreementButton.snp.makeConstraints { make in
+                make.top.equalTo(renameButton.snp.bottom).offset(20)
+                make.width.equalTo(UIScreen.main.bounds.width)
+            }
+            userAgreementButton.layer.cornerRadius = 15
+            userAgreementButton.addTarget(self, action: #selector(self.userAgreementButtonTouchAction), for: .touchDown)
+            liveButton.removeFromSuperview()
+            view.addSubview(liveButton)
+            liveButton.snp.makeConstraints { make in
+                make.top.equalTo(userAgreementButton.snp.bottom).offset(10)
+                make.width.equalTo(UIScreen.main.bounds.width)
+            }
+            liveButton.layer.cornerRadius = 15
+            liveButton.addTarget(self, action: #selector(self.liveButtonTouchAction), for: .touchDown)
+            expiresUserButton.removeFromSuperview()
+            view.addSubview(expiresUserButton)
+            expiresUserButton.snp.makeConstraints { make in
+                make.top.equalTo(liveButton.snp.bottom).offset(10)
+                make.width.equalTo(UIScreen.main.bounds.width)
+            }
+            expiresUserButton.layer.cornerRadius = 15
+            expiresUserButton.addTarget(self, action: #selector(self.expiresUserButtonTouchAction), for: .touchDown)
+            // Do any additional setup after loading the view.
         } catch {
             SVProgressHUD.show(withStatus: "图片加载错误")
             return
         }
         refreshControl?.endRefreshing()
+    }
+    @objc func liveButtonTouchAction() {
+        present(LiveController(), animated: true)
+    }
+    @objc func userAgreementButtonTouchAction() {
+        let controller = UIViewController()
+        let textView = UITextView(frame: UIScreen.main.bounds)
+        guard let userAgreement = Bundle.main.path(forResource: "用户协议", ofType: "txt") else {
+            SVProgressHUD.showInfo(withStatus: "似乎找不到目录")
+            return
+        }
+        do{
+        var readStr:NSString=try NSString(contentsOfFile: userAgreement, encoding: String.Encoding.utf8.rawValue)
+            textView.text = readStr as String
+            controller.view = textView
+            present(controller, animated: true)
+        }catch let error {
+        print(error.localizedDescription)
+        print("文件读取失败，可能是资源找不到")
+        }
+    }
+    @objc func expiresUserButtonTouchAction(){
+        NetworkTools.shared.ExpiresTheToken { Result, Error in
+            if Error != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                return
+            }
+            if(Result as! [String:Any])["msg"] != nil {
+                print(Result)
+                NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: nil)
+                UserAccountViewModel.sharedUserAccount.account = nil
+            }
+        }
     }
     @objc func action1(_ sender: UITextField) -> Bool{
         NetworkTools.shared.rename(rename: sender.text!) { Result, Error in
