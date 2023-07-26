@@ -126,6 +126,10 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/expiresToken.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
+    func logOff(finished: @escaping HMRequstCallBack) {
+        let urlString = "https://mhc.lmyz6.cn/logOff.php"
+        tokenRequest(.POST, urlString, nil, finished: finished)
+    }
     func addFriend(_ to_uid: String,finished: @escaping HMRequstCallBack) {
         guard var params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))

@@ -21,6 +21,12 @@ class LiveController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        for i in liveListViewModel.liveList {
+            if i.friend.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
+                SVProgressHUD.showInfo(withStatus: "你的直播已在其他设备上进行...")
+                return
+            }
+        }
         // Do any additional setup after loading the view, typically from a nib.
         let startButton = UIButton(title: "开始直播", color: .white, backImageName: nil,backColor: .red)
         startButton.layer.cornerRadius = 15

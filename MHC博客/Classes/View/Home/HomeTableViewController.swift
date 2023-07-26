@@ -75,6 +75,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         if liveListViewModel.liveList.isEmpty {
             var textView = UITextView(frame: liveView.frame)
             textView.text = "暂时无人直播哦..."
+            textView.isEditable = false
             textView.backgroundColor = .gray.withAlphaComponent(0.1)
             tableView.tableHeaderView = textView
         }

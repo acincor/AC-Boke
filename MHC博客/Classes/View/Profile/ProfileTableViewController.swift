@@ -26,6 +26,7 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
     }()
     let userAgreementButton = UIButton(title: "用户协议", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     let liveButton = UIButton(title: "开始直播", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
+    let logOffButton = UIButton(title: "注销账号", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     let expiresUserButton = UIButton(title: "退出登录", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +39,7 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
         renameButton = UITextField()
         renameButton.text = usernameLabel
         view.addSubview(renameButton)
+        view.addSubview(logOffButton)
         view.addSubview(liveButton)
         view.addSubview(userAgreementButton)
         view.addSubview(expiresUserButton)
@@ -105,6 +107,14 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
             }
             expiresUserButton.layer.cornerRadius = 15
             expiresUserButton.addTarget(self, action: #selector(self.expiresUserButtonTouchAction), for: .touchDown)
+            logOffButton.removeFromSuperview()
+            view.addSubview(logOffButton)
+            logOffButton.snp.makeConstraints { make in
+                make.top.equalTo(expiresUserButton.snp.bottom).offset(10)
+                make.width.equalTo(UIScreen.main.bounds.width)
+            }
+            logOffButton.layer.cornerRadius = 15
+            logOffButton.addTarget(self, action: #selector(self.logOffUserButtonTouchAction), for: .touchDown)
             // Do any additional setup after loading the view.
         } catch {
             SVProgressHUD.show(withStatus: "图片加载错误")
@@ -125,6 +135,7 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
         do{
         var readStr:NSString=try NSString(contentsOfFile: userAgreement, encoding: String.Encoding.utf8.rawValue)
             textView.text = readStr as String
+            textView.isEditable = false
             controller.view = textView
             present(controller, animated: true)
         }catch let error {
@@ -135,6 +146,20 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
     @objc func expiresUserButtonTouchAction(){
         NetworkTools.shared.ExpiresTheToken { Result, Error in
             if Error != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                return
+            }
+            if(Result as! [String:Any])["msg"] != nil {
+                print(Result)
+                NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: "logOut")
+                UserAccountViewModel.sharedUserAccount.account = nil
+            }
+        }
+    }
+    @objc func logOffUserButtonTouchAction() {
+        NetworkTools.shared.logOff { Result, Error in
+            if Error != nil {
+                print(Error)
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 return
             }

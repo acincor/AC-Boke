@@ -30,18 +30,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.window?.rootViewController = vc
         }
         NotificationCenter.default.addObserver(forName: .init("WBSwitchRootViewControllerLogOutNotification"), object: nil, queue: nil) { (notification) in
-            if UserAccountViewModel.sharedUserAccount.userLogon {
-                NetworkTools.shared.tokenIsExpires { Result, Error in
-                    print(Error)
-                    if (Result as! [String:Any])["msg"] as! Int == 1 {
-                        print("有没有一种可能到这里了")
-                        var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
-                        path = (path as NSString).appendingPathComponent("account.plist")
-                        if FileManager.default.fileExists(atPath: path) {
-                            SVProgressHUD.showInfo(withStatus: "退登成功，2秒后自动退出应用...")
-                            try! FileManager.default.removeItem(atPath: path)
-                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+2) {
-                                exit(0)
+            if notification.object != nil {
+                if UserAccountViewModel.sharedUserAccount.userLogon {
+                    NetworkTools.shared.tokenIsExpires { Result, Error in
+                        print(Error)
+                        if (Result as! [String:Any])["msg"] as! Int == 1 {
+                            print("有没有一种可能到这里了")
+                            var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
+                            path = (path as NSString).appendingPathComponent("account.plist")
+                            if FileManager.default.fileExists(atPath: path) {
+                                SVProgressHUD.showInfo(withStatus: "退登成功，1秒后自动退出应用...")
+                                try! FileManager.default.removeItem(atPath: path)
+                                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
+                                    exit(0)
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if UserAccountViewModel.sharedUserAccount.userLogon {
+                    NetworkTools.shared.logOff { Result, Error in
+                        print(Error)
+                        if (Result as! [String:Any])["msg"] as! Int == 1 {
+                            print("有没有一种可能到这里了")
+                            var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
+                            path = (path as NSString).appendingPathComponent("account.plist")
+                            if FileManager.default.fileExists(atPath: path) {
+                                SVProgressHUD.showInfo(withStatus: "注销成功，1秒后自动退出应用...")
+                                try! FileManager.default.removeItem(atPath: path)
+                                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
+                                    exit(0)
+                                }
                             }
                         }
                     }
