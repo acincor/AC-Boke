@@ -42,7 +42,7 @@ class CommentCommentViewModel: CustomStringConvertible {
         return Date.sina(comment.create_at ?? "")?.dateDescription
     }
     /// 缩略图URL数组 - 存储型属性 !!!
-    var thumbnailUrls: [URL]?
+    //var thumbnailUrls: [URL]?
     
     /// 构造函数
     init(comment: Comment) {

@@ -18,7 +18,6 @@ class UserAccount: NSObject, NSCoding {
     @objc var user: String?
     /// 用户头像地址（大图），180×180像素
     @objc var portrait: String?
-    
     init(dict: [String: Any]) {
         super.init()
         setValuesForKeys(dict)

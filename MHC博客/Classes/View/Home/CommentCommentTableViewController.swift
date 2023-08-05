@@ -21,34 +21,15 @@ class CommentCommentTableViewController: VisitorTableViewController {
         tableView.rowHeight = 400
     }
     @objc func action5(_ sender: UIButton) {
-        if sender.int == 1 {
-            //print(id ?? 0)
-            NetworkTools.shared.deleteLike(listViewModel.statusList[sender.tag].status.id,comment_id: commentlistViewModel.commentCommentList[sender.tag].comment.comment_id,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
-                if Error == nil {
-                    print(Result)
-                    sender.int = 0
-                    self.loadData()
-                    return
-                }
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
+        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id,comment_id: commentlistViewModel.commentCommentList[sender.tag].comment.comment_id,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
+            if Error == nil {
+                //print(Result as! [String:Any])
+                self.loadData()
                 return
             }
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                print(comment_id)
-                NetworkTools.shared.addLike(listViewModel.statusList[sender.tag].status.id,commentlistViewModel.commentList[sender.tag].comment.comment_id,comment_id:commentlistViewModel.commentCommentList[sender.tag].comment.comment_id) { Result, Error in
-                    if Error == nil {
-                        print(Result as! [String:Any])
-                        sender.int = 1
-                        self.loadData()
-                        return
-                    }
-                    SVProgressHUD.showInfo(withStatus: "出错了")
-                    print(Error)
-                    return
-                }
-            }
+            SVProgressHUD.showInfo(withStatus: "出错了")
+            //print(Error)
+            return
         }
     }
     @objc func loadData() {
@@ -58,7 +39,9 @@ class CommentCommentTableViewController: VisitorTableViewController {
         guard let comment_id = comment_comment_id else{
             return
         }
-        print([id,comment_id])
+        //print([id,comment_id])
+        listViewModel.loadStatus(isPullup: true) { isSuccessed in
+        }
         refreshControl?.beginRefreshing()
         StatusDAL.clearDataCache()
         commentlistViewModel.loadComment(id: id, comment_id: comment_id) { (isSuccessed) in

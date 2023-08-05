@@ -135,7 +135,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
                 let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
                 self.cell = ((n.object as! [String:Any])["cell"] as! StatusCell)
                 for s in like_list {
-                    if result.isEqualTo(s) {
+                    if result["like_uid"] as? Int == s["like_uid"] as? Int {
                         
                         self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
                         break
@@ -151,10 +151,9 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
                 if n.userInfo!.isEqualTo(["hello":"l"]) {
                     let result = ["id":"\(listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
                     let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
-                    discover.cell = ((n.object as! [String:Any])["cell"] as! StatusNormalCell)
+                    discover.cell = ((n.object as! [String:Any])["cell"] as? StatusNormalCell)
                     for s in like_list {
-                        if result.isEqualTo(s) {
-                            
+                        if result["like_uid"] as? Int == s["like_uid"] as? Int {
                             discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
                             break
                         } else {
@@ -168,6 +167,10 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             }
         }
     }
+    @objc func action(sender: UITapGestureRecognizer) {
+        present(UserProfileViewController(usernameLabel: sender.sender2, MID: sender.sender), animated: true)
+        }
+
     var cell: StatusCell?
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }
@@ -183,6 +186,10 @@ extension HomeTableViewController {
         cell.bottomView.deleteButton.identifier = cell
         cell.bottomView.deleteButton.tag = indexPath.row
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
+        let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
+        g.sender = "\(cell.topView.viewModel?.status.uid ?? 0)"
+        g.sender2 = "\(cell.topView.viewModel?.status.user ?? "")"
+        cell.topView.iconView.addGestureRecognizer(g)
         /*
         cell.bottomView.deleteButton.addAction(UIAction { action in
             cell.bottomView.deleteBlog(listViewModel.statusList[indexPath.row].status.id) { Result, Error in
@@ -234,10 +241,10 @@ extension HomeTableViewController {
             //print(UserAccountViewModel.sharedUserAccount.accessToken)
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                print(Error)
+                //print(Error)
                 return
             }
-            print(Result as! [String:Any])
+            //print(Result as! [String:Any])
             if (Result as! [String:Any])["error"] != nil {
                 SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
                 //print((Result as! [String:String])["error"])
@@ -263,34 +270,15 @@ extension HomeTableViewController {
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        if sender.int == 1 {
-            //print(id ?? 0)
-            NetworkTools.shared.deleteLike(listViewModel.statusList[sender.tag].status.id) { Result, Error in
-                if Error == nil {
-                    //print(Result as! [String:Any])
-                    sender.int = 0
-                    self.loadData()
-                    return
-                }
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
+        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+            if Error == nil {
+                print(Result as! [String:Any])
+                self.loadData()
                 return
             }
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                NetworkTools.shared.addLike(listViewModel.statusList[sender.tag].status.id) { Result, Error in
-                    if Error == nil {
-                        //print(Result as! [String:Any])
-                        
-                        sender.int = 1
-                        self.loadData()
-                        return
-                    }
-                    SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
-                    return
-                }
-            }
+            SVProgressHUD.showInfo(withStatus: "出错了")
+            //print(Error)
+            return
         }
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

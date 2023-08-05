@@ -20,7 +20,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     func filterContentForSearchText(_ searchText: NSString) {
         let p1 = NSPredicate(format: "SELF.user CONTAINS %@ || SELF.status CONTAINS %@", searchText,searchText)
-        print(p1.predicateFormat)
+        //print(p1.predicateFormat)
         if searchText.length == 0 {
             self.listFilterTeams = NSMutableArray(array: self.listTeams!)
             self.tableView.reloadData()
@@ -56,10 +56,10 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             //print(UserAccountViewModel.sharedUserAccount.accessToken)
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                print(Error)
+                //print(Error)
                 return
             }
-            print(Result as! [String:Any])
+            //print(Result as! [String:Any])
             if (Result as! [String:Any])["error"] != nil {
                 SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
                 //print((Result as! [String:String])["error"])
@@ -85,40 +85,21 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        if sender.int == 1 {
-            //print(id ?? 0)
-            NetworkTools.shared.deleteLike(listViewModel.statusList[sender.tag].status.id) { Result, Error in
-                if Error == nil {
-                    //print(Result as! [String:Any])
-                    sender.int = 0
-                    self.loadData()
-                    return
-                }
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
+        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+            if Error == nil {
+                //print(Result as! [String:Any])
+                self.loadData()
                 return
             }
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                NetworkTools.shared.addLike(listViewModel.statusList[sender.tag].status.id) { Result, Error in
-                    if Error == nil {
-                        //print(Result as! [String:Any])
-                        
-                        sender.int = 1
-                        self.loadData()
-                        return
-                    }
-                    SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
-                    return
-                }
-            }
+            SVProgressHUD.showInfo(withStatus: "出错了")
+            //print(Error)
+            return
         }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，最新、最热微博尽在掌握，不再会与时事潮流擦肩而过")
-        if !userLogon {
+        if !UserAccountViewModel.sharedUserAccount.userLogon {
+            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，最新、最热微博尽在掌握，不再会与时事潮流擦肩而过")
             return
         }
         self.listTeams = listViewModel.statusList

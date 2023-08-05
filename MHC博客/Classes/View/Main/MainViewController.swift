@@ -15,10 +15,12 @@ class MainViewController: UITabBarController {
         addChilds()
         // Do any additional setup after loading the view.
         setupComposedButton()
+        /*
         NetworkTools.shared.request(NetworkTools.HMRequestMethod.POST,"http://httpbin.org/post", ["name":"zhangsan","age":18]) {
             (Result,Error) -> () in
             ////print(Result)
         }
+         */
     }
     private lazy var composedButton: UIButton = UIButton(imageName: "tabbar_compose_icon_add", backImageName: "tabbar_compose_button")
     private func setupComposedButton() {

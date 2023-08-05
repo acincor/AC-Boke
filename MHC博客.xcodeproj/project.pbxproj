@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		2E03D3BA29DD30B300C46867 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E03D3B929DD30B300C46867 /* ImageIO.framework */; };
 		2E03D3C129DD311F00C46867 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E887F8A29CE8F5C007CA93B /* libsqlite3.tbd */; };
+		2E2AAA532A71EE2D0023417C /* WebSocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */; };
+		2E2AAA832A72A6690023417C /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA822A72A6690023417C /* MessageModel.swift */; };
+		2E2AAA852A72A7170023417C /* ChatDataSourch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA842A72A7170023417C /* ChatDataSourch.swift */; };
+		2E2AAA872A72A74D0023417C /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA862A72A74D0023417C /* TableView.swift */; };
+		2E2AAA892A72A7890023417C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA882A72A7890023417C /* TableViewCell.swift */; };
+		2E2AAAF62A73538D0023417C /* chat.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF52A73538D0023417C /* chat.sql */; };
+		2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF72A7354470023417C /* ChatDAL.swift */; };
 		2E66A4B82A33E09D009C8207 /* CommentCommentCellBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4B42A33E09D009C8207 /* CommentCommentCellBottomView.swift */; };
 		2E66A4B92A33E09D009C8207 /* CommentCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4B52A33E09D009C8207 /* CommentCommentCell.swift */; };
 		2E66A4BA2A33E09D009C8207 /* CommentCommentCellTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4B62A33E09D009C8207 /* CommentCommentCellTopView.swift */; };
@@ -420,12 +427,34 @@
 		2EB2943429EB7243009E0439 /* UIImage+Metadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EC29EB7243009E0439 /* UIImage+Metadata.m */; };
 		2EB2943529EB7243009E0439 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EE29EB7243009E0439 /* UIButton+WebCache.m */; };
 		2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EF29EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m */; };
+		2EDC44CE2A78C21E003D7E63 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */; };
+		2EDC44D62A7A4888003D7E63 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2E2AA9DF2A7161A50023417C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2E03D3B629DD2F1F00C46867 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge.h; sourceTree = "<group>"; };
 		2E03D3B929DD30B300C46867 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		2E03D41429DD324D00C46867 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketViewController.swift; sourceTree = "<group>"; };
+		2E2AAA822A72A6690023417C /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
+		2E2AAA842A72A7170023417C /* ChatDataSourch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDataSourch.swift; sourceTree = "<group>"; };
+		2E2AAA862A72A74D0023417C /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
+		2E2AAA882A72A7890023417C /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		2E2AAAF52A73538D0023417C /* chat.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chat.sql; sourceTree = "<group>"; };
+		2E2AAAF72A7354470023417C /* ChatDAL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDAL.swift; sourceTree = "<group>"; };
 		2E66A4B42A33E09D009C8207 /* CommentCommentCellBottomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentCellBottomView.swift; sourceTree = "<group>"; };
 		2E66A4B52A33E09D009C8207 /* CommentCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentCell.swift; sourceTree = "<group>"; };
 		2E66A4B62A33E09D009C8207 /* CommentCommentCellTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentCellTopView.swift; sourceTree = "<group>"; };
@@ -1164,6 +1193,8 @@
 		2EB293EF29EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWebImageDownloaderRequestModifier.m; sourceTree = "<group>"; };
 		2EB293F029EB7243009E0439 /* SDImageCodersManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCodersManager.h; sourceTree = "<group>"; };
 		2EB293F129EB7243009E0439 /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
+		2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
+		2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1180,10 +1211,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E2AA9D02A711B4E0023417C /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */,
+			);
+			path = WebSocket;
+			sourceTree = "<group>";
+		};
 		2E66A4FC2A376116009C8207 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
 				2E66A4FD2A376116009C8207 /* db.sql */,
+				2E2AAAF52A73538D0023417C /* chat.sql */,
 			);
 			name = Resource;
 			path = "MHC博客/Resource";
@@ -1316,6 +1356,7 @@
 		2E738A4F29AA38510014FA12 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				2E2AAAF72A7354470023417C /* ChatDAL.swift */,
 				2E66A4FF2A37617E009C8207 /* StatusDAL.swift */,
 				2E738A5029AA38510014FA12 /* UserAccountViewModel.swift */,
 				2E738A5229AA38510014FA12 /* StatusViewModel.swift */,
@@ -1326,6 +1367,7 @@
 				2EA71BEB29B9501B004742CA /* CommentListViewModel.swift */,
 				2EA71C3C29C6A6E4004742CA /* FriendListViewModel.swift */,
 				2EAA991B2A6C06760058481E /* LiveListViewModel.swift */,
+				2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1429,6 +1471,7 @@
 		2E738A7729AA38510014FA12 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC44D42A7A4888003D7E63 /* UserProfile */,
 				2E738A7829AA38510014FA12 /* Home */,
 				2E738A8529AA38510014FA12 /* Discover */,
 				2E738A8729AA38510014FA12 /* OAuth */,
@@ -1443,6 +1486,7 @@
 		2E738A7829AA38510014FA12 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				2E2AA9D02A711B4E0023417C /* WebSocket */,
 				2EAA99182A6BE35D0058481E /* Live */,
 				2E738A7929AA38510014FA12 /* RefreshView */,
 				2E738A7C29AA38510014FA12 /* StatusCell */,
@@ -1516,6 +1560,10 @@
 			isa = PBXGroup;
 			children = (
 				2EA71C3629C2066B004742CA /* MessageMainTableViewController.swift */,
+				2E2AAA822A72A6690023417C /* MessageModel.swift */,
+				2E2AAA842A72A7170023417C /* ChatDataSourch.swift */,
+				2E2AAA862A72A74D0023417C /* TableView.swift */,
+				2E2AAA882A72A7890023417C /* TableViewCell.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -2326,6 +2374,14 @@
 			path = WebImage;
 			sourceTree = "<group>";
 		};
+		2EDC44D42A7A4888003D7E63 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
 		98AC79562FF92B973FE3D084 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2346,6 +2402,7 @@
 				2E738A3129AA33CF0014FA12 /* Sources */,
 				2E738A3229AA33CF0014FA12 /* Frameworks */,
 				2E738A3329AA33CF0014FA12 /* Resources */,
+				2E2AA9DF2A7161A50023417C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2394,6 +2451,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E2AAAF62A73538D0023417C /* chat.sql in Resources */,
 				2EAA992E2A6D55E00058481E /* 用户协议.txt in Resources */,
 				2E66A52F2A416173009C8207 /* SVProgressHUD.bundle in Resources */,
 				2E704C0B29FA2977003FE541 /* README.md in Resources */,
@@ -2436,6 +2494,7 @@
 				2E66A4BB2A33E09D009C8207 /* CommentCommentNormalCell.swift in Sources */,
 				2EAA98DB2A6B85390058481E /* GPUImageVoronoiConsumerFilter.m in Sources */,
 				2EAA98732A6B85380058481E /* GPUImageGaussianBlurPositionFilter.m in Sources */,
+				2E2AAA832A72A6690023417C /* MessageModel.swift in Sources */,
 				2EA71BDE29B94CD6004742CA /* CommentViewModel.swift in Sources */,
 				2EB2942D29EB7243009E0439 /* SDImageCacheConfig.m in Sources */,
 				2E704C0E29FA2977003FE541 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -2468,6 +2527,7 @@
 				2E704C1629FA2977003FE541 /* AFHTTPSessionManager.m in Sources */,
 				2EAA98EF2A6B85390058481E /* GPUImageScreenBlendFilter.m in Sources */,
 				2E738AAC29AA38510014FA12 /* PicturePickerController.swift in Sources */,
+				2E2AAA892A72A7890023417C /* TableViewCell.swift in Sources */,
 				2E66A4BF2A33E524009C8207 /* CommentCommentViewModel.swift in Sources */,
 				2EAA98C32A6B85390058481E /* GPUImagePicture+TextureSubimage.m in Sources */,
 				2EB2940729EB7243009E0439 /* SDWebImageCacheSerializer.m in Sources */,
@@ -2506,6 +2566,7 @@
 				2EAA98E22A6B85390058481E /* GPUImageWhiteBalanceFilter.m in Sources */,
 				2EAA98AE2A6B85380058481E /* GPUImageDifferenceBlendFilter.m in Sources */,
 				2EB2907229EAE465009E0439 /* ConstraintMakerRelatable+Extensions.swift in Sources */,
+				2EDC44CE2A78C21E003D7E63 /* ChatListViewModel.swift in Sources */,
 				2EB2940629EB7243009E0439 /* SDImageLoader.m in Sources */,
 				2EAA98612A6B85380058481E /* LFMP4Atom.m in Sources */,
 				2EB2908129EAE465009E0439 /* Constraint.swift in Sources */,
@@ -2562,6 +2623,7 @@
 				2EAA98952A6B85380058481E /* GPUImageOverlayBlendFilter.m in Sources */,
 				2EAA98FB2A6B85390058481E /* GPUImageDilationFilter.m in Sources */,
 				2EB2906829EAE465009E0439 /* ConstraintAttributes.swift in Sources */,
+				2E2AAA852A72A7170023417C /* ChatDataSourch.swift in Sources */,
 				2EAA98F22A6B85390058481E /* GPUImageMotionBlurFilter.m in Sources */,
 				2EAA98D52A6B85390058481E /* GPUImageContrastFilter.m in Sources */,
 				2EAA98672A6B85380058481E /* GPUImageTwoPassTextureSamplingFilter.m in Sources */,
@@ -2694,6 +2756,7 @@
 				2EAA98A82A6B85380058481E /* GPUImageSphereRefractionFilter.m in Sources */,
 				2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */,
 				2EB2941829EB7243009E0439 /* UIImage+ExtendedCacheData.m in Sources */,
+				2EDC44D62A7A4888003D7E63 /* UserProfileViewController.swift in Sources */,
 				2EAA98A72A6B85380058481E /* GPUImage3x3TextureSamplingFilter.m in Sources */,
 				2EB2941F29EB7243009E0439 /* NSBezierPath+SDRoundedCorners.m in Sources */,
 				2EAA98EE2A6B85390058481E /* GPUImagePinchDistortionFilter.m in Sources */,
@@ -2713,6 +2776,7 @@
 				2EB2906A29EAE465009E0439 /* ConstraintPriorityTarget.swift in Sources */,
 				2EAA98742A6B85380058481E /* GPUImageColorPackingFilter.m in Sources */,
 				2E738AC729AA38510014FA12 /* DiscoverTableViewController.swift in Sources */,
+				2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */,
 				2E738AAD29AA38510014FA12 /* PicturePickerCell.swift in Sources */,
 				2EAA99002A6B85390058481E /* GPUImageKuwaharaFilter.m in Sources */,
 				2EB2908029EAE465009E0439 /* ConstraintItem.swift in Sources */,
@@ -2722,6 +2786,7 @@
 				2EAA98BE2A6B85390058481E /* GPUImageFramebufferCache.m in Sources */,
 				2EAA99042A6B85390058481E /* GPUImageLuminosityBlendFilter.m in Sources */,
 				2EAA98532A6B85380058481E /* LFAudioCapture.m in Sources */,
+				2E2AAA532A71EE2D0023417C /* WebSocketViewController.swift in Sources */,
 				2EAA98702A6B85380058481E /* GPUImageHighPassFilter.m in Sources */,
 				2EA71BEC29B9501B004742CA /* CommentListViewModel.swift in Sources */,
 				2EB2906529EAE465009E0439 /* LayoutConstraintItem.swift in Sources */,
@@ -2734,6 +2799,7 @@
 				2E738ABF29AA38510014FA12 /* StatusPictureView.swift in Sources */,
 				2EAA98552A6B85380058481E /* LFLiveStreamInfo.m in Sources */,
 				2EAA98B62A6B85390058481E /* GPUImageFilterPipeline.m in Sources */,
+				2E2AAA872A72A74D0023417C /* TableView.swift in Sources */,
 				2EB2906C29EAE465009E0439 /* ConstraintMakerFinalizable.swift in Sources */,
 				2E738A9F29AA38510014FA12 /* UserAccountViewModel.swift in Sources */,
 				2EB2921D29EAE979009E0439 /* FMDatabase.m in Sources */,
@@ -2945,6 +3011,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2953,16 +3023,18 @@
 					"\"${PROJECT_DIR}/MHC博客/fmdb\"",
 					"\"${PROJECT_DIR}/MHC博客/AFNetworking/AFNetworking\"",
 					"\"${PROJECT_DIR}/MHC博客/AFNetworking/UIKit+AFNetworking\"",
-					"\"${PROJECT_DIR}/MHC博客/LFLiveKit/LFLiveKit.h\"",
+					"\"${PROJECT_DIR}/MHC博客/LFLiveKit\"",
 				);
 				INFOPLIST_FILE = "MHC博客/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME)想使用您的摄像头";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(PRODUCT_NAME)想使用您的Microphone";
+				INFOPLIST_KEY_NSCameraUsageDescription = "MHC博客想使用您的摄像头";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MHC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "MHC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MARKETING_VERSION = 1.1;
@@ -2990,6 +3062,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"${PROJECT_DIR}/MHC博客/SDWebImage/WebImage\"",
@@ -2997,16 +3073,18 @@
 					"\"${PROJECT_DIR}/MHC博客/fmdb\"",
 					"\"${PROJECT_DIR}/MHC博客/AFNetworking/AFNetworking\"",
 					"\"${PROJECT_DIR}/MHC博客/AFNetworking/UIKit+AFNetworking\"",
-					"\"${PROJECT_DIR}/MHC博客/LFLiveKit/LFLiveKit.h\"",
+					"\"${PROJECT_DIR}/MHC博客/LFLiveKit\"",
 				);
 				INFOPLIST_FILE = "MHC博客/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME)想使用您的摄像头";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(PRODUCT_NAME)想使用您的Microphone";
+				INFOPLIST_KEY_NSCameraUsageDescription = "MHC博客想使用您的摄像头";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MHC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "MHC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MARKETING_VERSION = 1.1;

@@ -8,20 +8,60 @@
 import UIKit
 import SwiftUI
 
-class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegate {
-    private var usernameLabel: String {
-        return UserAccountViewModel.sharedUserAccount.account?.user ?? "用户未登录"
-    }
+class UserProfileViewController:UIViewController, UITextFieldDelegate {
+    private var usernameLabel: String
     private var label: String {
-        let lb = "用户名："
+        let lb = "用户名："+usernameLabel
             return lb
     }
-    private lazy var MIDLabel: UILabel = UILabel(title: label)
+    init(usernameLabel: String,MID: String) {
+        self.usernameLabel = usernameLabel
+        self.MID = MID
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    private lazy var MIDLabel: UILabel = UILabel(title: uidLabel)
+    private var MID: String
     private var uidLabel: String {
-        let lb = "MID:"+UserAccountViewModel.sharedUserAccount.account!.uid!
-            return lb
+        let lb = "MID:"+MID
+        return lb
     }
-    private var renameButton: UITextField = UITextField()
+    @objc func action(sender: UITapGestureRecognizer) {
+        print("\(sender.sender)")
+        NetworkTools.shared.addFriend(sender.sender) { Result, Error in
+            if Error != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                //print("Result出现错误")
+                //print(Error)
+                return
+            }
+            guard let result = Result as? [String:Any] else {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                //print("result出现转换错误")
+                return
+            }
+            if (result["error"] != nil) {
+                SVProgressHUD.showInfo(withStatus: result["error"] as? String)
+                //print("result出现error")
+                return
+            }
+            guard let code = result["code"] as? String else {
+                SVProgressHUD.showInfo(withStatus: "出错了")
+                //print("result出现转换错误")
+                return
+            }
+            if (code != "delete") {
+                SVProgressHUD.showInfo(withStatus: "成功添加好友")
+                //print("result出现error")
+                ////print(result)
+                return
+            }
+            SVProgressHUD.showInfo(withStatus: "成功删除/拉黑好友")
+        }
+    }
     private lazy var Label: UILabel = UILabel(title: label)
     private lazy var iconView: StatusPictureView = {
         let iv = StatusPictureView()
@@ -29,34 +69,14 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
         iv.layer.masksToBounds = true
         return iv
     }()
-    let userAgreementButton = UIButton(title: "用户协议", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
-    let liveButton = UIButton(title: "开始直播", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
-    let logOffButton = UIButton(title: "注销账号", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
-    let expiresUserButton = UIButton(title: "退出登录", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: "登陆后，你的微博，相册、个人资料会显示在这里，展示给别人")
-            return
-        }
-        view.addSubview(Label)
-        view.addSubview(iconView)
-        renameButton = UITextField()
-        renameButton.text = usernameLabel
-        view.addSubview(renameButton)
-        view.addSubview(logOffButton)
-        view.addSubview(liveButton)
-        view.addSubview(userAgreementButton)
-        view.addSubview(expiresUserButton)
-        view.addSubview(MIDLabel)
         loadData()
-        refreshControl = WBRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
     }
     @objc func loadData() {
-        refreshControl?.beginRefreshing()
+        view.backgroundColor = .white
         iconView.backgroundColor = .yellow
-        do {
+        view.addSubview(iconView)
             let imageView = UIImageView()
             imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
                 iconView.snp.makeConstraints { make in
@@ -72,67 +92,19 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
                     make.width.equalTo(90)
                     make.height.equalTo(90)
                 }
-            MIDLabel.removeFromSuperview()
-            MIDLabel = UILabel(title: uidLabel)
+        let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
+        g.sender = MID
+        iconView.addGestureRecognizer(g)
             view.addSubview(MIDLabel)
             MIDLabel.snp.makeConstraints { make in
                 make.top.equalTo(iconView.snp.bottom)
             }
-            Label.removeFromSuperview()
-            Label = UILabel(title: label)
             view.addSubview(Label)
             Label.snp.makeConstraints { make in
                 make.top.equalTo(MIDLabel.snp.bottom)
             }
             Label.sizeToFit()
-            renameButton.removeFromSuperview()
-            renameButton = UITextField()
-            renameButton.text = usernameLabel
-            view.addSubview(renameButton)
-            renameButton.snp.makeConstraints { make in
-                make.left.equalTo(Label.snp.right)
-                make.top.equalTo(MIDLabel.snp.bottom)
-            }
-            renameButton.delegate = self
-            renameButton.sizeToFit()
-            userAgreementButton.removeFromSuperview()
-            view.addSubview(userAgreementButton)
-            userAgreementButton.snp.makeConstraints { make in
-                make.top.equalTo(renameButton.snp.bottom).offset(20)
-                make.width.equalTo(UIScreen.main.bounds.width)
-            }
-            userAgreementButton.layer.cornerRadius = 15
-            userAgreementButton.addTarget(self, action: #selector(self.userAgreementButtonTouchAction), for: .touchDown)
-            liveButton.removeFromSuperview()
-            view.addSubview(liveButton)
-            liveButton.snp.makeConstraints { make in
-                make.top.equalTo(userAgreementButton.snp.bottom).offset(10)
-                make.width.equalTo(UIScreen.main.bounds.width)
-            }
-            liveButton.layer.cornerRadius = 15
-            liveButton.addTarget(self, action: #selector(self.liveButtonTouchAction), for: .touchDown)
-            expiresUserButton.removeFromSuperview()
-            view.addSubview(expiresUserButton)
-            expiresUserButton.snp.makeConstraints { make in
-                make.top.equalTo(liveButton.snp.bottom).offset(10)
-                make.width.equalTo(UIScreen.main.bounds.width)
-            }
-            expiresUserButton.layer.cornerRadius = 15
-            expiresUserButton.addTarget(self, action: #selector(self.expiresUserButtonTouchAction), for: .touchDown)
-            logOffButton.removeFromSuperview()
-            view.addSubview(logOffButton)
-            logOffButton.snp.makeConstraints { make in
-                make.top.equalTo(expiresUserButton.snp.bottom).offset(10)
-                make.width.equalTo(UIScreen.main.bounds.width)
-            }
-            logOffButton.layer.cornerRadius = 15
-            logOffButton.addTarget(self, action: #selector(self.logOffUserButtonTouchAction), for: .touchDown)
             // Do any additional setup after loading the view.
-        } catch {
-            SVProgressHUD.show(withStatus: "图片加载错误")
-            return
-        }
-        refreshControl?.endRefreshing()
     }
     @objc func liveButtonTouchAction() {
         let nav = UINavigationController(rootViewController: BKLiveController())
@@ -173,7 +145,7 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
                 return
             }
             if(Result as! [String:Any])["msg"] != nil {
-                print(Result)
+                //print(Result)
                 NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: "logOut")
                 UserAccountViewModel.sharedUserAccount.account = nil
             }
@@ -188,7 +160,6 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
             }
             print(Result)
             if(Result as! [String:Any])["msg"] != nil {
-                //print(Result)
                 NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: nil)
                 UserAccountViewModel.sharedUserAccount.account = nil
             }

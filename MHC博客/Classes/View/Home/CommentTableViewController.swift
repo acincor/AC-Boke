@@ -29,7 +29,7 @@ class CommentTableViewController: VisitorTableViewController {
                  SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                  return
              }
-             //print("array,",self.commentlistViewModel.commentList)
+             //print("array,",commentlistViewModel.commentList.count)
              self.tableView.reloadData()
          }
     }
@@ -57,7 +57,7 @@ class CommentTableViewController: VisitorTableViewController {
                 let like_list = commentlistViewModel.commentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].comment.like_list
                 self.cell = ((n.object as! [String:Any])["cell"] as! CommentCell)
                 for s in like_list {
-                    if result.isEqualTo(s) {
+                    if result["like_uid"] as? String == s["like_uid"] as? String {
                         
                         self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
                         break
@@ -78,6 +78,7 @@ class CommentTableViewController: VisitorTableViewController {
     @objc func close() {
         self.dismiss(animated: true)
     }
+    var int = 0
 }
 extension CommentTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -92,8 +93,8 @@ extension CommentTableViewController {
                 //print(Error)
                 return
             }
-            print(Result)
-            if (Result as! [String:String])["error"] != nil {
+            //print(Result)
+            if (Result as! [String:Any])["error"] != nil {
                 SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
                 //print((Result as! [String:String])["error"])
                 return
@@ -143,37 +144,17 @@ extension CommentTableViewController {
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        if sender.int == 1 {
-            //print(id ?? 0)
-            NetworkTools.shared.deleteLike(listViewModel.statusList[sender.tag].status.id,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
-                if Error == nil {
-                    print(Result as! [String:Any])
-                    sender.int = 0
-                    self.loadData()
-                    sender.setTitle("\(commentlistViewModel.commentList[sender.tag].comment.like_count)", for: .normal)
-                    return
-                }
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
+        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
+            if Error == nil {
+                print(Result as! [String:Any])
+                //sender.int = 0
+                self.loadData()
+                sender.setTitle("\(commentlistViewModel.commentList[sender.tag].comment.like_count)", for: .normal)
                 return
             }
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                print(comment_id)
-                NetworkTools.shared.addLike(listViewModel.statusList[sender.tag].status.id,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
-                    if Error == nil {
-                        print(Result as! [String:Any])
-                        
-                        sender.int = 1
-                        self.loadData()
-                        sender.setTitle("\(commentlistViewModel.commentList[sender.tag].comment.like_count)", for: .normal)
-                        return
-                    }
-                    SVProgressHUD.showInfo(withStatus: "出错了")
-                    print(Error)
-                    return
-                }
-            }
+            SVProgressHUD.showInfo(withStatus: "出错了")
+            //print(Error)
+            return
         }
     }
     @objc func action2(_ sender: UIButton) {
@@ -192,7 +173,7 @@ extension CommentTableViewController {
                 print(Result)
                 if (Result as! [String:Int])["error"] != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
+                    print(Error)
                     return
                 }
             sender.nav.close()

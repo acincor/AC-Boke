@@ -22,6 +22,7 @@ class UserAccountViewModel {
     }
     private var accountPath: String {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
+        //print(path)
         return (path as NSString).appendingPathComponent("account.plist")
     }
     private init() {

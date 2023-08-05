@@ -65,6 +65,11 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/getUser.php"
         request(.POST, urlString, params, finished: finished)
     }
+    func loadUserInfo(uid:Int, finished: @escaping HMRequstCallBack) {
+        let params = ["uid":uid]
+        let urlString = "https://mhc.lmyz6.cn/getUserUid.php"
+        request(.POST, urlString, params, finished: finished)
+    }
 }
 extension NetworkTools {
     func loadStatus(finished: @escaping HMRequstCallBack) {
@@ -75,6 +80,7 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/loadLive.php"
         tokenRequest(.GET, urlString, nil, finished: finished)
     }
+    ///此方法已弃用，现在我们直接用blog的来加载
     func loadComment(id: Int? = nil, comment_id: Int? = nil, finished: @escaping HMRequstCallBack) {
         var params = [String:Int]()
         let urlString = "https://mhc.lmyz6.cn/loadComment.php"
@@ -146,6 +152,7 @@ extension NetworkTools {
         }
         params["id"] = id
         let urlString = "https://mhc.lmyz6.cn/deleteBlog.php"
+        print(params)
         request(.POST, urlString, params, finished: finished)
     }
     func addComment(id: Int, comment_id: Int? = nil,_ comment: String,finished: @escaping HMRequstCallBack) {
@@ -158,7 +165,7 @@ extension NetworkTools {
         }
         params["id"] = id
         params["comment"] = comment
-        //print(params)
+        print(params)
         let urlString = "https://mhc.lmyz6.cn/addComment.php"
         request(.POST, urlString, params, finished: finished)
     }
@@ -173,10 +180,11 @@ extension NetworkTools {
             params["to_comment_id"] = comment_id
             params["comment_id"] = comment_comment_id
         }
-        print(params)
+        //print(params)
         let urlString = "https://mhc.lmyz6.cn/deleteComment.php"
         request(.POST, urlString, params, finished: finished)
     }
+    /*
     func addLike(_ id: Int,_ comment_id: Int? = nil,comment_id comment_comment_id: Int? = nil,finished: @escaping HMRequstCallBack) {
         guard var params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
@@ -192,7 +200,8 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/addLike.php"
         request(.POST, urlString, params, finished: finished)
     }
-    func deleteLike(_ id: Int,comment_id comment_comment_id: Int? = nil,_ comment_id: Int? = nil,_ finished: @escaping HMRequstCallBack) {
+     */
+    func like(_ id: Int,comment_id comment_comment_id: Int? = nil,_ comment_id: Int? = nil,_ finished: @escaping HMRequstCallBack) {
         guard var params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
@@ -205,7 +214,7 @@ extension NetworkTools {
         if comment_comment_id != nil {
             params["to_comment_id"] = comment_comment_id
         }
-        let urlString = "https://mhc.lmyz6.cn/deleteLike.php"
+        let urlString = "https://mhc.lmyz6.cn/like.php"
         request(.POST, urlString, params, finished: finished)
     }
     func tokenRequest(_ method: HMRequestMethod, _ URLString: String, _ parameters: [String: Any]?, finished: @escaping HMRequstCallBack) {

@@ -33,9 +33,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if notification.object != nil {
                 if UserAccountViewModel.sharedUserAccount.userLogon {
                     NetworkTools.shared.tokenIsExpires { Result, Error in
-                        print(Error)
+                        //print(Error)
                         if (Result as! [String:Any])["msg"] as! Int == 1 {
-                            print("有没有一种可能到这里了")
+                            //print("有没有一种可能到这里了")
                             var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
@@ -51,9 +51,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 if UserAccountViewModel.sharedUserAccount.userLogon {
                     NetworkTools.shared.logOff { Result, Error in
-                        print(Error)
+                        //print(Error)
                         if (Result as! [String:Any])["msg"] as! Int == 1 {
-                            print("有没有一种可能到这里了")
+                            //print("有没有一种可能到这里了")
                             var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
@@ -63,6 +63,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     exit(0)
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+        if UserAccountViewModel.sharedUserAccount.userLogon {
+            NetworkTools.shared.tokenIsExpires { Result, Error in
+                if (Result as! [String:Any])["msg"] as! Int == 1 {
+                    //print("有没有一种可能到这里了")
+                    var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
+                    path = (path as NSString).appendingPathComponent("account.plist")
+                    if FileManager.default.fileExists(atPath: path) {
+                        SVProgressHUD.showInfo(withStatus: "登陆过期")
+                        try! FileManager.default.removeItem(atPath: path)
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
+                            exit(0)
                         }
                     }
                 }

@@ -12,12 +12,39 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
     @objc private func close() {
         dismiss(animated: true,completion: nil)
     }
+    @objc private func closeUserAgreement() {
+        controller.dismiss(animated: true,completion: nil)
+    }
+    let controller = UIViewController()
+    @objc private func userAgreement() {
+        let textView = UITextView(frame: UIScreen.main.bounds)
+        guard let userAgreement = Bundle.main.path(forResource: "用户协议", ofType: "txt") else {
+            SVProgressHUD.showInfo(withStatus: "似乎找不到目录")
+            return
+        }
+        do{
+        var readStr:NSString=try NSString(contentsOfFile: userAgreement, encoding: String.Encoding.utf8.rawValue)
+            textView.text = readStr as String
+            textView.isEditable = false
+            controller.view = textView
+            controller.title = "用户协议"
+            controller.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(OAuthViewController.closeUserAgreement))
+            controller.navigationItem.leftBarButtonItem?.tintColor = .red
+            present(UINavigationController(rootViewController: controller), animated: true)
+        }catch _ {
+        //print(error.localizedDescription)
+        //print("文件读取失败，可能是资源找不到")
+        }
+    }
     override func loadView() {
         view = webView
         webView.delegate = self
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(OAuthViewController.close))
         navigationItem.leftBarButtonItem?.tintColor = .red
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "用户协议", style: .plain, target: self, action: #selector(OAuthViewController.userAgreement))
+        navigationItem.rightBarButtonItem?.tintColor = .red
     }
+    
     enum 登录方式: String {
         case 注册 = "注册"
         case 登录 = "登录"

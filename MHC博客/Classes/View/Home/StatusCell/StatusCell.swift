@@ -42,6 +42,7 @@ class StatusCell: UITableViewCell {
             make.height.equalTo(44)
         }
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

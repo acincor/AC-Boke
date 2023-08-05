@@ -47,7 +47,14 @@ class MessageTableViewController: VisitorTableViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.friendListViewModel.friendList.count
     }
-    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let socketController = WebSocketController()
+        socketController.to_uid = friendListViewModel.friendList[indexPath.row].friend.uid
+        socketController.username = friendListViewModel.friendList[indexPath.row].friend.user
+        let nav = UINavigationController(rootViewController: socketController)
+        nav.modalPresentationStyle = .custom
+        present(nav, animated: false)
+    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = friendListViewModel.friendList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: FriendCellNormalId, for: indexPath) as! FriendCell

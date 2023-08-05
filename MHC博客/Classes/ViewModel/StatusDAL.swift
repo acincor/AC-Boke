@@ -15,33 +15,33 @@ class StatusDAL {
         df.locale = Locale(identifier: "en")
         df.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateStr = df.string(from: date)
-        print(dateStr)
+        //print(dateStr)
         let sql = "DELETE FROM T_Status WHERE createtime < '?'"
         //DELETE FROM T_Status WHERE createTime < (?);
         SQLiteManager.shared.queue.inDatabase { db in
             try? db.executeUpdate(sql, values: [dateStr])
             if db.changes > 0 {
-                print("删除了\(db.changes)条缓存数据")
+                //print("删除了\(db.changes)条缓存数据")
             } else {
-                print("没有需要删除的")
+                //print("没有需要删除的")
             }
         }
     }
     class func loadStatus(since_id: Int, max_id: Int, finished: @escaping(_ array: [[String:Any]]?) -> ()) {
         let array = StatusDAL.checkCacheData(since_id: since_id, max_id: max_id)
         if array!.count > 0{
-            print("查询到缓存数据 \(array!.count)")
+            //print("查询到缓存数据 \(array!.count)")
             finished(array!)
             return
         }
         NetworkTools.shared.loadStatus { (Result, Error) -> () in
             if Error != nil {
-                print("出错了")
+                //print("出错了")
                 finished(nil)
                 return
             }
             guard let array = Result as? [[String: Any]] else {
-                print("数据格式错误")
+                //print("数据格式错误")
                 finished(nil)
                 return
             }
@@ -51,7 +51,7 @@ class StatusDAL {
     }
     class func checkCacheData(since_id: Int, max_id: Int) -> [[String:Any]]? {
         guard let userId = UserAccountViewModel.sharedUserAccount.account?.uid else {
-            print("用户没有登录")
+            //print("用户没有登录")
             return nil
         }
         var sql = "SELECT statusId, status, userId FROM T_Status \n"
@@ -62,7 +62,7 @@ class StatusDAL {
             sql += "    AND statusId < \(max_id) \n"
         }
         sql += "ORDER BY statusId DESC LIMIT 10;"
-        print("查询数据 SQL -> "+sql)
+        //print("查询数据 SQL -> "+sql)
         let array = SQLiteManager.shared.execRecordSet(sql: sql)
         var arrayM = [[String:Any]]()
         for dict in array {
@@ -74,7 +74,7 @@ class StatusDAL {
     }
     class func saveCache(array data: [[String:Any]]) {
         guard let userId = UserAccountViewModel.sharedUserAccount.account?.uid else {
-            print("用户没有登录")
+            //print("用户没有登录")
             return
         }
         let sql = "INSERT OR REPLACE INTO T_Status(statusId, status, userId) VALUES (?, ?, ?);"
@@ -91,16 +91,16 @@ class StatusDAL {
                 
                 // 插入数据
                 do {
-                    try! db.executeUpdate(sql, values: [statusId, json, userId])
+                    try db.executeUpdate(sql, values: [statusId, json, userId])
                     guard db.changes > 0 else {
-                        print("插入数据失败")
+                        //print("插入数据失败")
                         break
                     }
                 } catch {
-                    print("插入数据成功")
+                    //print("插入数据成功")
                 }
             }
         }
-        print("数据插入完成")
+        //print("数据插入完成")
     }
 }

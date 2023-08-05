@@ -28,7 +28,7 @@ class LiveTableView: UICollectionView{
                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                 return
             }
-            print(liveListViewModel.liveList)
+            //print(liveListViewModel.liveList)
             self.reloadData()
         }
          /*

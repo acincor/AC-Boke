@@ -10,10 +10,10 @@ import UIKit
 class StatusCellTopView: UIView {
     // MARK: - 懒加载控件
     /// 头像
-    private lazy var iconView: UIImageView = UIImageView(imageName: "avatar_default_big")
+    lazy var iconView: UIImageView = UIImageView(imageName: "avatar_default_big")
     
     /// 姓名
-    private lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)
+    lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)
     
     /// 时间标签
     private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.red)
@@ -36,44 +36,10 @@ class StatusCellTopView: UIView {
             iconView.layer.cornerRadius = 15
             iconView.layer.masksToBounds = true
             iconView.isUserInteractionEnabled = true
-            let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
-            g.sender = "\(viewModel?.status.uid ?? 0)"
-            iconView.addGestureRecognizer(g)
+            
         }
     }
-    @objc func action(sender: UITapGestureRecognizer) {
-        print("\(viewModel?.status.uid ?? 0)")
-        NetworkTools.shared.addFriend(sender.sender) { Result, Error in
-            if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print("Result出现错误")
-                print(Error)
-                return
-            }
-            guard let result = Result as? [String:Any] else {
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                print("result出现转换错误")
-                return
-            }
-            if (result["error"] != nil) {
-                SVProgressHUD.showInfo(withStatus: result["error"] as? String)
-                print("result出现error")
-                return
-            }
-            guard let code = result["code"] as? String else {
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                print("result出现转换错误")
-                return
-            }
-            if (code != "delete") {
-                SVProgressHUD.showInfo(withStatus: "成功添加好友")
-                //print("result出现error")
-                ////print(result)
-                return
-            }
-            SVProgressHUD.showInfo(withStatus: "成功删除/拉黑好友")
-        }
-    }
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -128,15 +94,26 @@ extension StatusCellTopView {
 extension UITapGestureRecognizer {
     private struct AssociatedKey {
             static var sender: String = "sender"
+        static var sender2: String = "sender2"
         }
         
-        public var sender: String {
+    public var sender: String {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.sender) as? String ?? ""
+        }
+        
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.sender, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
+        
+        public var sender2: String {
             get {
-                return objc_getAssociatedObject(self, &AssociatedKey.sender) as? String ?? ""
+                return objc_getAssociatedObject(self, &AssociatedKey.sender2) as? String ?? ""
             }
             
             set {
-                objc_setAssociatedObject(self, &AssociatedKey.sender, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+                objc_setAssociatedObject(self, &AssociatedKey.sender2, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
             }
         }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-class LiveController: UIViewController {
+class BKLiveController: UIViewController {
     //MARK: - Getters and Setters
     lazy var session: LFLiveSession = {
         let audioConfiguration = LFLiveAudioConfiguration.default()
@@ -20,13 +20,21 @@ class LiveController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        var image = UIImage(named: "Live")
+        var newImage = image?.resizableImage(withCapInsets: UIScreen.main.overscanCompensationInsets)
+        var live = UIImageView(image: newImage)
+        live.frame = UIScreen.main.bounds
+        view.addSubview(live)
+        view.backgroundColor = .red
         for i in liveListViewModel.liveList {
             if i.friend.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
                 SVProgressHUD.showInfo(withStatus: "你的直播已在其他设备上进行...")
                 return
             }
         }
+        title = "hi，一起直播鸭！"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))
+        navigationItem.leftBarButtonItem?.tintColor = .white
         // Do any additional setup after loading the view, typically from a nib.
         let startButton = UIButton(title: "开始直播", color: .white, backImageName: nil,backColor: .red)
         startButton.layer.cornerRadius = 15
@@ -44,7 +52,9 @@ class LiveController: UIViewController {
         startButton.addTarget(self, action: #selector(self.startLive(_:)), for: .touchDown)
         stopButton.addTarget(self, action: #selector(self.stopLive(_:)), for: .touchDown)
     }
-    
+    @objc func close() {
+        self.dismiss(animated: true)
+    }
     @objc func startLive(_ sender: Any) {
         let stream = LFLiveStreamInfo()
         stream.url = "rtmp://mhc.lmyz6.cn:1935/live/\(UserAccountViewModel.sharedUserAccount.account!.uid!)";
