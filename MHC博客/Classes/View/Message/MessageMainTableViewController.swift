@@ -13,8 +13,8 @@ let FriendNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{
     var friendListViewModel = FriendListViewModel()
     private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .whiteLarge)
-        indicator.color = .white
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = .black
         return indicator
     }()
     @objc func loadData() {

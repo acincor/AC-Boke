@@ -74,8 +74,8 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate {
         loadData()
     }
     @objc func loadData() {
-        view.backgroundColor = .white
-        iconView.backgroundColor = .yellow
+        view.backgroundColor = .black
+        iconView.backgroundColor = .black
         view.addSubview(iconView)
             let imageView = UIImageView()
             imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])

@@ -23,7 +23,7 @@ class CommentCommentTableViewController: VisitorTableViewController {
     @objc func action5(_ sender: UIButton) {
         NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id,comment_id: commentlistViewModel.commentCommentList[sender.tag].comment.comment_id,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
             if Error == nil {
-                //print(Result as! [String:Any])
+                print(Result)
                 self.loadData()
                 return
             }
@@ -50,7 +50,7 @@ class CommentCommentTableViewController: VisitorTableViewController {
                  SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                  return
              }
-             //print("array,",self.commentlistViewModel.commentList)
+             print("array,",commentlistViewModel.commentCommentList)
              self.tableView.reloadData()
          }
     }
@@ -71,7 +71,7 @@ class CommentCommentTableViewController: VisitorTableViewController {
                 let like_list = commentlistViewModel.commentCommentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].comment.like_list
                 self.cell = ((n.object as! [String:Any])["cell"] as! CommentCommentCell)
                 for s in like_list {
-                    if result.isEqualTo(s) {
+                    if s["like_uid"] as! String == result["like_uid"] as! String {
                         
                         self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
                         break
@@ -163,16 +163,17 @@ extension CommentCommentTableViewController {
             
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
+                    print(Error)
                     return
                 }
                 //print(Result)
-                if (Result as! [String:String])["error"] != nil {
+                if (Result as! [String:Any])["error"] != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
+                    print((Result as! [String:String])["error"])
                     return
                 }
-            sender.nav.close()
+            SVProgressHUD.showInfo(withStatus: "删除成功")
+            self.loadData()
             }
     }
     @objc func action2(_ sender: UIButton) {

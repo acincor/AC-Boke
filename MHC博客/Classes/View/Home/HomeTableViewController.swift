@@ -13,8 +13,8 @@ let StatusCellNormalId2 = "StatusCellNormalId2"
 var listViewModel = StatusListViewModel()
 class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
     private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .whiteLarge)
-        indicator.color = .white
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = .black
         return indicator
     }()
     deinit {
@@ -76,7 +76,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             var textView = UITextView(frame: liveView.frame)
             textView.text = "暂时无人直播哦..."
             textView.isEditable = false
-            textView.backgroundColor = .gray.withAlphaComponent(0.1)
+            textView.backgroundColor = .lightGray
             tableView.tableHeaderView = textView
         }
     }
@@ -135,7 +135,8 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
                 let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
                 self.cell = ((n.object as! [String:Any])["cell"] as! StatusCell)
                 for s in like_list {
-                    if result["like_uid"] as? Int == s["like_uid"] as? Int {
+                    print(s["like_uid"] as? String)
+                    if result["like_uid"] as? String == s["like_uid"] as? String {
                         
                         self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
                         break
@@ -153,7 +154,8 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
                     let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
                     discover.cell = ((n.object as! [String:Any])["cell"] as? StatusNormalCell)
                     for s in like_list {
-                        if result["like_uid"] as? Int == s["like_uid"] as? Int {
+                        print(s["like_uid"] as? String)
+                        if result["like_uid"] as? String == s["like_uid"] as? String {
                             discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
                             break
                         } else {

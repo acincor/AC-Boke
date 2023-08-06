@@ -1,5 +1,5 @@
 //
-//  StatusCellTopView.swift
+//  CommentCellTopView.swift
 //  MHC微博
 //
 //  Created by Monkey hammer on 2022/9/11.
@@ -14,10 +14,15 @@ class CommentCellTopView: UIView {
     
     /// 姓名
     private lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)
+    /// 时间标签
     private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.red)
+    
+    /// 来源标签
+    private lazy var sourceLabel: UILabel = UILabel(title: "来源", fontSize: 11)
     var viewModel: CommentViewModel? {
         didSet {
             // 姓名
+            sourceLabel.text = viewModel?.comment.source
             timeLabel.text = viewModel?.createAt
             self.nameLabel.text = viewModel?.comment.user
             nameLabel.textColor = .red
@@ -46,7 +51,7 @@ class CommentCellTopView: UIView {
 extension CommentCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor.lightGray
+        sepView.backgroundColor = .black
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)

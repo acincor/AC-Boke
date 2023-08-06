@@ -29,7 +29,6 @@ class CommentTableViewController: VisitorTableViewController {
                  SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                  return
              }
-             //print("array,",commentlistViewModel.commentList.count)
              self.tableView.reloadData()
          }
     }

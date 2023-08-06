@@ -59,7 +59,7 @@ class StatusCellTopView: UIView {
 extension StatusCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = .white
+        sepView.backgroundColor = .black
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)

@@ -28,6 +28,8 @@ class MainViewController: UITabBarController {
         let count = children.count
         let w = tabBar.bounds.width / CGFloat(count) - 1
         composedButton.frame = tabBar.bounds.insetBy(dx: 2 * w, dy: 0)
+        composedButton.layer.masksToBounds = true
+        composedButton.layer.cornerRadius = 30
         composedButton.addTarget(self, action: #selector(MainViewController.clickComposedButton), for: .touchUpInside)
     }
     override func viewWillAppear(_ animated: Bool) {

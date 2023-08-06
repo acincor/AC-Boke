@@ -55,7 +55,7 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
     }
     @objc func loadData() {
         refreshControl?.beginRefreshing()
-        iconView.backgroundColor = .yellow
+        iconView.backgroundColor = .black
         do {
             let imageView = UIImageView()
             imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])

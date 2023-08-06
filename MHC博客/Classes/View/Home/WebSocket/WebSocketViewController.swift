@@ -33,7 +33,7 @@ class WebSocketController: UIViewController,ChatDataSource {
     override func viewDidLoad() {
         connect()
         SVProgressHUD.dismiss()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
                 view.addSubview(textField)
                 view.addSubview(sendButton)
                 view.addSubview(table)

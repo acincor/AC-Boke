@@ -22,7 +22,7 @@ class CommentCell: UITableViewCell {
         }
     }
     private lazy var topView: CommentCellTopView = CommentCellTopView()
-    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .darkGray, screenInset: CommentCellMargin)
+    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .white, screenInset: CommentCellMargin)
     lazy var bottomView: CommentCellBottomView = CommentCellBottomView()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -1,5 +1,5 @@
 //
-//  StatusCellTopView.swift
+//  LiveCellTopView.swift
 //  MHC微博
 //
 //  Created by Monkey hammer on 2022/9/11.
@@ -52,12 +52,13 @@ class LiveCellTopView: UIView {
 extension LiveCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor.white
+        sepView.backgroundColor = UIColor.black
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)
         addSubview(timeLabel)
         addSubview(sourceLabel)
+        sourceLabel.textColor = .white
         iconView.snp.makeConstraints { make in
             make.top.equalTo(sepView.snp.bottom).offset(StatusCellMargin)
             make.left.equalTo(self.snp.left).offset(StatusCellMargin)

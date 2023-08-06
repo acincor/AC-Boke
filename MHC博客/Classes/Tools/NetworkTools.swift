@@ -81,6 +81,7 @@ extension NetworkTools {
         tokenRequest(.GET, urlString, nil, finished: finished)
     }
     ///此方法已弃用，现在我们直接用blog的来加载
+    /*
     func loadComment(id: Int? = nil, comment_id: Int? = nil, finished: @escaping HMRequstCallBack) {
         var params = [String:Int]()
         let urlString = "https://mhc.lmyz6.cn/loadComment.php"
@@ -90,6 +91,7 @@ extension NetworkTools {
             params["id"] = id
         tokenRequest(.POST, urlString, params, finished: finished)
     }
+     */
     func loadChat(finished: @escaping HMRequstCallBack) {
         guard var params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))

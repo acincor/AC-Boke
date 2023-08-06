@@ -35,17 +35,16 @@ class CommentListViewModel {
             finished(true)
              */
             listViewModel.loadStatus(isPullup: true) { isSuccessed in
-                
-            }
-            for i in listViewModel.statusList {
-                if i.status.id == id {
-                    var dataList = [CommentViewModel]()
-                    for dict in i.status.comment_list {
-                        dataList.append(CommentViewModel(comment: Comment(dict: dict)))
+                for i in listViewModel.statusList {
+                    if i.status.id == id {
+                        var dataList = [CommentViewModel]()
+                        for dict in i.status.comment_list {
+                            dataList.append(CommentViewModel(comment: Comment(dict: dict)))
+                        }
+                        self.commentList = dataList
+                        finished(true)
+                        break
                     }
-                    self.commentList = dataList
-                    finished(true)
-                    break
                 }
             }
     }
@@ -72,22 +71,22 @@ class CommentListViewModel {
             finished(true)
              */
             listViewModel.loadStatus(isPullup: true) { isSuccessed in
-                
-            }
-            for i in listViewModel.statusList {
-                if i.status.id == id {
-                    var dataList = [CommentViewModel]()
-                    for dict in i.status.comment_list {
-                        if dict["comment_id"] as! String == String(comment_id) {
-                            for dictionary in i.status.comment_list {
-                                dataList.append(CommentViewModel(comment: Comment(dict: dictionary)))
+                var dataList = [CommentCommentViewModel]()
+                for i in listViewModel.statusList {
+                    if i.status.id == id {
+                        for dict in i.status.comment_list {
+                            if dict["comment_id"] as! String == String(comment_id) {
+                                for dictionary in dict["comment_list"] as! [[String:Any]] {
+                                    print(dictionary)
+                                    dataList.append(CommentCommentViewModel(comment: Comment(dict: dictionary)))
+                                }
                             }
                         }
+                        break
                     }
-                    self.commentList = dataList
-                    finished(true)
-                    break
                 }
+                self.commentCommentList = dataList
+                finished(true)
             }
     }
 }

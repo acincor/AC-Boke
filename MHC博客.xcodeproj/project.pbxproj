@@ -429,6 +429,7 @@
 		2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EF29EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m */; };
 		2EDC44CE2A78C21E003D7E63 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */; };
 		2EDC44D62A7A4888003D7E63 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */; };
+		2EDC44D82A7F2FFB003D7E63 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC44D72A7F2FFB003D7E63 /* readme.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1195,6 +1196,7 @@
 		2EB293F129EB7243009E0439 /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
 		2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		2EDC44D72A7F2FFB003D7E63 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1323,6 +1325,7 @@
 		2E738A4C29AA38510014FA12 /* MHC博客 */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC44D72A7F2FFB003D7E63 /* readme.md */,
 				2EAA96A92A6B85380058481E /* LFLiveKit */,
 				2E66A5212A416173009C8207 /* SVProgressHUD */,
 				2E66A4FC2A376116009C8207 /* Resource */,
@@ -2459,6 +2462,7 @@
 				2E738AD129AA38510014FA12 /* Assets.xcassets in Resources */,
 				2E66A4FE2A376116009C8207 /* db.sql in Resources */,
 				2E738AB229AA38510014FA12 /* Emoticons.bundle in Resources */,
+				2EDC44D82A7F2FFB003D7E63 /* readme.md in Resources */,
 				2E704C0A29FA2977003FE541 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3014,6 +3018,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/MHC博客",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -3022,8 +3027,8 @@
 					"\"${PROJECT_DIR}/MHC博客/SVProgressHUD\"",
 					"\"${PROJECT_DIR}/MHC博客/fmdb\"",
 					"\"${PROJECT_DIR}/MHC博客/AFNetworking/AFNetworking\"",
-					"\"${PROJECT_DIR}/MHC博客/AFNetworking/UIKit+AFNetworking\"",
 					"\"${PROJECT_DIR}/MHC博客/LFLiveKit\"",
+					"\"${PROJECT_DIR}/MHC博客/AFNetworking/UIKit+AFNetworking\"",
 				);
 				INFOPLIST_FILE = "MHC博客/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "MHC博客想使用您的摄像头";
@@ -3034,6 +3039,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -3065,6 +3071,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/MHC博客",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -3072,8 +3079,8 @@
 					"\"${PROJECT_DIR}/MHC博客/SVProgressHUD\"",
 					"\"${PROJECT_DIR}/MHC博客/fmdb\"",
 					"\"${PROJECT_DIR}/MHC博客/AFNetworking/AFNetworking\"",
-					"\"${PROJECT_DIR}/MHC博客/AFNetworking/UIKit+AFNetworking\"",
 					"\"${PROJECT_DIR}/MHC博客/LFLiveKit\"",
+					"\"${PROJECT_DIR}/MHC博客/AFNetworking/UIKit+AFNetworking\"",
 				);
 				INFOPLIST_FILE = "MHC博客/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "MHC博客想使用您的摄像头";
@@ -3084,6 +3091,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";

@@ -20,7 +20,7 @@ class CommentCommentCellBottomView: UIView {
     
     // MARK: - 懒加载控件
     /// 评论按钮
-    lazy var deleteButton: UIButton = UIButton(title: " 删除", fontSize: 12, color: UIColor.white, imageName:
+    lazy var deleteButton: UIButton = UIButton(title: " 删除", fontSize: 12, color: .white, imageName:
     "timeline_icon_retweet")
     
     /// 点赞按钮
@@ -31,7 +31,7 @@ class CommentCommentCellBottomView: UIView {
 extension CommentCommentCellBottomView {
     private func setupUI() {
         // 0. 设置背景颜色
-        backgroundColor = UIColor(white: 0.9, alpha: 1.0)
+        backgroundColor = .clear
         
         // 1. 添加控件
         addSubview(deleteButton)

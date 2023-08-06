@@ -23,7 +23,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         //print(p1.predicateFormat)
         if searchText.length == 0 {
             self.listFilterTeams = NSMutableArray(array: self.listTeams!)
-            self.tableView.reloadData()
+            //self.tableView.reloadData()
             return
         }
         guard let tempArray = (self.listTeams?.filter{
@@ -105,7 +105,9 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.listTeams = listViewModel.statusList
         filterContentForSearchText("")
         refreshControl = WBRefreshControl()
+        refreshControl?.backgroundColor = .clear
         //tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .plain)
+        loadData()
         refreshControl?.addTarget(self, action: Selector("loadData"), for: .valueChanged)
         tableView.tableFooterView = pullupView
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")
@@ -117,8 +119,8 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .whiteLarge)
-        indicator.color = .white
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = .clear
         return indicator
     }()
     @objc func loadData() {

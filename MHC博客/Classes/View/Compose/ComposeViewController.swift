@@ -13,7 +13,7 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
     private lazy var textView:UITextView = {
         let tv = UITextView()
         tv.font = UIFont.systemFont(ofSize: 18)
-        tv.textColor = .darkGray
+        tv.textColor = .white
         tv.alwaysBounceVertical = true
         tv.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
         tv.delegate = self
@@ -87,7 +87,7 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
 }
 extension ComposeViewController {
     func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         automaticallyAdjustsScrollViewInsets = false
         prepare()
         prepareTool()
@@ -165,7 +165,7 @@ extension ComposeViewController {
             make.right.equalTo(view.snp.right)
             make.height.equalTo(44)
         }
-        let itemSettings = [["imageName": "compose_toolbar_picture", "actionName": "selectPicture"],["imageName": "compose_mentionbutton_background"], ["imageName":"compose_trendbutton_background"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_addbutton_background"]]
+        let itemSettings = [["imageName": "compose_toolbar_picture", "actionName": "selectPicture"],["imageName": "compose_mentionbutton_background"], ["imageName":"compose_trendbutton_background"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_pic_big_add"]]
         var items = [UIBarButtonItem]()
         for dict in itemSettings {
             items.append(UIBarButtonItem(imageName: dict["imageName"]!, target: self, actionName: dict["actionName"]))
