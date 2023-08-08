@@ -14,7 +14,7 @@ class MessageTableViewController: VisitorTableViewController{
     var friendListViewModel = FriendListViewModel()
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .black
+        indicator.color = .white
         return indicator
     }()
     @objc func loadData() {

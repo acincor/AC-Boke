@@ -29,7 +29,7 @@ class StatusCell: UITableViewCell {
         }
     }
     lazy var topView: StatusCellTopView = StatusCellTopView()
-    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .white, screenInset: StatusCellMargin)
+    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .black, screenInset: StatusCellMargin)
     lazy var bottomView: StatusCellBottomView = StatusCellBottomView()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -52,7 +52,7 @@ class LiveCellTopView: UIView {
 extension LiveCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor.black
+        sepView.backgroundColor = UIColor.lightGray
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)

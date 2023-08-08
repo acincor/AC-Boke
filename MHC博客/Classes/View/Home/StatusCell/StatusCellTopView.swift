@@ -59,7 +59,7 @@ class StatusCellTopView: UIView {
 extension StatusCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = .black
+        sepView.backgroundColor = UIColor.lightGray
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)
@@ -95,6 +95,7 @@ extension UITapGestureRecognizer {
     private struct AssociatedKey {
             static var sender: String = "sender"
         static var sender2: String = "sender2"
+        static var sender3: String = "sender3"
         }
         
     public var sender: String {
@@ -104,6 +105,15 @@ extension UITapGestureRecognizer {
         
         set {
             objc_setAssociatedObject(self, &AssociatedKey.sender, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
+    public var sender3: String {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.sender3) as? String ?? ""
+        }
+        
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.sender3, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
     }
         

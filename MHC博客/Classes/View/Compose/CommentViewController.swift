@@ -18,7 +18,7 @@ class CommentViewController: UIViewController{
     lazy var textView:UITextView = {
         let tv = UITextView()
         tv.font = UIFont.systemFont(ofSize: 18)
-        tv.textColor = .white
+        tv.textColor = .black
         tv.alwaysBounceVertical = true
         tv.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
         tv.delegate = self
@@ -65,7 +65,7 @@ class CommentViewController: UIViewController{
 }
 extension CommentViewController {
     func setupUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
         prepare()
         prepareTool()

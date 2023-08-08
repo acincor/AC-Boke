@@ -52,7 +52,7 @@ class FriendCellTopView: UIView {
 extension FriendCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = .black
+        sepView.backgroundColor = UIColor.lightGray
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)

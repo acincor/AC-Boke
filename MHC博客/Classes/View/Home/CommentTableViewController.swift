@@ -162,7 +162,7 @@ extension CommentTableViewController {
             SVProgressHUD.showInfo(withStatus: "出错了")
             return
         }
-        NetworkTools.shared.addComment(id: sender.vm!.comment.id, comment_id: sender.vm!.comment.comment_id, sender.nav.textView.text!) { Result, Error in
+        NetworkTools.shared.addComment(id: sender.vm!.comment.id, comment_id: sender.vm!.comment.comment_id, sender.nav.textView.emoticonText) { Result, Error in
             
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")

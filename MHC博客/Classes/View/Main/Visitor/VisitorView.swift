@@ -198,20 +198,8 @@ extension UIView {
 }
 extension VisitorView {
     private func setupUI() {
-        self.addGradient(colors: [.black, .lightGray],
-                                    point: (CGPoint(x: 1.0, y: 0.0), CGPoint(x: 0.0, y: 1.0)),
-                                    frame: UIScreen.main.bounds,
-                                    radius: 0)
-        registerButton.addGradient(colors: [.green, .red],
-                                   point: (CGPoint(x: 1.0, y: 0.0), CGPoint(x: 0.0, y: 1.0)),
-                                   frame: registerButton.frame,
-                                   radius: 0)
-        loginButton.addGradient(colors: [.orange, .gray],
-                                point: (CGPoint(x: 1.0, y: 0.0), CGPoint(x: 0.0, y: 1.0)),
-                                frame: loginButton.frame,
-                                radius: 0)
         addSubview(homeIconView)
-        //addSubview(maskIconView)
+        addSubview(maskIconView)
         addSubview(iconView)
         addSubview(messageLabel)
         messageLabel.textColor = .white
@@ -242,14 +230,13 @@ extension VisitorView {
             make.width.equalTo(registerButton.snp.width)
             make.height.equalTo(registerButton.snp.height)
         }
-        /*
         maskIconView.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(self.snp.top)
             make.left.equalTo(self.snp.left)
             make.right.equalTo(self.snp.right)
-            make.bottom.equalTo(self.snp.bottom)
+            make.bottom.equalTo(registerButton.snp.bottom)
         }
-         */
+        backgroundColor = UIColor(white: 237.0 / 255.0, alpha: 1.0)
     }
     private func startAnim() {
         let anim = CABasicAnimation(keyPath: "transform.rotation")
@@ -266,7 +253,7 @@ extension VisitorView {
             return
         }
         homeIconView.isHidden = true
-        //sendSubviewToBack(maskIconView)
+        sendSubviewToBack(maskIconView)
         iconView.image = UIImage(named: imgName)
     }
 }

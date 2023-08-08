@@ -1,5 +1,5 @@
 //
-//  HomeTableViewController.swift
+//  CommentStatusTableViewController.swift
 //  MHC微博
 //
 //  Created by Monkey hammer on 2022/9/10.
@@ -8,10 +8,9 @@
 import UIKit
 
 
-let StatusCellNormalId = "StatusCellNormalId"
-let StatusCellNormalId2 = "StatusCellNormalId2"
-var listViewModel = StatusListViewModel()
-class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
+let commentStatusCellNormalId = "CommentStatusCellNormalId"
+let commentListViewModel = CommentStatusListViewModel()
+class CommentStatusTableViewController: VisitorTableViewController {
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.color = .white
@@ -20,64 +19,40 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    let liveView = LiveTableView()
     private func prepareTableView() {
         tableView.separatorStyle = .none
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
+        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: commentStatusCellNormalId)
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         tableView.tableFooterView = pullupView
-        liveView.delegate = self
-        liveView.dataSource = self
-        tableView.tableHeaderView = liveView
     }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return liveListViewModel.liveList.count
+    init(uid: String) {
+        self.uid = uid
+        super.init(style: .plain)
     }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let vm = liveListViewModel.liveList[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! LiveCell
-        cell.viewModel = vm
-        return cell
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vm = liveListViewModel.liveList[indexPath.row]
-        guard let url = ("https://mhc.lmyz6.cn/hls/\(vm.friend.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
-            return
-        }
-        guard let urlEncoded = URL(string:url) else {
-            SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
-            return
-        }
-        present(HomeWebViewController(url: urlEncoded),animated: true)
-    }
+    var uid: String
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //print(self.pullupView.isAnimating)
         StatusDAL.clearDataCache()
-        listViewModel.loadStatus(isPullup: pullupView.isAnimating) { (isSuccessed) in
+        commentListViewModel.loadStatus(uid) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()
             if !isSuccessed {
-                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                SVProgressHUD.showInfo(withStatus: "暂无评论任何博客哦！")
+                commentListViewModel.statusList = []
+                self.tableView.reloadData()
                 return
             }
-            //print(listViewModel.statusList)
+            //print(commentListViewModel.statusList)
             self.showPulldownTip()
             self.tableView.reloadData()
-        }
-        liveView.loadData()
-        liveView.reloadData()
-        if liveListViewModel.liveList.isEmpty {
-            var textView = UITextView(frame: liveView.frame)
-            textView.text = "暂时无人直播哦..."
-            textView.isEditable = false
-            textView.backgroundColor = .lightGray
-            tableView.tableHeaderView = textView
         }
     }
     private lazy var pulldownTipLabel: UILabel = {
@@ -87,7 +62,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         return label
     }()
     private func showPulldownTip() {
-        guard let count = listViewModel.pulldownCount else {
+        guard let count = commentListViewModel.pulldownCount else {
             //print("难道你有博客吗？")
             return
         }
@@ -113,26 +88,13 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         
         loadData()
         prepareTableView()
-        NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
-                return
-            }
-            guard let urls = n.userInfo?[WBStatusSelectedPhotoURLsKey] as? [URL] else {
-                return
-            }
-            guard let cell = n.object as? PhotoBrowserPresentDelegate else {
-                return
-            }
-            let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
-            vc.modalPresentationStyle = .custom
-            vc.transitioningDelegate = self?.photoBrowserAnimator
-            self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
-            self?.present(vc, animated: true,completion: nil)
-        }
-        NotificationCenter.default.addObserver(forName: Notification.Name("BKIfLikeIsTrueLightIt"), object: nil, queue: nil) { n in
+        NotificationCenter.default.addObserver(forName: Notification.Name("BKIfLikeHappyIt"), object: nil, queue: nil) { n in
             if n.object != nil {
-                let result = ["id":"\(listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
+                if commentListViewModel.statusList.isEmpty {
+                    return
+                }
+                let result = ["id":"\(commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+                let like_list = commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
                 self.cell = ((n.object as! [String:Any])["cell"] as! StatusCell)
                 for s in like_list {
                     print(s["like_uid"] as? String)
@@ -149,9 +111,12 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
                 }
             }
             if n.userInfo != nil {
+                if commentListViewModel.statusList.isEmpty {
+                    return
+                }
                 if n.userInfo!.isEqualTo(["hello":"l"]) {
-                    let result = ["id":"\(listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                    let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
+                    let result = ["id":"\(commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+                    let like_list = commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
                     discover.cell = ((n.object as! [String:Any])["cell"] as? StatusNormalCell)
                     for s in like_list {
                         print(s["like_uid"] as? String)
@@ -176,13 +141,13 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     var cell: StatusCell?
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }
-extension HomeTableViewController {
+extension CommentStatusTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listViewModel.statusList.count
+        return commentListViewModel.statusList.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = listViewModel.statusList[indexPath.row]
-        var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
+        let vm = commentListViewModel.statusList[indexPath.row]
+        var cell = tableView.dequeueReusableCell(withIdentifier: commentStatusCellNormalId, for: indexPath) as! StatusCell
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.identifier = cell
@@ -195,8 +160,8 @@ extension HomeTableViewController {
         cell.topView.iconView.addGestureRecognizer(g)
         /*
         cell.bottomView.deleteButton.addAction(UIAction { action in
-            cell.bottomView.deleteBlog(listViewModel.statusList[indexPath.row].status.id) { Result, Error in
-                //print(listViewModel.statusList[indexPath.row].status.id)
+            cell.bottomView.deleteBlog(commentListViewModel.statusList[indexPath.row].status.id) { Result, Error in
+                //print(commentListViewModel.statusList[indexPath.row].status.id)
                 //print(UserAccountViewModel.sharedUserAccount.accessToken)
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
@@ -212,11 +177,11 @@ extension HomeTableViewController {
             }
         }, for: .touchUpInside)
          */
-        cell.bottomView.commentButton.setTitle("\(listViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
+        cell.bottomView.commentButton.setTitle("\(commentListViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
-        cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        NotificationCenter.default.post(name: Notification.Name("BKIfLikeIsTrueLightIt"), object: ["cell":cell,"indexPath":indexPath])
+        cell.bottomView.likeButton.setTitle("\(commentListViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
+        NotificationCenter.default.post(name: Notification.Name("BKIfLikeHappyIt"), object: ["cell":cell,"indexPath":indexPath])
         cell = self.cell!
         cell.bottomView.likeButton.tag = indexPath.row
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
@@ -224,7 +189,7 @@ extension HomeTableViewController {
         return cell
     }
     @objc func action2(_ sender: UIButton) {
-        NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
+        NetworkTools.shared.addComment(id: commentListViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 //print(Error)
@@ -239,8 +204,8 @@ extension HomeTableViewController {
         }
     }
     @objc func action1(_ sender: UIButton) {
-        sender.identifier.bottomView.deleteBlog(listViewModel.statusList[sender.tag].status.id) { Result, Error in
-            //print(listViewModel.statusList[indexPath.row].status.id)
+        sender.identifier.bottomView.deleteBlog(commentListViewModel.statusList[sender.tag].status.id) { Result, Error in
+            //print(commentListViewModel.statusList[indexPath.row].status.id)
             //print(UserAccountViewModel.sharedUserAccount.accessToken)
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
@@ -260,9 +225,9 @@ extension HomeTableViewController {
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
         let button = UIButton(title: "发表", color: .red,backImageName: nil)
-        //print(listViewModel.statusList[indexPath.row].status.id)
+        //print(commentListViewModel.statusList[indexPath.row].status.id)
         //print(nav.textView.text!)
-        guard (listViewModel.statusList[sender.tag].status.id > 0) else {
+        guard (commentListViewModel.statusList[sender.tag].status.id > 0) else {
             SVProgressHUD.showInfo(withStatus: "出错了")
             return
         }
@@ -273,7 +238,7 @@ extension HomeTableViewController {
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+        NetworkTools.shared.like(commentListViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
                 print(Result as! [String:Any])
                 self.loadData()
@@ -285,7 +250,7 @@ extension HomeTableViewController {
         }
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return listViewModel.statusList[indexPath.row].rowHeight
+        return commentListViewModel.statusList[indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         id = indexPath.row
@@ -295,100 +260,10 @@ extension HomeTableViewController {
         self.present(nav, animated: false)
     }
 }
-extension HomeTableViewController: StatusCellDelegate {
+extension CommentStatusTableViewController: StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
         let vc = HomeWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
-    }
-}
-extension Dictionary where Key: Equatable {
-    func isEqualTo(_ dictionary: Dictionary, excluding: [Key] = []) -> Bool {
-      let left = filter({ !excluding.contains($0.key) })
-      let right = dictionary.filter({ !excluding.contains($0.key) })
-      return NSDictionary(dictionary: left).isEqual(to: right)
-    }
-}
-extension UITextField {
-    private struct AssociatedKey {
-        static var identifier = ""
-    }
-    var identifier: String {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.identifier) as? String ?? ""
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.identifier, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
-}
-extension UIButton {
-    private struct AssociatedKey {
-           static var identifier: StatusCell = StatusCell()
-        static var cell: CommentCell = CommentCell()
-        static var cell2: CommentCommentCell = CommentCommentCell()
-        static var nav: CommentViewController = CommentViewController()
-        static var int: Int = 0
-        static var vm: CommentViewModel? = CommentListViewModel().commentList.first
-        static var vm2: CommentCommentViewModel? = CommentListViewModel().commentCommentList.first
-       }
-       
-       var identifier: StatusCell {
-           get {
-               return objc_getAssociatedObject(self, &AssociatedKey.identifier) as? StatusCell ?? StatusCell()
-           }
-           set {
-               objc_setAssociatedObject(self, &AssociatedKey.identifier, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-           }
-       }
-    var cell: CommentCell {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.cell) as? CommentCell ?? CommentCell()
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.cell, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
-    var cell2: CommentCommentCell {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.cell2) as? CommentCommentCell ?? CommentCommentCell()
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.cell2, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
-    var vm: CommentViewModel? {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.vm) as? CommentViewModel
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.vm, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    var vm2: CommentCommentViewModel? {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.vm2) as? CommentCommentViewModel
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.vm2, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    var nav: CommentViewController {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.nav) as? CommentViewController ?? CommentViewController()
-        }
-        
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.nav, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    var int: Int {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.int) as? Int ?? 0
-        }
-        
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.int, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
     }
 }

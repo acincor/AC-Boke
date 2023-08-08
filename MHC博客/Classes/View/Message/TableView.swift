@@ -36,7 +36,6 @@ class TableView:UITableView,UITableViewDelegate, UITableViewDataSource
      
     override func reloadData()
     {
-         
         //self.showsVerticalScrollIndicator = false
         //self.showsHorizontalScrollIndicator = false
         bubbleSection.removeAll()

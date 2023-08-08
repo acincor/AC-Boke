@@ -76,6 +76,18 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/loadBlog.php"
         tokenRequest(.GET, urlString, nil, finished: finished)
     }
+    func loadLikeStatus(_ uid: String,finished: @escaping HMRequstCallBack) {
+        let urlString = "https://mhc.lmyz6.cn/loadLikeBlog.php"
+        var params = [String:Any]()
+        params["uid"] = uid
+        request(.POST, urlString, params, finished: finished)
+    }
+    func loadCommentStatus(_ uid: String,finished: @escaping HMRequstCallBack) {
+        let urlString = "https://mhc.lmyz6.cn/loadCommentBlog.php"
+        var params = [String:Any]()
+        params["uid"] = uid
+        request(.POST, urlString, params, finished: finished)
+    }
     func loadLive(finished: @escaping HMRequstCallBack) {
         let urlString = "https://mhc.lmyz6.cn/loadLive.php"
         tokenRequest(.GET, urlString, nil, finished: finished)
@@ -252,6 +264,15 @@ extension NetworkTools {
             }
         }
     }
+    func sendPortrait(image: UIImage?, finished: @escaping HMRequstCallBack) {
+        // 1. 创建参数字典
+        var params = [String: Any]()
+        // 2. 设置参数
+            let urlString = "https://mhc.lmyz6.cn/portrait.php"
+            sendPortrait(urlString, image!.jpegData(compressionQuality: 0.8)!, params) { Result, Error in
+                finished(Result, Error)
+            }
+    }
     private func upload(_ URLString: String, _ data: [Data], _ parameters: [String: Any]?, finished: @escaping HMRequstCallBack) {
         guard let token = UserAccountViewModel.sharedUserAccount.accessToken else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
@@ -267,6 +288,26 @@ extension NetworkTools {
             for d in 0...data.count - 1{
                 formData.appendPart(withFileData: data[d], name: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), fileName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), mimeType: "image/png")
             }
+        }, progress: nil, success: { _, result in
+            finished(result, nil)
+        }) { _ , error in
+            //print(error)
+            finished(nil,error)
+        }
+    }
+    func sendPortrait(_ URLString: String, _ data: Data, _ parameters: [String: Any]?, finished: @escaping HMRequstCallBack) {
+        guard let token = UserAccountViewModel.sharedUserAccount.accessToken else {
+            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
+            
+            return
+        }
+        var parameters = parameters
+        if parameters == nil {
+            parameters = [String:Any]()
+        }
+        parameters!["access_token"] = token
+        post(URLString, parameters: parameters,headers: nil,constructingBodyWith: { formData in
+            formData.appendPart(withFileData: data, name: "pic", fileName: "pic", mimeType: "image/png")
         }, progress: nil, success: { _, result in
             finished(result, nil)
         }) { _ , error in

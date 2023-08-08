@@ -51,30 +51,35 @@ class CommentCommentCellTopView: UIView {
 extension CommentCommentCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = .black
+        sepView.backgroundColor = UIColor.lightGray
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)
         addSubview(timeLabel)
+        addSubview(sourceLabel)
         iconView.snp.makeConstraints { make in
-            make.top.equalTo(sepView.snp.bottom).offset(CommentCellMargin)
-            make.left.equalTo(self.snp.left).offset(CommentCellMargin)
-            make.width.equalTo(CommentCellIconWidth)
-            make.height.equalTo(CommentCellIconWidth)
+            make.top.equalTo(sepView.snp.bottom).offset(StatusCellMargin)
+            make.left.equalTo(self.snp.left).offset(StatusCellMargin)
+            make.width.equalTo(StatusCellIconWidth)
+            make.height.equalTo(StatusCellIconWidth)
         }
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(iconView.snp.top)
-            make.left.equalTo(iconView.snp.right).offset(CommentCellMargin)
+            make.left.equalTo(iconView.snp.right).offset(StatusCellMargin)
         }
         timeLabel.snp.makeConstraints { make in
             make.bottom.equalTo(iconView.snp.bottom)
-            make.left.equalTo(iconView.snp.right).offset(CommentCellMargin)
+            make.left.equalTo(iconView.snp.right).offset(StatusCellMargin)
+        }
+        sourceLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(timeLabel.snp.bottom)
+            make.left.equalTo(timeLabel.snp.right).offset(StatusCellMargin)
         }
         sepView.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top)
             make.left.equalTo(self.snp.left)
             make.right.equalTo(self.snp.right)
-            make.height.equalTo(CommentCellMargin)
+            make.height.equalTo(StatusCellMargin)
         }
     }
 }

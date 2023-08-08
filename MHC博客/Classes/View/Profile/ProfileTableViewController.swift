@@ -8,7 +8,10 @@
 import UIKit
 import SwiftUI
 
-class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegate {
+let WBProfileSelectedPhotoNotification = "WBProfileSelectedPhotoNotification"
+let WBProfileSelectedPhotoIndexPathKey = "WBProfileSelectedPhotoIndexPathKey"
+let WBProfileSelectedPhotoURLsKey = "WBProfileSelectedPhotoURLsKey"
+class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegate, UITabBarDelegate {
     private var usernameLabel: String {
         return UserAccountViewModel.sharedUserAccount.account?.user ?? "用户未登录"
     }
@@ -23,12 +26,6 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
     }
     private var renameButton: UITextField = UITextField()
     private lazy var Label: UILabel = UILabel(title: label)
-    private lazy var iconView: StatusPictureView = {
-        let iv = StatusPictureView()
-        iv.layer.cornerRadius = 45
-        iv.layer.masksToBounds = true
-        return iv
-    }()
     let userAgreementButton = UIButton(title: "用户协议", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     let liveButton = UIButton(title: "开始直播", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     let logOffButton = UIButton(title: "注销账号", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
@@ -39,8 +36,24 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
             visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: "登陆后，你的微博，相册、个人资料会显示在这里，展示给别人")
             return
         }
-        view.addSubview(Label)
         view.addSubview(iconView)
+        iconView.snp.makeConstraints { make in
+            make.centerX.equalTo(view.snp.centerX)
+            make.top.equalTo(view.snp.top).offset(50)
+            make.width.equalTo(90)
+            make.height.equalTo(90)
+        }
+        let imageView = UIImageView()
+        imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+        iconView.addSubview(imageView)
+            imageView.snp.makeConstraints { make in
+                make.centerX.equalTo(view.snp.centerX)
+                make.top.equalTo(view.snp.top).offset(50)
+                make.width.equalTo(90)
+                make.height.equalTo(90)
+            }
+        iconView.layer.cornerRadius = 15
+        view.addSubview(Label)
         renameButton = UITextField()
         renameButton.text = usernameLabel
         view.addSubview(renameButton)
@@ -49,34 +62,57 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
         view.addSubview(userAgreementButton)
         view.addSubview(expiresUserButton)
         view.addSubview(MIDLabel)
+        view.addSubview(tabBar)
         loadData()
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
+        NotificationCenter.default.addObserver(forName: Notification.Name(WBProfileSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
+            guard let indexPath = n.userInfo?[WBProfileSelectedPhotoIndexPathKey] as? IndexPath else {
+                return
+            }
+            guard let urls = n.userInfo?[WBProfileSelectedPhotoURLsKey] as? [URL] else {
+                return
+            }
+            guard let cell = n.object as? ProfileBrowserPresentDelegate else {
+                return
+            }
+            let vc = UserProfileBrowserViewController(urls: urls, indexPath: indexPath)
+            vc.modalPresentationStyle = .custom
+            vc.transitioningDelegate = self?.photoBrowserAnimator
+            self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
+            self?.present(vc, animated: true,completion: nil)
+            
+        }
+        
     }
+    lazy var iconView = ProfilePictureView(viewModel: UserAccountViewModel.sharedUserAccount.portraitUrl)
+    private lazy var photoBrowserAnimator: ProfileBrowserAnimator = ProfileBrowserAnimator()
     @objc func loadData() {
         refreshControl?.beginRefreshing()
-        iconView.backgroundColor = .black
         do {
+            iconView.removeFromSuperview()
+            view.addSubview(iconView)
+            iconView.snp.makeConstraints { make in
+                make.centerX.equalTo(view.snp.centerX)
+                make.top.equalTo(view.snp.top).offset(50)
+                make.width.equalTo(90)
+                make.height.equalTo(90)
+            }
             let imageView = UIImageView()
             imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
-                iconView.snp.makeConstraints { make in
-                    make.centerX.equalTo(view.snp.centerX)
-                    make.top.equalTo(view.snp.top).offset(50)
-                    make.width.equalTo(90)
-                    make.height.equalTo(90)
-                }
-                iconView.addSubview(imageView)
+            iconView.addSubview(imageView)
                 imageView.snp.makeConstraints { make in
                     make.centerX.equalTo(view.snp.centerX)
                     make.top.equalTo(view.snp.top).offset(50)
                     make.width.equalTo(90)
                     make.height.equalTo(90)
                 }
+            iconView.layer.cornerRadius = 15
             MIDLabel.removeFromSuperview()
             MIDLabel = UILabel(title: uidLabel)
             view.addSubview(MIDLabel)
             MIDLabel.snp.makeConstraints { make in
-                make.top.equalTo(iconView.snp.bottom)
+                make.top.equalTo(imageView.snp.bottom)
             }
             Label.removeFromSuperview()
             Label = UILabel(title: label)
@@ -128,11 +164,27 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
             logOffButton.layer.cornerRadius = 15
             logOffButton.addTarget(self, action: #selector(self.logOffUserButtonTouchAction), for: .touchDown)
             // Do any additional setup after loading the view.
+            tabBar.removeFromSuperview()
+            view.addSubview(tabBar)
+            tabBar.snp.makeConstraints { make in
+                make.top.equalTo(logOffButton.snp.bottom).offset(10)
+                make.width.equalTo(UIScreen.main.bounds.width)
+            }
+            tabBar.delegate = self
+            tabBar.items = [UITabBarItem(title: "点赞过的", image: UIImage(named: "timeline_icon_unlike"), tag: 0),UITabBarItem(title: "评论过的", image: UIImage(named: "timeline_icon_comment"), tag: 0)]
         } catch {
             SVProgressHUD.show(withStatus: "图片加载错误")
             return
         }
         refreshControl?.endRefreshing()
+    }
+    let tabBar = UITabBar()
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        if item.title == "点赞过的" {
+            present(UINavigationController(rootViewController: LikeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account!.uid!)), animated: true)
+        } else {
+            present(UINavigationController(rootViewController: CommentStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account!.uid!)), animated: true)
+        }
     }
     @objc func liveButtonTouchAction() {
         let nav = UINavigationController(rootViewController: BKLiveController())

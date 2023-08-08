@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 @main
 
@@ -14,7 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.backgroundColor = UIColor.white
+        window?.backgroundColor = .white
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if (!granted) {
+                           print("hi")
+                       }
+        }
+        UIApplication.shared.registerForRemoteNotifications()
         MySearchTextField?.searchBar.resignFirstResponder()
         
         window?.rootViewController = defaultRootViewController
@@ -86,6 +93,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return true
     }
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+
+        print("Recived: \(userInfo)")
+       //Parsing userinfo:
+       var temp = userInfo
+        print(userInfo)
+       if let info = userInfo["aps"] as? Dictionary<String, Any>
+                {
+                    var alertMsg = info["alert"] as! String
+                    print(alertMsg)
+               //alert.show()
+                }
+    }
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+            print("NOTIFICATION ERROR: \(error)")
+        }
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    }
     deinit {
     // 注销通知 - 注销指定的通知
         NotificationCenter.default.removeObserver(self,   // 监听者
@@ -93,8 +118,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                   object: nil)
     }
     func applicationDidEnterBackground(_ application: UIApplication) {
+        SDImageCache.shared.clearDisk()
         StatusDAL.clearDataCache()
+        let content = UNMutableNotificationContent()
+        content.title = "MHC博客"
+        content.sound = .default
         
+        content.sound = UNNotificationSound.default
+        //print(self.pullupView.isAnimating)
+        StatusDAL.clearDataCache()
+        listViewModel.loadStatus(isPullup: true) { (isSuccessed) in
+            if !isSuccessed {
+                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                return
+            }
+            //print(listViewModel.statusList)
+        }
+        content.badge = true
+        if(listViewModel.statusList.last?.status.user != nil || listViewModel.statusList.last?.status.status != nil) {
+            content.subtitle = listViewModel.statusList.last!.status.user!
+            content.body = listViewModel.statusList.last!.status.status!
+        }
+        StatusDAL.clearDataCache()
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: "com.Mhc-inc.MHC--", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { error in
+          if let error = error {
+            // 处理发送通知时出现的错误
+          } else {
+            // 通知已发送到设备
+          }
+        }
     }
 }
 extension AppDelegate {

@@ -7,15 +7,19 @@
 
 import UIKit
 import SwiftUI
-
-class UserProfileViewController:UIViewController, UITextFieldDelegate {
+let WBUserProfileSelectedPhotoNotification = "WBUserProfileSelectedPhotoNotification"
+let WBUserProfileSelectedPhotoIndexPathKey = "WBUserProfileSelectedPhotoIndexPathKey"
+let WBUserProfileSelectedPhotoURLsKey = "WBUserProfileSelectedPhotoURLsKey"
+class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDelegate {
     private var usernameLabel: String
+    private var portrait: String
     private var label: String {
         let lb = "用户名："+usernameLabel
-            return lb
+        return lb
     }
-    init(usernameLabel: String,MID: String) {
+    init(portrait: String,usernameLabel: String,MID: String) {
         self.usernameLabel = usernameLabel
+        self.portrait = portrait
         self.MID = MID
         super.init(nibName: nil, bundle: nil)
     }
@@ -29,9 +33,8 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate {
         let lb = "MID:"+MID
         return lb
     }
-    @objc func action(sender: UITapGestureRecognizer) {
-        print("\(sender.sender)")
-        NetworkTools.shared.addFriend(sender.sender) { Result, Error in
+    @objc func action() {
+        NetworkTools.shared.addFriend(MID) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 //print("Result出现错误")
@@ -63,48 +66,78 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate {
         }
     }
     private lazy var Label: UILabel = UILabel(title: label)
-    private lazy var iconView: StatusPictureView = {
-        let iv = StatusPictureView()
-        iv.layer.cornerRadius = 45
-        iv.layer.masksToBounds = true
-        return iv
-    }()
+    private lazy var addButton = UIButton(title: "添加好友", fontSize: 14, color: .black, imageName: nil)
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(forName: Notification.Name(WBUserProfileSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
+            guard let indexPath = n.userInfo?[WBUserProfileSelectedPhotoIndexPathKey] as? IndexPath else {
+                return
+            }
+            guard let urls = n.userInfo?[WBUserProfileSelectedPhotoURLsKey] as? [URL] else {
+                return
+            }
+            guard let cell = n.object as? ProfileBrowserPresentDelegate else {
+                return
+            }
+            let vc = ProfileBrowserViewController(urls: urls, indexPath: indexPath)
+            vc.modalPresentationStyle = .custom
+            vc.transitioningDelegate = self?.photoBrowserAnimator
+            self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
+            self?.present(vc, animated: true,completion: nil)
+        }
         loadData()
     }
+    private lazy var photoBrowserAnimator: ProfileBrowserAnimator = ProfileBrowserAnimator()
+    lazy var iconView = UserProfilePictureView(viewModel:URL(string: portrait)!)
     @objc func loadData() {
-        view.backgroundColor = .black
-        iconView.backgroundColor = .black
+        view.backgroundColor = .white
         view.addSubview(iconView)
-            let imageView = UIImageView()
-            imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
-                iconView.snp.makeConstraints { make in
-                    make.centerX.equalTo(view.snp.centerX)
-                    make.top.equalTo(view.snp.top).offset(50)
-                    make.width.equalTo(90)
-                    make.height.equalTo(90)
-                }
-                iconView.addSubview(imageView)
-                imageView.snp.makeConstraints { make in
-                    make.centerX.equalTo(view.snp.centerX)
-                    make.top.equalTo(view.snp.top).offset(50)
-                    make.width.equalTo(90)
-                    make.height.equalTo(90)
-                }
-        let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
-        g.sender = MID
-        iconView.addGestureRecognizer(g)
-            view.addSubview(MIDLabel)
-            MIDLabel.snp.makeConstraints { make in
-                make.top.equalTo(iconView.snp.bottom)
+        iconView.snp.makeConstraints { make in
+            make.centerX.equalTo(view.snp.centerX)
+            make.top.equalTo(view.snp.top).offset(50)
+            make.width.equalTo(90)
+            make.height.equalTo(90)
+        }
+        let imageView = UIImageView()
+        imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+        iconView.addSubview(imageView)
+            imageView.snp.makeConstraints { make in
+                make.centerX.equalTo(view.snp.centerX)
+                make.top.equalTo(view.snp.top).offset(50)
+                make.width.equalTo(90)
+                make.height.equalTo(90)
             }
-            view.addSubview(Label)
-            Label.snp.makeConstraints { make in
-                make.top.equalTo(MIDLabel.snp.bottom)
-            }
-            Label.sizeToFit()
-            // Do any additional setup after loading the view.
+        iconView.layer.cornerRadius = 15
+        view.addSubview(addButton)
+        addButton.addTarget(self, action: #selector(self.action), for: .touchUpInside)
+        addButton.snp.makeConstraints { make in
+            make.top.equalTo(iconView.snp.bottom)
+        }
+        view.addSubview(MIDLabel)
+        MIDLabel.snp.makeConstraints { make in
+            make.top.equalTo(addButton.snp.bottom)
+        }
+        view.addSubview(Label)
+        Label.snp.makeConstraints { make in
+            make.top.equalTo(MIDLabel.snp.bottom)
+        }
+        Label.sizeToFit()
+        view.addSubview(tabBar)
+        tabBar.snp.makeConstraints { make in
+            make.top.equalTo(Label.snp.bottom).offset(10)
+            make.width.equalTo(UIScreen.main.bounds.width)
+        }
+        tabBar.delegate = self
+        tabBar.items = [UITabBarItem(title: "点赞过的", image: UIImage(named: "timeline_icon_unlike"), tag: 0),UITabBarItem(title: "评论过的", image: UIImage(named: "timeline_icon_comment"), tag: 0)]
+        // Do any additional setup after loading the view.
+    }
+    let tabBar = UITabBar()
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        if item.title == "点赞过的" {
+            present(UINavigationController(rootViewController: LikeStatusTableViewController(uid: MID)), animated: true)
+        } else {
+            present(UINavigationController(rootViewController: CommentStatusTableViewController(uid: MID)), animated: true)
+        }
     }
     @objc func liveButtonTouchAction() {
         let nav = UINavigationController(rootViewController: BKLiveController())
@@ -134,8 +167,8 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate {
             nav.modalPresentationStyle = .custom
             present(nav, animated: true)
         }catch _ {
-        //print(error.localizedDescription)
-        //print("文件读取失败，可能是资源找不到")
+            //print(error.localizedDescription)
+            //print("文件读取失败，可能是资源找不到")
         }
     }
     @objc func expiresUserButtonTouchAction(){
@@ -189,60 +222,60 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate {
         return action1(textField)
     }
     // MARK: - Table view data source
-
+    
     /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
+     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+     
+     // Configure the cell...
+     
+     return cell
+     }
+     */
+    
     /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
+     // Override to support conditional editing of the table view.
+     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the specified item to be editable.
+     return true
+     }
+     */
+    
     /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
+     // Override to support editing the table view.
+     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+     if editingStyle == .delete {
+     // Delete the row from the data source
+     tableView.deleteRows(at: [indexPath], with: .fade)
+     } else if editingStyle == .insert {
+     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+     }    
+     }
+     */
+    
     /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
+     // Override to support rearranging the table view.
+     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+     
+     }
+     */
+    
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
+     // Override to support conditional rearranging of the table view.
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

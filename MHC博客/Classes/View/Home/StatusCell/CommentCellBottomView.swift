@@ -32,7 +32,7 @@ class CommentCellBottomView: UIView {
 extension CommentCellBottomView {
     private func setupUI() {
         // 0. 设置背景颜色
-        backgroundColor = .clear
+        backgroundColor = .lightGray
         
         // 1. 添加控件
         addSubview(deleteButton)
@@ -86,7 +86,7 @@ extension CommentCellBottomView {
 /// 创建分隔视图
 private func sepView() -> UIView {
     let v = UIView()
-    v.backgroundColor = UIColor.white
+    v.backgroundColor = UIColor.lightGray
     return v
 }
 }

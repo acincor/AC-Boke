@@ -61,8 +61,6 @@ class WBRefreshView: UIView {
     @IBOutlet weak var tipView: UIView!
     @IBOutlet weak var tipIconView: UIImageView!
     func startAnimation() {
-        backgroundColor = .clear
-        //tipView.backgroundColor = .clear
         tipView.isHidden = true
         //loadingView.isHidden = false
         let key = "transform.rotation"
@@ -78,7 +76,6 @@ class WBRefreshView: UIView {
     }
     func stopAnimation() {
         tipView.isHidden = false
-        //loadingView.isHidden = true
         loadingView.layer.removeAllAnimations()
     }
     private func rotateTipIcon() {

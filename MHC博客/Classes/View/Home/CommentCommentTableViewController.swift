@@ -41,18 +41,18 @@ class CommentCommentTableViewController: VisitorTableViewController {
         }
         //print([id,comment_id])
         listViewModel.loadStatus(isPullup: true) { isSuccessed in
+            self.refreshControl?.beginRefreshing()
+            StatusDAL.clearDataCache()
+            commentlistViewModel.loadComment(id: id, comment_id: comment_id) { (isSuccessed) in
+                self.refreshControl?.endRefreshing()
+                if !isSuccessed {
+                    SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                    return
+                }
+                print("array,",commentlistViewModel.commentCommentList)
+                self.tableView.reloadData()
+            }
         }
-        refreshControl?.beginRefreshing()
-        StatusDAL.clearDataCache()
-        commentlistViewModel.loadComment(id: id, comment_id: comment_id) { (isSuccessed) in
-            self.refreshControl?.endRefreshing()
-             if !isSuccessed {
-                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
-                 return
-             }
-             print("array,",commentlistViewModel.commentCommentList)
-             self.tableView.reloadData()
-         }
     }
     
     override func viewDidLoad() {
@@ -94,7 +94,7 @@ class CommentCommentTableViewController: VisitorTableViewController {
         cell.viewModel = commentlistViewModel.commentList[id]
         cell.bottomView.removeFromSuperview()
         tableView.tableHeaderView = cell
-        tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, listViewModel.statusList[id].rowHeight-40)
+        tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, commentlistViewModel.commentList[id].rowHeight-40)
         
     }
     
@@ -166,7 +166,7 @@ extension CommentCommentTableViewController {
                     print(Error)
                     return
                 }
-                //print(Result)
+                print(Result)
                 if (Result as! [String:Any])["error"] != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
                     print((Result as! [String:String])["error"])
@@ -182,7 +182,7 @@ extension CommentCommentTableViewController {
             SVProgressHUD.showInfo(withStatus: "出错了")
             return
         }
-        NetworkTools.shared.addComment(id: sender.vm2!.comment.id, comment_id: sender.vm2!.comment.comment_id, sender.nav.textView.text!) { Result, Error in
+        NetworkTools.shared.addComment(id: sender.vm2!.comment.id, comment_id: sender.vm2!.comment.comment_id, sender.nav.textView.emoticonText) { Result, Error in
             
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")

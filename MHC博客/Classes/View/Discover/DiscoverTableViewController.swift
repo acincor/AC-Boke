@@ -105,7 +105,6 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.listTeams = listViewModel.statusList
         filterContentForSearchText("")
         refreshControl = WBRefreshControl()
-        refreshControl?.backgroundColor = .clear
         //tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .plain)
         loadData()
         refreshControl?.addTarget(self, action: Selector("loadData"), for: .valueChanged)
@@ -120,7 +119,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .clear
+        indicator.color = .white
         return indicator
     }()
     @objc func loadData() {

@@ -73,7 +73,6 @@
 		2E738ABB29AA38510014FA12 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7529AA38510014FA12 /* Comment.swift */; };
 		2E738ABC29AA38510014FA12 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7629AA38510014FA12 /* UserAccount.swift */; };
 		2E738ABE29AA38510014FA12 /* WBRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7B29AA38510014FA12 /* WBRefreshView.swift */; };
-		2E738ABF29AA38510014FA12 /* StatusPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7D29AA38510014FA12 /* StatusPictureView.swift */; };
 		2E738AC029AA38510014FA12 /* StatusNormalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7E29AA38510014FA12 /* StatusNormalCell.swift */; };
 		2E738AC229AA38510014FA12 /* StatusCellBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A8029AA38510014FA12 /* StatusCellBottomView.swift */; };
 		2E738AC329AA38510014FA12 /* StatusCellTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A8129AA38510014FA12 /* StatusCellTopView.swift */; };
@@ -430,6 +429,18 @@
 		2EDC44CE2A78C21E003D7E63 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */; };
 		2EDC44D62A7A4888003D7E63 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */; };
 		2EDC44D82A7F2FFB003D7E63 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC44D72A7F2FFB003D7E63 /* readme.md */; };
+		2EDC452C2A7FE2D0003D7E63 /* StatusPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC452B2A7FE2D0003D7E63 /* StatusPictureView.swift */; };
+		2EDC45302A807535003D7E63 /* ProfileBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC452F2A807535003D7E63 /* ProfileBrowserViewController.swift */; };
+		2EDC45322A8075C5003D7E63 /* ProfileBrowserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45312A8075C5003D7E63 /* ProfileBrowserCell.swift */; };
+		2EDC45342A80763A003D7E63 /* ProfileProgressImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45332A80763A003D7E63 /* ProfileProgressImageView.swift */; };
+		2EDC45362A8076CA003D7E63 /* ProfileBrowserAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45352A8076CA003D7E63 /* ProfileBrowserAnimator.swift */; };
+		2EDC45382A80785D003D7E63 /* ProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45372A80785D003D7E63 /* ProfilePictureView.swift */; };
+		2EDC453A2A807E74003D7E63 /* UserProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45392A807E74003D7E63 /* UserProfilePictureView.swift */; };
+		2EDC453C2A80846F003D7E63 /* UserProfileBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC453B2A80846F003D7E63 /* UserProfileBrowserViewController.swift */; };
+		2EDC45402A81EC38003D7E63 /* LikeStatusTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC453F2A81EC38003D7E63 /* LikeStatusTableViewController.swift */; };
+		2EDC45422A81ECBC003D7E63 /* LikeStatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45412A81ECBC003D7E63 /* LikeStatusListViewModel.swift */; };
+		2EDC45442A82316C003D7E63 /* CommentStatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45432A82316C003D7E63 /* CommentStatusListViewModel.swift */; };
+		2EDC45462A823195003D7E63 /* CommentStatusTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45452A823195003D7E63 /* CommentStatusTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -441,6 +452,16 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2EDC45262A7FC861003D7E63 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -537,7 +558,6 @@
 		2E738A7629AA38510014FA12 /* UserAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		2E738A7A29AA38510014FA12 /* WBRefreshView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WBRefreshView.xib; sourceTree = "<group>"; };
 		2E738A7B29AA38510014FA12 /* WBRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WBRefreshView.swift; sourceTree = "<group>"; };
-		2E738A7D29AA38510014FA12 /* StatusPictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusPictureView.swift; sourceTree = "<group>"; };
 		2E738A7E29AA38510014FA12 /* StatusNormalCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusNormalCell.swift; sourceTree = "<group>"; };
 		2E738A8029AA38510014FA12 /* StatusCellBottomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusCellBottomView.swift; sourceTree = "<group>"; };
 		2E738A8129AA38510014FA12 /* StatusCellTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusCellTopView.swift; sourceTree = "<group>"; };
@@ -1197,6 +1217,20 @@
 		2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		2EDC44D72A7F2FFB003D7E63 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = SOURCE_ROOT; };
+		2EDC450D2A7FA5F2003D7E63 /* 测试.anps */ = {isa = PBXFileReference; lastKnownFileType = text; path = "测试.anps"; sourceTree = "<group>"; };
+		2EDC450F2A7FC2E7003D7E63 /* MHC博客Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MHC博客Release.entitlements"; sourceTree = "<group>"; };
+		2EDC452B2A7FE2D0003D7E63 /* StatusPictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusPictureView.swift; sourceTree = "<group>"; };
+		2EDC452F2A807535003D7E63 /* ProfileBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBrowserViewController.swift; sourceTree = "<group>"; };
+		2EDC45312A8075C5003D7E63 /* ProfileBrowserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBrowserCell.swift; sourceTree = "<group>"; };
+		2EDC45332A80763A003D7E63 /* ProfileProgressImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProgressImageView.swift; sourceTree = "<group>"; };
+		2EDC45352A8076CA003D7E63 /* ProfileBrowserAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBrowserAnimator.swift; sourceTree = "<group>"; };
+		2EDC45372A80785D003D7E63 /* ProfilePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePictureView.swift; sourceTree = "<group>"; };
+		2EDC45392A807E74003D7E63 /* UserProfilePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfilePictureView.swift; sourceTree = "<group>"; };
+		2EDC453B2A80846F003D7E63 /* UserProfileBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileBrowserViewController.swift; sourceTree = "<group>"; };
+		2EDC453F2A81EC38003D7E63 /* LikeStatusTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeStatusTableViewController.swift; sourceTree = "<group>"; };
+		2EDC45412A81ECBC003D7E63 /* LikeStatusListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeStatusListViewModel.swift; sourceTree = "<group>"; };
+		2EDC45432A82316C003D7E63 /* CommentStatusListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentStatusListViewModel.swift; sourceTree = "<group>"; };
+		2EDC45452A823195003D7E63 /* CommentStatusTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentStatusTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1325,6 +1359,7 @@
 		2E738A4C29AA38510014FA12 /* MHC博客 */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC450F2A7FC2E7003D7E63 /* MHC博客Release.entitlements */,
 				2EDC44D72A7F2FFB003D7E63 /* readme.md */,
 				2EAA96A92A6B85380058481E /* LFLiveKit */,
 				2E66A5212A416173009C8207 /* SVProgressHUD */,
@@ -1338,6 +1373,7 @@
 				2E738A9729AA38510014FA12 /* Assets.xcassets */,
 				2E738A9829AA38510014FA12 /* MHC博客.entitlements */,
 				2E738A9A29AA38510014FA12 /* AppDelegate.swift */,
+				2EDC450D2A7FA5F2003D7E63 /* 测试.anps */,
 				2E738A9D29AA38510014FA12 /* Info.plist */,
 				2E03D3B629DD2F1F00C46867 /* bridge.h */,
 				2EAA992B2A6D48C70058481E /* 用户协议.txt */,
@@ -1359,6 +1395,8 @@
 		2E738A4F29AA38510014FA12 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC45432A82316C003D7E63 /* CommentStatusListViewModel.swift */,
+				2EDC45412A81ECBC003D7E63 /* LikeStatusListViewModel.swift */,
 				2E2AAAF72A7354470023417C /* ChatDAL.swift */,
 				2E66A4FF2A37617E009C8207 /* StatusDAL.swift */,
 				2E738A5029AA38510014FA12 /* UserAccountViewModel.swift */,
@@ -1452,6 +1490,11 @@
 		2E738A6E29AA38510014FA12 /* PhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC453B2A80846F003D7E63 /* UserProfileBrowserViewController.swift */,
+				2EDC45352A8076CA003D7E63 /* ProfileBrowserAnimator.swift */,
+				2EDC45332A80763A003D7E63 /* ProfileProgressImageView.swift */,
+				2EDC45312A8075C5003D7E63 /* ProfileBrowserCell.swift */,
+				2EDC452F2A807535003D7E63 /* ProfileBrowserViewController.swift */,
 				2E738A6F29AA38510014FA12 /* PhotoBrowserAnimator.swift */,
 				2E738A7029AA38510014FA12 /* ProgressImageView.swift */,
 				2E738A7129AA38510014FA12 /* PhotoBrowserViewController.swift */,
@@ -1489,6 +1532,8 @@
 		2E738A7829AA38510014FA12 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC45452A823195003D7E63 /* CommentStatusTableViewController.swift */,
+				2EDC453F2A81EC38003D7E63 /* LikeStatusTableViewController.swift */,
 				2E2AA9D02A711B4E0023417C /* WebSocket */,
 				2EAA99182A6BE35D0058481E /* Live */,
 				2E738A7929AA38510014FA12 /* RefreshView */,
@@ -1513,12 +1558,14 @@
 		2E738A7C29AA38510014FA12 /* StatusCell */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC45392A807E74003D7E63 /* UserProfilePictureView.swift */,
+				2EDC45372A80785D003D7E63 /* ProfilePictureView.swift */,
+				2EDC452B2A7FE2D0003D7E63 /* StatusPictureView.swift */,
 				2E66A4B52A33E09D009C8207 /* CommentCommentCell.swift */,
 				2E66A4B42A33E09D009C8207 /* CommentCommentCellBottomView.swift */,
 				2E66A4B62A33E09D009C8207 /* CommentCommentCellTopView.swift */,
 				2E66A4B72A33E09D009C8207 /* CommentCommentNormalCell.swift */,
 				2EA71BDF29B94D5E004742CA /* CommentNormalCell.swift */,
-				2E738A7D29AA38510014FA12 /* StatusPictureView.swift */,
 				2E738A7E29AA38510014FA12 /* StatusNormalCell.swift */,
 				2E738A8029AA38510014FA12 /* StatusCellBottomView.swift */,
 				2E738A8129AA38510014FA12 /* StatusCellTopView.swift */,
@@ -2406,6 +2453,7 @@
 				2E738A3229AA33CF0014FA12 /* Frameworks */,
 				2E738A3329AA33CF0014FA12 /* Resources */,
 				2E2AA9DF2A7161A50023417C /* Embed Frameworks */,
+				2EDC45262A7FC861003D7E63 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -2423,7 +2471,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					2E738A3429AA33CF0014FA12 = {
@@ -2603,8 +2651,10 @@
 				2E738AC029AA38510014FA12 /* StatusNormalCell.swift in Sources */,
 				2EAA98C12A6B85390058481E /* GPUImageMovieWriter.m in Sources */,
 				2EB2942329EB7243009E0439 /* SDImageLoadersManager.m in Sources */,
+				2EDC453C2A80846F003D7E63 /* UserProfileBrowserViewController.swift in Sources */,
 				2EAA98D92A6B85390058481E /* GPUImageColorLocalBinaryPatternFilter.m in Sources */,
 				2EA71BD229AF897F004742CA /* StatusListViewModel.swift in Sources */,
+				2EDC45302A807535003D7E63 /* ProfileBrowserViewController.swift in Sources */,
 				2EAA99262A6C110F0058481E /* LiveTableViewController.swift in Sources */,
 				2EB2907E29EAE465009E0439 /* ConstraintLayoutGuideDSL.swift in Sources */,
 				2EB2906F29EAE465009E0439 /* ConstraintPriority.swift in Sources */,
@@ -2642,11 +2692,13 @@
 				2EAA98AC2A6B85380058481E /* GLProgram.m in Sources */,
 				2EAA98882A6B85380058481E /* GPUImageiOSBlurFilter.m in Sources */,
 				2E738AD029AA38510014FA12 /* VisitorView.swift in Sources */,
+				2EDC45382A80785D003D7E63 /* ProfilePictureView.swift in Sources */,
 				2E738AA729AA38510014FA12 /* UIButton+Extension.swift in Sources */,
 				2EAA98B92A6B85390058481E /* GPUImageFramebuffer.m in Sources */,
 				2EB2942E29EB7243009E0439 /* SDWebImageCacheKeyFilter.m in Sources */,
 				2EAA98622A6B85380058481E /* LFNALUnit.cpp in Sources */,
 				2EAA98A42A6B85380058481E /* GPUImageCropFilter.m in Sources */,
+				2EDC45342A80763A003D7E63 /* ProfileProgressImageView.swift in Sources */,
 				2EB2942529EB7243009E0439 /* SDImageTransformer.m in Sources */,
 				2EA71C3B29C6A4BB004742CA /* FriendAccount.swift in Sources */,
 				2EAA98902A6B85380058481E /* GPUImageHistogramGenerator.m in Sources */,
@@ -2730,6 +2782,7 @@
 				2E66A52B2A416173009C8207 /* SVRadialGradientLayer.m in Sources */,
 				2E66A4B82A33E09D009C8207 /* CommentCommentCellBottomView.swift in Sources */,
 				2EB2941929EB7243009E0439 /* SDDeviceHelper.m in Sources */,
+				2EDC45442A82316C003D7E63 /* CommentStatusListViewModel.swift in Sources */,
 				2EB2940029EB7243009E0439 /* UIImage+ForceDecode.m in Sources */,
 				2EAA98F52A6B85390058481E /* GPUImagePerlinNoiseFilter.m in Sources */,
 				2EA71C4329C6B78B004742CA /* FriendViewModel.swift in Sources */,
@@ -2753,10 +2806,12 @@
 				2EAA98922A6B85380058481E /* GPUImageAlphaBlendFilter.m in Sources */,
 				2EA71BEA29B94FE6004742CA /* CommentTableViewController.swift in Sources */,
 				2EAA98562A6B85380058481E /* LFVideoFrame.m in Sources */,
+				2EDC45422A81ECBC003D7E63 /* LikeStatusListViewModel.swift in Sources */,
 				2E738AAA29AA38510014FA12 /* String+emoji.swift in Sources */,
 				2EAA986F2A6B85380058481E /* GPUImageSobelEdgeDetectionFilter.m in Sources */,
 				2EA71C3729C2066B004742CA /* MessageMainTableViewController.swift in Sources */,
 				2EAA991C2A6C06760058481E /* LiveListViewModel.swift in Sources */,
+				2EDC453A2A807E74003D7E63 /* UserProfilePictureView.swift in Sources */,
 				2EAA98A82A6B85380058481E /* GPUImageSphereRefractionFilter.m in Sources */,
 				2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */,
 				2EB2941829EB7243009E0439 /* UIImage+ExtendedCacheData.m in Sources */,
@@ -2781,6 +2836,7 @@
 				2EAA98742A6B85380058481E /* GPUImageColorPackingFilter.m in Sources */,
 				2E738AC729AA38510014FA12 /* DiscoverTableViewController.swift in Sources */,
 				2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */,
+				2EDC45402A81EC38003D7E63 /* LikeStatusTableViewController.swift in Sources */,
 				2E738AAD29AA38510014FA12 /* PicturePickerCell.swift in Sources */,
 				2EAA99002A6B85390058481E /* GPUImageKuwaharaFilter.m in Sources */,
 				2EB2908029EAE465009E0439 /* ConstraintItem.swift in Sources */,
@@ -2800,12 +2856,12 @@
 				2EAA98B02A6B85380058481E /* GPUImageDivideBlendFilter.m in Sources */,
 				2EAA98D42A6B85390058481E /* GPUImageRGBDilationFilter.m in Sources */,
 				2EAA98972A6B85380058481E /* GPUImageSkinToneFilter.m in Sources */,
-				2E738ABF29AA38510014FA12 /* StatusPictureView.swift in Sources */,
 				2EAA98552A6B85380058481E /* LFLiveStreamInfo.m in Sources */,
 				2EAA98B62A6B85390058481E /* GPUImageFilterPipeline.m in Sources */,
 				2E2AAA872A72A74D0023417C /* TableView.swift in Sources */,
 				2EB2906C29EAE465009E0439 /* ConstraintMakerFinalizable.swift in Sources */,
 				2E738A9F29AA38510014FA12 /* UserAccountViewModel.swift in Sources */,
+				2EDC45462A823195003D7E63 /* CommentStatusTableViewController.swift in Sources */,
 				2EB2921D29EAE979009E0439 /* FMDatabase.m in Sources */,
 				2EB2942C29EB7243009E0439 /* UIImage+MemoryCacheCost.m in Sources */,
 				2EAA98652A6B85380058481E /* LFHardwareVideoEncoder.m in Sources */,
@@ -2816,6 +2872,7 @@
 				2E66A52D2A416173009C8207 /* SVProgressHUD.m in Sources */,
 				2EAA98A32A6B85380058481E /* GPUImageOpacityFilter.m in Sources */,
 				2EAA989C2A6B85380058481E /* GPUImagePolarPixellateFilter.m in Sources */,
+				2EDC452C2A7FE2D0003D7E63 /* StatusPictureView.swift in Sources */,
 				2EB2940429EB7243009E0439 /* SDWebImageDownloader.m in Sources */,
 				2EAA98E62A6B85390058481E /* GPUImageMonochromeFilter.m in Sources */,
 				2E704C1729FA2977003FE541 /* AFURLSessionManager.m in Sources */,
@@ -2823,12 +2880,14 @@
 				2EAA98982A6B85380058481E /* GPUImageHarrisCornerDetectionFilter.m in Sources */,
 				2EB293F229EB7243009E0439 /* SDImageHEICCoder.m in Sources */,
 				2EAA988B2A6B85380058481E /* GPUImageHueFilter.m in Sources */,
+				2EDC45362A8076CA003D7E63 /* ProfileBrowserAnimator.swift in Sources */,
 				2EB2922329EAED51009E0439 /* FFLabel.swift in Sources */,
 				2E704C1A29FA2977003FE541 /* AFSecurityPolicy.m in Sources */,
 				2E738ABC29AA38510014FA12 /* UserAccount.swift in Sources */,
 				2EB2906E29EAE465009E0439 /* ConstraintMakerExtendable.swift in Sources */,
 				2EB2921F29EAE979009E0439 /* FMResultSet.m in Sources */,
 				2EB293F829EB7243009E0439 /* SDWebImageDownloaderDecryptor.m in Sources */,
+				2EDC45322A8075C5003D7E63 /* ProfileBrowserCell.swift in Sources */,
 				2EB2907029EAE465009E0439 /* ConstraintInsetTarget.swift in Sources */,
 				2E738AAB29AA38510014FA12 /* UITextView+Emoticon.swift in Sources */,
 				2EAA98F02A6B85390058481E /* GPUImageTwoInputCrossTextureSamplingFilter.m in Sources */,
@@ -3007,6 +3066,7 @@
 		2E738A4A29AA33CF0014FA12 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3037,13 +3097,12 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MHC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "MHC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHC--";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3060,11 +3119,12 @@
 		2E738A4B29AA33CF0014FA12 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Launch image";
-				CODE_SIGN_ENTITLEMENTS = "MHC博客/MHC博客.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "MHC博客/MHC博客Release.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
@@ -3089,15 +3149,14 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MHC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "MHC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHC--";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHCBoke";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
