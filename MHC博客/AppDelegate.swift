@@ -120,34 +120,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         SDImageCache.shared.clearDisk()
         StatusDAL.clearDataCache()
-        let content = UNMutableNotificationContent()
-        content.title = "MHC博客"
-        content.sound = .default
-        
-        content.sound = UNNotificationSound.default
-        //print(self.pullupView.isAnimating)
-        StatusDAL.clearDataCache()
-        listViewModel.loadStatus(isPullup: true) { (isSuccessed) in
-            if !isSuccessed {
-                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
-                return
+        if UserAccountViewModel.sharedUserAccount.userLogon {
+            let content = UNMutableNotificationContent()
+            content.title = "MHC博客"
+            content.sound = .default
+            
+            content.sound = UNNotificationSound.default
+            //print(self.pullupView.isAnimating)
+            StatusDAL.clearDataCache()
+            listViewModel.loadStatus(isPullup: true) { (isSuccessed) in
+                if !isSuccessed {
+                    SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                    return
+                }
+                //print(listViewModel.statusList)
             }
-            //print(listViewModel.statusList)
-        }
-        content.badge = true
-        if(listViewModel.statusList.last?.status.user != nil || listViewModel.statusList.last?.status.status != nil) {
-            content.subtitle = listViewModel.statusList.last!.status.user!
-            content.body = listViewModel.statusList.last!.status.status!
-        }
-        StatusDAL.clearDataCache()
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(identifier: "com.Mhc-inc.MHC--", content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request) { error in
-          if let error = error {
-            // 处理发送通知时出现的错误
-          } else {
-            // 通知已发送到设备
-          }
+            StatusDAL.clearDataCache()
+            content.badge = true
+            if(listViewModel.statusList.last?.status.user != nil || listViewModel.statusList.last?.status.status != nil) {
+                content.subtitle = listViewModel.statusList.last!.status.user!
+                content.body = listViewModel.statusList.last!.status.status!
+            }
+            StatusDAL.clearDataCache()
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            let request = UNNotificationRequest(identifier: "com.Mhc-inc.MHC--", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    // 处理发送通知时出现的错误
+                } else {
+                    // 通知已发送到设备
+                }
+            }
         }
     }
 }
