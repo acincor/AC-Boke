@@ -24,8 +24,8 @@ class NetworkTools: AFHTTPSessionManager{
     }
     var acceptableContentTypes: [String]?
     enum OAuthURL: String {
-        case 登陆 = "https://mhc.lmyz6.cn/login.html"
-        case 注册 = "https://mhc.lmyz6.cn/register.html"
+        case 登陆 = "https://mhc.lmyz6.cn/api/login.html"
+        case 注册 = "https://mhc.lmyz6.cn/api/register.html"
     }
     typealias HMRequstCallBack = (_ Result: Any?, _ Error: Error?) -> ()
 }
@@ -46,7 +46,7 @@ extension NetworkTools {
         }
     }
     func loadAccessToken(code: String, finished: @escaping HMRequstCallBack) {
-        let urlString = "https://mhc.lmyz6.cn/accessToken.php"
+        let urlString = "https://mhc.lmyz6.cn/api/accessToken.php"
         let params = ["code":code]
         request(.POST, urlString, params, finished: finished)
         //responseSerializer = AFHTTPResponseSerializer()
@@ -62,41 +62,45 @@ extension NetworkTools {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
-        let urlString = "https://mhc.lmyz6.cn/getUser.php"
+        let urlString = "https://mhc.lmyz6.cn/api/getUser.php"
         request(.POST, urlString, params, finished: finished)
     }
     func loadUserInfo(uid:Int, finished: @escaping HMRequstCallBack) {
         let params = ["uid":uid]
-        let urlString = "https://mhc.lmyz6.cn/getUserUid.php"
+        let urlString = "https://mhc.lmyz6.cn/api/getUserUid.php"
         request(.POST, urlString, params, finished: finished)
     }
 }
 extension NetworkTools {
-    func loadStatus(finished: @escaping HMRequstCallBack) {
-        let urlString = "https://mhc.lmyz6.cn/loadBlog.php"
-        tokenRequest(.GET, urlString, nil, finished: finished)
+    func loadStatus(max_id: Int,finished: @escaping HMRequstCallBack) {
+        let urlString = "https://mhc.lmyz6.cn/api/loadBlog.php"
+        var params = [String:Any]()
+        if max_id > 0 {
+            params["max_id"] = max_id
+        }
+        tokenRequest(.POST, urlString, params, finished: finished)
     }
     func loadLikeStatus(_ uid: String,finished: @escaping HMRequstCallBack) {
-        let urlString = "https://mhc.lmyz6.cn/loadLikeBlog.php"
+        let urlString = "https://mhc.lmyz6.cn/api/loadLikeBlog.php"
         var params = [String:Any]()
         params["uid"] = uid
         request(.POST, urlString, params, finished: finished)
     }
     func loadCommentStatus(_ uid: String,finished: @escaping HMRequstCallBack) {
-        let urlString = "https://mhc.lmyz6.cn/loadCommentBlog.php"
+        let urlString = "https://mhc.lmyz6.cn/api/loadCommentBlog.php"
         var params = [String:Any]()
         params["uid"] = uid
         request(.POST, urlString, params, finished: finished)
     }
     func loadLive(finished: @escaping HMRequstCallBack) {
-        let urlString = "https://mhc.lmyz6.cn/loadLive.php"
+        let urlString = "https://mhc.lmyz6.cn/api/loadLive.php"
         tokenRequest(.GET, urlString, nil, finished: finished)
     }
     ///此方法已弃用，现在我们直接用blog的来加载
     /*
     func loadComment(id: Int? = nil, comment_id: Int? = nil, finished: @escaping HMRequstCallBack) {
         var params = [String:Int]()
-        let urlString = "https://mhc.lmyz6.cn/loadComment.php"
+        let urlString = "https://mhc.lmyz6.cn/api/loadComment.php"
         if comment_id != nil {
             params["comment_id"] = comment_id
         }
@@ -110,7 +114,7 @@ extension NetworkTools {
             return
         }
         params["scope"]="read"
-        let urlString = "https://mhc.lmyz6.cn/chat.php"
+        let urlString = "https://mhc.lmyz6.cn/api/chat.php"
         request(.POST, urlString, params, finished: finished)
     }
     func loadFriend(finished: @escaping HMRequstCallBack) {
@@ -118,7 +122,7 @@ extension NetworkTools {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
-        let urlString = "https://mhc.lmyz6.cn/friend.php"
+        let urlString = "https://mhc.lmyz6.cn/api/friend.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func rename(rename: String,finished: @escaping HMRequstCallBack) {
@@ -127,7 +131,7 @@ extension NetworkTools {
             return
         }
         params["rename"] = rename
-        let urlString = "https://mhc.lmyz6.cn/rename.php"
+        let urlString = "https://mhc.lmyz6.cn/api/rename.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func tokenIsExpires(finished: @escaping HMRequstCallBack) {
@@ -135,7 +139,7 @@ extension NetworkTools {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
-        let urlString = "https://mhc.lmyz6.cn/accessTokenIsExpires.php"
+        let urlString = "https://mhc.lmyz6.cn/api/accessTokenIsExpires.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func ExpiresTheToken(finished: @escaping HMRequstCallBack) {
@@ -143,11 +147,11 @@ extension NetworkTools {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
-        let urlString = "https://mhc.lmyz6.cn/expiresToken.php"
+        let urlString = "https://mhc.lmyz6.cn/api/expiresToken.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func logOff(finished: @escaping HMRequstCallBack) {
-        let urlString = "https://mhc.lmyz6.cn/logOff.php"
+        let urlString = "https://mhc.lmyz6.cn/api/logOff.php"
         tokenRequest(.POST, urlString, nil, finished: finished)
     }
     func addFriend(_ to_uid: String,finished: @escaping HMRequstCallBack) {
@@ -156,7 +160,7 @@ extension NetworkTools {
             return
         }
         params["to_uid"] = to_uid
-        let urlString = "https://mhc.lmyz6.cn/addFriend.php"
+        let urlString = "https://mhc.lmyz6.cn/api/addFriend.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func deleteStatus(_ id: Int,finished: @escaping HMRequstCallBack) {
@@ -165,7 +169,7 @@ extension NetworkTools {
             return
         }
         params["id"] = id
-        let urlString = "https://mhc.lmyz6.cn/deleteBlog.php"
+        let urlString = "https://mhc.lmyz6.cn/api/deleteBlog.php"
         print(params)
         request(.POST, urlString, params, finished: finished)
     }
@@ -180,7 +184,7 @@ extension NetworkTools {
         params["id"] = id
         params["comment"] = comment
         print(params)
-        let urlString = "https://mhc.lmyz6.cn/addComment.php"
+        let urlString = "https://mhc.lmyz6.cn/api/addComment.php"
         request(.POST, urlString, params, finished: finished)
     }
     func deleteComment(_ id: Int,_ comment_id: Int,comment_id comment_comment_id: Int? = nil,finished: @escaping HMRequstCallBack) {
@@ -195,7 +199,7 @@ extension NetworkTools {
             params["comment_id"] = comment_comment_id
         }
         //print(params)
-        let urlString = "https://mhc.lmyz6.cn/deleteComment.php"
+        let urlString = "https://mhc.lmyz6.cn/api/deleteComment.php"
         request(.POST, urlString, params, finished: finished)
     }
     /*
@@ -211,7 +215,7 @@ extension NetworkTools {
             params["to_comment_id"] = comment_comment_id
         }
         params["id"] = id
-        let urlString = "https://mhc.lmyz6.cn/addLike.php"
+        let urlString = "https://mhc.lmyz6.cn/api/addLike.php"
         request(.POST, urlString, params, finished: finished)
     }
      */
@@ -228,7 +232,7 @@ extension NetworkTools {
         if comment_comment_id != nil {
             params["to_comment_id"] = comment_comment_id
         }
-        let urlString = "https://mhc.lmyz6.cn/like.php"
+        let urlString = "https://mhc.lmyz6.cn/api/like.php"
         request(.POST, urlString, params, finished: finished)
     }
     func tokenRequest(_ method: HMRequestMethod, _ URLString: String, _ parameters: [String: Any]?, finished: @escaping HMRequstCallBack) {
@@ -251,10 +255,10 @@ extension NetworkTools {
         // 2. 设置参数
         params["status"] = status
         if image == nil {
-            let urlString = "https://mhc.lmyz6.cn/upload.php"
+            let urlString = "https://mhc.lmyz6.cn/api/upload.php"
             tokenRequest(.POST, urlString, params, finished: finished)
         } else {
-            let urlString = "https://mhc.lmyz6.cn/upload.php"
+            let urlString = "https://mhc.lmyz6.cn/api/upload.php"
             var data: [Data] = []
             for i in image! {
                 data.append(i.jpegData(compressionQuality: 0.8)!)
@@ -268,7 +272,7 @@ extension NetworkTools {
         // 1. 创建参数字典
         var params = [String: Any]()
         // 2. 设置参数
-            let urlString = "https://mhc.lmyz6.cn/portrait.php"
+            let urlString = "https://mhc.lmyz6.cn/api/portrait.php"
             sendPortrait(urlString, image!.jpegData(compressionQuality: 0.8)!, params) { Result, Error in
                 finished(Result, Error)
             }

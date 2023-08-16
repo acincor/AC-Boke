@@ -20,7 +20,6 @@ class MessageTableViewController: VisitorTableViewController{
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //print(self.pullupView.isAnimating)
-        StatusDAL.clearDataCache()
         friendListViewModel.loadFriend { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()

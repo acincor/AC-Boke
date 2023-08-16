@@ -117,30 +117,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                               name: .init(rawValue: WBSwitchRootViewControllerNotification),           // 监听的通知
                                                   object: nil)
     }
+    let content = UNMutableNotificationContent()
     func applicationDidEnterBackground(_ application: UIApplication) {
         SDImageCache.shared.clearDisk()
         StatusDAL.clearDataCache()
         if UserAccountViewModel.sharedUserAccount.userLogon {
-            let content = UNMutableNotificationContent()
             content.title = "MHC博客"
             content.sound = .default
             
             content.sound = UNNotificationSound.default
             //print(self.pullupView.isAnimating)
-            StatusDAL.clearDataCache()
             listViewModel.loadStatus(isPullup: true) { (isSuccessed) in
                 if !isSuccessed {
                     SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                     return
                 }
+                if(listViewModel.statusList.last?.status.user != nil || listViewModel.statusList.last?.status.status != nil) {
+                    self.content.subtitle = listViewModel.statusList.last!.status.user!
+                    self.content.body = listViewModel.statusList.last!.status.status!
+                }
                 //print(listViewModel.statusList)
             }
             StatusDAL.clearDataCache()
             content.badge = true
-            if(listViewModel.statusList.last?.status.user != nil || listViewModel.statusList.last?.status.status != nil) {
-                content.subtitle = listViewModel.statusList.last!.status.user!
-                content.body = listViewModel.statusList.last!.status.status!
-            }
             StatusDAL.clearDataCache()
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
             let request = UNNotificationRequest(identifier: "com.Mhc-inc.MHC--", content: content, trigger: trigger)

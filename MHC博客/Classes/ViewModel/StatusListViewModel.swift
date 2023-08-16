@@ -28,7 +28,11 @@ class StatusListViewModel {
             }
             //print("bool:",dataList.count > self.statusList.count)
             self.pulldownCount = self.statusList.count == 0 ? dataList.count : (dataList.count > self.statusList.count ? dataList.count - self.statusList.count: nil)
-            self.statusList = dataList
+            if max_id > 0 {
+                self.statusList += dataList
+            } else {
+                self.statusList = dataList
+            }
             self.cacheSingleImage(dataList: dataList, finished: finished)
         }
     }

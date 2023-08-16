@@ -125,7 +125,6 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //print(self.pullupView.isAnimating)
-        StatusDAL.clearDataCache()
         listViewModel.loadStatus(isPullup: pullupView.isAnimating) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()

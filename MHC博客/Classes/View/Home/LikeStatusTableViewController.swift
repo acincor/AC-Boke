@@ -40,7 +40,6 @@ class LikeStatusTableViewController: VisitorTableViewController {
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //print(self.pullupView.isAnimating)
-        StatusDAL.clearDataCache()
         likeListViewModel.loadStatus(uid) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()

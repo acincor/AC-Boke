@@ -225,7 +225,7 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
                 return
             }
             if(Result as! [String:Any])["msg"] != nil {
-                print(Result)
+                //print(Result)
                 NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: "logOut")
                 UserAccountViewModel.sharedUserAccount.account = nil
             }
@@ -234,11 +234,11 @@ class ProfileTableViewController: VisitorTableViewController, UITextFieldDelegat
     @objc func logOffUserButtonTouchAction() {
         NetworkTools.shared.logOff { Result, Error in
             if Error != nil {
-                print(Error)
+                //print(Error)
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 return
             }
-            print(Result)
+            //print(Result)
             if(Result as! [String:Any])["msg"] != nil {
                 //print(Result)
                 NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: nil)

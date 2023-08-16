@@ -34,7 +34,8 @@ class StatusDAL {
             finished(array!)
             return
         }
-        NetworkTools.shared.loadStatus { (Result, Error) -> () in
+        NetworkTools.shared.loadStatus(max_id: max_id) { (Result, Error) -> () in
+            //print(Error)
             if Error != nil {
                 //print("出错了")
                 finished(nil)
@@ -45,6 +46,7 @@ class StatusDAL {
                 finished(nil)
                 return
             }
+            //print(array)
             StatusDAL.saveCache(array: array)
             finished(array)
         }
@@ -67,7 +69,7 @@ class StatusDAL {
         var arrayM = [[String:Any]]()
         for dict in array {
             let jsonData = dict["status"] as! Data
-            let result = try! JSONSerialization.data(withJSONObject: jsonData,options: [])
+            let result = try! JSONSerialization.jsonObject(with: jsonData,options: [])
             arrayM.append(result as! [String:Any])
         }
         return arrayM
@@ -97,7 +99,7 @@ class StatusDAL {
                         break
                     }
                 } catch {
-                    //print("插入数据成功")
+                    //print("插入数据失败")
                 }
             }
         }

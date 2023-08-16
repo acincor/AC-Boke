@@ -193,6 +193,13 @@ extension HomeTableViewController {
         g.sender2 = "\(cell.topView.viewModel?.status.user ?? "")"
         g.sender3 = "\(cell.topView.viewModel?.status.portrait ?? "")"
         cell.topView.iconView.addGestureRecognizer(g)
+        if listViewModel.statusList.count >= 10 {
+            if indexPath.row == listViewModel.statusList.count - 1 && !pullupView.isAnimating {
+                // 开始动画
+                pullupView.startAnimating()
+                loadData()
+            }//二十条刷新一次
+        }
         /*
         cell.bottomView.deleteButton.addAction(UIAction { action in
             cell.bottomView.deleteBlog(listViewModel.statusList[indexPath.row].status.id) { Result, Error in

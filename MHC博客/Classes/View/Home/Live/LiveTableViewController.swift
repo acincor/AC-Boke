@@ -21,7 +21,6 @@ class LiveTableView: UICollectionView{
     @objc func loadData() {
         refreshControl?.beginRefreshing()
         //print(self.pullupView.isAnimating)
-        StatusDAL.clearDataCache()
         liveListViewModel.loadLive { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             if !isSuccessed {
@@ -32,7 +31,7 @@ class LiveTableView: UICollectionView{
             self.reloadData()
         }
          /*
-        liveListViewModel.liveList = [FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/465651082032/portrait/KdsFei1FClof.png","uid":465651082032]))]
+        liveListViewModel.liveList = [FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/resource/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/resource/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/resource/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/resource/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/resource/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/resource/465651082032/portrait/KdsFei1FClof.png","uid":465651082032])),FriendViewModel(friend: FriendAccount(dict: ["user":"Mhc-inc","portrait":"https://mhc.lmyz6.cn/resource/465651082032/portrait/KdsFei1FClof.png","uid":465651082032]))]
           */
     }
     init() {

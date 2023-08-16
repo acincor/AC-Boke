@@ -59,7 +59,7 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
         }
     }
     //默认注册
-    var oauthURL = URL(string: "https://mhc.lmyz6.cn/register.html")
+    var oauthURL = URL(string: "https://mhc.lmyz6.cn/resource/register.html")
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment the following line to preserve selection between presentations
@@ -136,7 +136,7 @@ extension OAuthViewController {
         }
         //print("到这里了")
         let code = query.substring(from: "code=".endIndex)
-        //print("授权码是 "+code)
+        print("授权码是 "+code)
         UserAccountViewModel.sharedUserAccount.loadAccessToken(code: code) { (isSuccessed) -> () in
             if !isSuccessed {
                 return
