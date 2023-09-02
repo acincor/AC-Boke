@@ -40,7 +40,7 @@ class WelcomeViewController: UIViewController {
         iv.layer.masksToBounds = true
         return iv
     }()
-    private lazy var welcomeLabel: UILabel = UILabel(title:"欢迎归来",fontSize: 18)
+    private lazy var welcomeLabel: UILabel = UILabel(title:"欢迎\(UserAccountViewModel.sharedUserAccount.account!.user!)归来！",fontSize: 18)
     /*
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation

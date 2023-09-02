@@ -1,5 +1,5 @@
 //
-//  CommentCell.swift
+//  StatusCommentCell.swift
 //  MHC微博
 //
 //  Created by Monkey hammer on 2022/9/11.
@@ -9,11 +9,8 @@ import UIKit
 
 let CommentCellMargin: CGFloat = 12
 let CommentCellIconWidth: CGFloat = 35
-protocol CommentCellDelegate: NSObjectProtocol {
-    func commentCellDidClickUrl(url:URL)
-}
-class CommentCell: UITableViewCell {
-    weak var cellDelegate: CommentCellDelegate?
+class StatusCommentCell: UITableViewCell, FFLabelDelegate {
+    weak var cellDelegate: StatusCellDelegate?
     var viewModel: CommentViewModel? {
         didSet {
             let text = viewModel?.comment.comment ?? ""
@@ -21,14 +18,13 @@ class CommentCell: UITableViewCell {
             topView.viewModel = viewModel
         }
     }
-    private lazy var topView: CommentCellTopView = CommentCellTopView()
-    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .black, screenInset: CommentCellMargin)
-    lazy var bottomView: CommentCellBottomView = CommentCellBottomView()
+    lazy var topView: StatusCellTopView = StatusCellTopView()
+    var bottomView: StatusCellBottomView = StatusCellBottomView()
+    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .label, screenInset: CommentCellMargin)
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -38,7 +34,7 @@ class CommentCell: UITableViewCell {
         return bottomView.frame.maxY
     }
 }
-extension CommentCell {
+extension StatusCommentCell {
     @objc func setupUI() {
         contentView.addSubview(topView)
         contentView.addSubview(contentLabel)
@@ -66,21 +62,5 @@ extension CommentCell {
             make.height.equalTo(44)
         }
         contentLabel.labelDelegate = self
-    }
-}
-extension CommentCell: FFLabelDelegate {
-    func labelDidSelectedLinkText(label: FFLabel, text: String) {
-        if text.hasPrefix("http://") {
-            guard let url = URL(string: text) else {
-                return
-            }
-            cellDelegate?.commentCellDidClickUrl(url: url)
-        }
-        if text.hasPrefix("https://") {
-            guard let url = URL(string: text) else {
-                return
-            }
-            cellDelegate?.commentCellDidClickUrl(url: url)
-        }
     }
 }

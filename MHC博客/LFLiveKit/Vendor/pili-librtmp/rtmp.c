@@ -127,7 +127,7 @@ static int clk_tck;
 #endif
 
 uint32_t
-    PILI_RTMP_GetTime() {
+PILI_RTMP_GetTime(void) {
 #ifdef _DEBUG
     return 0;
 #elif defined(_WIN32)
@@ -139,7 +139,7 @@ uint32_t
 #endif
 }
 
-void PILI_RTMP_UserInterrupt() {
+void PILI_RTMP_UserInterrupt(void) {
     PILI_RTMP_ctrlC = TRUE;
 }
 
@@ -177,11 +177,11 @@ void PILI_RTMPPacket_Dump(PILI_RTMPPacket *p) {
              p->m_nBodySize, p->m_body ? (unsigned char)p->m_body[0] : 0);
 }
 
-int PILI_RTMP_LibVersion() {
+int PILI_RTMP_LibVersion(void) {
     return RTMP_LIB_VERSION;
 }
 
-void PILI_RTMP_TLS_Init() {
+void PILI_RTMP_TLS_Init(void) {
 #ifdef CRYPTO
 #ifdef USE_POLARSSL
     /* Do this regardless of NO_SSL, we use havege for rtmpe too */
@@ -211,7 +211,7 @@ void PILI_RTMP_TLS_Init() {
 }
 
 PILI_RTMP *
-    PILI_RTMP_Alloc() {
+PILI_RTMP_Alloc(void) {
     return calloc(1, sizeof(PILI_RTMP));
 }
 
@@ -474,7 +474,7 @@ static const AVal truth[] = {
     AVC("true"),
     {0, 0}};
 
-static void RTMP_OptUsage() {
+static void RTMP_OptUsage(void) {
     int i;
 
     RTMP_Log(RTMP_LOGERROR, "Valid PILI_RTMP options are:\n");

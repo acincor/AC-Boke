@@ -19,6 +19,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.filterContentForSearchText(searchController.searchBar.text! as NSString)
     }
     func filterContentForSearchText(_ searchText: NSString) {
+        /*
         let p1 = NSPredicate(format: "SELF.user CONTAINS %@ || SELF.status CONTAINS %@", searchText,searchText)
         //print(p1.predicateFormat)
         if searchText.length == 0 {
@@ -31,12 +32,25 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             return
         }
         self.listFilterTeams = NSMutableArray(array: tempArray)
+         */
+        NetworkTools.shared.search(status: searchText as String) { Result, Error in
+            var dataList = [StatusViewModel]()
+            if Result != nil {
+                for i in Result as! [[String:Any]]{
+                    dataList.append(StatusViewModel(status: Status(dict: i)))
+                }
+                self.listFilterTeams = NSMutableArray(array: dataList)
+            }
+            SVProgressHUD.showInfo(withStatus: "没有博客")
+        }
         self.tableView.reloadData()
     }
     var listTeams: [StatusViewModel]?
     var listFilterTeams: NSArray?
     @objc func action2(_ sender: UIButton) {
+        SVProgressHUD.show(withStatus: "加载中")
         NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
+            SVProgressHUD.dismiss()
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 //print(Error)
@@ -66,7 +80,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                 return
             }
             SVProgressHUD.showInfo(withStatus: "删除成功")
-            self.loadData()
+            self.tableView.reloadData()
         }
     }
     @objc func action3(_ sender: UIButton) {
@@ -99,7 +113,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，最新、最热微博尽在掌握，不再会与时事潮流擦肩而过")
+            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，最新、最热博客尽在掌握，不再会与时事潮流擦肩而过")
             return
         }
         self.listTeams = listViewModel.statusList
@@ -107,9 +121,10 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         refreshControl = WBRefreshControl()
         //tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .plain)
         loadData()
-        refreshControl?.addTarget(self, action: Selector("loadData"), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         tableView.tableFooterView = pullupView
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")
+        //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")
+        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)//StatusCellNormalId has been exist
         prepare()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -119,28 +134,49 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .white
+        indicator.color = .systemBackground
         return indicator
     }()
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //print(self.pullupView.isAnimating)
-        listViewModel.loadStatus(isPullup: pullupView.isAnimating) { (isSuccessed) in
-            self.refreshControl?.endRefreshing()
-            self.pullupView.stopAnimating()
-            if !isSuccessed {
-                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+        /*
+        let since_id = pullupView.isAnimating ? 0 : ((listFilterTeams?[0] as? StatusViewModel)?.status.id ?? 0)
+        let max_id = pullupView.isAnimating ? ((listFilterTeams?[(listFilterTeams?.count ?? 0) == 0 ? 0 : listFilterTeams!.count-1] as! StatusViewModel).status.id) : 0
+        StatusDAL.loadStatus(since_id: since_id, max_id: max_id) { (array) -> () in
+            guard let array = array else {
+                //print("数据格式错误")
                 return
             }
-            self.listFilterTeams = listViewModel.statusList as NSArray
-            //print(listViewModel.statusList)
+            var dataList = [StatusViewModel]()
+            //print(result)
+            for n in 0..<array.count {
+                //print(array[n])
+                //print(Status(dict: array[n]))
+                dataList.append(StatusViewModel(status: Status(dict: array[n])))
+            }
+            self.listFilterTeams = dataList as NSArray
             self.tableView.reloadData()
         }
+        */
+        //StatusDAL.clearDataCache()
+         listViewModel.loadStatus(isPullup: pullupView.isAnimating) { (isSuccessed) in
+             self.refreshControl?.endRefreshing()
+             self.pullupView.stopAnimating()
+             if !isSuccessed {
+                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                 return
+             }
+             self.listFilterTeams = listViewModel.statusList as NSArray
+             print(listViewModel.statusList)
+             self.tableView.reloadData()
+         }
     }
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewController", for: indexPath) as! StatusNormalCell
-        var vm = self.listFilterTeams?[indexPath.row] as? StatusViewModel
+        //var cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewController", for: indexPath) as! StatusNormalCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: StatusCellNormalId, for: indexPath) as! StatusNormalCell
+        let vm = self.listFilterTeams?[indexPath.row] as? StatusViewModel
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.identifier = cell
@@ -168,9 +204,34 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         cell.bottomView.commentButton.setTitle("\(listViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        let result = ["id":"\(listViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        NotificationCenter.default.post(name: Notification.Name("BKIfLikeIsTrueLightIt"), object: ["cell":cell,"indexPath":indexPath],userInfo: ["hello":"l"])
-        cell = self.cell!
+        NetworkTools.shared.loadOneStatus(id: listViewModel.statusList[indexPath.row].status.id) { res, error in
+            if error != nil {
+                return
+            }
+            guard let list = res as? [String:Any] else {
+                return
+            }
+            guard let like_list = list["like_list"] as? [[String:Any]] else {
+                return
+            }
+            cell.bottomView.commentButton.setTitle(list["comment_count"] as? String, for: .normal)
+            cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
+            for s in like_list {
+                //print(s["like_uid"] as? String)
+                if result["like_uid"] as? String == s["like_uid"] as? String {
+                    
+                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
+                    break
+                } else {
+                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+                }
+            }
+            if like_list.isEmpty {
+                cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+            }
+        }
         cell.bottomView.likeButton.tag = indexPath.row
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.cellDelegate = self
@@ -180,7 +241,8 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     func prepare() {
         MySearchTextField = UISearchController(searchResultsController: nil)
         // 输入框提示内容
-        MySearchTextField?.dimsBackgroundDuringPresentation = false
+        
+        MySearchTextField?.obscuresBackgroundDuringPresentation = false
         MySearchTextField?.searchResultsUpdater = self
         MySearchTextField?.searchBar.delegate = self
         MySearchTextField?.searchBar.sizeToFit()
@@ -194,7 +256,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         return (self.listFilterTeams?[indexPath.row] as! StatusViewModel).rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        id = indexPath.row
+        statusId = indexPath.row
         let vc = CommentTableViewController()
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom

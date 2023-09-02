@@ -15,7 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.backgroundColor = .white
+        window?.backgroundColor = .systemBackground
+        SVProgressHUD.setDefaultMaskType(.clear)
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if (!granted) {
                            print("hi")
@@ -39,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.addObserver(forName: .init("WBSwitchRootViewControllerLogOutNotification"), object: nil, queue: nil) { (notification) in
             if notification.object != nil {
                 if UserAccountViewModel.sharedUserAccount.userLogon {
-                    NetworkTools.shared.tokenIsExpires { Result, Error in
+                    NetworkTools.shared.ExpiresTheToken { Result, Error in
                         //print(Error)
                         if (Result as! [String:Any])["msg"] as! Int == 1 {
                             //print("有没有一种可能到这里了")
@@ -54,6 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             }
                         }
                     }
+                } else {
+                    SVProgressHUD.showInfo(withStatus: "先登陆哦")
                 }
             } else {
                 if UserAccountViewModel.sharedUserAccount.userLogon {
@@ -72,6 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             }
                         }
                     }
+                } else {
+                    SVProgressHUD.showInfo(withStatus: "先登陆哦")
                 }
             }
         }
@@ -97,11 +102,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         print("Recived: \(userInfo)")
        //Parsing userinfo:
-       var temp = userInfo
+        _ = userInfo
         print(userInfo)
        if let info = userInfo["aps"] as? Dictionary<String, Any>
                 {
-                    var alertMsg = info["alert"] as! String
+           let alertMsg = info["alert"] as! String
                     print(alertMsg)
                //alert.show()
                 }
@@ -127,27 +132,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             content.sound = UNNotificationSound.default
             //print(self.pullupView.isAnimating)
-            listViewModel.loadStatus(isPullup: true) { (isSuccessed) in
-                if !isSuccessed {
+            NetworkTools.shared.loadHotStatus { Result, Error in
+                if Result == nil {
                     SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                     return
                 }
-                if(listViewModel.statusList.last?.status.user != nil || listViewModel.statusList.last?.status.status != nil) {
-                    self.content.subtitle = listViewModel.statusList.last!.status.user!
-                    self.content.body = listViewModel.statusList.last!.status.status!
-                }
-                //print(listViewModel.statusList)
-            }
-            StatusDAL.clearDataCache()
-            content.badge = true
-            StatusDAL.clearDataCache()
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-            let request = UNNotificationRequest(identifier: "com.Mhc-inc.MHC--", content: content, trigger: trigger)
-            UNUserNotificationCenter.current().add(request) { error in
-                if let error = error {
-                    // 处理发送通知时出现的错误
-                } else {
-                    // 通知已发送到设备
+                if((Result as! [String:Any])["user"] != nil || (Result as! [String:Any])["status"] != nil) {
+                    StatusDAL.clearDataCache()
+                    self.content.badge = true
+                    StatusDAL.clearDataCache()
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                    let request = UNNotificationRequest(identifier: "com.Mhc-inc.MHCBlog", content: self.content, trigger: trigger)
+                    let status = Status(dict: Result as! [String:Any])
+                    self.content.body = status.status!
+                    self.content.title = status.user!
+                    self.content.subtitle = status.create_at!
+                    UNUserNotificationCenter.current().add(request) { error in
+                        if error != nil {
+                            // 处理发送通知时出现的错误
+                        } else {
+                            // 通知已发送到设备
+                        }
+                    }
+
                 }
             }
         }

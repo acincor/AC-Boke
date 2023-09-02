@@ -7,31 +7,15 @@
 
 
 import UIKit
-class CommentCommentCellBottomView: UIView {
-    
-    // MARK: - 构造函数
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - 懒加载控件
-    /// 评论按钮
-    lazy var deleteButton: UIButton = UIButton(title: " 删除", fontSize: 12, color: .black, imageName:
-    "timeline_icon_retweet")
-    
-    /// 点赞按钮
-    lazy var likeButton: UIButton = UIButton(title: " 赞", fontSize: 12, color: UIColor.black, imageName: "timeline_icon_unlike")
-}
 
 // MARK: - 设置界面
-extension CommentCommentCellBottomView {
-    private func setupUI() {
+import UIKit
+
+// MARK: - 设置界面
+class CommentCommentCellBottomView: StatusCellBottomView {
+    override func setupUI() {
         // 0. 设置背景颜色
-        backgroundColor = .lightGray
+        backgroundColor = .systemBackground
         
         // 1. 添加控件
         addSubview(deleteButton)
@@ -50,10 +34,11 @@ extension CommentCommentCellBottomView {
             make.right.equalTo(self.snp.right)
         }
         // 3. 分隔视图
-        let sep1 = sepView()
-        addSubview(sep1)
+        //let sep1 = sepView()
+        //addSubview(sep1)
         
         // 布局
+        /*
         let w = 1
         let scale = 0.4
         sep1.snp.makeConstraints { (make) -> Void in
@@ -63,13 +48,15 @@ extension CommentCommentCellBottomView {
             make.height.equalTo(deleteButton.snp.height)
                 .multipliedBy(scale)
         }
-        
+        */
     }
 /// 创建分隔视图
-private func sepView() -> UIView {
+/*
+func sepView() -> UIView {
     let v = UIView()
-    v.backgroundColor = UIColor.lightGray
+    v.backgroundColor = .systemBackground
     return v
 }
+*/
 }
 

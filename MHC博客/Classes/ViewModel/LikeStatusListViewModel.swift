@@ -32,7 +32,7 @@ class LikeStatusListViewModel {
     }
     private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping (_ isSuccessed: Bool) -> ()) {
         let group = DispatchGroup()
-        var dataLength = 0
+        //var dataLength = 0
         for vm in dataList {
             if vm.thumbnailUrls?.count != 1 {
                 continue
@@ -40,13 +40,9 @@ class LikeStatusListViewModel {
             let url = vm.thumbnailUrls![0]
             //print("要缓存的\(url)")
             group.enter()
-            SDWebImageManager.shared.loadImage(with: url,options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached], progress: nil,completed: { (image,_,_,_,_,_) -> Void in
-                if let img = image,let data = img.pngData() {
-                    //print(data.count)
-                    dataLength += data.count
-                }
+            SDWebImageManager.shared.loadImage(with: url,options: [SDWebImageOptions.retryFailed], progress: nil,completed: { (_,_,_,_,_,_) -> Void in
+                group.leave()
             })
-            group.leave()
         }
         group.notify(queue: DispatchQueue.main) {
             //print("缓存完成\(dataLength / 1024)K")

@@ -46,10 +46,10 @@ class TableViewCell:UITableViewCell
              
         }
          
-        var type =  self.msgItem.mtype
-        var width =  self.msgItem.view.frame.size.width
+        let type =  self.msgItem.mtype
+        let width =  self.msgItem.view.frame.size.width
          
-        var height =  self.msgItem.view.frame.size.height
+        let height =  self.msgItem.view.frame.size.height
          
         var x =  (type == ChatType.Someone) ? 0 : self.frame.size.width - width -
             self.msgItem.insets.left - self.msgItem.insets.right
@@ -58,14 +58,9 @@ class TableViewCell:UITableViewCell
         //显示用户头像
         if (self.msgItem.logo != "")
         {
-            var logo = self.msgItem.logo
-            do {
+            let logo = self.msgItem.logo
                 self.avatarImage = UIImageView()
                 avatarImage.sd_setImage(with: URL(string: logo))
-            } catch {
-                SVProgressHUD.showInfo(withStatus: "出问题了")
-                return
-            }
              
             self.avatarImage.layer.cornerRadius = 9.0
             self.avatarImage.layer.masksToBounds = true
@@ -73,16 +68,16 @@ class TableViewCell:UITableViewCell
             self.avatarImage.layer.borderWidth = 1.0
              
             //别人头像，在左边，我的头像在右边
-            var avatarX =  (type == ChatType.Someone) ? 2 : self.frame.size.width - 52
+            let avatarX =  (type == ChatType.Someone) ? 2 : self.frame.size.width - 52
              
             //头像居于消息底部
-            var avatarY =  height
+            let avatarY =  height
             //set the frame correctly
             self.avatarImage.frame = CGRectMake(avatarX, avatarY, 50, 50)
             self.addSubview(self.avatarImage)
              
              
-            var delta =  self.frame.size.height - (self.msgItem.insets.top + self.msgItem.insets.bottom
+            let delta =  self.frame.size.height - (self.msgItem.insets.top + self.msgItem.insets.bottom
                 + self.msgItem.view.frame.size.height)
             if (delta > 0)
             {

@@ -16,7 +16,7 @@ class Comment: NSObject {
     @objc var create_at: String?
     /// 用户头像地址（中图），50×50像素
     @objc var portrait: String?
-    @objc var comment_list:[[String:Any]] = []
+    @objc var comment_list:[[String:Any]]?
     @objc var comment_count: Int = 0
     @objc var like_list:[[String:Any]] = []
     @objc var like_count: Int = 0

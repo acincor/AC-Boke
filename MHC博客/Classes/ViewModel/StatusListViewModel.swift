@@ -14,11 +14,13 @@ class StatusListViewModel {
         let since_id = isPullup ? 0 : (statusList.first?.status.id ?? 0)
         let max_id = isPullup ? (statusList.last?.status.id ?? 0) : 0
         StatusDAL.loadStatus(since_id: since_id, max_id: max_id) { (array) -> () in
-            guard let array = array else {
+            //print("查询到缓存数据 \(array!.count)")
+            guard var array = array else {
                 //print("数据格式错误")
                 finished(false)
                 return
             }
+            print(array)
             var dataList = [StatusViewModel]()
             //print(result)
             for n in 0..<array.count {
@@ -38,24 +40,21 @@ class StatusListViewModel {
     }
     private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping (_ isSuccessed: Bool) -> ()) {
         let group = DispatchGroup()
-        var dataLength = 0
+        //var dataLength = 0
         for vm in dataList {
             if vm.thumbnailUrls?.count != 1 {
                 continue
             }
             let url = vm.thumbnailUrls![0]
-            //print("要缓存的\(url)")
-            group.enter()
-            SDWebImageManager.shared.loadImage(with: url,options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached], progress: nil,completed: { (image,_,_,_,_,_) -> Void in
-                if let img = image,let data = img.pngData() {
-                    //print(data.count)
-                    dataLength += data.count
-                }
-            })
-            group.leave()
+                //print("要缓存的\(url)")
+                group.enter()
+            SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed],progress: nil) {
+                (image, data, error, type, bool, url) in
+                group.leave()
+            }
         }
-        group.notify(queue: DispatchQueue.main) {
-            //print("缓存完成\(dataLength / 1024)K")
+       group.notify(queue: DispatchQueue.main) {
+            print("缓存完成")
             finished(true)
         }
     }

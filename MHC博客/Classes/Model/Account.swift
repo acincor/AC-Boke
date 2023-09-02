@@ -8,7 +8,7 @@
 import UIKit
 
 /// 用户账户模型
-class FriendAccount: NSObject, NSCoding {
+class Account: NSObject, NSCoding {
     /// 当前授权用户的UID
     @objc var uid: Int = 0
     @objc var user: String?

@@ -1,5 +1,5 @@
 //
-//  LiveCellTopView.swift
+//  UserCellTopView.swift
 //  MHC微博
 //
 //  Created by Monkey hammer on 2022/9/11.
@@ -8,7 +8,7 @@
 import UIKit
 
 
-class LiveCellTopView: UIView {
+class UserCellTopView: UIView {
     // MARK: - 懒加载控件
     /// 头像
     private lazy var iconView: UIImageView = UIImageView(imageName: "avatar_default_big")
@@ -20,14 +20,14 @@ class LiveCellTopView: UIView {
     private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.red)
     
     /// 可更改来源标签
-    lazy var sourceLabel: UILabel = UILabel(title: "直播中...", fontSize: 11)
-    var viewModel: FriendViewModel? {
+    lazy var sourceLabel: UILabel = UILabel(title: "你的伙伴", fontSize: 11)
+    var viewModel: UserViewModel? {
         didSet {
             // 姓名
-            nameLabel.text = viewModel?.friend.user
+            nameLabel.text = viewModel?.user.user
             nameLabel.textColor = .red
             // 头像
-            iconView.sd_setImage(with: viewModel?.friendProfileUrl, placeholderImage: viewModel?.friendDefaultIconView)
+            iconView.sd_setImage(with: viewModel?.userProfileUrl, placeholderImage: viewModel?.userDefaultIconView)
             iconView.isUserInteractionEnabled = true
             iconView.layer.cornerRadius = 15
             iconView.layer.masksToBounds = true
@@ -49,16 +49,15 @@ class LiveCellTopView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-extension LiveCellTopView {
+extension UserCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor.lightGray
+        sepView.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)
         addSubview(timeLabel)
         addSubview(sourceLabel)
-        sourceLabel.textColor = .white
         iconView.snp.makeConstraints { make in
             make.top.equalTo(sepView.snp.bottom).offset(StatusCellMargin)
             make.left.equalTo(self.snp.left).offset(StatusCellMargin)

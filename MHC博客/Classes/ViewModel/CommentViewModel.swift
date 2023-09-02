@@ -28,12 +28,20 @@ class CommentViewModel: CustomStringConvertible {
         return UIImage(named: "avatar_default_big")!
     }
     lazy var rowHeight: CGFloat = {
-        var cell: CommentCell
-        cell = CommentCell(style: .default, reuseIdentifier: CommentCellNormalId)
-        return cell.rowHeight(self)
+        
+        if self.comment.comment_list != nil {
+            var cell = StatusCommentCell(style: .default, reuseIdentifier: CommentCellNormalId)
+            return cell.rowHeight(self)
+        } else {
+            var cell = CommentCommentCell(style: .default, reuseIdentifier: CommentCommentCellNormalId)
+            return cell.rowHeight(self)
+        }
     }()
     var cellId: String {
-        return CommentCellNormalId
+        if self.comment.comment_list != nil {
+            return CommentCellNormalId
+        }
+        return CommentCommentCellNormalId
     }
     /// 用户认证图标
     /// 认证类型，-1：没有认证，0，认证用户，2,3,5: 企业认证，220: 达人
@@ -42,7 +50,6 @@ class CommentViewModel: CustomStringConvertible {
         return Date.sina(comment.create_at ?? "")?.dateDescription
     }
     /// 缩略图URL数组 - 存储型属性 !!!
-    var thumbnailUrls: [URL]?
     
     /// 构造函数
     init(comment: Comment) {

@@ -9,12 +9,13 @@ import UIKit
 
 
 let StatusCellNormalId = "StatusCellNormalId"
-let StatusCellNormalId2 = "StatusCellNormalId2"
+//let StatusCellNormalId2 = "StatusCellNormalId2"
 var listViewModel = StatusListViewModel()
+var statusId: Int?
 class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .white
+        indicator.color = .systemBackground
         return indicator
     }()
     deinit {
@@ -24,7 +25,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     private func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
+        //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
@@ -32,7 +33,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         tableView.tableFooterView = pullupView
         liveView.delegate = self
         liveView.dataSource = self
-        tableView.tableHeaderView = liveView
+        tableView.tableHeaderView = liveListViewModel.liveList.isEmpty ? nil : liveView
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return liveListViewModel.liveList.count
@@ -45,7 +46,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vm = liveListViewModel.liveList[indexPath.row]
-        guard let url = ("https://mhc.lmyz6.cn/hls/\(vm.friend.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+        guard let url = ("https://mhc.lmyz6.cn/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
             return
         }
@@ -58,8 +59,8 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //print(self.pullupView.isAnimating)
-        StatusDAL.clearDataCache()
-        listViewModel.loadStatus(isPullup: pullupView.isAnimating) { (isSuccessed) in
+        StatusDAL.clearDataCache()//删除缓存
+            listViewModel.loadStatus(isPullup: self.pullupView.isAnimating) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()
             if !isSuccessed {
@@ -70,15 +71,9 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             self.showPulldownTip()
             self.tableView.reloadData()
         }
-        liveView.loadData()
-        liveView.reloadData()
-        if liveListViewModel.liveList.isEmpty {
-            var textView = UITextView(frame: liveView.frame)
-            textView.text = "暂时无人直播哦..."
-            textView.isEditable = false
-            textView.backgroundColor = .lightGray
-            tableView.tableHeaderView = textView
-        }
+            self.liveView.loadData()
+            self.liveView.reloadData()
+            self.tableView.tableHeaderView = liveListViewModel.liveList.isEmpty ? nil : self.liveView
     }
     private lazy var pulldownTipLabel: UILabel = {
         let label = UILabel(title: "", fontSize: 18,color: .white)
@@ -104,14 +99,18 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             }
         }
     }
+    func like(object: [String:Any]) -> Error? {
+        
+        print("开始了")
+        print("结束了")
+        return nil
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UserAccountViewModel.sharedUserAccount.userLogon {
             visitorView?.setupInfo(imageName: nil, title: "关注一些人，回这里看看有什么惊喜")
             return
         }
-        
-        loadData()
         prepareTableView()
         NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
             guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
@@ -129,45 +128,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
             self?.present(vc, animated: true,completion: nil)
         }
-        NotificationCenter.default.addObserver(forName: Notification.Name("BKIfLikeIsTrueLightIt"), object: nil, queue: nil) { n in
-            if n.object != nil {
-                let result = ["id":"\(listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
-                self.cell = ((n.object as! [String:Any])["cell"] as! StatusCell)
-                for s in like_list {
-                    print(s["like_uid"] as? String)
-                    if result["like_uid"] as? String == s["like_uid"] as? String {
-                        
-                        self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
-                        break
-                    } else {
-                        self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                    }
-                }
-                if like_list.isEmpty {
-                    self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                }
-            }
-            if n.userInfo != nil {
-                if n.userInfo!.isEqualTo(["hello":"l"]) {
-                    let result = ["id":"\(listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                    let like_list = listViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
-                    discover.cell = ((n.object as! [String:Any])["cell"] as? StatusNormalCell)
-                    for s in like_list {
-                        print(s["like_uid"] as? String)
-                        if result["like_uid"] as? String == s["like_uid"] as? String {
-                            discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
-                            break
-                        } else {
-                            discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                        }
-                    }
-                    if like_list.isEmpty {
-                        discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                    }
-                }
-            }
-        }
+        self.loadData()
     }
     @objc func action(sender: UITapGestureRecognizer) {
         present(UserProfileViewController(portrait: sender.sender3, usernameLabel: sender.sender2, MID: sender.sender), animated: true)
@@ -181,6 +142,7 @@ extension HomeTableViewController {
         return listViewModel.statusList.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //print("开始动画")
         let vm = listViewModel.statusList[indexPath.row]
         var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
         // Configure the cell...
@@ -189,9 +151,12 @@ extension HomeTableViewController {
         cell.bottomView.deleteButton.tag = indexPath.row
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
-        g.sender = "\(cell.topView.viewModel?.status.uid ?? 0)"
-        g.sender2 = "\(cell.topView.viewModel?.status.user ?? "")"
-        g.sender3 = "\(cell.topView.viewModel?.status.portrait ?? "")"
+        guard let viewModel = cell.topView.viewModel as? StatusViewModel else {
+            return cell
+        }
+        g.sender = "\(viewModel.status.uid)"
+        g.sender2 = "\(viewModel.status.user ?? "")"
+        g.sender3 = "\(viewModel.status.portrait ?? "")"
         cell.topView.iconView.addGestureRecognizer(g)
         if listViewModel.statusList.count >= 10 {
             if indexPath.row == listViewModel.statusList.count - 1 && !pullupView.isAnimating {
@@ -219,20 +184,49 @@ extension HomeTableViewController {
             }
         }, for: .touchUpInside)
          */
-        cell.bottomView.commentButton.setTitle("\(listViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        //print("\(listViewModel.statusList[indexPath.row].status.like_count)")
+        let result = ["id":"\(listViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        NotificationCenter.default.post(name: Notification.Name("BKIfLikeIsTrueLightIt"), object: ["cell":cell,"indexPath":indexPath])
-        cell = self.cell!
+        NetworkTools.shared.loadOneStatus(id: listViewModel.statusList[indexPath.row].status.id) { res, error in
+            if error != nil {
+                return
+            }
+            guard let list = res as? [String:Any] else {
+                return
+            }
+            cell.bottomView.commentButton.setTitle(list["comment_count"] as? String, for: .normal)
+            cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
+            guard let like_list = list["like_list"] as? [[String:Any]] else {
+                return
+            }
+            for s in like_list {
+                //print(s["like_uid"] as? String)
+                if result["like_uid"] as? String == s["like_uid"] as? String {
+                    
+                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
+                    break
+                } else {
+                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+                }
+            }
+            if like_list.isEmpty {
+                cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+            }
+        }
+        //cell = self.cell!
         cell.bottomView.likeButton.tag = indexPath.row
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.cellDelegate = self
         return cell
     }
     @objc func action2(_ sender: UIButton) {
+        SVProgressHUD.show(withStatus: "加载中")
         NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
+            SVProgressHUD.dismiss()
             if Error != nil {
+                SVProgressHUD.showInfo(withStatus: "出错了")
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 //print(Error)
                 return
@@ -243,6 +237,7 @@ extension HomeTableViewController {
                 return
             }
             sender.nav.close()
+            self.tableView.reloadData()
         }
     }
     @objc func action1(_ sender: UIButton) {
@@ -283,7 +278,7 @@ extension HomeTableViewController {
         NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
                 print(Result as! [String:Any])
-                self.loadData()
+                self.tableView.reloadData()
                 return
             }
             SVProgressHUD.showInfo(withStatus: "出错了")
@@ -295,7 +290,7 @@ extension HomeTableViewController {
         return listViewModel.statusList[indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        id = indexPath.row
+        statusId = indexPath.row
         let vc = CommentTableViewController()
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
@@ -332,12 +327,12 @@ extension UITextField {
 extension UIButton {
     private struct AssociatedKey {
            static var identifier: StatusCell = StatusCell()
-        static var cell: CommentCell = CommentCell()
+        static var cell: StatusCommentCell = StatusCommentCell()
         static var cell2: CommentCommentCell = CommentCommentCell()
         static var nav: CommentViewController = CommentViewController()
         static var int: Int = 0
         static var vm: CommentViewModel? = CommentListViewModel().commentList.first
-        static var vm2: CommentCommentViewModel? = CommentListViewModel().commentCommentList.first
+        static var vm2: CommentViewModel? = CommentListViewModel().commentCommentList.first
        }
        
        var identifier: StatusCell {
@@ -348,9 +343,9 @@ extension UIButton {
                objc_setAssociatedObject(self, &AssociatedKey.identifier, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
            }
        }
-    var cell: CommentCell {
+    var cell: StatusCommentCell {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.cell) as? CommentCell ?? CommentCell()
+            return objc_getAssociatedObject(self, &AssociatedKey.cell) as? StatusCommentCell ?? StatusCommentCell()
         }
         set {
             objc_setAssociatedObject(self, &AssociatedKey.cell, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
@@ -372,9 +367,9 @@ extension UIButton {
             objc_setAssociatedObject(self, &AssociatedKey.vm, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    var vm2: CommentCommentViewModel? {
+    var vm2: CommentViewModel? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.vm2) as? CommentCommentViewModel
+            return objc_getAssociatedObject(self, &AssociatedKey.vm2) as? CommentViewModel
         }
         set {
             objc_setAssociatedObject(self, &AssociatedKey.vm2, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)

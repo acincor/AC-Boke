@@ -20,7 +20,7 @@ class StatusCell: UITableViewCell {
             let text = viewModel?.status.status ?? ""
             contentLabel.attributedText = EmoticonManager.sharedManager.emoticonText(string: text, font: contentLabel.font)
             topView.viewModel = viewModel
-            pictureView.backgroundColor = .white
+            pictureView.backgroundColor = .systemBackground
             pictureView.viewModel = viewModel
             pictureView.snp.updateConstraints { make in
                 make.height.equalTo(pictureView.bounds.height)
@@ -29,7 +29,7 @@ class StatusCell: UITableViewCell {
         }
     }
     lazy var topView: StatusCellTopView = StatusCellTopView()
-    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .black, screenInset: StatusCellMargin)
+    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .label, screenInset: StatusCellMargin)
     lazy var bottomView: StatusCellBottomView = StatusCellBottomView()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -80,6 +80,12 @@ extension StatusCell {
 extension StatusCell: FFLabelDelegate {
     func labelDidSelectedLinkText(label: FFLabel, text: String) {
         if text.hasPrefix("http://") {
+            guard let url = URL(string: text) else {
+                return
+            }
+            cellDelegate?.statusCellDidClickUrl(url: url)
+        }
+        if text.hasPrefix("https://") {
             guard let url = URL(string: text) else {
                 return
             }

@@ -74,7 +74,7 @@ class PhotoBrowserCell: UICollectionViewCell {
                 return
             }
             reset()
-            let placeHolderImage = SDImageCache.shared.imageFromDiskCache(forKey: url.absoluteString)
+            _ = SDImageCache.shared.imageFromDiskCache(forKey: url.absoluteString)
             imageView.sd_setImage(with: url,
                 placeholderImage: nil,
                                          options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached],

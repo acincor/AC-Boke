@@ -246,7 +246,7 @@ static unsigned int to_host(unsigned char *p){
                     dispatch_async(_readQueue, ^{
                         // finish the file, writing moov, before reading any more from the file
                         // since we don't yet know where the mdat ends
-                        _readSource = nil;
+                        self->_readSource = nil;
                         [oldVideo finishWithCompletionHandler:^{
                             [self swapFiles:oldVideo.path];
                         }];
@@ -424,12 +424,12 @@ static unsigned int to_host(unsigned char *p){
         _readSource = nil;
         if (_headerWriter) {
             [_headerWriter finishWithCompletionHandler:^{
-                _headerWriter = nil;
+                self->_headerWriter = nil;
             }];
         }
         if (_writer) {
             [_writer finishWithCompletionHandler:^{
-                _writer = nil;
+                self->_writer = nil;
             }];
         }
         // !! wait for these to finish before returning and delete temp files

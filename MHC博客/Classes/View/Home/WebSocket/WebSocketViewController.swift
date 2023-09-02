@@ -33,7 +33,7 @@ class WebSocketController: UIViewController,ChatDataSource {
     override func viewDidLoad() {
         connect()
         SVProgressHUD.dismiss()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
                 view.addSubview(textField)
                 view.addSubview(sendButton)
                 view.addSubview(table)
@@ -74,7 +74,7 @@ class WebSocketController: UIViewController,ChatDataSource {
                 sendButton.sizeToFit()
         urlRequestToUidTask.receive {[weak self]result in
             switch result {
-            case .failure(let error):
+            case .failure(_):
                 //print("Error in receiving message: \(error)")
                 break
             case .success(.string(let str)):
@@ -133,13 +133,17 @@ class WebSocketController: UIViewController,ChatDataSource {
         if textField.hasText && sender.tag == 1 {
             let text = self.textField.text!//UITextField.text must be used from main thread only
             SVProgressHUD.show()
-            task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"content\":\"\(textField.text!)\",\"to_uid\":\(to_uid!),\"timeInterval\":\(Date().timeIntervalSince1970)}")) { error in
-                guard error != nil else {
+            sendButton.isEnabled = false
+            DispatchQueue.main.asyncAfter(deadline: .now()+1){
+                self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"content\":\"\(self.textField.text!)\",\"to_uid\":\(self.to_uid!),\"timeInterval\":\(Date().timeIntervalSince1970)}")) { error in
+                    guard error != nil else {
+                        SVProgressHUD.dismiss()
+                        ChatDAL.saveCache(array: ["uid":Int(UserAccountViewModel.sharedUserAccount.account!.uid!)!,"content":text,"to_uid":self.to_uid!,"timeInterval":Date().timeIntervalSince1970])
+                        return
+                    }
                     SVProgressHUD.dismiss()
-                    ChatDAL.saveCache(array: ["uid":Int(UserAccountViewModel.sharedUserAccount.account!.uid!)!,"content":text,"to_uid":self.to_uid!,"timeInterval":Date().timeIntervalSince1970])
-                    return
+                    self.sendButton.isEnabled = true
                 }
-                SVProgressHUD.dismiss()
             }
         } else {
             SVProgressHUD.showInfo(withStatus: "对方未在线或您没有发送文字 sb isn't on line or you send blank text.")
@@ -163,7 +167,7 @@ class WebSocketController: UIViewController,ChatDataSource {
         self.chatListViewModel.chatList.removeAll()
         urlRequestToUidTask.receive {[weak self]result in
             switch result {
-            case .failure(let error):
+            case .failure(_):
                 //print("Error in receiving message: \(error)")
                 break
             case .success(.string(let str)):

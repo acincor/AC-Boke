@@ -13,7 +13,7 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
     private lazy var textView:UITextView = {
         let tv = UITextView()
         tv.font = UIFont.systemFont(ofSize: 18)
-        tv.textColor = .black
+        tv.textColor = .label
         tv.alwaysBounceVertical = true
         tv.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
         tv.delegate = self
@@ -45,7 +45,7 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
             make.height.equalTo(view.bounds.height * 0.6)
         }
         textView.snp.remakeConstraints { make in
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.equalTo(view.snp.left)
             make.right.equalTo(view.snp.right)
             make.bottom.equalTo(picturesPickerController.view.snp.top)
@@ -57,7 +57,7 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
         textView.inputView = textView.inputView == nil ? emoticonView : nil
         textView.becomeFirstResponder()
     }
-    private lazy var placeHolderLabel: UILabel = UILabel(title: "分享新鲜事...",fontSize: 18,color: .lightGray)
+    private lazy var placeHolderLabel: UILabel = UILabel(title: "分享新鲜事...",fontSize: 18,color: UIColor(white: 0.6, alpha: 1.0))
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         textView.becomeFirstResponder()
@@ -69,6 +69,10 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(self.keyboardChange(_:)),
+                                               name: UIResponder.keyboardWillChangeFrameNotification,
+            object: nil)
         setupUI()
     }
     @objc private func keyboardChange(_ n: NSNotification) {
@@ -80,14 +84,14 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
         }
         let curve = (n.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber).intValue
         UIView.animate(withDuration: duration) {
-            UIView.setAnimationCurve(UIView.AnimationCurve(rawValue: curve)!)
+            UIViewPropertyAnimator(duration: duration, curve: UIView.AnimationCurve(rawValue: curve)!).startAnimation()
             self.view.layoutIfNeeded()
         }
     }
 }
 extension ComposeViewController {
     func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         automaticallyAdjustsScrollViewInsets = false
         prepare()
         prepareTool()
@@ -95,14 +99,14 @@ extension ComposeViewController {
         preparePicturePicker()
     }
     private func prepare() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: "close")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "发布", style: .plain, target: self, action: "sendStatus")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(self.close))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "发布", style: .plain, target: self, action: #selector(self.sendStatus))
         navigationItem.leftBarButtonItem?.tintColor = .red
         navigationItem.rightBarButtonItem?.tintColor = .red
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 36))
         navigationItem.titleView = titleView
         let titleLabel = UILabel(title: "写博客",fontSize: 15)
-        let nameLabel = UILabel(title: UserAccountViewModel.sharedUserAccount.account?.user ?? "", fontSize: 13,color: .lightGray)
+        let nameLabel = UILabel(title: UserAccountViewModel.sharedUserAccount.account?.user ?? "", fontSize: 13,color: UIColor(white: 0.6, alpha: 1.0))
         titleView.addSubview(titleLabel)
         titleView.addSubview(nameLabel)
         titleLabel.snp.makeConstraints { make in
@@ -118,8 +122,10 @@ extension ComposeViewController {
     @objc private func sendStatus() {
         let text = textView.emoticonText
         let image = picturesPickerController.pictures
+        SVProgressHUD.show(withStatus: "加载中")
         if image != [] {
             NetworkTools.shared.sendStatus(status: text, image: image) { (Result, Error) -> () in
+                SVProgressHUD.dismiss()
                 if Error != nil {
                     //print("出错了")
                     //print(Error)
@@ -131,6 +137,7 @@ extension ComposeViewController {
             }
         } else {
             NetworkTools.shared.sendStatus(status: text, image: nil) { (Result, Error) -> () in
+                SVProgressHUD.dismiss()
                 if Error != nil {
                     //print("出错了")
                     //print(Error)
@@ -150,7 +157,7 @@ extension ComposeViewController {
         }
         view.addSubview(textView)
         textView.snp.makeConstraints { make in
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.equalTo(view.snp.left)
             make.right.equalTo(view.snp.right)
             make.bottom.equalTo(toolbar.snp.top)

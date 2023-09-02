@@ -9,69 +9,67 @@ import Foundation
 import Photos
 import UIKit
 private let UserProfileBrowserCellId = "UserProfileBrowserCellId"
-class UserProfileBrowserViewController: UIViewController, UICollectionViewDataSource{
+class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
     
-    
+    weak var photoDelegate: PhotoBrowserCellDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.scrollToItem(at: current, at: .centeredHorizontally, animated: false)
-    }
-    private class PhotoBrowserViewLayout: UICollectionViewFlowLayout {
-        override func prepare() {
-            super.prepare()
-            itemSize = collectionView!.bounds.size
-            minimumLineSpacing = 0
-            minimumInteritemSpacing = 0
-            scrollDirection = .horizontal
-            collectionView?.isPagingEnabled = true
-            collectionView?.bounces = false
-            collectionView?.showsHorizontalScrollIndicator = false
-        }
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return urls.count
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileBrowserCellId, for: indexPath) as! ProfileBrowserCell
-        cell.backgroundColor = .black
-        if picture != nil {
-            cell.imageView.image = picture
-            portraitButton.removeFromSuperview()
-            portraitButton = UIButton(title: "完成", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.darkText)
-                portraitButton.addTarget(self, action: #selector(self.send), for: .touchUpInside)
-            view.addSubview(portraitButton)
-            portraitButton.snp.makeConstraints { make in
-                make.bottom.equalTo(view.snp.bottom).offset(-8)
-                make.left.equalTo(view.snp.left).offset(28)
-                make.size.equalTo(CGSize(width: 100, height: 36))
+        print("开始设置")
+        // 1. 恢复 scrollView
+        resetScrollView()
+        
+        // 2. url 缩略图的地址
+        // 从磁盘加载缩略图的图像
+        let placeholderImage = SDImageCache.shared.imageFromDiskCache(forKey: url.absoluteString)
+        
+        setPlaceHolder(image: placeholderImage)
+        
+        // 3. 异步加载大图
+        imageView.sd_setImage(with: url,
+            placeholderImage: nil,
+                              options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached],
+            progress: { (current, total, _) -> Void in
+                
+                // 更新进度
+            DispatchQueue.main.async {
+                self.placeHolder.progress = CGFloat(current) / CGFloat(total)
             }
-        } else {
-            cell.imageURL = urls[indexPath.item]
+                
+            }) { (image, _, _, _) -> Void in
+                
+                // 判断图像下载是否成功
+                if image == nil {
+                    SVProgressHUD.showInfo(withStatus: "您的网络不给力")
+                    return
+                }
+                
+                // 隐藏占位图像
+                self.placeHolder.isHidden = true
+                
+                // 设置图像视图位置
+                self.setPositon(image: image!)
         }
-        cell.photoDelegate = self
-        return cell
     }
     @objc func send() {
-        let cell = collectionView.visibleCells[0] as! ProfileBrowserCell
-        guard let image = cell.imageView.image else {
+        guard imageView.image != nil else {
             return
         }
-        NetworkTools.shared.sendPortrait(image: image) { Result, Error in
+        NetworkTools.shared.sendPortrait(image: imageView.image!) { Result, Error in
             if Result != nil {
                 SVProgressHUD.showInfo(withStatus: "成功啦")
                 SDImageCache.shared.clearDisk()
             }
         }
     }
-    private var urls: [URL]
-    private func prepare() {
-        collectionView.register(ProfileBrowserCell.self, forCellWithReuseIdentifier: UserProfileBrowserCellId)
-        collectionView.dataSource = self
+    var url: URL
+    enum User: String {
+        case SomeBody = "SomeBody"
+        case Me = "Me"
     }
-    private var current: IndexPath
-    init(urls: [URL], indexPath: IndexPath) {
-        self.urls = urls
-        self.current = indexPath
+    var style: User
+    init(url: URL,style: User) {
+        self.url = url
+        self.style = style
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -83,31 +81,160 @@ class UserProfileBrowserViewController: UIViewController, UICollectionViewDataSo
         view = UIView(frame: rect)
         setupUI()
     }
-    lazy var collectionView: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: PhotoBrowserViewLayout())
-    private lazy var saveButton: UIButton = UIButton(title: "保存", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.darkText)
-    private lazy var portraitButton: UIButton = UIButton(title: "更换头像", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.darkText)
+    private lazy var closeButton: UIButton = UIButton(title: "关闭", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var saveButton: UIButton = UIButton(title: "保存", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var portraitButton: UIButton = UIButton(title: "更换头像", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var imageView = UIImageView()
+    @objc func close() {
+        dismiss(animated: true) {
+            SDImageCache.shared.clearDisk()
+        }
+    }
+    lazy var scrollView: UIScrollView = UIScrollView()
+    /// 返回被缩放的视图
+    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+    
+    /// 缩放完成后执行一次
+    ///
+    /// - parameter scrollView: scrollView
+    /// - parameter view:       view 被缩放的视图
+    /// - parameter scale:      被缩放的比例
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+
+        // 如果缩放比例 < 1，直接关闭
+        if scale < 1 {
+            photoDelegate?.photoBrowserCellDidTapImage()
+            
+            return
+        }
+        
+        var offsetY = (scrollView.bounds.height - view!.frame.height) * 0.5
+        offsetY = offsetY < 0 ? 0 : offsetY
+        
+        var offsetX = (scrollView.bounds.width - view!.frame.width) * 0.5
+        offsetX = offsetX < 0 ? 0 : offsetX
+        
+        // 设置间距
+        scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
+    }
+    
+    /// 只要缩放就会被调用
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+    
+    /// 设置占位图像视图的内容
+    ///
+    /// - parameter image: 本地缓存的缩略图，如果缩略图下载失败，image 为 nil
+    private func setPlaceHolder(image: UIImage?) {
+        
+        placeHolder.isHidden = false
+        placeHolder.image = image
+        placeHolder.sizeToFit()
+        placeHolder.center = scrollView.center
+    }
+    
+    /// 重设 scrollView 内容属性
+    private func resetScrollView() {
+        // 重设 imageView 的内容属性
+        imageView.transform = CGAffineTransformIdentity
+        
+        // 重设 scrollView 的内容属性
+        scrollView.contentInset = UIEdgeInsets.zero
+        scrollView.contentOffset = CGPointZero
+        scrollView.contentSize = CGSizeZero
+    }
+    
+    /// 设置 imageView 的位置
+    ///
+    /// - parameter image: image
+    /// - 长/短图
+    private func setPositon(image: UIImage) {
+        // 自动设置大小
+        let size = self.displaySize(image: image)
+        
+        // 判断图片高度
+        if size.height < scrollView.bounds.height {
+            // 上下居中显示 - 调整 frame 的 x/y，一旦缩放，影响滚动范围
+            imageView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            
+            // 内容边距 － 会调整控件位置，但是不会影响控件的滚动
+            let y = (scrollView.bounds.height - size.height) * 0.5
+            scrollView.contentInset = UIEdgeInsets(top: y, left: 0, bottom: 0, right: 0)
+        } else {
+            imageView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            scrollView.contentSize = size
+        }
+    }
+    
+    /// 根据 scrollView 的宽度计算等比例缩放之后的图片尺寸
+    ///
+    /// - parameter image: image
+    ///
+    /// - returns: 缩放之后的 size
+    private lazy var placeHolder: ProgressImageView = ProgressImageView()
+    private func displaySize(image: UIImage) -> CGSize {
+        
+        let w = scrollView.bounds.width
+        let h = image.size.height * w / image.size.width
+        
+        return CGSize(width: w, height: h)
+    }
     private func setupUI() {
-        view.addSubview(collectionView)
-        view.addSubview(portraitButton)
+        view.backgroundColor = .black
         view.addSubview(saveButton)
-        collectionView.frame = view.bounds
-        portraitButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom).offset(-8)
-            make.left.equalTo(view.snp.left).offset(28)
-            make.size.equalTo(CGSize(width: 100, height: 36))
+        imageView.sd_setImage(with: url,
+            placeholderImage: nil,
+                              options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached])
+        view.addSubview(scrollView)
+        scrollView.addSubview(imageView)
+        scrollView.addSubview(placeHolder)
+        // 2. 设置位置
+        var rect = view.bounds
+        rect.size.width -= 20
+        scrollView.frame = rect
+        
+        // 3. 设置 scrollView 缩放
+        scrollView.delegate = self
+        scrollView.minimumZoomScale = 0.5
+        scrollView.maximumZoomScale = 2.0
+        
+        // 4. 添加手势识别
+        let tap = UITapGestureRecognizer(target: self, action: #selector(close))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tap)
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 5
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.close)))
+        if style == .Me {
+            view.addSubview(portraitButton)
+            portraitButton.snp.makeConstraints { make in
+                make.bottom.equalTo(view.snp.bottom).offset(-8)
+                make.left.equalTo(view.snp.left).offset(28)
+                make.size.equalTo(CGSize(width: 100, height: 36))
+            }
+            portraitButton.addTarget(self, action: #selector(sendPortrait), for: .touchUpInside)
+        } else {
+            view.addSubview(closeButton)
+            closeButton.snp.makeConstraints { make in
+                make.bottom.equalTo(view.snp.bottom).offset(-8)
+                make.left.equalTo(view.snp.left).offset(28)
+                make.size.equalTo(CGSize(width: 100, height: 36))
+            }
+            closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         }
         saveButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.snp.bottom).offset(-8)
             make.right.equalTo(view.snp.right).offset(-28)
             make.size.equalTo(CGSize(width: 100, height: 36))
         }
-        portraitButton.addTarget(self, action: #selector(sendPortrait), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
-        prepare()
     }
     @objc private func sendPortrait() {
-        let cell = collectionView.visibleCells[0] as! ProfileBrowserCell
-        guard let image = cell.imageView.image else {
+        guard imageView.image != nil else {
             return
         }
         let picker = UIImagePickerController()
@@ -115,8 +242,8 @@ class UserProfileBrowserViewController: UIViewController, UICollectionViewDataSo
         present(picker, animated: true)
     }
     @objc private func save() {
-        let cell = collectionView.visibleCells[0] as! ProfileBrowserCell
-            guard let image = cell.imageView.image else {
+        
+            guard let image = imageView.image else {
                 return
             }
         
@@ -127,11 +254,20 @@ class UserProfileBrowserViewController: UIViewController, UICollectionViewDataSo
         SVProgressHUD.showInfo(withStatus: message)
     }
     var picture : UIImage?
-}
-extension UserProfileBrowserViewController: ProfileBrowserCellDelegate {
-    func profileBrowserCellDidTapImage() {
-        imageViewForDimiss()
-        self.dismiss(animated: true)
+    func reloadData() {
+        if picture != nil {
+            imageView.image = picture
+            portraitButton.removeFromSuperview()
+            portraitButton = UIButton(title: "完成", fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
+                portraitButton.addTarget(self, action: #selector(self.send), for: .touchUpInside)
+            view.addSubview(portraitButton)
+            portraitButton.snp.makeConstraints { make in
+                make.bottom.equalTo(view.snp.bottom).offset(-8)
+                make.left.equalTo(view.snp.left).offset(28)
+                make.size.equalTo(CGSize(width: 100, height: 36))
+            }
+        }
+        
     }
 }
 extension UserProfileBrowserViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -139,24 +275,6 @@ extension UserProfileBrowserViewController: UIImagePickerControllerDelegate, UIN
         let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         dismiss(animated: true,completion: nil)
         picture = image
-        collectionView.reloadData()
+        reloadData()
     }
-}
-extension UserProfileBrowserViewController: ProfileBrowserDismissDelegate {
-    func imageViewForDimiss() -> UIImageView {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        let cell = collectionView.visibleCells[0] as! ProfileBrowserCell
-        iv.image = cell.imageView.image
-        iv.frame = cell.scrollView.convert(cell.imageView.frame, to: UIApplication.shared.keyWindow!)
-        //UIApplication.shared.keyWindow!.addSubview(iv)
-        return iv
-    }
-    
-    func indexPathForDimiss() -> IndexPath {
-        return collectionView.indexPathsForVisibleItems[0]
-    }
-    
-    
 }

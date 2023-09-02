@@ -202,7 +202,7 @@ extension VisitorView {
         addSubview(maskIconView)
         addSubview(iconView)
         addSubview(messageLabel)
-        messageLabel.textColor = .white
+        messageLabel.textColor = UIColor(white: 0.3, alpha: 1.0)
         addSubview(registerButton)
         addSubview(loginButton)
         iconView.snp.makeConstraints { (make) -> Void in
@@ -260,10 +260,10 @@ extension VisitorView {
 extension VisitorView {
     func visitorViewDidRegister() {
         let vc = OAuthViewController(.注册)
-        let nav = UINavigationController(rootViewController: vc)
+        _ = UINavigationController(rootViewController: vc)
     }
     func visitorViewDidLogin() {
         let vc = OAuthViewController(.登录)
-        let nav = UINavigationController(rootViewController: vc)
+        _ = UINavigationController(rootViewController: vc)
     }
 }

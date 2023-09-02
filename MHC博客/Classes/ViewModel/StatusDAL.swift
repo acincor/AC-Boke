@@ -28,9 +28,8 @@ class StatusDAL {
         }
     }
     class func loadStatus(since_id: Int, max_id: Int, finished: @escaping(_ array: [[String:Any]]?) -> ()) {
-        let array = StatusDAL.checkCacheData(since_id: since_id, max_id: max_id)
+        var array = StatusDAL.checkCacheData(since_id: since_id, max_id: max_id)
         if array!.count > 0{
-            //print("查询到缓存数据 \(array!.count)")
             finished(array!)
             return
         }
@@ -58,12 +57,7 @@ class StatusDAL {
         }
         var sql = "SELECT statusId, status, userId FROM T_Status \n"
         sql += "WHERE userId = \(userId) \n"
-        if since_id > 0 {
-            sql += "    AND statusId > \(since_id) \n"
-        } else if max_id > 0 {
-            sql += "    AND statusId < \(max_id) \n"
-        }
-        sql += "ORDER BY statusId DESC LIMIT 10;"
+        sql += "ORDER BY createTime DESC LIMIT 10;"
         //print("查询数据 SQL -> "+sql)
         let array = SQLiteManager.shared.execRecordSet(sql: sql)
         var arrayM = [[String:Any]]()
@@ -87,20 +81,17 @@ class StatusDAL {
             for dict in data {
                 // 微博id
                 let statusId = dict["id"] as! Int
-                
-                // 序列化字典 -> 二进制数据
-                let json = try! JSONSerialization.data(withJSONObject: dict,options: [])
-                
-                // 插入数据
-                do {
-                    try db.executeUpdate(sql, values: [statusId, json, userId])
-                    guard db.changes > 0 else {
+                    let json = try! JSONSerialization.data(withJSONObject: dict,options: [])
+                    // 插入数据
+                    do {
+                        try db.executeUpdate(sql, values: [statusId, json, userId])
+                        guard db.changes > 0 else {
+                            //print("插入数据失败")
+                           return
+                        }
+                    } catch {
                         //print("插入数据失败")
-                        break
                     }
-                } catch {
-                    //print("插入数据失败")
-                }
             }
         }
         //print("数据插入完成")

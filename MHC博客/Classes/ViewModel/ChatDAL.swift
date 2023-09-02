@@ -14,7 +14,7 @@ class ChatDAL {
         let df = DateFormatter()
         df.locale = Locale(identifier: "en")
         df.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let dateStr = df.string(from: date)
+        _ = df.string(from: date)
         //print(dateStr)
         let sql = "DELETE FROM T_Chats;"
         //DELETE FROM T_Status WHERE createTime < (?);

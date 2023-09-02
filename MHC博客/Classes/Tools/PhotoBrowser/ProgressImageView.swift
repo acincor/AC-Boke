@@ -46,8 +46,8 @@ private class ProgressView: UIView {
     override func draw(_ rect: CGRect) {
         let center = CGPoint(x: rect.width * 0.5, y: rect.height * 0.5)
         let r = min(rect.width, rect.height) * 0.5
-        let start = CGFloat(-M_PI_2)
-        let end = start + progress * 2 * CGFloat(M_PI)
+        let start = Double.pi / 2
+        let end = start + progress * 2 * .pi
         let path = UIBezierPath(arcCenter: center, radius: r, startAngle: start, endAngle: end, clockwise: true)
         path.addLine(to: center)
         path.close()

@@ -22,11 +22,7 @@ class StatusViewModel: CustomStringConvertible {
     var userDefaultIconView: UIImage {
         return UIImage(named: "avatar_default_big")!
     }
-    lazy var rowHeight: CGFloat = {
-        var cell: StatusCell
-        cell = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId)
-        return cell.rowHeight(self)
-    }()
+    lazy var rowHeight: CGFloat = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId).rowHeight(self)
     var cellId: String {
         return StatusCellNormalId
     }
@@ -44,7 +40,7 @@ class StatusViewModel: CustomStringConvertible {
         self.status = status
         
         // 根据模型，来生成缩略图的数组
-        let urls = status.pic_urls ?? [[:]]
+        let urls = status.pic_urls 
             // 创建缩略图数组
             thumbnailUrls = [URL]()
             

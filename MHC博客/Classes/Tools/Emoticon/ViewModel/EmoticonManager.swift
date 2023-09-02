@@ -69,7 +69,7 @@ class EmoticonManager {
         //print(packages)
     }
     private func loadInfoPlist(_ id: String) {
-        let path = Bundle.main.path(forResource: "info", ofType: "plist", inDirectory: "Emoticons.bundle/\(id)")!
+        let path = Bundle.main.path(forResource: "emoticon", ofType: "plist", inDirectory: "Emoticons.bundle/\(id)")!
         let dict = NSDictionary(contentsOfFile: path) as! [String: Any]
         packages.append(EmoticonPackage(dict: dict))
     }

@@ -23,19 +23,19 @@ class StatusCellBottomView: UIView {
     
     // MARK: - 懒加载控件
     /// 评论按钮
-    lazy var deleteButton: UIButton = UIButton(title: " 删除", fontSize: 12, color: .white, imageName:
+    lazy var deleteButton: UIButton = UIButton(title: " 删除", fontSize: 12, color: UIColor(white: 0.6, alpha: 1.0), imageName:
     "timeline_icon_retweet")
-    lazy var commentButton: UIButton = UIButton(title: " 评论", fontSize: 12, color: .white, imageName: "timeline_icon_comment")
+    lazy var commentButton: UIButton = UIButton(title: " 评论", fontSize: 12, color: UIColor(white: 0.6, alpha: 1.0), imageName: "timeline_icon_comment")
     
     /// 点赞按钮
-    lazy var likeButton: UIButton = UIButton(title: " 赞", fontSize: 12, color: .white, imageName: "timeline_icon_unlike")
+    lazy var likeButton: UIButton = UIButton(title: " 赞", fontSize: 12, color: UIColor(white: 0.6, alpha: 1.0), imageName: "timeline_icon_unlike")
 }
 
 // MARK: - 设置界面
 extension StatusCellBottomView {
-    private func setupUI() {
+    @objc func setupUI() {
         // 0. 设置背景颜色
-        backgroundColor = .lightGray
+        backgroundColor = .systemBackground
         
         // 1. 添加控件
         addSubview(deleteButton)
@@ -61,6 +61,7 @@ extension StatusCellBottomView {
             make.right.equalTo(self.snp.right)
         }
         // 3. 分隔视图
+        /*
         let sep1 = sepView()
         let sep2 = sepView()
         addSubview(sep1)
@@ -84,12 +85,12 @@ extension StatusCellBottomView {
             make.height.equalTo(deleteButton.snp.height)
                 .multipliedBy(scale)
         }
-        
+        */
     }
 /// 创建分隔视图
-private func sepView() -> UIView {
+func sepView() -> UIView {
     let v = UIView()
-    v.backgroundColor = UIColor.lightGray
+    v.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
     return v
 }
 }

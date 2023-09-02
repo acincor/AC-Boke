@@ -117,13 +117,13 @@ extension StatusPictureView:UICollectionViewDelegate {
         let userInfo = [WBStatusSelectedPhotoIndexPathKey: indexPath, WBStatusSelectedPhotoURLsKey: viewModel!.thumbnailUrls!] as [String : Any]
         NotificationCenter.default.post(name: Notification.Name(WBStatusSelectedPhotoNotification), object: self, userInfo: userInfo)
         //photoBrowserPresentFromRect(indexPath: indexPath)
-        photoBrowserPresentToRect(indexPath: indexPath)
+        _ = photoBrowserPresentToRect(indexPath: indexPath)
     }
 }
 extension StatusPictureView: PhotoBrowserPresentDelegate{
     func photoBrowserPresentFromRect(indexPath: IndexPath) -> CGRect {
         let cell = self.cellForItem(at: indexPath)!
-        let rect = self.convert(cell.frame, to: UIApplication.shared.keyWindow!)
+        let rect = self.convert(cell.frame, to: UIApplication.shared.windows.first { $0.isKeyWindow })
         //let v = imageViewForPresent(indexPath: indexPath)
         //v.backgroundColor = .red
         //v.frame = rect

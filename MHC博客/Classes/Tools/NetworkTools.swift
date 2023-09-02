@@ -70,6 +70,11 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/api/getUserUid.php"
         request(.POST, urlString, params, finished: finished)
     }
+    func search(status:String, finished: @escaping HMRequstCallBack) {
+        let params = ["status":status]
+        let urlString = "https://mhc.lmyz6.cn/api/search.php"
+        request(.POST, urlString, params, finished: finished)
+    }
 }
 extension NetworkTools {
     func loadStatus(max_id: Int,finished: @escaping HMRequstCallBack) {
@@ -79,6 +84,15 @@ extension NetworkTools {
             params["max_id"] = max_id
         }
         tokenRequest(.POST, urlString, params, finished: finished)
+    }
+    func loadOneStatus(id: Int,finished: @escaping HMRequstCallBack) {
+        let urlString = "https://mhc.lmyz6.cn/api/loadBlogOfId.php"
+        let params = ["id":id]
+        tokenRequest(.POST, urlString, params, finished: finished)
+    }
+    func loadHotStatus(finished: @escaping HMRequstCallBack) {
+        let urlString = "https://mhc.lmyz6.cn/api/loadHotBlog.php"
+        tokenRequest(.POST, urlString,nil, finished: finished)
     }
     func loadLikeStatus(_ uid: String,finished: @escaping HMRequstCallBack) {
         let urlString = "https://mhc.lmyz6.cn/api/loadLikeBlog.php"
@@ -135,7 +149,7 @@ extension NetworkTools {
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func tokenIsExpires(finished: @escaping HMRequstCallBack) {
-        guard var params = tokenDict else {
+        guard let params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
@@ -143,7 +157,7 @@ extension NetworkTools {
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func ExpiresTheToken(finished: @escaping HMRequstCallBack) {
-        guard var params = tokenDict else {
+        guard let params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
@@ -270,7 +284,7 @@ extension NetworkTools {
     }
     func sendPortrait(image: UIImage?, finished: @escaping HMRequstCallBack) {
         // 1. 创建参数字典
-        var params = [String: Any]()
+        let params = [String: Any]()
         // 2. 设置参数
             let urlString = "https://mhc.lmyz6.cn/api/portrait.php"
             sendPortrait(urlString, image!.jpegData(compressionQuality: 0.8)!, params) { Result, Error in

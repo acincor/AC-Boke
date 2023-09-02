@@ -25,7 +25,7 @@ class TableView:UITableView,UITableViewDelegate, UITableViewDataSource
          
         super.init(frame:frame, style:.plain)
          
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = .systemBackground
          
         self.separatorStyle = .none
         self.delegate = self
@@ -50,7 +50,7 @@ class TableView:UITableView,UITableViewDelegate, UITableViewDataSource
                 for i in 0 ... count - 1
                 {
                      
-                    var object =  self.chatDataSource.chatTableView(tableView: self, dataForRow:i)
+                    let object =  self.chatDataSource.chatTableView(tableView: self, dataForRow:i)
                     bubbleSection.append(object)
                      
                 }
@@ -83,7 +83,7 @@ class TableView:UITableView,UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView:UITableView,heightForRowAt indexPath:IndexPath) -> CGFloat
     {
          
-        var data =  self.bubbleSection[indexPath.row]
+        let data =  self.bubbleSection[indexPath.row]
          
         return max(data.insets.top + data.view.frame.size.height + data.insets.bottom, 52)
     }
@@ -93,10 +93,10 @@ class TableView:UITableView,UITableViewDelegate, UITableViewDataSource
         -> UITableViewCell
     {
            
-        var cellId = "MsgCell"
-        var data =  self.bubbleSection[indexPath.row]
+        let cellId = "MsgCell"
+        let data =  self.bubbleSection[indexPath.row]
      
-        var cell =  TableViewCell(data:data, reuseIdentifier:cellId)
+        let cell =  TableViewCell(data:data, reuseIdentifier:cellId)
      
         return cell
     }

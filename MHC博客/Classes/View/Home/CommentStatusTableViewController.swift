@@ -13,7 +13,7 @@ let commentListViewModel = CommentStatusListViewModel()
 class CommentStatusTableViewController: VisitorTableViewController {
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .white
+        indicator.color = .systemBackground
         return indicator
     }()
     deinit {
@@ -88,51 +88,6 @@ class CommentStatusTableViewController: VisitorTableViewController {
         
         loadData()
         prepareTableView()
-        NotificationCenter.default.addObserver(forName: Notification.Name("BKIfLikeHappyIt"), object: nil, queue: nil) { n in
-            if n.object != nil {
-                if commentListViewModel.statusList.isEmpty {
-                    return
-                }
-                let result = ["id":"\(commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                let like_list = commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
-                self.cell = ((n.object as! [String:Any])["cell"] as! StatusCell)
-                for s in like_list {
-                    print(s["like_uid"] as? String)
-                    if result["like_uid"] as? String == s["like_uid"] as? String {
-                        
-                        self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
-                        break
-                    } else {
-                        self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                    }
-                }
-                if like_list.isEmpty {
-                    self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                }
-            }
-            if n.userInfo != nil {
-                if commentListViewModel.statusList.isEmpty {
-                    return
-                }
-                if n.userInfo!.isEqualTo(["hello":"l"]) {
-                    let result = ["id":"\(commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                    let like_list = commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
-                    discover.cell = ((n.object as! [String:Any])["cell"] as? StatusNormalCell)
-                    for s in like_list {
-                        print(s["like_uid"] as? String)
-                        if result["like_uid"] as? String == s["like_uid"] as? String {
-                            discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
-                            break
-                        } else {
-                            discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                        }
-                    }
-                    if like_list.isEmpty {
-                        discover.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                    }
-                }
-            }
-        }
     }
     @objc func action(sender: UITapGestureRecognizer) {
         present(UserProfileViewController(portrait: sender.sender3, usernameLabel: sender.sender2, MID: sender.sender), animated: true)
@@ -154,9 +109,12 @@ extension CommentStatusTableViewController {
         cell.bottomView.deleteButton.tag = indexPath.row
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
-        g.sender = "\(cell.topView.viewModel?.status.uid ?? 0)"
-        g.sender2 = "\(cell.topView.viewModel?.status.user ?? "")"
-        g.sender3 = "\(cell.topView.viewModel?.status.portrait ?? "")"
+        guard let viewModel = cell.topView.viewModel as? StatusViewModel else {
+            return cell
+        }
+        g.sender = "\(viewModel.status.uid )"
+        g.sender2 = "\(viewModel.status.user ?? "")"
+        g.sender3 = "\(viewModel.status.portrait ?? "")"
         cell.topView.iconView.addGestureRecognizer(g)
         /*
         cell.bottomView.deleteButton.addAction(UIAction { action in
@@ -180,16 +138,43 @@ extension CommentStatusTableViewController {
         cell.bottomView.commentButton.setTitle("\(commentListViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        let result = ["id":"\(listViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         cell.bottomView.likeButton.setTitle("\(commentListViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        NotificationCenter.default.post(name: Notification.Name("BKIfLikeHappyIt"), object: ["cell":cell,"indexPath":indexPath])
-        cell = self.cell!
+        NetworkTools.shared.loadOneStatus(id: listViewModel.statusList[indexPath.row].status.id) { res, error in
+            if error != nil {
+                return
+            }
+            guard let list = res as? [String:Any] else {
+                return
+            }
+            guard let like_list = list["like_list"] as? [[String:Any]] else {
+                return
+            }
+            for s in like_list {
+                //print(s["like_uid"] as? String)
+                if result["like_uid"] as? String == s["like_uid"] as? String {
+                    
+                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
+                    cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
+                    break
+                } else {
+                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+                    cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
+                }
+            }
+            if like_list.isEmpty {
+                cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+            }
+        }
         cell.bottomView.likeButton.tag = indexPath.row
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.cellDelegate = self
         return cell
     }
     @objc func action2(_ sender: UIButton) {
+        SVProgressHUD.show(withStatus: "加载中")
         NetworkTools.shared.addComment(id: commentListViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
+            SVProgressHUD.dismiss()
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 //print(Error)

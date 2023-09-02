@@ -66,47 +66,38 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDe
         }
     }
     private lazy var Label: UILabel = UILabel(title: label)
-    private lazy var addButton = UIButton(title: "添加好友", fontSize: 14, color: .black, imageName: nil)
+    private lazy var addButton = UIButton(title: "添加好友", fontSize: 14, color: UIColor(white: 0.6, alpha: 1.0), imageName: nil)
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(forName: Notification.Name(WBUserProfileSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[WBUserProfileSelectedPhotoIndexPathKey] as? IndexPath else {
-                return
-            }
-            guard let urls = n.userInfo?[WBUserProfileSelectedPhotoURLsKey] as? [URL] else {
-                return
-            }
-            guard let cell = n.object as? ProfileBrowserPresentDelegate else {
-                return
-            }
-            let vc = ProfileBrowserViewController(urls: urls, indexPath: indexPath)
-            vc.modalPresentationStyle = .custom
-            vc.transitioningDelegate = self?.photoBrowserAnimator
-            self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
-            self?.present(vc, animated: true,completion: nil)
-        }
         loadData()
     }
-    private lazy var photoBrowserAnimator: ProfileBrowserAnimator = ProfileBrowserAnimator()
-    lazy var iconView = UserProfilePictureView(viewModel:URL(string: portrait)!)
+    @objc func action2(_ sender:UITapGestureRecognizer) {
+        guard let url = URL(string: portrait) else{
+            return
+        }
+        let vc = UserProfileBrowserViewController(url: url,style: .SomeBody)
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .custom
+        self.present(nav, animated: true,completion: nil)
+    }
+    lazy var iconView = UIImageView()
     @objc func loadData() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(iconView)
+        guard let url = URL(string: portrait) else{
+            return
+        }
+        iconView.sd_setImage(with: url)
+        iconView.layer.cornerRadius = 5
+        iconView.clipsToBounds = true
         iconView.snp.makeConstraints { make in
             make.centerX.equalTo(view.snp.centerX)
             make.top.equalTo(view.snp.top).offset(50)
             make.width.equalTo(90)
             make.height.equalTo(90)
         }
-        let imageView = UIImageView()
-        imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
-        iconView.addSubview(imageView)
-            imageView.snp.makeConstraints { make in
-                make.centerX.equalTo(view.snp.centerX)
-                make.top.equalTo(view.snp.top).offset(50)
-                make.width.equalTo(90)
-                make.height.equalTo(90)
-            }
+        iconView.isUserInteractionEnabled = true
+        iconView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.action2)))
         iconView.layer.cornerRadius = 15
         view.addSubview(addButton)
         addButton.addTarget(self, action: #selector(self.action), for: .touchUpInside)
@@ -171,6 +162,7 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDe
             //print("文件读取失败，可能是资源找不到")
         }
     }
+    /*
     @objc func expiresUserButtonTouchAction(){
         NetworkTools.shared.ExpiresTheToken { Result, Error in
             if Error != nil {
@@ -187,17 +179,18 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDe
     @objc func logOffUserButtonTouchAction() {
         NetworkTools.shared.logOff { Result, Error in
             if Error != nil {
-                print(Error)
+                //print(Error)
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 return
             }
-            print(Result)
+            //print(Result)
             if(Result as! [String:Any])["msg"] != nil {
                 NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: nil)
                 UserAccountViewModel.sharedUserAccount.account = nil
             }
         }
     }
+     */
     @objc func action1(_ sender: UITextField) -> Bool{
         NetworkTools.shared.rename(rename: sender.text!) { Result, Error in
             if Error != nil {

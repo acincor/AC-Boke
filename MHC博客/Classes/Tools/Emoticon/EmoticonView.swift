@@ -16,7 +16,7 @@ class EmoticonView: UIView {
         var rect = UIScreen.main.bounds
         rect.size.height = 226
         super.init(frame: rect)
-        backgroundColor = .black
+        backgroundColor = .systemBackground
         setupUI()
         let indexPath = IndexPath(item: 0, section: 1)
         DispatchQueue.main.async {
@@ -27,8 +27,8 @@ class EmoticonView: UIView {
         override init(frame: CGRect) {
             super.init(frame: frame)
             contentView.addSubview(emoticonButton)
-            emoticonButton.backgroundColor = .black
-            emoticonButton.setTitleColor(.black, for: .normal)
+            emoticonButton.backgroundColor = .systemBackground
+            emoticonButton.setTitleColor(.systemOrange, for: .normal)
             emoticonButton.frame = CGRectInset(bounds, 4, 4)
             emoticonButton.titleLabel!.font = UIFont.systemFont(ofSize: 32)
             emoticonButton.isUserInteractionEnabled = false
@@ -71,7 +71,7 @@ class EmoticonView: UIView {
 }
 private extension EmoticonView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(collectionView)
         addSubview(toolbar)
         toolbar.snp.makeConstraints { make in
@@ -107,7 +107,7 @@ private extension EmoticonView {
         collectionView.scrollToItem(at: indexPath, at: .left, animated: true)
     }
     func prepareCollectionView() {
-        collectionView.backgroundColor = UIColor.black
+        collectionView.backgroundColor = UIColor.systemBackground
         collectionView.register(EmoticonViewCell.self, forCellWithReuseIdentifier: EmoticonViewCellId)
         collectionView.dataSource = self
         collectionView.delegate = self

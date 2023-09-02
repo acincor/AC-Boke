@@ -8,7 +8,7 @@
 import UIKit
 
 import WebKit
-
+import SwiftUI
 class MainViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ class MainViewController: UITabBarController {
         let w = tabBar.bounds.width / CGFloat(count) - 1
         composedButton.frame = tabBar.bounds.insetBy(dx: 2 * w, dy: 0)
         composedButton.layer.masksToBounds = true
-        composedButton.layer.cornerRadius = 30
+        composedButton.layer.cornerRadius = 5
         composedButton.addTarget(self, action: #selector(MainViewController.clickComposedButton), for: .touchUpInside)
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -57,7 +57,6 @@ class MainViewController: UITabBarController {
         present(nav, animated: true)
     }
 }
-var discover = DiscoverTableViewController()
 extension MainViewController {
     
     private func addChilds() {
@@ -65,8 +64,13 @@ extension MainViewController {
         addChild(HomeTableViewController(), "首页", "tabbar_home")
         addChild(MessageTableViewController(), "消息", "tabbar_message_center")
         addChild(UIViewController())
-        addChild(discover, "发现", "tabbar_discover")
-        addChild(ProfileTableViewController(), "我", "tabbar_profile")
+        addChild(DiscoverTableViewController(), "发现", "tabbar_discover")
+        if UserAccountViewModel.sharedUserAccount.userLogon {
+            addChild(UIHostingController(rootView: NavigationLinkView()), "我", "tabbar_profile")
+            //个人喜欢四个登陆界面相同，若想改成NavigationView的ViewController也可以，只是不美观，因为不同，但是我们是处理好的
+        } else {
+            addChild(ProfileTableViewController(), "我", "tabbar_profile")
+        }
     }
     private func addChild(_ vc: UIViewController,_ title: String, _ imageName: String) {
         vc.title = title

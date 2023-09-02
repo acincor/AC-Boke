@@ -39,7 +39,7 @@ class LiveTableView: UICollectionView{
         flt.minimumLineSpacing = 0
         flt.minimumInteritemSpacing = 0
         flt.scrollDirection = .horizontal
-        super.init(frame: CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: Int(2 * LiveCellMargin + LiveCellIconWidth+10)), collectionViewLayout: flt)
+        super.init(frame: CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: Int(2 * UserCellMargin + UserCellIconWidth+10)), collectionViewLayout: flt)
         bounces = false
         isPagingEnabled = true
         showsHorizontalScrollIndicator = false

@@ -592,7 +592,7 @@ forHTTPHeaderField:(NSString *)field
 
 #pragma mark -
 
-static NSString * AFCreateMultipartFormBoundary() {
+static NSString * AFCreateMultipartFormBoundary(void) {
     return [NSString stringWithFormat:@"Boundary+%08X%08X", arc4random(), arc4random()];
 }
 

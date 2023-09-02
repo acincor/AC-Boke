@@ -20,21 +20,40 @@ class StatusCellTopView: UIView {
     
     /// 来源标签
     private lazy var sourceLabel: UILabel = UILabel(title: "来源", fontSize: 11)
-    var viewModel: StatusViewModel? {
+    var viewModel: CustomStringConvertible? {
         didSet {
             // 姓名
-            timeLabel.text = viewModel?.createAt
-            self.nameLabel.text = viewModel?.status.user as? String
+            guard let viewModel = viewModel as? StatusViewModel else {
+                guard let viewModel = viewModel as? CommentViewModel else {
+                    return
+                }
+                timeLabel.text = viewModel.createAt
+                self.nameLabel.text = viewModel.comment.user
+                nameLabel.textColor = .red
+                if viewModel.comment.source != nil ? viewModel.comment.source != "unknown": false{
+                    sourceLabel.text = viewModel.comment.source
+                }else {
+                    sourceLabel.text = "未知"
+                }
+                // 头像
+                iconView.sd_setImage(with: viewModel.userProfileUrl, placeholderImage: viewModel.userDefaultIconView)
+                iconView.layer.cornerRadius = 5
+                iconView.clipsToBounds = true
+                iconView.isUserInteractionEnabled = true
+                return
+            }
+            timeLabel.text = viewModel.createAt
+            self.nameLabel.text = viewModel.status.user
             nameLabel.textColor = .red
-            if viewModel?.status.source != nil ? viewModel?.status.source != "unknown": false{
-                sourceLabel.text = viewModel?.status.source
+            if viewModel.status.source != nil ? viewModel.status.source != "unknown": false{
+                sourceLabel.text = viewModel.status.source
             }else {
                 sourceLabel.text = "未知"
             }
             // 头像
-            iconView.sd_setImage(with: viewModel?.userProfileUrl, placeholderImage: viewModel?.userDefaultIconView)
-            iconView.layer.cornerRadius = 15
-            iconView.layer.masksToBounds = true
+            iconView.sd_setImage(with: viewModel.userProfileUrl, placeholderImage: viewModel.userDefaultIconView)
+            iconView.layer.cornerRadius = 5
+            iconView.clipsToBounds = true
             iconView.isUserInteractionEnabled = true
             
         }
@@ -59,7 +78,7 @@ class StatusCellTopView: UIView {
 extension StatusCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor.lightGray
+        sepView.backgroundColor = .systemBackground
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)
@@ -96,8 +115,17 @@ extension UITapGestureRecognizer {
             static var sender: String = "sender"
         static var sender2: String = "sender2"
         static var sender3: String = "sender3"
+        static var sender4: URL = URL(string: "https://mhc.lmyz6.cn/api/MHC.png")!
+        }
+    public var sender4: URL {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.sender4) as? URL ?? URL(string: "https://mhc.lmyz6.cn/api/MHC.png")!
         }
         
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.sender4, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
     public var sender: String {
         get {
             return objc_getAssociatedObject(self, &AssociatedKey.sender) as? String ?? ""

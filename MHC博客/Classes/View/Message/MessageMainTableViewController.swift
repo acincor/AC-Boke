@@ -8,13 +8,13 @@
 import UIKit
 
 var to_user: String?
-let FriendCellNormalId = "FriendCellNormalId"
-let FriendNormalCellMargin = 1.5
+let UserCellNormalId = "UserCellNormalId"
+let UserNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{
     var friendListViewModel = FriendListViewModel()
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .white
+        indicator.color = .systemBackground
         return indicator
     }()
     @objc func loadData() {
@@ -37,7 +37,7 @@ class MessageTableViewController: VisitorTableViewController{
             visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，别人评论你的微博，发给你的消息，都会在这里收到通知")
             return
         }
-        tableView.register(FriendCell.self, forCellReuseIdentifier: FriendCellNormalId)
+        tableView.register(UserCell.self, forCellReuseIdentifier: UserCellNormalId)
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         tableView.tableFooterView = pullupView
@@ -48,20 +48,20 @@ class MessageTableViewController: VisitorTableViewController{
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let socketController = WebSocketController()
-        socketController.to_uid = friendListViewModel.friendList[indexPath.row].friend.uid
-        socketController.username = friendListViewModel.friendList[indexPath.row].friend.user
+        socketController.to_uid = friendListViewModel.friendList[indexPath.row].user.uid
+        socketController.username = friendListViewModel.friendList[indexPath.row].user.user
         let nav = UINavigationController(rootViewController: socketController)
         nav.modalPresentationStyle = .custom
         present(nav, animated: false)
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = friendListViewModel.friendList[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: FriendCellNormalId, for: indexPath) as! FriendCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserCellNormalId, for: indexPath) as! UserCell
         cell.viewModel = vm
         return cell
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.friendListViewModel.friendList[indexPath.row].rowHeight * FriendNormalCellMargin
+        return self.friendListViewModel.friendList[indexPath.row].rowHeight * UserNormalCellMargin
     }
 }
 

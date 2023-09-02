@@ -26,7 +26,13 @@ class UserAccountViewModel {
         return (path as NSString).appendingPathComponent("account.plist")
     }
     private init() {
-        account = NSKeyedUnarchiver.unarchiveObject(withFile: accountPath) as? UserAccount
+        do {
+            account = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [UserAccount.self, NSString.self, NSNumber.self], from: Data(contentsOf: NSURL(fileURLWithPath: accountPath) as URL)) as? UserAccount
+        } catch/*(let e)*/ {
+            //print(e) //一般情况下e是找不到目录，这时候就说明还没登录
+            
+            SVProgressHUD.showInfo(withStatus: "未登录")
+        }
         //print(account)
     }
 }
@@ -59,7 +65,13 @@ extension UserAccountViewModel {
             account.user = dict["user"] as? String
             account.portrait = (dict["portrait"] as? String)?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             account.uid = dict["uid"] as? String
-            NSKeyedArchiver.archiveRootObject(account, toFile: self.accountPath)
+            do {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: account, requiringSecureCoding: true)
+                try data.write(to: NSURL(fileURLWithPath: self.accountPath) as URL)
+            } catch {
+                print(error)
+                SVProgressHUD.showInfo(withStatus: "出错了")
+            }
             //print(self.accountPath)
             finished(true)
         }

@@ -9,7 +9,7 @@ import UIKit
 
 
 class FriendListViewModel {
-    lazy var friendList = [FriendViewModel]()
+    lazy var friendList = [UserViewModel]()
     func loadFriend(finished: @escaping (_ isSuccessed: Bool) -> ()) {
         NetworkTools.shared.loadFriend { (array,error) -> () in
             guard let array = array else {
@@ -21,10 +21,10 @@ class FriendListViewModel {
             guard let arr = array as? [[String:Any]] else {
                 return
             }
-            var dataList = [FriendViewModel]()
+            var dataList = [UserViewModel]()
                 for n in 0..<arr.count {
                     //print(FriendAccount(dict: dict))
-                    dataList.append(FriendViewModel(friend: FriendAccount(dict: arr[n])))
+                    dataList.append(UserViewModel(user: Account(dict: arr[n])))
                 }
             self.friendList = dataList
                 //print(dataList)

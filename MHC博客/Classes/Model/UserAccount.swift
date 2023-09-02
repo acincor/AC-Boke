@@ -8,7 +8,12 @@
 import UIKit
 
 /// 用户账户模型
-class UserAccount: NSObject, NSCoding {
+class UserAccount: NSObject,NSCoding,NSSecureCoding {
+    
+    static var supportsSecureCoding: Bool {
+        return true
+    }
+    
     /// 用于调用access_token，接口获取授权后的access token
     @objc var access_token: String?
     @objc var expires_in: Int = 0
@@ -55,6 +60,15 @@ class UserAccount: NSObject, NSCoding {
         var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
         path = (path as NSString).appendingPathComponent("account.plist")
         //print(path)
+        /*
+         //deprecated
         NSKeyedArchiver.archiveRootObject(self, toFile: path)
+         */
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true)
+            try data.write(to: NSURL(fileURLWithPath: path) as URL)
+        } catch {
+            SVProgressHUD.showInfo(withStatus: "出错了")
+        }
     }
 }

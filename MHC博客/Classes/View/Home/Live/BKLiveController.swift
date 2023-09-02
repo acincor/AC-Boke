@@ -20,14 +20,14 @@ class BKLiveController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var image = UIImage(named: "Live")
-        var newImage = image?.resizableImage(withCapInsets: UIScreen.main.overscanCompensationInsets)
-        var live = UIImageView(image: newImage)
+        let image = UIImage(named: "Live")
+        let newImage = image?.resizableImage(withCapInsets: UIScreen.main.overscanCompensationInsets)
+        let live = UIImageView(image: newImage)
         live.frame = UIScreen.main.bounds
         view.addSubview(live)
         view.backgroundColor = .red
         for i in liveListViewModel.liveList {
-            if i.friend.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
+            if i.user.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
                 SVProgressHUD.showInfo(withStatus: "你的直播已在其他设备上进行...")
                 return
             }

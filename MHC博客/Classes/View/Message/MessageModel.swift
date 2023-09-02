@@ -56,17 +56,17 @@ class MessageItem
     //构造文本消息体
     convenience init(body:NSString, logo:String, date:NSDate, mtype:ChatType)
     {
-        var font =  UIFont.boldSystemFont(ofSize: 12)
+        let font =  UIFont.boldSystemFont(ofSize: 12)
          
-        var width =  225, height = 10000.0
+        let width = 225, height = 10000.0
          
-        var atts =  NSMutableDictionary()
+        let atts =  NSMutableDictionary()
         atts.setObject(font,forKey:NSAttributedString.Key.font as NSCopying)
          
-        var size =  body.boundingRect(with: CGSizeMake(CGFloat(width), CGFloat(height)),
+        let size =  body.boundingRect(with: CGSizeMake(CGFloat(width), CGFloat(height)),
                                       options:NSStringDrawingOptions.usesLineFragmentOrigin, attributes:atts as? [NSAttributedString.Key : Any], context:nil)
          
-        var label =  UILabel(frame:CGRectMake(0, 0, size.size.width, size.size.height))
+        let label =  UILabel(frame:CGRectMake(0, 0, size.size.width, size.size.height))
          
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -74,7 +74,7 @@ class MessageItem
         label.font = font
         label.backgroundColor = UIColor.clear
          
-        var insets:UIEdgeInsets =  (mtype == ChatType.Mine ?
+        let insets:UIEdgeInsets =  (mtype == ChatType.Mine ?
             MessageItem.getTextInsetsMine() : MessageItem.getTextInsetsSomeone())
         self.init(logo:logo, date:date, mtype:mtype, view:label, insets:insets)
         self.content = body as String
@@ -100,12 +100,12 @@ class MessageItem
             size.height /= (size.width / 220);
             size.width = 220;
         }
-        var imageView = UIImageView(frame:CGRectMake(0, 0, size.width, size.height))
+        let imageView = UIImageView(frame:CGRectMake(0, 0, size.width, size.height))
         imageView.image = image
         imageView.layer.cornerRadius = 5.0
         imageView.layer.masksToBounds = true
          
-        var insets:UIEdgeInsets =  (mtype == ChatType.Mine ?
+        let insets:UIEdgeInsets =  (mtype == ChatType.Mine ?
             MessageItem.getImageInsetsMine() : MessageItem.getImageInsetsSomeone())
          
         self.init(logo:logo,  date:date, mtype:mtype, view:imageView, insets:insets)

@@ -10,7 +10,7 @@ import UIKit
 
 class CommentListViewModel {
     lazy var commentList = [CommentViewModel]()
-    lazy var commentCommentList = [CommentCommentViewModel]()
+    lazy var commentCommentList = [CommentViewModel]()
     func loadComment(id: Int,finished: @escaping (_ isSuccessed: Bool) -> ()) {
             /*
             guard let array = array else {
@@ -34,18 +34,21 @@ class CommentListViewModel {
             //print(self.commentList)
             finished(true)
              */
-            listViewModel.loadStatus(isPullup: true) { isSuccessed in
-                for i in listViewModel.statusList {
-                    if i.status.id == id {
-                        var dataList = [CommentViewModel]()
-                        for dict in i.status.comment_list {
-                            dataList.append(CommentViewModel(comment: Comment(dict: dict)))
-                        }
-                        self.commentList = dataList
-                        finished(true)
-                        break
-                    }
+            NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
+                guard let status = Result as? [String:Any] else {
+                    SVProgressHUD.showInfo(withStatus: "博客加载错误")
+                    return
                 }
+                guard let comment_list = status["comment_list"] as? [[String:Any]] else {
+                    SVProgressHUD.showInfo(withStatus: "评论加载错误")
+                    return
+                }
+                var dataList = [CommentViewModel]()
+                for dict in comment_list {
+                    dataList.append(CommentViewModel(comment: Comment(dict: dict)))
+                }
+                self.commentList = dataList
+                finished(true)
             }
     }
     func loadComment(id: Int,comment_id: Int,finished: @escaping (_ isSuccessed: Bool) -> ()) {
@@ -70,23 +73,28 @@ class CommentListViewModel {
             //print(self.commentList)
             finished(true)
              */
-            listViewModel.loadStatus(isPullup: true) { isSuccessed in
-                var dataList = [CommentCommentViewModel]()
-                for i in listViewModel.statusList {
-                    if i.status.id == id {
-                        for dict in i.status.comment_list {
-                            if dict["comment_id"] as! String == String(comment_id) {
-                                for dictionary in dict["comment_list"] as! [[String:Any]] {
-                                    print(dictionary)
-                                    dataList.append(CommentCommentViewModel(comment: Comment(dict: dictionary)))
-                                }
-                            }
-                        }
-                        break
-                    }
-                }
-                self.commentCommentList = dataList
-                finished(true)
+        NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
+            guard let status = Result as? [String:Any] else {
+                SVProgressHUD.showInfo(withStatus: "博客加载错误")
+                return
             }
+            guard let comment_list = status["comment_list"] as? [[String:Any]] else {
+                SVProgressHUD.showInfo(withStatus: "评论加载错误")
+                return
+            }
+            var dataList = [CommentViewModel]()
+            for dict in comment_list {
+                if dict["comment_id"] as! String == String(comment_id) {
+                    for dictionary in dict["comment_list"] as! [[String:Any]] {
+                        print(dictionary)
+                        dataList.append(CommentViewModel(comment: Comment(dict: dictionary)))
+                    }
+                    self.commentCommentList = dataList
+                    finished(true)
+                    return
+                }
+            }
+            
+        }
     }
 }

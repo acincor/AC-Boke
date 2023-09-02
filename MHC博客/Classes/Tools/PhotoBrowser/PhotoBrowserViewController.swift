@@ -58,8 +58,8 @@ class PhotoBrowserViewController: UIViewController, UICollectionViewDataSource {
         setupUI()
     }
     lazy var collectionView: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: PhotoBrowserViewLayout())
-    private lazy var closeButton: UIButton = UIButton(title: "关闭", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.darkText)
-    private lazy var saveButton: UIButton = UIButton(title: "保存", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.darkText)
+    private lazy var closeButton: UIButton = UIButton(title: "关闭", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var saveButton: UIButton = UIButton(title: "保存", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
     private func setupUI() {
         view.addSubview(collectionView)
         view.addSubview(closeButton)
@@ -97,7 +97,7 @@ class PhotoBrowserViewController: UIViewController, UICollectionViewDataSource {
 }
 extension PhotoBrowserViewController: PhotoBrowserCellDelegate {
     func photoBrowserCellDidTapImage() {
-        imageViewForDimiss()
+        _ = imageViewForDimiss()
         close()
     }
 }
@@ -108,7 +108,7 @@ extension PhotoBrowserViewController: PhotoBrowserDismissDelegate {
         iv.clipsToBounds = true
         let cell = collectionView.visibleCells[0] as! PhotoBrowserCell
         iv.image = cell.imageView.image
-        iv.frame = cell.scrollView.convert(cell.imageView.frame, to: UIApplication.shared.keyWindow!)
+        iv.frame = cell.scrollView.convert(cell.imageView.frame, to: UIApplication.shared.windows.first {$0.isKeyWindow})
         //UIApplication.shared.keyWindow!.addSubview(iv)
         return iv
     }

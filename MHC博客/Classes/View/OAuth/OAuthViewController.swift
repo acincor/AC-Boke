@@ -7,8 +7,8 @@
 
 import UIKit
 import WebKit
-class OAuthViewController: UIViewController,UIWebViewDelegate {
-    private lazy var webView = UIWebView()
+class OAuthViewController: UIViewController,WKNavigationDelegate {
+    private lazy var webView = WKWebView()
     @objc private func close() {
         dismiss(animated: true,completion: nil)
     }
@@ -23,7 +23,7 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
             return
         }
         do{
-        var readStr:NSString=try NSString(contentsOfFile: userAgreement, encoding: String.Encoding.utf8.rawValue)
+            let readStr:NSString=try NSString(contentsOfFile: userAgreement, encoding: String.Encoding.utf8.rawValue)
             textView.text = readStr as String
             textView.isEditable = false
             controller.view = textView
@@ -38,7 +38,7 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
     }
     override func loadView() {
         view = webView
-        webView.delegate = self
+        webView.navigationDelegate = self
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(OAuthViewController.close))
         navigationItem.leftBarButtonItem?.tintColor = .red
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "用户协议", style: .plain, target: self, action: #selector(OAuthViewController.userAgreement))
@@ -59,7 +59,7 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
         }
     }
     //默认注册
-    var oauthURL = URL(string: "https://mhc.lmyz6.cn/resource/register.html")
+    var oauthURL = URL(string: "https://mhc.lmyz6.cn/api/register.html"/*可以先提供一个错误的url，测试请使用https://mhc.lmyz6.cn/resource/register.html */)
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment the following line to preserve selection between presentations
@@ -67,7 +67,7 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        webView.loadRequest(URLRequest(url: oauthURL!))
+        webView.load(URLRequest(url: oauthURL!))
     }
     
     /*
@@ -127,15 +127,16 @@ class OAuthViewController: UIViewController,UIWebViewDelegate {
 
 }
 extension OAuthViewController {
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
-        guard let url = request.url, url.absoluteString.hasPrefix("https://mhc.lmyz6.cn/?") else {
-            return true
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
+        guard let url = webView.url, url.absoluteString.hasPrefix("https://mhc.lmyz6.cn") else {
+            return .allow
         }
         guard let query = url.query,query.hasPrefix("code=") else {
-            return false
+            return .allow
         }
         //print("到这里了")
-        let code = query.substring(from: "code=".endIndex)
+
+        let code = String(query["code=".endIndex...])
         print("授权码是 "+code)
         UserAccountViewModel.sharedUserAccount.loadAccessToken(code: code) { (isSuccessed) -> () in
             if !isSuccessed {
@@ -146,6 +147,6 @@ extension OAuthViewController {
                 NotificationCenter.default.post(name: .init(rawValue: WBSwitchRootViewControllerNotification), object: "welcome")
             }
         }
-        return false
+        return .cancel
     }
 }
