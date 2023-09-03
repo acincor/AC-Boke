@@ -49,11 +49,6 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/api/accessToken.php"
         let params = ["code":code]
         request(.POST, urlString, params, finished: finished)
-        //responseSerializer = AFHTTPResponseSerializer()
-        //post(urlString, parameters: params, headers: nil, progress: nil,success: { (_,Result) -> Void in
-            //let json = NSString(data: Result as! Data, encoding: String.Encoding.utf8.rawValue)
-            //print(json)
-        //},failure: nil)
     }
 }
 extension NetworkTools {
@@ -77,13 +72,15 @@ extension NetworkTools {
     }
 }
 extension NetworkTools {
-    func loadStatus(max_id: Int,finished: @escaping HMRequstCallBack) {
+    func loadStatus(max_id: Int,since_id:Int,finished: @escaping HMRequstCallBack) {
         let urlString = "https://mhc.lmyz6.cn/api/loadBlog.php"
         var params = [String:Any]()
-        if max_id > 0 {
+        if since_id > 0{
+            params["since_id"] = since_id
+        } else if max_id > 0{
             params["max_id"] = max_id
         }
-        tokenRequest(.POST, urlString, params, finished: finished)
+        request(.GET, urlString, params, finished: finished)
     }
     func loadOneStatus(id: Int,finished: @escaping HMRequstCallBack) {
         let urlString = "https://mhc.lmyz6.cn/api/loadBlogOfId.php"
@@ -184,7 +181,6 @@ extension NetworkTools {
         }
         params["id"] = id
         let urlString = "https://mhc.lmyz6.cn/api/deleteBlog.php"
-        print(params)
         request(.POST, urlString, params, finished: finished)
     }
     func addComment(id: Int, comment_id: Int? = nil,_ comment: String,finished: @escaping HMRequstCallBack) {
@@ -197,7 +193,6 @@ extension NetworkTools {
         }
         params["id"] = id
         params["comment"] = comment
-        print(params)
         let urlString = "https://mhc.lmyz6.cn/api/addComment.php"
         request(.POST, urlString, params, finished: finished)
     }
@@ -212,7 +207,6 @@ extension NetworkTools {
             params["to_comment_id"] = comment_id
             params["comment_id"] = comment_comment_id
         }
-        //print(params)
         let urlString = "https://mhc.lmyz6.cn/api/deleteComment.php"
         request(.POST, urlString, params, finished: finished)
     }
@@ -309,7 +303,6 @@ extension NetworkTools {
         }, progress: nil, success: { _, result in
             finished(result, nil)
         }) { _ , error in
-            //print(error)
             finished(nil,error)
         }
     }
@@ -329,7 +322,6 @@ extension NetworkTools {
         }, progress: nil, success: { _, result in
             finished(result, nil)
         }) { _ , error in
-            //print(error)
             finished(nil,error)
         }
     }

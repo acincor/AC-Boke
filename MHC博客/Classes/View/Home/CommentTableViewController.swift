@@ -18,12 +18,12 @@ class CommentTableViewController: VisitorTableViewController {
         tableView.rowHeight = 400
     }
     @objc func loadData() {
-        guard let id = statusId else{
+        guard let viewModel = viewModel else{
             return
         }
         refreshControl?.beginRefreshing()
         //StatusDAL.clearDataCache()
-         commentlistViewModel.loadComment(id: listViewModel.statusList[id].status.id) { (isSuccessed) in
+        commentlistViewModel.loadComment(id: viewModel.status.id) { (isSuccessed) in
              self.refreshControl?.endRefreshing()
              if !isSuccessed {
                  SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
@@ -34,14 +34,14 @@ class CommentTableViewController: VisitorTableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let id = statusId else{
+        guard let viewModel = viewModel else{
             return
         }
         let cell = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId)
-        cell.viewModel = listViewModel.statusList[id]
+        cell.viewModel = viewModel
         cell.bottomView.removeFromSuperview()
         tableView.tableHeaderView = cell
-        tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, listViewModel.statusList[id].rowHeight-40)
+        tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, viewModel.rowHeight-40)
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         if !UserAccountViewModel.sharedUserAccount.userLogon {
@@ -74,7 +74,6 @@ class CommentTableViewController: VisitorTableViewController {
                 }
         }
         loadData()
-        //print("loadData")
         prepareTableView()
     }
     var cell: StatusCommentCell?
@@ -89,27 +88,21 @@ extension CommentTableViewController {
     }
     @objc func action(_ sender: UIButton) {
         NetworkTools.shared.deleteComment((sender.vm?.comment.id)!, (sender.vm?.comment.comment_id)!) { Result, Error in
-            //print(UserAccountViewModel.sharedUserAccount.accessToken)
             
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
                 return
             }
-            //print(Result)
             if (Result as! [String:Any])["error"] != nil {
                 SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
-                //print((Result as! [String:String])["error"])
                 return
             }
-            ////print(Result)
             SVProgressHUD.showInfo(withStatus: "删除成功")
             self.loadData()
         }
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = commentlistViewModel.commentList[indexPath.row]
-        //print("vm,",vm)
         var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCommentCell
         // Configure the cell...
         cell.viewModel = vm
@@ -139,7 +132,7 @@ extension CommentTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发表", color: .red,backImageName: nil)
+        let button = UIButton(title: "发布", color: .red,backImageName: nil)
         button.tag = sender.tag
         button.nav = nav
         button.vm = sender.vm
@@ -149,16 +142,22 @@ extension CommentTableViewController {
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        NetworkTools.shared.like(listViewModel.statusList[statusId!].status.id,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
+        NetworkTools.shared.like((viewModel?.status.id)!,commentlistViewModel.commentList[sender.tag].comment.comment_id) { Result, Error in
             if Error == nil {
-                print(Result as! [String:Any])
                 //sender.int = 0
+                if (Result as! [String:Any])["code"] as! String == "add" {
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: "你的点赞TA收到了")
+                } else {
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: "你的取消TA收到了")
+                }
                 self.loadData()
                 //sender.setTitle("\(commentlistViewModel.commentList[sender.tag].comment.like_count)", for: .normal)
+                DispatchQueue.main.asyncAfter(deadline: .now()+1){
+                    SVProgressHUD.dismiss()
+                }
                 return
             }
             SVProgressHUD.showInfo(withStatus: "出错了")
-            //print(Error)
             return
         }
     }
@@ -173,13 +172,10 @@ extension CommentTableViewController {
             SVProgressHUD.dismiss()
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
                     return
                 }
-                //print(Result)
                 if (Result as! [String:Int])["error"] != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
                     return
                 }
             sender.nav.close()

@@ -32,8 +32,6 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
             controller.navigationItem.leftBarButtonItem?.tintColor = .red
             present(UINavigationController(rootViewController: controller), animated: true)
         }catch _ {
-        //print(error.localizedDescription)
-        //print("文件读取失败，可能是资源找不到")
         }
     }
     override func loadView() {
@@ -134,15 +132,12 @@ extension OAuthViewController {
         guard let query = url.query,query.hasPrefix("code=") else {
             return .allow
         }
-        //print("到这里了")
 
         let code = String(query["code=".endIndex...])
-        print("授权码是 "+code)
         UserAccountViewModel.sharedUserAccount.loadAccessToken(code: code) { (isSuccessed) -> () in
             if !isSuccessed {
                 return
             }
-            //print("成功了")
             self.dismiss(animated: false) {
                 NotificationCenter.default.post(name: .init(rawValue: WBSwitchRootViewControllerNotification), object: "welcome")
             }

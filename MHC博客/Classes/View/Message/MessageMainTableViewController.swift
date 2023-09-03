@@ -19,7 +19,6 @@ class MessageTableViewController: VisitorTableViewController{
     }()
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        //print(self.pullupView.isAnimating)
         friendListViewModel.loadFriend { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()
@@ -27,7 +26,6 @@ class MessageTableViewController: VisitorTableViewController{
                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                 return
             }
-            //print(listViewModel.statusList)
             self.tableView.reloadData()
         }
     }

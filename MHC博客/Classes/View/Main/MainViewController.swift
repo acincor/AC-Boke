@@ -18,7 +18,6 @@ class MainViewController: UITabBarController {
         /*
         NetworkTools.shared.request(NetworkTools.HMRequestMethod.POST,"http://httpbin.org/post", ["name":"zhangsan","age":18]) {
             (Result,Error) -> () in
-            ////print(Result)
         }
          */
     }

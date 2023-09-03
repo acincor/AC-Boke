@@ -74,8 +74,7 @@
  *	matrixmult -
  *		multiply two matricies
  */
-static void matrixmult(a,b,c)
-float a[4][4], b[4][4], c[4][4];
+static void matrixmult(float a[4][4],float b[4][4],float c[4][4])
 {
     int x, y;
     float temp[4][4];
@@ -96,8 +95,7 @@ float a[4][4], b[4][4], c[4][4];
  *	identmat -
  *		make an identity matrix
  */
-static void identmat(matrix)
-float matrix[4][4];
+static void identmat(float matrix[4][4])
 {
     memset(matrix, 0, sizeof(float[4][4]));
     matrix[0][0] = 1.0f;
@@ -110,10 +108,10 @@ float matrix[4][4];
  *	xformpnt -
  *		transform a 3D point using a matrix
  */
-static void xformpnt(matrix,x,y,z,tx,ty,tz)
-float matrix[4][4];
-float x,y,z;
-float *tx,*ty,*tz;
+static void xformpnt(float matrix[4][4],float x,float y,float z,float *tx,float *ty,float *tz)
+//float matrix[4][4];
+//float x,y,z;
+//float *tx,*ty,*tz;
 {
     *tx = x*matrix[0][0] + y*matrix[1][0] + z*matrix[2][0] + matrix[3][0];
     *ty = x*matrix[0][1] + y*matrix[1][1] + z*matrix[2][1] + matrix[3][1];
@@ -124,9 +122,7 @@ float *tx,*ty,*tz;
  *	cscalemat -
  *		make a color scale marix
  */
-static void cscalemat(mat,rscale,gscale,bscale)
-float mat[4][4];
-float rscale, gscale, bscale;
+static void cscalemat(float mat[4][4],float rscale,float gscale,float bscale)
 {
     float mmat[4][4];
     
@@ -157,9 +153,7 @@ float rscale, gscale, bscale;
  *	saturatemat -
  *		make a saturation marix
  */
-static void saturatemat(mat,sat)
-float mat[4][4];
-float sat;
+static void saturatemat(float mat[4][4],float sat)
 {
     float mmat[4][4];
     float a, b, c, d, e, f, g, h, i;
@@ -204,9 +198,7 @@ float sat;
  *	xrotate -
  *		rotate about the x (red) axis
  */
-static void xrotatemat(mat,rs,rc)
-float mat[4][4];
-float rs, rc;
+static void xrotatemat(float mat[4][4],float rs,float rc)
 {
     float mmat[4][4];
     
@@ -236,9 +228,7 @@ float rs, rc;
  *	yrotate -
  *		rotate about the y (green) axis
  */
-static void yrotatemat(mat,rs,rc)
-float mat[4][4];
-float rs, rc;
+static void yrotatemat(float mat[4][4],float rs,float rc)
 {
     float mmat[4][4];
     
@@ -268,9 +258,7 @@ float rs, rc;
  *	zrotate -
  *		rotate about the z (blue) axis
  */
-static void zrotatemat(mat,rs,rc)
-float mat[4][4];
-float rs, rc;
+static void zrotatemat(float mat[4][4],float rs,float rc)
 {
     float mmat[4][4];
     
@@ -300,9 +288,7 @@ float rs, rc;
  *	zshear -
  *		shear z using x and y.
  */
-static void zshearmat(mat,dx,dy)
-float mat[4][4];
-float dx, dy;
+static void zshearmat(float mat[4][4],float dx,float dy)
 {
     float mmat[4][4];
     
@@ -366,9 +352,7 @@ float dx, dy;
  *	huerotatemat -
  *		rotate the hue, while maintaining luminance.
  */
-static void huerotatemat(mat,rot)
-float mat[4][4];
-float rot;
+static void huerotatemat(float mat[4][4],float rot)
 {
     float mmat[4][4];
     float mag;

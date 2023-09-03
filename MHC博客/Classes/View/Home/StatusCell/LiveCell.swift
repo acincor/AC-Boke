@@ -16,7 +16,7 @@ class LiveCell: UICollectionViewCell {
             topView.viewModel = viewModel
         }
     }
-    lazy var topView: UserCellTopView = UserCellTopView()
+    lazy var topView: LiveCellTopView = LiveCellTopView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

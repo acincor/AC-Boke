@@ -43,7 +43,6 @@ extension PicturePickerController: PicturePickerCellDelegate {
     }
     @objc func picturePickerDidAdd(cell: PicturePickerCell) {
         if !UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
-            //print("无法访问")
         }
         let picker = UIImagePickerController()
         selectedIndex = collectionView.indexPath(for: cell)?.item ?? 0

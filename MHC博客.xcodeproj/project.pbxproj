@@ -17,6 +17,7 @@
 		2E2AAA892A72A7890023417C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA882A72A7890023417C /* TableViewCell.swift */; };
 		2E2AAAF62A73538D0023417C /* chat.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF52A73538D0023417C /* chat.sql */; };
 		2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF72A7354470023417C /* ChatDAL.swift */; };
+		2E3F87682AA31DAF00353BBF /* LiveCellTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3F87672AA31DAF00353BBF /* LiveCellTopView.swift */; };
 		2E557E6B2A9AD1B800C13474 /* UserAgreementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */; };
 		2E557E6D2A9AD81100C13474 /* logOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6C2A9AD81100C13474 /* logOutViewController.swift */; };
 		2E557E6F2A9CEF7E00C13474 /* CommentCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */; };
@@ -468,6 +469,7 @@
 		2E2AAA882A72A7890023417C /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		2E2AAAF52A73538D0023417C /* chat.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chat.sql; sourceTree = "<group>"; };
 		2E2AAAF72A7354470023417C /* ChatDAL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDAL.swift; sourceTree = "<group>"; };
+		2E3F87672AA31DAF00353BBF /* LiveCellTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveCellTopView.swift; sourceTree = "<group>"; };
 		2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementViewController.swift; sourceTree = "<group>"; };
 		2E557E6C2A9AD81100C13474 /* logOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logOutViewController.swift; sourceTree = "<group>"; };
 		2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentCell.swift; sourceTree = "<group>"; };
@@ -1544,6 +1546,7 @@
 				2EA71C4429C6B80D004742CA /* UserCell.swift */,
 				2E9B6D012A9DC2B20033AC91 /* LiveCell.swift */,
 				2EA71C3E29C6B6B7004742CA /* UserCellTopView.swift */,
+				2E3F87672AA31DAF00353BBF /* LiveCellTopView.swift */,
 				2EA71BE129B94DBF004742CA /* StatusCommentCell.swift */,
 			);
 			path = StatusCell;
@@ -2824,6 +2827,7 @@
 				2E2AAA872A72A74D0023417C /* TableView.swift in Sources */,
 				2EB2906C29EAE465009E0439 /* ConstraintMakerFinalizable.swift in Sources */,
 				2E738A9F29AA38510014FA12 /* UserAccountViewModel.swift in Sources */,
+				2E3F87682AA31DAF00353BBF /* LiveCellTopView.swift in Sources */,
 				2EDC45462A823195003D7E63 /* CommentStatusTableViewController.swift in Sources */,
 				2EB2921D29EAE979009E0439 /* FMDatabase.m in Sources */,
 				2EB2942C29EB7243009E0439 /* UIImage+MemoryCacheCost.m in Sources */,
@@ -3080,7 +3084,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHCBlog";
@@ -3140,7 +3144,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHCBlog";

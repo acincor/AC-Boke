@@ -37,29 +37,22 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDe
         NetworkTools.shared.addFriend(MID) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print("Result出现错误")
-                //print(Error)
                 return
             }
             guard let result = Result as? [String:Any] else {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print("result出现转换错误")
                 return
             }
             if (result["error"] != nil) {
                 SVProgressHUD.showInfo(withStatus: result["error"] as? String)
-                //print("result出现error")
                 return
             }
             guard let code = result["code"] as? String else {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print("result出现转换错误")
                 return
             }
             if (code != "delete") {
                 SVProgressHUD.showInfo(withStatus: "成功添加好友")
-                //print("result出现error")
-                ////print(result)
                 return
             }
             SVProgressHUD.showInfo(withStatus: "成功删除/拉黑好友")
@@ -158,39 +151,8 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDe
             nav.modalPresentationStyle = .custom
             present(nav, animated: true)
         }catch _ {
-            //print(error.localizedDescription)
-            //print("文件读取失败，可能是资源找不到")
         }
     }
-    /*
-    @objc func expiresUserButtonTouchAction(){
-        NetworkTools.shared.ExpiresTheToken { Result, Error in
-            if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                return
-            }
-            if(Result as! [String:Any])["msg"] != nil {
-                //print(Result)
-                NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: "logOut")
-                UserAccountViewModel.sharedUserAccount.account = nil
-            }
-        }
-    }
-    @objc func logOffUserButtonTouchAction() {
-        NetworkTools.shared.logOff { Result, Error in
-            if Error != nil {
-                //print(Error)
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                return
-            }
-            //print(Result)
-            if(Result as! [String:Any])["msg"] != nil {
-                NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: nil)
-                UserAccountViewModel.sharedUserAccount.account = nil
-            }
-        }
-    }
-     */
     @objc func action1(_ sender: UITextField) -> Bool{
         NetworkTools.shared.rename(rename: sender.text!) { Result, Error in
             if Error != nil {
@@ -199,7 +161,6 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDe
                 return
             }
             if(Result as! [String:Any])["msg"] != nil {
-                //print(Result)
                 UserAccountViewModel.sharedUserAccount.account = UserAccount(dict: (Result as! [String: Any])["usermsg"] as! [String:Any])
                 UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) {isSuccessed in
                     if isSuccessed {

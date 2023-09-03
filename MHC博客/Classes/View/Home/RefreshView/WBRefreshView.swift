@@ -36,10 +36,8 @@ class WBRefreshControl: UIRefreshControl {
             refreshView.startAnimation()
         }
         if frame.origin.y < WBRefreshControlOffset && !refreshView.rotateFlag {
-            //print("反过来")
             refreshView.rotateFlag = true
         } else if frame.origin.y >= WBRefreshControlOffset && refreshView.rotateFlag {
-            //print("转过去")
             refreshView.rotateFlag = false
         }
     }
@@ -62,7 +60,6 @@ class WBRefreshView: UIView {
     @IBOutlet weak var tipIconView: UIImageView!
     func startAnimation() {
         tipView.isHidden = true
-        //loadingView.isHidden = false
         let key = "transform.rotation"
         if loadingView.layer.animation(forKey: key) != nil {
             return

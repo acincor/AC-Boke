@@ -59,7 +59,6 @@ class UserAccount: NSObject,NSCoding,NSSecureCoding {
     func saveUserAccount() {
         var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
         path = (path as NSString).appendingPathComponent("account.plist")
-        //print(path)
         /*
          //deprecated
         NSKeyedArchiver.archiveRootObject(self, toFile: path)

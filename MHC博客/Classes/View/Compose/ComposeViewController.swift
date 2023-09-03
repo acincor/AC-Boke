@@ -52,7 +52,6 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
         }
     }
     @objc private func selectEmoticon() {
-        //print("选择表情 \(textView.inputView)")
         textView.resignFirstResponder()
         textView.inputView = textView.inputView == nil ? emoticonView : nil
         textView.becomeFirstResponder()
@@ -92,7 +91,7 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
 extension ComposeViewController {
     func setupUI() {
         view.backgroundColor = .systemBackground
-        automaticallyAdjustsScrollViewInsets = false
+        //automaticallyAdjustsScrollViewInsets = false
         prepare()
         prepareTool()
         prepareTextView()
@@ -127,24 +126,18 @@ extension ComposeViewController {
             NetworkTools.shared.sendStatus(status: text, image: image) { (Result, Error) -> () in
                 SVProgressHUD.dismiss()
                 if Error != nil {
-                    //print("出错了")
-                    //print(Error)
                     SVProgressHUD.showInfo(withStatus: "您的网络不给力")
                     return
                 }
-                ////print(Result)
                 self.close()
             }
         } else {
             NetworkTools.shared.sendStatus(status: text, image: nil) { (Result, Error) -> () in
                 SVProgressHUD.dismiss()
                 if Error != nil {
-                    //print("出错了")
-                    //print(Error)
                     SVProgressHUD.showInfo(withStatus: "您的网络不给力")
                     return
                 }
-                ////print(Result)
                 self.close()
             }
         }

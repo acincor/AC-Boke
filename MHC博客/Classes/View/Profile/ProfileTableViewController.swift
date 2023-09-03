@@ -188,8 +188,6 @@ class ProfileTableViewController: VisitorTableViewController {
             nav.modalPresentationStyle = .custom
             present(nav, animated: true)
         }catch _ {
-        //print(error.localizedDescription)
-        //print("文件读取失败，可能是资源找不到")
         }
     }
      */
@@ -200,7 +198,6 @@ class ProfileTableViewController: VisitorTableViewController {
                 return
             }
             if(Result as! [String:Any])["msg"] != nil {
-                //print(Result)
                 UserAccountViewModel.sharedUserAccount.account = UserAccount(dict: (Result as! [String: Any])["usermsg"] as! [String:Any])
                 UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) { [self]isSuccessed in
                     if isSuccessed {

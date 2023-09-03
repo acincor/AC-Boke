@@ -14,7 +14,6 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
     weak var photoDelegate: PhotoBrowserCellDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("开始设置")
         // 1. 恢复 scrollView
         resetScrollView()
         

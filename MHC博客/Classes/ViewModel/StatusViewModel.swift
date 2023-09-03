@@ -29,7 +29,6 @@ class StatusViewModel: CustomStringConvertible {
     /// 用户认证图标
     /// 认证类型，-1：没有认证，0，认证用户，2,3,5: 企业认证，220: 达人
     var createAt: String? {
-        //print(Date.sina(status.create_at ?? ""))
         return Date.sina(status.create_at ?? "")?.dateDescription
     }
     /// 缩略图URL数组 - 存储型属性 !!!

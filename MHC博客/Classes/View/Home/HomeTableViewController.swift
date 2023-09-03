@@ -10,8 +10,8 @@ import UIKit
 
 let StatusCellNormalId = "StatusCellNormalId"
 //let StatusCellNormalId2 = "StatusCellNormalId2"
-var listViewModel = StatusListViewModel()
-var statusId: Int?
+
+var viewModel: StatusViewModel?
 class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
     private lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
@@ -58,16 +58,14 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     }
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        //print(self.pullupView.isAnimating)
-        StatusDAL.clearDataCache()//删除缓存
-            listViewModel.loadStatus(isPullup: self.pullupView.isAnimating) { (isSuccessed) in
+        //StatusDAL.clearDataCache()//删除缓存
+        listViewModel.loadStatus(isPullup: self.pullupView.isAnimating) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()
             if !isSuccessed {
                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                 return
             }
-            //print(listViewModel.statusList)
             self.showPulldownTip()
             self.tableView.reloadData()
         }
@@ -83,10 +81,8 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     }()
     private func showPulldownTip() {
         guard let count = listViewModel.pulldownCount else {
-            //print("难道你有博客吗？")
             return
         }
-        //print("count:",count)
         pulldownTipLabel.text = (count == 0) ? "没有博客" : "刷新到\(count)条博客"
         let height: CGFloat = 44
         let rect = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
@@ -98,12 +94,6 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
                 self.pulldownTipLabel.frame = CGRectOffset(rect, 0, -2 * height)
             }
         }
-    }
-    func like(object: [String:Any]) -> Error? {
-        
-        print("开始了")
-        print("结束了")
-        return nil
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,7 +132,6 @@ extension HomeTableViewController {
         return listViewModel.statusList.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //print("开始动画")
         let vm = listViewModel.statusList[indexPath.row]
         var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
         // Configure the cell...
@@ -158,35 +147,15 @@ extension HomeTableViewController {
         g.sender2 = "\(viewModel.status.user ?? "")"
         g.sender3 = "\(viewModel.status.portrait ?? "")"
         cell.topView.iconView.addGestureRecognizer(g)
-        if listViewModel.statusList.count >= 10 {
+        if listViewModel.statusList.count % 10 == 0 {
             if indexPath.row == listViewModel.statusList.count - 1 && !pullupView.isAnimating {
                 // 开始动画
                 pullupView.startAnimating()
                 loadData()
-            }//二十条刷新一次
+            }//十条刷新一次
         }
-        /*
-        cell.bottomView.deleteButton.addAction(UIAction { action in
-            cell.bottomView.deleteBlog(listViewModel.statusList[indexPath.row].status.id) { Result, Error in
-                //print(listViewModel.statusList[indexPath.row].status.id)
-                //print(UserAccountViewModel.sharedUserAccount.accessToken)
-                if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
-                    return
-                }
-                if (Result as! [String:Any])["error"] != nil {
-                    SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
-                    //print((Result as! [String:String])["error"])
-                    return
-                }
-                SVProgressHUD.showInfo(withStatus: "删除成功")
-            }
-        }, for: .touchUpInside)
-         */
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
-        //print("\(listViewModel.statusList[indexPath.row].status.like_count)")
         let result = ["id":"\(listViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
         NetworkTools.shared.loadOneStatus(id: listViewModel.statusList[indexPath.row].status.id) { res, error in
@@ -202,7 +171,6 @@ extension HomeTableViewController {
                 return
             }
             for s in like_list {
-                //print(s["like_uid"] as? String)
                 if result["like_uid"] as? String == s["like_uid"] as? String {
                     
                     cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
@@ -227,13 +195,10 @@ extension HomeTableViewController {
             SVProgressHUD.dismiss()
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
                 return
             }
             sender.nav.close()
@@ -242,28 +207,23 @@ extension HomeTableViewController {
     }
     @objc func action1(_ sender: UIButton) {
         sender.identifier.bottomView.deleteBlog(listViewModel.statusList[sender.tag].status.id) { Result, Error in
-            //print(listViewModel.statusList[indexPath.row].status.id)
-            //print(UserAccountViewModel.sharedUserAccount.accessToken)
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
                 return
             }
-            print(Result as! [String:Any])
             if (Result as! [String:Any])["error"] != nil {
                 SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
-                //print((Result as! [String:String])["error"])
                 return
             }
             SVProgressHUD.showInfo(withStatus: "删除成功")
-            self.loadData()
+            StatusDAL.removeCache(listViewModel.statusList[sender.tag].status.id)
+            listViewModel.statusList.remove(at: sender.tag)
+            self.tableView.reloadData()
         }
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发表", color: .red,backImageName: nil)
-        //print(listViewModel.statusList[indexPath.row].status.id)
-        //print(nav.textView.text!)
+        let button = UIButton(title: "发布", color: .red,backImageName: nil)
         guard (listViewModel.statusList[sender.tag].status.id > 0) else {
             SVProgressHUD.showInfo(withStatus: "出错了")
             return
@@ -277,12 +237,18 @@ extension HomeTableViewController {
     @objc func action4(_ sender: UIButton) {
         NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
-                print(Result as! [String:Any])
+                if (Result as! [String:Any])["code"] as! String == "add" {
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: "你的点赞TA收到了")
+                } else {
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: "你的取消TA收到了")
+                }
                 self.tableView.reloadData()
+                DispatchQueue.main.asyncAfter(deadline: .now()+1){
+                    SVProgressHUD.dismiss()
+                }
                 return
             }
             SVProgressHUD.showInfo(withStatus: "出错了")
-            //print(Error)
             return
         }
     }
@@ -290,7 +256,7 @@ extension HomeTableViewController {
         return listViewModel.statusList[indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        statusId = indexPath.row
+        viewModel = listViewModel.statusList[indexPath.row]
         let vc = CommentTableViewController()
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom

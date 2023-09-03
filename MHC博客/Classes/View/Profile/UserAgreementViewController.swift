@@ -25,8 +25,6 @@ class UserAgreementViewController: UIViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.closeUserAgreement))
             navigationItem.leftBarButtonItem?.tintColor = .red
         }catch _ {
-        //print(error.localizedDescription)
-        //print("文件读取失败，可能是资源找不到")
         }
         // Do any additional setup after loading the view.
     }

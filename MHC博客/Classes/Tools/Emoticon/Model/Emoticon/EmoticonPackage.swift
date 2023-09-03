@@ -52,7 +52,6 @@ class EmoticonPackage: NSObject {
         if emoticons.count > 0 && count == 0 {
             return
         }
-        //print("\(group_name_cn)剩余表情数量\(count)")
         for _ in count..<20 {
             emoticons.append(Emoticon(isEmpty: true))
         }

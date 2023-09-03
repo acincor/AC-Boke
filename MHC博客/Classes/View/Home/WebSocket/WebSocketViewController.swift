@@ -75,13 +75,11 @@ class WebSocketController: UIViewController,ChatDataSource {
         urlRequestToUidTask.receive {[weak self]result in
             switch result {
             case .failure(_):
-                //print("Error in receiving message: \(error)")
                 break
             case .success(.string(let str)):
                 let data = str.data(using: String.Encoding.utf8)
                             let dict = try! JSONSerialization.jsonObject(with: data!,
                                                                             options: .mutableContainers) as! [String : Any]
-                //print(dict)
                 if(dict["isHESHE"] as! Int == 0) {
                                     SVProgressHUD.showInfo(withStatus: "对方未在线")
                                     DispatchQueue.main.async {
@@ -94,7 +92,6 @@ class WebSocketController: UIViewController,ChatDataSource {
                                     }
                                 }
             default:
-                //print("default")
                 break
             }
         }
@@ -123,7 +120,6 @@ class WebSocketController: UIViewController,ChatDataSource {
             SVProgressHUD.dismiss()
             guard error == nil else {
                 SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(error)
                 return
             }
         }
@@ -168,13 +164,11 @@ class WebSocketController: UIViewController,ChatDataSource {
         urlRequestToUidTask.receive {[weak self]result in
             switch result {
             case .failure(_):
-                //print("Error in receiving message: \(error)")
                 break
             case .success(.string(let str)):
                 let data = str.data(using: String.Encoding.utf8)
                 let dict = try! JSONSerialization.jsonObject(with: data!,
                                                              options: .mutableContainers) as! [String : Any]
-                //print("dict,",dict)
                 if(dict["isHESHE"] as! Int == 1) {
                     SVProgressHUD.showInfo(withStatus: "对方在线了 sb is on line.")
                     DispatchQueue.main.async {
@@ -186,12 +180,10 @@ class WebSocketController: UIViewController,ChatDataSource {
                         self?.sendButton.tag = 0
                     }
                 }
-                //print(dict)
                 if(dict["to_uid"] as? Int == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)) {
                     ChatDAL.saveCache(array: ["uid":dict["uid"] as! Int,"content":dict["content"] as! String,"to_uid":Int(UserAccountViewModel.sharedUserAccount.account!.uid!)!,"timeInterval":dict["timeInterval"] as! TimeInterval])
                 }
             default:
-                //print("default")
                 break
             }
         }

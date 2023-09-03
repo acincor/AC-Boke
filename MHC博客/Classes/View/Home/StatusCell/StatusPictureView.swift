@@ -113,7 +113,6 @@ class StatusPictureViewCell: UICollectionViewCell {
 }
 extension StatusPictureView:UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //print("单击照片\(indexPath) \(viewModel?.thumbnailUrls)")
         let userInfo = [WBStatusSelectedPhotoIndexPathKey: indexPath, WBStatusSelectedPhotoURLsKey: viewModel!.thumbnailUrls!] as [String : Any]
         NotificationCenter.default.post(name: Notification.Name(WBStatusSelectedPhotoNotification), object: self, userInfo: userInfo)
         //photoBrowserPresentFromRect(indexPath: indexPath)

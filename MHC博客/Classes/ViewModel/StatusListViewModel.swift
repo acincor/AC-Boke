@@ -14,26 +14,19 @@ class StatusListViewModel {
         let since_id = isPullup ? 0 : (statusList.first?.status.id ?? 0)
         let max_id = isPullup ? (statusList.last?.status.id ?? 0) : 0
         StatusDAL.loadStatus(since_id: since_id, max_id: max_id) { (array) -> () in
-            //print("查询到缓存数据 \(array!.count)")
-            guard var array = array else {
-                //print("数据格式错误")
+            guard let array = array else {
                 finished(false)
                 return
             }
-            print(array)
             var dataList = [StatusViewModel]()
-            //print(result)
-            for n in 0..<array.count {
-                //print(array[n])
-                //print(Status(dict: array[n]))
-                dataList.append(StatusViewModel(status: Status(dict: array[n])))
+            for dict in array {
+                dataList.append(StatusViewModel(status: Status(dict: dict)))
             }
-            //print("bool:",dataList.count > self.statusList.count)
-            self.pulldownCount = self.statusList.count == 0 ? dataList.count : (dataList.count > self.statusList.count ? dataList.count - self.statusList.count: nil)
+            self.pulldownCount = (since_id > 0) ? dataList.count : nil
             if max_id > 0 {
                 self.statusList += dataList
             } else {
-                self.statusList = dataList
+                self.statusList = dataList + self.statusList
             }
             self.cacheSingleImage(dataList: dataList, finished: finished)
         }
@@ -46,7 +39,6 @@ class StatusListViewModel {
                 continue
             }
             let url = vm.thumbnailUrls![0]
-                //print("要缓存的\(url)")
                 group.enter()
             SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed],progress: nil) {
                 (image, data, error, type, bool, url) in
@@ -54,7 +46,6 @@ class StatusListViewModel {
             }
         }
        group.notify(queue: DispatchQueue.main) {
-            print("缓存完成")
             finished(true)
         }
     }

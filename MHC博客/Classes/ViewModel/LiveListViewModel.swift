@@ -13,8 +13,6 @@ class LiveListViewModel {
     func loadLive(finished: @escaping (_ isSuccessed: Bool) -> ()) {
         NetworkTools.shared.loadLive { (array,error) -> () in
             guard let array = array else {
-                //print("数据格式错误")
-                //print("array转换错误")
                 finished(false)
                 return
             }
@@ -23,14 +21,10 @@ class LiveListViewModel {
             }
             var dataList = [UserViewModel]()
                 for n in 0..<arr.count {
-                    //print(FriendAccount(dict: dict))
                     dataList.append(UserViewModel(user: Account(dict: arr[n])))
                 }
             
             self.liveList = dataList
-                //print(dataList)
-                //print("bool:",dataList.count > self.friendList.count)
-                //print(self.friendList)
                 finished(true)
         }
     }

@@ -21,17 +21,20 @@ class CommentCommentTableViewController: VisitorTableViewController {
         tableView.rowHeight = 400
     }
     @objc func action5(_ sender: UIButton) {
-        //print(listViewModel.statusList[sender.tag].status.id)
-        //print(commentlistViewModel.commentCommentList[sender.tag].comment.comment_id)
-        //print(commentlistViewModel.commentList[sender.tag].comment.comment_id)
         NetworkTools.shared.like(comment_id!,comment_id: commentlistViewModel.commentCommentList[sender.tag].comment.comment_id,comment_comment_id!) { Result, Error in
             if Error == nil {
-                //print(Result)
+                if (Result as! [String:Any])["code"] as! String == "add" {
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: "你的点赞TA收到了")
+                } else {
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: "你的取消TA收到了")
+                }
                 self.loadData()
+                DispatchQueue.main.asyncAfter(deadline: .now()+1){
+                    SVProgressHUD.dismiss()
+                }
                 return
             }
             SVProgressHUD.showInfo(withStatus: "出错了")
-            //print(Error)
             return
         }
     }
@@ -42,7 +45,6 @@ class CommentCommentTableViewController: VisitorTableViewController {
         guard let comment_id = comment_comment_id else{
             return
         }
-        //print([id,comment_id])
             self.refreshControl?.beginRefreshing()
             commentlistViewModel.loadComment(id: id, comment_id: comment_id) { (isSuccessed) in
                 self.refreshControl?.endRefreshing()
@@ -50,7 +52,6 @@ class CommentCommentTableViewController: VisitorTableViewController {
                     SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                     return
                 }
-                //print("array,",commentlistViewModel.commentCommentList)
                 self.tableView.reloadData()
             }
     }
@@ -85,7 +86,6 @@ class CommentCommentTableViewController: VisitorTableViewController {
             }
         }
         loadData()
-        //print("loadData")
         prepareTableView()
         guard let id = id else {
             return
@@ -106,29 +106,8 @@ extension CommentCommentTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return commentlistViewModel.commentCommentList.count
     }
-    /*
-    @objc func action(_ sender: UIButton) {
-        NetworkTools.shared.deleteComment((sender.vm?.comment.id)!, (sender.vm?.comment.comment_id)!) { Result, Error in
-            //print(UserAccountViewModel.sharedUserAccount.accessToken)
-            if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                //print(Error)
-                return
-            }
-            ////print(Result)
-            if (Result as! [String:String])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
-                //print((Result as! [String:String])["error"])
-                return
-            }
-            ////print(Result)
-            SVProgressHUD.showInfo(withStatus: "删除成功")
-        }
-    }
-     */
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = commentlistViewModel.commentCommentList[indexPath.row]
-        //print("vm,",vm)
         var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! CommentCommentCell
         // Configure the cell...
         cell.viewModel = vm
@@ -152,7 +131,7 @@ extension CommentCommentTableViewController {
     /*
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发表", color: .red,backImageName: nil)
+        let button = UIButton(title: "发布", color: .red,backImageName: nil)
         button.tag = sender.tag
         button.nav = nav
         button.vm2 = sender.vm2
@@ -166,13 +145,10 @@ extension CommentCommentTableViewController {
         NetworkTools.shared.deleteComment(sender.vm2!.comment.id,  comment_comment_id! , comment_id: sender.vm2!.comment.comment_id) { Result, Error in
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
                     return
                 }
-                //print(Result)
                 if (Result as! [String:Any])["error"] != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print((Result as! [String:String])["error"])
                     return
                 }
             SVProgressHUD.showInfo(withStatus: "删除成功")
@@ -190,13 +166,10 @@ extension CommentCommentTableViewController {
             SVProgressHUD.dismiss()
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
                     return
                 }
-                //print(Result)
                 if (Result as! [String:Int])["error"] != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
-                    //print(Error)
                     return
                 }
             sender.nav.close()

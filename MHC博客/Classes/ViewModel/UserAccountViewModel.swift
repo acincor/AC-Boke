@@ -22,30 +22,24 @@ class UserAccountViewModel {
     }
     private var accountPath: String {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
-        //print(path)
         return (path as NSString).appendingPathComponent("account.plist")
     }
     private init() {
         do {
             account = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [UserAccount.self, NSString.self, NSNumber.self], from: Data(contentsOf: NSURL(fileURLWithPath: accountPath) as URL)) as? UserAccount
         } catch/*(let e)*/ {
-            //print(e) //一般情况下e是找不到目录，这时候就说明还没登录
             
             SVProgressHUD.showInfo(withStatus: "未登录")
         }
-        //print(account)
     }
 }
 extension UserAccountViewModel {
     func loadAccessToken(code: String, finished: @escaping (_ isSuccessed: Bool) -> ()) {
         NetworkTools.shared.loadAccessToken(code: code) { (Result, Error) -> () in
             if Error != nil {
-                //print(Error)
-                //print("出错了")
                 finished(false)
                 return
             }
-            ////print(Result)
             self.account = UserAccount(dict: Result as! [String: Any])
             self.loadUserInfo(account: self.account!, finished: finished)
         }
@@ -53,12 +47,10 @@ extension UserAccountViewModel {
     func loadUserInfo(account: UserAccount, finished: @escaping (_ isSuccessed: Bool) -> ()) {
         NetworkTools.shared.loadUserInfo { (Result, Error) -> () in
             if Error != nil {
-                //print("加载用户出错了")
                 finished(false)
                 return
             }
             guard let dict = Result as? [String: Any] else {
-                //print("格式错误")
                 finished(false)
                 return
             }
@@ -69,10 +61,8 @@ extension UserAccountViewModel {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: account, requiringSecureCoding: true)
                 try data.write(to: NSURL(fileURLWithPath: self.accountPath) as URL)
             } catch {
-                print(error)
                 SVProgressHUD.showInfo(withStatus: "出错了")
             }
-            //print(self.accountPath)
             finished(true)
         }
     }

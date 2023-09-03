@@ -31,7 +31,6 @@ class CommentViewController: UIViewController{
         dismiss(animated: true,completion: nil)
     }
     @objc private func selectEmoticon() {
-        //print("选择表情 \(textView.inputView)")
         textView.resignFirstResponder()
         textView.inputView = textView.inputView == nil ? emoticonView : nil
         textView.becomeFirstResponder()

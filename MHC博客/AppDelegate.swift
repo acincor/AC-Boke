@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SVProgressHUD.setDefaultMaskType(.clear)
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if (!granted) {
-                           print("hi")
                        }
         }
         UIApplication.shared.registerForRemoteNotifications()
@@ -41,9 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if notification.object != nil {
                 if UserAccountViewModel.sharedUserAccount.userLogon {
                     NetworkTools.shared.ExpiresTheToken { Result, Error in
-                        //print(Error)
                         if (Result as! [String:Any])["msg"] as! Int == 1 {
-                            //print("有没有一种可能到这里了")
                             var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
@@ -61,9 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 if UserAccountViewModel.sharedUserAccount.userLogon {
                     NetworkTools.shared.logOff { Result, Error in
-                        //print(Error)
                         if (Result as! [String:Any])["msg"] as! Int == 1 {
-                            //print("有没有一种可能到这里了")
                             var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
@@ -83,7 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserAccountViewModel.sharedUserAccount.userLogon {
             NetworkTools.shared.tokenIsExpires { Result, Error in
                 if (Result as! [String:Any])["msg"] as! Int == 1 {
-                    //print("有没有一种可能到这里了")
                     var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                     path = (path as NSString).appendingPathComponent("account.plist")
                     if FileManager.default.fileExists(atPath: path) {
@@ -99,20 +93,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-
-        print("Recived: \(userInfo)")
        //Parsing userinfo:
-        _ = userInfo
-        print(userInfo)
        if let info = userInfo["aps"] as? Dictionary<String, Any>
                 {
            let alertMsg = info["alert"] as! String
-                    print(alertMsg)
-               //alert.show()
                 }
     }
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-            print("NOTIFICATION ERROR: \(error)")
         }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     }
@@ -131,7 +118,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             content.sound = .default
             
             content.sound = UNNotificationSound.default
-            //print(self.pullupView.isAnimating)
             NetworkTools.shared.loadHotStatus { Result, Error in
                 if Result == nil {
                     SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
@@ -167,12 +153,10 @@ extension AppDelegate {
         // 1. 当前的版本 - info.plist
         let currentVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let version = Double(currentVersion)!
-        // print("当前版本 \(version)")
     
         // 2. `之前`的版本，把当前版本保存在用户偏好 - 如果 key 不存在，返回 0
         let sandboxVersionKey = "sandboxVersionKey"
         let sandboxVersion = UserDefaults.standard.double(forKey: sandboxVersionKey)
-        // print("之前版本 \(sandboxVersion)")
     
         // 3. 保存当前版本
         UserDefaults.standard.set(version, forKey:sandboxVersionKey)

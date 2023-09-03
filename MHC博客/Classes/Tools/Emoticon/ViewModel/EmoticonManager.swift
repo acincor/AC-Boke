@@ -55,18 +55,15 @@ class EmoticonManager {
     init() {
         packages.append(EmoticonPackage(dict: ["group_name_cn":"最近"]))
         guard let path = Bundle.main.path(forResource: "emoticons", ofType: "plist", inDirectory: "Emoticons.bundle") else {
-            //print("emoticons文件不存在")
             return
         }
         guard let dict = NSDictionary(contentsOfFile: path) else {
-            //print("数据加载错误")
             return
         }
         let array = (dict["packages"] as! NSArray).value(forKey: "id") as! [String]
         for id in array {
             loadInfoPlist(id)
         }
-        //print(packages)
     }
     private func loadInfoPlist(_ id: String) {
         let path = Bundle.main.path(forResource: "emoticon", ofType: "plist", inDirectory: "Emoticons.bundle/\(id)")!
