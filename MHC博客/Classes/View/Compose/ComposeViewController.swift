@@ -29,12 +29,38 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
             make.height.equalTo(0)
         }
     }
+    private lazy var trendView: TrendCellView = TrendCellView { viewModel in
+        self.textView.text.append(contentsOf: "#"+viewModel+"#")
+        self.textView.delegate?.textViewDidChange!(self.textView)
+    }
     private lazy var emoticonView: EmoticonView = EmoticonView { emoticon in
         self.textView.insertEmoticon(emoticon)
     }
-    @objc private func close() {
-        textView.resignFirstResponder()
-        dismiss(animated: true,completion: nil)
+    private lazy var userCollectionView: UserCollectionCellView = UserCollectionCellView { viewModel in
+        guard let user = viewModel.user.user else {
+            return
+        }
+        self.textView.text.append(contentsOf: "@"+user)
+        self.textView.delegate?.textViewDidChange!(self.textView)
+    }
+    @objc private func createTrend() {
+        let controller = UIAlertController(title: "创建话题", message: "输入你的话题：", preferredStyle: .alert)
+        controller.addTextField { textField in
+            textField.placeholder = "创建你的话题"
+            textField.textColor = .label
+        }
+        controller.addAction(UIAlertAction(title: "关闭", style: .cancel))
+        controller.addAction(UIAlertAction(title: "创建", style: .default) { action in
+            guard let fields = controller.textFields else {
+                return
+            }
+            if fields[0].hasText {
+                NetworkTools.shared.trend(fields[0].text!) { Result, Error in
+                    controller.dismiss(animated: true)
+                }
+            }
+        })
+        self.present(controller, animated: true)
     }
     @objc private func selectPicture() {
         textView.resignFirstResponder()
@@ -50,6 +76,32 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
             make.right.equalTo(view.snp.right)
             make.bottom.equalTo(picturesPickerController.view.snp.top)
         }
+    }
+    @objc private func selectTrend() {
+        NetworkTools.shared.trend { result,error in
+            guard let Result = result as? [String] else {
+                return
+            }
+            print(Result)
+            self.trendView.collectionView.reloadData()
+            self.trendView.trendList = Result
+        }
+        self.trendView.setupUI()
+        print(self.trendView.trendList)
+        textView.resignFirstResponder()
+        textView.inputView = textView.inputView == nil ? self.trendView : nil
+        textView.becomeFirstResponder()
+    }
+    @objc private func selectUser() {
+        userCollectionView.friendListViewModel.loadFriend { isSuccessed in
+            print(isSuccessed)
+            self.userCollectionView.collectionView.reloadData()
+        }
+        self.userCollectionView.setupUI()
+        print(self.userCollectionView.friendListViewModel.friendList)
+        textView.resignFirstResponder()
+        textView.inputView = textView.inputView == nil ? userCollectionView : nil
+        textView.becomeFirstResponder()
     }
     @objc private func selectEmoticon() {
         textView.resignFirstResponder()
@@ -91,6 +143,11 @@ class ComposeViewController: UIViewController, UIWebViewDelegate {
 extension ComposeViewController {
     func setupUI() {
         view.backgroundColor = .systemBackground
+        NotificationCenter.default.addObserver(forName: .init("TrendPresentViewControllerNotification"), object: nil, queue: nil) { n in
+            if n.object != nil {
+                self.present(n.object as! UIAlertController, animated: true)
+            }
+        }
         //automaticallyAdjustsScrollViewInsets = false
         prepare()
         prepareTool()
@@ -98,7 +155,7 @@ extension ComposeViewController {
         preparePicturePicker()
     }
     private func prepare() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(self.close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "创建一个话题", style: .plain, target: self, action: #selector(self.createTrend))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "发布", style: .plain, target: self, action: #selector(self.sendStatus))
         navigationItem.leftBarButtonItem?.tintColor = .red
         navigationItem.rightBarButtonItem?.tintColor = .red
@@ -129,7 +186,8 @@ extension ComposeViewController {
                     SVProgressHUD.showInfo(withStatus: "您的网络不给力")
                     return
                 }
-                self.close()
+                self.textView.resignFirstResponder()
+                self.dismiss(animated: true,completion: nil)
             }
         } else {
             NetworkTools.shared.sendStatus(status: text, image: nil) { (Result, Error) -> () in
@@ -138,7 +196,8 @@ extension ComposeViewController {
                     SVProgressHUD.showInfo(withStatus: "您的网络不给力")
                     return
                 }
-                self.close()
+                self.textView.resignFirstResponder()
+                self.dismiss(animated: true,completion: nil)
             }
         }
     }
@@ -165,7 +224,7 @@ extension ComposeViewController {
             make.right.equalTo(view.snp.right)
             make.height.equalTo(44)
         }
-        let itemSettings = [["imageName": "compose_toolbar_picture", "actionName": "selectPicture"],["imageName": "compose_mentionbutton_background"], ["imageName":"compose_trendbutton_background"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_pic_big_add"]]
+        let itemSettings = [["imageName": "compose_toolbar_picture", "actionName": "selectPicture"],["imageName": "compose_mentionbutton_background","actionName":"selectUser"], ["imageName":"compose_trendbutton_background","actionName":"selectTrend"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_pic_big_add"]]
         var items = [UIBarButtonItem]()
         for dict in itemSettings {
             items.append(UIBarButtonItem(imageName: dict["imageName"]!, target: self, actionName: dict["actionName"]))

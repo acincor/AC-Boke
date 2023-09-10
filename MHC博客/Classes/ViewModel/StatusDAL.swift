@@ -26,7 +26,7 @@ class StatusDAL {
         }
     }
     class func loadStatus(since_id: Int, max_id: Int, finished: @escaping(_ array: [[String:Any]]?) -> ()) {
-        var array = StatusDAL.checkCacheData(since_id: since_id, max_id: max_id)
+        let array = StatusDAL.checkCacheData(since_id: since_id, max_id: max_id)
         if array!.count > 0{
             finished(array!)
             return

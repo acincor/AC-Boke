@@ -17,7 +17,7 @@
 		2E2AAA892A72A7890023417C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA882A72A7890023417C /* TableViewCell.swift */; };
 		2E2AAAF62A73538D0023417C /* chat.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF52A73538D0023417C /* chat.sql */; };
 		2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF72A7354470023417C /* ChatDAL.swift */; };
-		2E3F87682AA31DAF00353BBF /* LiveCellTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3F87672AA31DAF00353BBF /* LiveCellTopView.swift */; };
+		2E3F87682AA31DAF00353BBF /* UserCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */; };
 		2E557E6B2A9AD1B800C13474 /* UserAgreementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */; };
 		2E557E6D2A9AD81100C13474 /* logOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6C2A9AD81100C13474 /* logOutViewController.swift */; };
 		2E557E6F2A9CEF7E00C13474 /* CommentCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */; };
@@ -92,7 +92,10 @@
 		2E738AD129AA38510014FA12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E738A9729AA38510014FA12 /* Assets.xcassets */; };
 		2E738AD329AA38510014FA12 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A9A29AA38510014FA12 /* AppDelegate.swift */; };
 		2E85007929DD345A00B7A018 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E03D41429DD324D00C46867 /* QuartzCore.framework */; };
-		2E9B6D022A9DC2B20033AC91 /* LiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9B6D012A9DC2B20033AC91 /* LiveCell.swift */; };
+		2E969AE72AA8A23000219FF6 /* TrendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E969AE62AA8A23000219FF6 /* TrendCell.swift */; };
+		2E969AEB2AAC989D00219FF6 /* UserCollectionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E969AEA2AAC989D00219FF6 /* UserCollectionCellView.swift */; };
+		2E969AED2AAD2D3400219FF6 /* TrendCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E969AEC2AAD2D3300219FF6 /* TrendCellView.swift */; };
+		2E9B6D022A9DC2B20033AC91 /* UserCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9B6D012A9DC2B20033AC91 /* UserCollectionCell.swift */; };
 		2EA71BD229AF897F004742CA /* StatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BD129AF897F004742CA /* StatusListViewModel.swift */; };
 		2EA71BDA29B48EED004742CA /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BD929B48EED004742CA /* CommentViewController.swift */; };
 		2EA71BDC29B94932004742CA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BDB29B94932004742CA /* Status.swift */; };
@@ -469,7 +472,7 @@
 		2E2AAA882A72A7890023417C /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		2E2AAAF52A73538D0023417C /* chat.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chat.sql; sourceTree = "<group>"; };
 		2E2AAAF72A7354470023417C /* ChatDAL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDAL.swift; sourceTree = "<group>"; };
-		2E3F87672AA31DAF00353BBF /* LiveCellTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveCellTopView.swift; sourceTree = "<group>"; };
+		2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionView.swift; sourceTree = "<group>"; };
 		2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementViewController.swift; sourceTree = "<group>"; };
 		2E557E6C2A9AD81100C13474 /* logOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logOutViewController.swift; sourceTree = "<group>"; };
 		2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentCell.swift; sourceTree = "<group>"; };
@@ -570,7 +573,10 @@
 		2E738A9A29AA38510014FA12 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2E738A9D29AA38510014FA12 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E887F8A29CE8F5C007CA93B /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		2E9B6D012A9DC2B20033AC91 /* LiveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveCell.swift; sourceTree = "<group>"; };
+		2E969AE62AA8A23000219FF6 /* TrendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCell.swift; sourceTree = "<group>"; };
+		2E969AEA2AAC989D00219FF6 /* UserCollectionCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionCellView.swift; sourceTree = "<group>"; };
+		2E969AEC2AAD2D3300219FF6 /* TrendCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrendCellView.swift; sourceTree = "<group>"; };
+		2E9B6D012A9DC2B20033AC91 /* UserCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionCell.swift; sourceTree = "<group>"; };
 		2EA71BD129AF897F004742CA /* StatusListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusListViewModel.swift; sourceTree = "<group>"; };
 		2EA71BD929B48EED004742CA /* CommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		2EA71BDB29B94932004742CA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
@@ -1536,6 +1542,8 @@
 		2E738A7C29AA38510014FA12 /* StatusCell */ = {
 			isa = PBXGroup;
 			children = (
+				2E969AEC2AAD2D3300219FF6 /* TrendCellView.swift */,
+				2E969AE62AA8A23000219FF6 /* TrendCell.swift */,
 				2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */,
 				2EDC452B2A7FE2D0003D7E63 /* StatusPictureView.swift */,
 				2E66A4B42A33E09D009C8207 /* CommentCommentCellBottomView.swift */,
@@ -1544,9 +1552,10 @@
 				2E738A8129AA38510014FA12 /* StatusCellTopView.swift */,
 				2E738A8229AA38510014FA12 /* StatusCell.swift */,
 				2EA71C4429C6B80D004742CA /* UserCell.swift */,
-				2E9B6D012A9DC2B20033AC91 /* LiveCell.swift */,
+				2E9B6D012A9DC2B20033AC91 /* UserCollectionCell.swift */,
 				2EA71C3E29C6B6B7004742CA /* UserCellTopView.swift */,
-				2E3F87672AA31DAF00353BBF /* LiveCellTopView.swift */,
+				2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */,
+				2E969AEA2AAC989D00219FF6 /* UserCollectionCellView.swift */,
 				2EA71BE129B94DBF004742CA /* StatusCommentCell.swift */,
 			);
 			path = StatusCell;
@@ -2585,7 +2594,7 @@
 				2EB293FB29EB7243009E0439 /* SDImageIOAnimatedCoder.m in Sources */,
 				2E704C1429FA2977003FE541 /* AFImageDownloader.m in Sources */,
 				2E738AA429AA38510014FA12 /* UIImageView+Extension.swift in Sources */,
-				2E9B6D022A9DC2B20033AC91 /* LiveCell.swift in Sources */,
+				2E9B6D022A9DC2B20033AC91 /* UserCollectionCell.swift in Sources */,
 				2EAA98752A6B85380058481E /* GPUImageHighlightShadowTintFilter.m in Sources */,
 				2EAA98872A6B85380058481E /* GPUImageSketchFilter.m in Sources */,
 				2EAA98E22A6B85390058481E /* GPUImageWhiteBalanceFilter.m in Sources */,
@@ -2661,8 +2670,10 @@
 				2EB2941D29EB7243009E0439 /* SDWebImageDownloaderConfig.m in Sources */,
 				2EAA98A02A6B85380058481E /* GPUImageToonFilter.m in Sources */,
 				2E66A52C2A416173009C8207 /* SVProgressAnimatedView.m in Sources */,
+				2E969AEB2AAC989D00219FF6 /* UserCollectionCellView.swift in Sources */,
 				2EAA98AC2A6B85380058481E /* GLProgram.m in Sources */,
 				2EAA98882A6B85380058481E /* GPUImageiOSBlurFilter.m in Sources */,
+				2E969AED2AAD2D3400219FF6 /* TrendCellView.swift in Sources */,
 				2E738AD029AA38510014FA12 /* VisitorView.swift in Sources */,
 				2E738AA729AA38510014FA12 /* UIButton+Extension.swift in Sources */,
 				2EAA98B92A6B85390058481E /* GPUImageFramebuffer.m in Sources */,
@@ -2827,7 +2838,7 @@
 				2E2AAA872A72A74D0023417C /* TableView.swift in Sources */,
 				2EB2906C29EAE465009E0439 /* ConstraintMakerFinalizable.swift in Sources */,
 				2E738A9F29AA38510014FA12 /* UserAccountViewModel.swift in Sources */,
-				2E3F87682AA31DAF00353BBF /* LiveCellTopView.swift in Sources */,
+				2E3F87682AA31DAF00353BBF /* UserCollectionView.swift in Sources */,
 				2EDC45462A823195003D7E63 /* CommentStatusTableViewController.swift in Sources */,
 				2EB2921D29EAE979009E0439 /* FMDatabase.m in Sources */,
 				2EB2942C29EB7243009E0439 /* UIImage+MemoryCacheCost.m in Sources */,
@@ -2843,6 +2854,7 @@
 				2EB2940429EB7243009E0439 /* SDWebImageDownloader.m in Sources */,
 				2EAA98E62A6B85390058481E /* GPUImageMonochromeFilter.m in Sources */,
 				2E704C1729FA2977003FE541 /* AFURLSessionManager.m in Sources */,
+				2E969AE72AA8A23000219FF6 /* TrendCell.swift in Sources */,
 				2E704C1829FA2977003FE541 /* AFURLRequestSerialization.m in Sources */,
 				2EAA98982A6B85380058481E /* GPUImageHarrisCornerDetectionFilter.m in Sources */,
 				2EB293F229EB7243009E0439 /* SDImageHEICCoder.m in Sources */,
@@ -3049,7 +3061,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MHC博客/MHC博客.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3112,7 +3124,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MHC博客/MHC博客Release.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

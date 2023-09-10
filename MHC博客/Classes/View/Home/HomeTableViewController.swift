@@ -40,7 +40,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let vm = liveListViewModel.liveList[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! LiveCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! UserCollectionCell
         cell.viewModel = vm
         return cell
     }

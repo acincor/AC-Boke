@@ -41,7 +41,7 @@ class LiveTableView: UICollectionView{
         bounces = false
         isPagingEnabled = true
         showsHorizontalScrollIndicator = false
-        register(LiveCell.self, forCellWithReuseIdentifier: LiveCellNormalId)
+        register(UserCollectionCell.self, forCellWithReuseIdentifier: LiveCellNormalId)
         if UserAccountViewModel.sharedUserAccount.userLogon {
             self.loadData()
         }

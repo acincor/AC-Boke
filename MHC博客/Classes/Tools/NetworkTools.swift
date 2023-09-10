@@ -65,6 +65,16 @@ extension NetworkTools {
         let urlString = "https://mhc.lmyz6.cn/api/getUserUid.php"
         request(.POST, urlString, params, finished: finished)
     }
+    func trend(_ trend:String? = nil, finished: @escaping HMRequstCallBack) {
+        let params = ["trend":trend]
+        let urlString = "https://mhc.lmyz6.cn/api/trend.php"
+        request(.GET, urlString, params, finished: finished)
+    }
+    func deleteTrend(_ trend:String?, finished: @escaping HMRequstCallBack) {
+        let params = ["trend":trend]
+        let urlString = "https://mhc.lmyz6.cn/api/deleteTrend.php"
+        request(.GET, urlString, params, finished: finished)
+    }
     func search(status:String, finished: @escaping HMRequstCallBack) {
         let params = ["status":status]
         let urlString = "https://mhc.lmyz6.cn/api/search.php"

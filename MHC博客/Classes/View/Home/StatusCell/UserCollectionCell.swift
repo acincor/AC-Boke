@@ -8,15 +8,15 @@
 import UIKit
 
 
-let LiveCellMargin: CGFloat = 12
-let LiveCellIconWidth: CGFloat = 35
-class LiveCell: UICollectionViewCell {
+let UserCollectionCellMargin: CGFloat = 12
+let UserCollectionCellIconWidth: CGFloat = 35
+class UserCollectionCell: UICollectionViewCell {
     var viewModel: UserViewModel? {
         didSet {
             topView.viewModel = viewModel
         }
     }
-    lazy var topView: LiveCellTopView = LiveCellTopView()
+    lazy var topView: UserCollectionView = UserCollectionView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -30,7 +30,7 @@ class LiveCell: UICollectionViewCell {
         return topView.bounds.maxY
     }
 }
-extension LiveCell {
+extension UserCollectionCell {
     func setupUI() {
         contentView.addSubview(topView)
         topView.snp.makeConstraints { (make) -> Void in

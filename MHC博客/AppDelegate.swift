@@ -96,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        //Parsing userinfo:
        if let info = userInfo["aps"] as? Dictionary<String, Any>
                 {
-           let alertMsg = info["alert"] as! String
+           print(info["alert"] as! String)
                 }
     }
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {

@@ -1,5 +1,5 @@
 //
-//  ComposeViewController.swift
+//  CommentViewController.swift
 //  MHC微博
 //
 //  Created by mhc team on 2022/11/11.
@@ -63,6 +63,19 @@ class CommentViewController: UIViewController{
         UIViewPropertyAnimator(duration: duration, curve: UIView.AnimationCurve(rawValue: curve)!).startAnimation()
         self.view.layoutIfNeeded()
     }
+    @objc private func trendChange(_ n: NSNotification) {
+        let rect = (n.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let duration = (n.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        let offset = -UIScreen.main.bounds.height + rect.origin.y
+        toolbar.snp.updateConstraints { make in
+            make.bottom.equalTo(view.snp.bottom).offset(offset)
+        }
+        let curve = (n.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber).intValue
+        //UIView.animate(withDuration: duration) {
+        UIViewPropertyAnimator(duration: duration, curve: UIView.AnimationCurve(rawValue: curve)!).startAnimation()
+        self.view.layoutIfNeeded()
+    }
+
 }
 extension CommentViewController {
     
