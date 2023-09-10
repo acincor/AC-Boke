@@ -35,7 +35,6 @@ class TrendCell: UICollectionViewCell {
         controller.addAction(UIAlertAction(title: "取消", style: .cancel))
         controller.addAction(UIAlertAction(title: "删除", style: .default) { action in
             NetworkTools.shared.deleteTrend(self.model) { Result, Error in
-                print(Result)
             }
         }
         )
