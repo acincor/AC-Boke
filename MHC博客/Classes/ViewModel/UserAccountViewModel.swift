@@ -29,7 +29,6 @@ class UserAccountViewModel {
             account = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [UserAccount.self, NSString.self, NSNumber.self], from: Data(contentsOf: NSURL(fileURLWithPath: accountPath) as URL)) as? UserAccount
         } catch/*(let e)*/ {
             
-            SVProgressHUD.showInfo(withStatus: "未登录")
         }
     }
 }

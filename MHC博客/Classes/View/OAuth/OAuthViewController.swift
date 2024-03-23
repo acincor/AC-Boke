@@ -57,7 +57,7 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
         }
     }
     //默认注册
-    var oauthURL = URL(string: "https://mhc.lmyz6.cn/api/register.html"/*可以先提供一个错误的url，测试请使用https://mhc.lmyz6.cn/resource/register.html */)
+    var oauthURL = URL(string: rootHost+"/api/register.html"/*可以先提供一个错误的url，测试请使用http://localhost:8000/resource/register.html */)
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment the following line to preserve selection between presentations
@@ -126,7 +126,7 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
 }
 extension OAuthViewController {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        guard let url = webView.url, url.absoluteString.hasPrefix("https://mhc.lmyz6.cn") else {
+        guard let url = webView.url, url.absoluteString.hasPrefix(rootHost+"") else {
             return .allow
         }
         guard let query = url.query,query.hasPrefix("code=") else {

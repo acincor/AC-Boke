@@ -10,3 +10,7 @@ let WBSwitchRootViewControllerNotification = "WBSwitchRootViewControllerNotifica
 let WBStatusSelectedPhotoNotification = "WBStatusSelectedPhotoNotification"
 let WBStatusSelectedPhotoIndexPathKey = "WBStatusSelectedPhotoIndexPathKey"
 let WBStatusSelectedPhotoURLsKey = "WBStatusSelectedPhotoURLsKey"
+var rootHost:String {
+    return "http://localhost:8000"
+}
+var listViewModel = StatusListViewModel()

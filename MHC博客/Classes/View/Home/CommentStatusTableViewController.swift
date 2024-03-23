@@ -175,7 +175,7 @@ extension CommentStatusTableViewController {
             SVProgressHUD.showInfo(withStatus: "删除成功")
             self.loadData()
             StatusDAL.removeCache(commentListViewModel.statusList[sender.tag].status.id)
-            for i in 0..<listViewModel.statusList.count {
+            for i in 0 ..< listViewModel.statusList.count {
                 if listViewModel.statusList[i].status.id == commentListViewModel.statusList[sender.tag].status.id {
                     listViewModel.statusList.remove(at: i)
                 }

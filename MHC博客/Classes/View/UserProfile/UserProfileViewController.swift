@@ -161,7 +161,6 @@ class UserProfileViewController:UIViewController, UITextFieldDelegate,UITabBarDe
                 return
             }
             if(Result as! [String:Any])["msg"] != nil {
-                UserAccountViewModel.sharedUserAccount.account = UserAccount(dict: (Result as! [String: Any])["usermsg"] as! [String:Any])
                 UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) {isSuccessed in
                     if isSuccessed {
                         SVProgressHUD.showInfo(withStatus: "改名成功")

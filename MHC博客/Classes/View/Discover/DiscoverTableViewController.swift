@@ -8,7 +8,7 @@
 import UIKit
 
 var MySearchTextField: UISearchController?
-var listViewModel = StatusListViewModel()
+
 class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUpdating, UISearchBarDelegate, StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
         let vc = HomeWebViewController(url: url)
@@ -18,6 +18,20 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     
     func updateSearchResults(for searchController: UISearchController) {
         self.filterContentForSearchText(searchController.searchBar.text! as NSString)
+    }
+    @objc func refresh() {
+        NetworkTools.shared.search(status: "") { Result, Error in
+            self.refreshControl?.endRefreshing()
+            var dataList = [StatusViewModel]()
+            if Result != nil {
+                for i in Result as! [[String:Any]]{
+                    dataList.append(StatusViewModel(status: Status(dict: i)))
+                }
+                self.listFilterTeams = dataList
+            }
+            //SVProgressHUD.showInfo(withStatus: "没有博客")
+        }
+        self.tableView.reloadData()
     }
     func filterContentForSearchText(_ searchText: NSString) {
         /*
@@ -33,23 +47,23 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         }
         self.listFilterTeams = NSMutableArray(array: tempArray)
          */
+        
         NetworkTools.shared.search(status: searchText as String) { Result, Error in
             var dataList = [StatusViewModel]()
             if Result != nil {
                 for i in Result as! [[String:Any]]{
                     dataList.append(StatusViewModel(status: Status(dict: i)))
                 }
-                self.listFilterTeams = NSMutableArray(array: dataList)
+                self.listFilterTeams = dataList
             }
-            SVProgressHUD.showInfo(withStatus: "没有博客")
+            //SVProgressHUD.showInfo(withStatus: "没有博客")
         }
         self.tableView.reloadData()
     }
-    var listTeams: [StatusViewModel]?
-    var listFilterTeams: NSArray?
+    var listFilterTeams: [StatusViewModel]?
     @objc func action2(_ sender: UIButton) {
         SVProgressHUD.show(withStatus: "加载中")
-        NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
+        NetworkTools.shared.addComment(id: listFilterTeams![sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
             SVProgressHUD.dismiss()
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
@@ -63,7 +77,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         }
     }
     @objc func action1(_ sender: UIButton) {
-        sender.identifier.bottomView.deleteBlog(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+        sender.identifier.bottomView.deleteBlog(listFilterTeams![sender.tag].status.id) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 return
@@ -73,14 +87,19 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                 return
             }
             SVProgressHUD.showInfo(withStatus: "删除成功")
-            StatusDAL.removeCache(listViewModel.statusList[sender.tag].status.id)
-            self.loadData()
+            StatusDAL.removeCache(self.listFilterTeams![sender.tag].status.id)
+            for i in 0 ..< listViewModel.statusList.count {
+                if listViewModel.statusList[i].status.id == self.listFilterTeams![sender.tag].status.id {
+                    listViewModel.statusList.remove(at: i)
+                }
+            }
+            self.filterContentForSearchText("")
         }
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
         let button = UIButton(title: "发布", color: .red,backImageName: nil)
-        guard (listViewModel.statusList[sender.tag].status.id > 0) else {
+        guard (listFilterTeams![sender.tag].status.id > 0) else {
             SVProgressHUD.showInfo(withStatus: "出错了")
             return
         }
@@ -91,7 +110,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+        NetworkTools.shared.like(listFilterTeams![sender.tag].status.id) { Result, Error in
             if Error == nil {
                 if (Result as! [String:Any])["code"] as! String == "add" {
                     SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: "你的点赞TA收到了")
@@ -114,12 +133,10 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，最新、最热博客尽在掌握，不再会与时事潮流擦肩而过")
             return
         }
-        self.listTeams = listViewModel.statusList
         filterContentForSearchText("")
         refreshControl = WBRefreshControl()
         //tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .plain)
-        loadData()
-        refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(self.refresh), for: .valueChanged)
         tableView.tableFooterView = pullupView
         //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)//StatusCellNormalId has been exist
@@ -135,35 +152,6 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         indicator.color = .systemBackground
         return indicator
     }()
-    @objc func loadData() {
-        self.refreshControl?.beginRefreshing()
-        /*
-        let since_id = pullupView.isAnimating ? 0 : ((listFilterTeams?[0] as? StatusViewModel)?.status.id ?? 0)
-        let max_id = pullupView.isAnimating ? ((listFilterTeams?[(listFilterTeams?.count ?? 0) == 0 ? 0 : listFilterTeams!.count-1] as! StatusViewModel).status.id) : 0
-        StatusDAL.loadStatus(since_id: since_id, max_id: max_id) { (array) -> () in
-            guard let array = array else {
-                return
-            }
-            var dataList = [StatusViewModel]()
-            for n in 0..<array.count {
-                dataList.append(StatusViewModel(status: Status(dict: array[n])))
-            }
-            self.listFilterTeams = dataList as NSArray
-            self.tableView.reloadData()
-        }
-        */
-        //StatusDAL.clearDataCache()
-         listViewModel.loadStatus(isPullup: pullupView.isAnimating) { (isSuccessed) in
-             self.refreshControl?.endRefreshing()
-             self.pullupView.stopAnimating()
-             if !isSuccessed {
-                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
-                 return
-             }
-             self.listFilterTeams = listViewModel.statusList as NSArray
-             self.tableView.reloadData()
-         }
-    }
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //var cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewController", for: indexPath) as! StatusNormalCell
@@ -176,7 +164,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
         /*
         cell.bottomView.deleteButton.addAction(UIAction { action in
-            cell.bottomView.deleteBlog(listViewModel.statusList[indexPath.row].status.id) { Result, Error in
+            cell.bottomView.deleteBlog(listFilterTeams![indexPath.row].status.id) { Result, Error in
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "出错了")
                     return
@@ -189,12 +177,12 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             }
         }, for: .touchUpInside)
          */
-        cell.bottomView.commentButton.setTitle("\(listViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
+        cell.bottomView.commentButton.setTitle("\(listFilterTeams![indexPath.row].status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
-        let result = ["id":"\(listViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-        cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        NetworkTools.shared.loadOneStatus(id: listViewModel.statusList[indexPath.row].status.id) { res, error in
+        let result = ["id":"\(listFilterTeams![indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+        cell.bottomView.likeButton.setTitle("\(listFilterTeams![indexPath.row].status.like_count)", for: .normal)
+        NetworkTools.shared.loadOneStatus(id: listFilterTeams![indexPath.row].status.id) { res, error in
             if error != nil {
                 return
             }
@@ -240,10 +228,10 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         return self.listFilterTeams?.count ?? 0
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (self.listFilterTeams?[indexPath.row] as! StatusViewModel).rowHeight
+        return self.listFilterTeams![indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel = listViewModel.statusList[indexPath.row]
+        viewModel = listFilterTeams![indexPath.row]
         let vc = CommentTableViewController()
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom

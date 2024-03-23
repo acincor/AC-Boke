@@ -115,11 +115,11 @@ extension UITapGestureRecognizer {
             static var sender: String = "sender"
         static var sender2: String = "sender2"
         static var sender3: String = "sender3"
-        static var sender4: URL = URL(string: "https://mhc.lmyz6.cn/api/MHC.png")!
+        static var sender4: URL = URL(string: rootHost+"/api/MHC.png")!
         }
     public var sender4: URL {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.sender4) as? URL ?? URL(string: "https://mhc.lmyz6.cn/api/MHC.png")!
+            return objc_getAssociatedObject(self, &AssociatedKey.sender4) as? URL ?? URL(string: rootHost+"/api/MHC.png")!
         }
         
         set {

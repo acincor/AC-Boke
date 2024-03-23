@@ -11,7 +11,10 @@ import SwiftUI
 struct NavigationLinkView: View {
     @State var isShow = false
     @State var isShow2 = false
+    let likeController = LikeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+    let commentController = CommentStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
     var body: some View {
+        if #available(iOS 15.0, *) {
             NavigationView {
                 List {
                     ImageDetailView()
@@ -23,46 +26,66 @@ struct NavigationLinkView: View {
                         Text("我的主页")
                             .foregroundColor(.orange)
                     }
-                    if UserAccountViewModel.sharedUserAccount.userLogon {
-                        NavigationLink(destination: MyDetailView(controller: LikeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account!.uid!))) {
-                            Image("timeline_icon_like")
-                            Text("点赞过的")
-                                .foregroundColor(.orange)
-                        }
-                    } else {
-                        NavigationLink(destination: MyDetailView(controller: OAuthViewController(.登录))) {
-                            Image("timeline_icon_like")
-                            Text("点赞过的")
-                                .foregroundColor(.orange)
-                        }
+                    NavigationLink(destination: MyDetailView(controller: likeController)) {
+                        Image("timeline_icon_like")
+                        Text("点赞过的")
+                            .foregroundColor(.orange)
                     }
-                    if UserAccountViewModel.sharedUserAccount.userLogon {
-                        NavigationLink(destination: MyDetailView(controller: CommentStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account!.uid!))) {
-                            Image("timeline_icon_comment")
-                            Text("评论过的")
-                                .foregroundColor(.orange)
-                        }
-                    } else {
-                        NavigationLink(destination: MyDetailView(controller: OAuthViewController(.登录))) {
-                            Image("timeline_icon_comment")
-                            Text("评论过的")
-                                .foregroundColor(.orange)
-                        }
+                    NavigationLink(destination: MyDetailView(controller: commentController)) {
+                        Image("timeline_icon_comment")
+                        Text("评论过的")
+                            .foregroundColor(.orange)
                     }
-                    if UserAccountViewModel.sharedUserAccount.userLogon {
-                        NavigationLink(destination: MyDetailView(controller: BKLiveController())) {
-                            Image("live_small_icon")
-                                .background(Color.red)
-                            Text("开始直播")
-                                .foregroundColor(.orange)
-                        }
-                    } else {
-                        NavigationLink(destination: MyDetailView(controller: OAuthViewController(.登录))) {
-                            Image("live_small_icon")
-                                .background(Color.red)
-                            Text("开始直播")
-                                .foregroundColor(.orange)
-                        }
+                    NavigationLink(destination: MyDetailView(controller: BKLiveController())) {
+                        Image("live_small_icon")
+                            .background(Color.red)
+                        Text("开始直播")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOffController(showing: self.$isShow))), isActive: self.$isShow) {
+                        Text("注销账号")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOutController(showing: self.$isShow2))), isActive: self.$isShow2) {
+                        Text("退出登录")
+                            .foregroundColor(.orange)
+                    }
+                }
+            }
+            .refreshable {
+                commentController.loadData()
+                likeController.loadData()
+            }
+            .navigationBarTitle("hi，"+(UserAccountViewModel.sharedUserAccount.account?.user ?? "未登录的用户"))
+            .accentColor(.orange)
+        } else {
+            // Fallback on earlier versions
+            NavigationView {
+                List {
+                    ImageDetailView()
+                    NavigationLink(destination: MyDetailView (controller: UserAgreementViewController())) {
+                        Text("用户协议")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller: UINavigationController(rootViewController: ProfileTableViewController()))) {
+                        Text("我的主页")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller: likeController)) {
+                        Image("timeline_icon_like")
+                        Text("点赞过的")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller: commentController)) {
+                        Image("timeline_icon_comment")
+                        Text("评论过的")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller: BKLiveController())) {
+                        Image("live_small_icon")
+                            .background(Color.red)
+                        Text("开始直播")
+                            .foregroundColor(.orange)
                     }
                     NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOffController(showing: self.$isShow))), isActive: self.$isShow) {
                         Text("注销账号")
@@ -76,6 +99,7 @@ struct NavigationLinkView: View {
             }
             .navigationBarTitle("hi，"+(UserAccountViewModel.sharedUserAccount.account?.user ?? "未登录的用户"))
             .accentColor(.orange)
+        }
     }
 }
 struct MyDetailView: UIViewRepresentable {

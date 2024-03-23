@@ -9,7 +9,6 @@ import UIKit
 import UserNotifications
 
 @main
-
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -44,16 +43,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
-                                SVProgressHUD.showInfo(withStatus: "退登成功，1秒后自动退出应用...")
                                 try! FileManager.default.removeItem(atPath: path)
-                                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
-                                    exit(0)
-                                }
+                                NotificationCenter.default.post(name: .init(rawValue: .init(WBSwitchRootViewControllerNotification)), object: nil)
                             }
                         }
                     }
-                } else {
-                    SVProgressHUD.showInfo(withStatus: "先登陆哦")
                 }
             } else {
                 if UserAccountViewModel.sharedUserAccount.userLogon {
@@ -62,16 +56,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
-                                SVProgressHUD.showInfo(withStatus: "注销成功，1秒后自动退出应用...")
                                 try! FileManager.default.removeItem(atPath: path)
-                                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
-                                    exit(0)
-                                }
+                                NotificationCenter.default.post(name: .init(rawValue: .init(WBSwitchRootViewControllerNotification)), object: nil)
                             }
                         }
                     }
-                } else {
-                    SVProgressHUD.showInfo(withStatus: "先登陆哦")
                 }
             }
         }
@@ -81,11 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                     path = (path as NSString).appendingPathComponent("account.plist")
                     if FileManager.default.fileExists(atPath: path) {
-                        SVProgressHUD.showInfo(withStatus: "登陆过期")
                         try! FileManager.default.removeItem(atPath: path)
-                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
-                            exit(0)
-                        }
+                        NotificationCenter.default.post(name: .init(rawValue: .init(WBSwitchRootViewControllerNotification)), object: nil)
                     }
                 }
             }

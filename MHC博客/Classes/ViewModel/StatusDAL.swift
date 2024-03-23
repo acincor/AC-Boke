@@ -61,7 +61,7 @@ class StatusDAL {
             //博客没被删除
             sql += "    AND create_at < '\(maxCreateTime[0]["create_at"] as! String)' \n"
         }
-        sql += "ORDER BY statusId DESC LIMIT 10;"
+        sql += "ORDER BY create_at DESC LIMIT 10;"
         let array = SQLiteManager.shared.execRecordSet(sql: sql)
         var arrayM = [[String:Any]]()
         for dict in array {
