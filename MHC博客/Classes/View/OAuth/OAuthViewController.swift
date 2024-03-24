@@ -57,7 +57,7 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
         }
     }
     //默认注册
-    var oauthURL = URL(string: rootHost+"/api/register.html"/*可以先提供一个错误的url，测试请使用http://localhost:8000/resource/register.html */)
+    var oauthURL = URL(string: rootHost+"/api/register.html"/*可以先提供一个错误的url，测试请使用http://localhost:9002/resource/register.html */)
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment the following line to preserve selection between presentations

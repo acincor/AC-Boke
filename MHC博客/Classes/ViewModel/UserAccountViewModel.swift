@@ -27,6 +27,7 @@ class UserAccountViewModel {
     private init() {
         do {
             account = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [UserAccount.self, NSString.self, NSNumber.self], from: Data(contentsOf: NSURL(fileURLWithPath: accountPath) as URL)) as? UserAccount
+            print(account)
         } catch/*(let e)*/ {
             
         }

@@ -57,8 +57,8 @@ class BKLiveController: UIViewController {
     }
     @objc func startLive(_ sender: Any) {
         let stream = LFLiveStreamInfo()
-        stream.url = "rtmp://mhc.lmyz6.cn:1935/live/\(UserAccountViewModel.sharedUserAccount.account!.uid!)";
-        //stream.url = "rtmp://mhc.lmyz6.cn:1935/live?uid=888505392646/Mhc-inc";
+        stream.url = "rtmp://localhost:1935/live/\(UserAccountViewModel.sharedUserAccount.account!.uid!)";
+        //stream.url = "rtmp://localhost:1935/live?uid=888505392646/Mhc-inc";
         //stream.streamId = UserAccountViewModel.sharedUserAccount.account?.user
         session.startLive(stream)
         session.running = true
