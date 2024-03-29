@@ -25,8 +25,8 @@ class NetworkTools: AFHTTPSessionManager{
     }
     var acceptableContentTypes: [String]?
     enum OAuthURL: String {
-        case 登陆 = "http://localhost:9002/api/login.html"
-        case 注册 = "http://localhost:9002/api/register.html"
+        case 登陆 = "http://localhost/api/login.html"
+        case 注册 = "http://localhost/api/register.html"
     }
     typealias HMRequstCallBack = (_ Result: Any?, _ Error: Error?) -> ()
 }

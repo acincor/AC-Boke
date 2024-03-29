@@ -54,7 +54,7 @@ if(isset($_POST['user']) && isset($_POST['password'])) {
         mkdir('./'.$uid."/portrait/");
     }
     file_put_contents('./'.$uid."/portrait/portrait.png",$png);
-    $sql = "insert into users(uid, friend_list, portrait, user, password) values (".$uid.", '[]', '".'http://localhost:8000/api/'.$uid."/portrait/portrait.png"."', '".$_POST['user']."', '".password_hash($_POST['password'], PASSWORD_DEFAULT)."');";
+    $sql = "insert into users(uid, friend_list, portrait, user, password) values (".$uid.", '[]', '".'http://localhost/api/'.$uid."/portrait/portrait.png"."', '".$_POST['user']."', '".password_hash($_POST['password'], PASSWORD_DEFAULT)."');";
     mysqli_query($mysql, $sql);
     //生成code
     $code = "";

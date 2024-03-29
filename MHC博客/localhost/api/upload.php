@@ -157,7 +157,7 @@ if(isset($_POST['access_token']) && isset($_POST['status'])) {
                             }
                         }
                         if (move_uploaded_file($sourcePath, $targetPath)) {
-                            array_push($pic_urls,['pic'.$index=>'http://localhost:8000/api/'.$data['uid']."/".$fd.".".explode('/',$fileType)[1]]);
+                            array_push($pic_urls,['pic'.$index=>'http://localhost/api/'.$data['uid']."/".$fd.".".explode('/',$fileType)[1]]);
                             $index++;
                         } else {
                             exit(json_encode(['error'=>"the file of upload emerged fatal error when it moved"]));

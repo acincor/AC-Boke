@@ -14,15 +14,21 @@ Installation
 
 You can download the zip or clone this repository.
 
-**改进了直播的方面，将nginx配置放在了Resource内，将端口统一为9002，可以通过以下配置**
+**改进了直播的方面，将nginx配置放在了Resource内，将端口统一为80（所以可以省略），可以通过以下配置**
 
 ```brew install nginx-full```
 
-```brew services install nginx-full```
+```brew install php```
+
+```brew services start nginx-full```
 
 **resource内的nginx.conf替换到/opt/homebrew/etc/nginx.conf**
 
 ```nginx -s /opt/homebrew/etc/nginx.conf```
+
+**resource内的php.ini替换到/opt/homebrew/etc/php/（版本号，我的是8.3）/php.ini**
+
+```brew services start php.ini```
 
 **localhost内的所有文件添加到/opt/homebrew/var/www**
 

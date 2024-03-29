@@ -18,7 +18,7 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                     if(!is_bool($pic_urls)){
                         $pic_urls = json_decode(mysqli_fetch_array($pic_urls,MYSQLI_ASSOC)['pic_urls'],true);
                         for ($i = 0; $i < count($pic_urls); $i++) {
-                             unlink(".".explode("http://localhost:8000/api",$pic_urls[$i]['pic'.$i])[1]);
+                             unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
                         }
                     }
                     $select_bool = mysqli_query($mysql,"SELECT * FROM likes WHERE id = ".$_POST['id']."");
