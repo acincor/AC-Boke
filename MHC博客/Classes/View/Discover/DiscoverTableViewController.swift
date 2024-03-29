@@ -156,6 +156,9 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //var cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewController", for: indexPath) as! StatusNormalCell
         let cell = tableView.dequeueReusableCell(withIdentifier: StatusCellNormalId, for: indexPath) as! StatusNormalCell
+        if(indexPath.row > (self.listFilterTeams?.count ?? 0) - 1) {
+            return cell
+        }
         let vm = self.listFilterTeams?[indexPath.row] as? StatusViewModel
         // Configure the cell...
         cell.viewModel = vm
@@ -228,7 +231,10 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         return self.listFilterTeams?.count ?? 0
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.listFilterTeams![indexPath.row].rowHeight
+        if(indexPath.row > (self.listFilterTeams?.count ?? 0) - 1) {
+            return 0
+        }
+        return self.listFilterTeams?[indexPath.row].rowHeight ?? 0
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel = listFilterTeams![indexPath.row]
