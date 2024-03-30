@@ -307,6 +307,7 @@ extension NetworkTools {
             parameters = [String:Any]()
         }
         parameters!["access_token"] = token
+
         post(URLString, parameters: parameters,headers: nil,constructingBodyWith: { formData in
             for d in 0...data.count - 1{
                 formData.appendPart(withFileData: data[d], name: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), fileName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), mimeType: "image/png")

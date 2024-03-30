@@ -184,6 +184,7 @@ extension ComposeViewController {
                 SVProgressHUD.dismiss()
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: "您的网络不给力")
+                    print(Error)
                     return
                 }
                 self.textView.resignFirstResponder()
