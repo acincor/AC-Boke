@@ -45,9 +45,7 @@ class MessageTableViewController: VisitorTableViewController{
         return self.friendListViewModel.friendList.count
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let socketController = WebSocketController()
-        socketController.to_uid = friendListViewModel.friendList[indexPath.row].user.uid
-        socketController.username = friendListViewModel.friendList[indexPath.row].user.user
+        let socketController = WebSocketController(to_uid: friendListViewModel.friendList[indexPath.row].user.uid, username: friendListViewModel.friendList[indexPath.row].user.user ?? "")
         let nav = UINavigationController(rootViewController: socketController)
         nav.modalPresentationStyle = .custom
         present(nav, animated: false)

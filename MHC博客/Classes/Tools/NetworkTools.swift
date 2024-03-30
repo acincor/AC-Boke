@@ -118,27 +118,6 @@ extension NetworkTools {
         let urlString = rootHost+"/api/loadLive.php"
         tokenRequest(.GET, urlString, nil, finished: finished)
     }
-    ///此方法已弃用，现在我们直接用blog的来加载
-    /*
-    func loadComment(id: Int? = nil, comment_id: Int? = nil, finished: @escaping HMRequstCallBack) {
-        var params = [String:Int]()
-        let urlString = rootHost+"/api/loadComment.php"
-        if comment_id != nil {
-            params["comment_id"] = comment_id
-        }
-            params["id"] = id
-        tokenRequest(.POST, urlString, params, finished: finished)
-    }
-     */
-    func loadChat(finished: @escaping HMRequstCallBack) {
-        guard var params = tokenDict else {
-            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
-            return
-        }
-        params["scope"]="read"
-        let urlString = rootHost+"/api/chat.php"
-        request(.POST, urlString, params, finished: finished)
-    }
     func loadFriend(finished: @escaping HMRequstCallBack) {
         guard let params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
@@ -165,12 +144,8 @@ extension NetworkTools {
         tokenRequest(.POST, urlString, params, finished: finished)
     }
     func ExpiresTheToken(finished: @escaping HMRequstCallBack) {
-        guard let params = tokenDict else {
-            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
-            return
-        }
         let urlString = rootHost+"/api/expiresToken.php"
-        tokenRequest(.POST, urlString, params, finished: finished)
+        tokenRequest(.POST, urlString, nil, finished: finished)
     }
     func logOff(finished: @escaping HMRequstCallBack) {
         let urlString = rootHost+"/api/logOff.php"

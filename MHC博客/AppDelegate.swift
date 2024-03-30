@@ -57,6 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
                                 try! FileManager.default.removeItem(atPath: path)
+                                ChatDAL.clearDataCache()
+                                StatusDAL.clearDataCache()
                                 NotificationCenter.default.post(name: .init(rawValue: .init(WBSwitchRootViewControllerNotification)), object: nil)
                             }
                         }

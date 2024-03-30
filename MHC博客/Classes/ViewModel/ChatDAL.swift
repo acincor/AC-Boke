@@ -41,11 +41,11 @@ class ChatDAL {
         guard let userId = UserAccountViewModel.sharedUserAccount.account?.uid else {
             return nil
         }
-        var sql = "SELECT to_uid, content, userId, timeInterval FROM T_Chats \n"
+        var sql = "SELECT to_uid, content, portrait, userId, timeInterval FROM T_Chats \n"
         sql += "WHERE userId = \(userId) \n"
         sql += "    AND to_uid = \(to_uid) \n"
         let array = SQLiteManager.shared.chatExecRecordSet(sql: sql)
-        sql = "SELECT to_uid, content, userId, timeInterval FROM T_Chats \n"
+        sql = "SELECT to_uid, content, userId, portrait, timeInterval FROM T_Chats \n"
         sql += "WHERE userId = \(to_uid) \n"
         sql += "    AND to_uid = \(userId) \n"
         let to_uidArray = SQLiteManager.shared.chatExecRecordSet(sql: sql)
@@ -59,7 +59,7 @@ class ChatDAL {
         return arrayM
     }
     class func saveCache(array data: [String:Any]) {
-        let sql = "INSERT INTO T_Chats(to_uid, content, timeInterval, userId) VALUES (?, ?, ?, ?);"
+        let sql = "INSERT INTO T_Chats(to_uid, content, portrait, timeInterval, userId) VALUES (?, ?, ?, ?, ?);"
         
         // 3. 遍历数组 - 如果不能确认数据插入的消耗时间，可以在实际开发中写测试代码
         SQLiteManager.shared.chatQueue.inTransaction { (db, rollback) -> Void in
@@ -75,7 +75,7 @@ class ChatDAL {
             
             // 插入数据
             do {
-                try db.executeUpdate(sql, values: [to_uid, data["content"] as! String, timeInterval, userId])
+                try db.executeUpdate(sql, values: [to_uid, data["content"] as! String, data["portrait"] as! String, timeInterval, userId])
                 guard db.changes > 0 else {
                     return
                 }

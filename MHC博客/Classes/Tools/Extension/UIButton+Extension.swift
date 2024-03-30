@@ -8,22 +8,33 @@
 import Foundation
 import UIKit
 import SwiftUI
-struct NavigationLinkView: View {
+struct UserNavigationLinkView: View {
     @State var isShow = false
     @State var isShow2 = false
-    let likeController = LikeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
-    let commentController = CommentStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+    var account: UserViewModel?
+    var likeController:LikeStatusTableViewController {
+        if let account = account {
+            return LikeStatusTableViewController(uid: "\(account.user.uid)")
+        }
+        return LikeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+    }
+    var commentController : CommentStatusTableViewController {
+        if let account = account {
+            return CommentStatusTableViewController(uid: "\(account.user.uid)")
+        }
+        return CommentStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+    }
     var body: some View {
         if #available(iOS 15.0, *) {
             NavigationView {
                 List {
-                    ImageDetailView()
+                    ImageDetailView(account: account)
                     NavigationLink(destination: MyDetailView (controller: UserAgreementViewController())) {
                         Text("用户协议")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller: UINavigationController(rootViewController: ProfileTableViewController()))) {
-                        Text("我的主页")
+                    NavigationLink(destination: MyDetailView(controller: UINavigationController(rootViewController: ProfileTableViewController(account: account)))) {
+                        Text("主页")
                             .foregroundColor(.orange)
                     }
                     NavigationLink(destination: MyDetailView(controller: likeController)) {
@@ -36,19 +47,21 @@ struct NavigationLinkView: View {
                         Text("评论过的")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller: BKLiveController())) {
-                        Image("live_small_icon")
-                            .background(Color.red)
-                        Text("开始直播")
-                            .foregroundColor(.orange)
-                    }
-                    NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOffController(showing: self.$isShow))), isActive: self.$isShow) {
-                        Text("注销账号")
-                            .foregroundColor(.orange)
-                    }
-                    NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOutController(showing: self.$isShow2))), isActive: self.$isShow2) {
-                        Text("退出登录")
-                            .foregroundColor(.orange)
+                    if account == nil {
+                        NavigationLink(destination: MyDetailView(controller: BKLiveController())) {
+                            Image("live_small_icon")
+                                .background(Color.red)
+                            Text("开始直播")
+                                .foregroundColor(.orange)
+                        }
+                        NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOffController(showing: self.$isShow))), isActive: self.$isShow) {
+                            Text("注销账号")
+                                .foregroundColor(.orange)
+                        }
+                        NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOutController(showing: self.$isShow2))), isActive: self.$isShow2) {
+                            Text("退出登录")
+                                .foregroundColor(.orange)
+                        }
                     }
                 }
             }
@@ -56,19 +69,19 @@ struct NavigationLinkView: View {
                 commentController.loadData()
                 likeController.loadData()
             }
-            .navigationBarTitle("hi，"+(UserAccountViewModel.sharedUserAccount.account?.user ?? "未登录的用户"))
+            .navigationBarTitle("Name: "+(account?.user.user != nil ? "\(account!.user.user ?? "")" : (UserAccountViewModel.sharedUserAccount.account?.user ?? "")))
             .accentColor(.orange)
         } else {
             // Fallback on earlier versions
             NavigationView {
                 List {
-                    ImageDetailView()
+                    ImageDetailView(account: account)
                     NavigationLink(destination: MyDetailView (controller: UserAgreementViewController())) {
                         Text("用户协议")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller: UINavigationController(rootViewController: ProfileTableViewController()))) {
-                        Text("我的主页")
+                    NavigationLink(destination: MyDetailView(controller: UINavigationController(rootViewController: ProfileTableViewController(account: account)))) {
+                        Text("主页")
                             .foregroundColor(.orange)
                     }
                     NavigationLink(destination: MyDetailView(controller: likeController)) {
@@ -81,23 +94,25 @@ struct NavigationLinkView: View {
                         Text("评论过的")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller: BKLiveController())) {
-                        Image("live_small_icon")
-                            .background(Color.red)
-                        Text("开始直播")
-                            .foregroundColor(.orange)
-                    }
-                    NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOffController(showing: self.$isShow))), isActive: self.$isShow) {
-                        Text("注销账号")
-                            .foregroundColor(.orange)
-                    }
-                    NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOutController(showing: self.$isShow2))), isActive: self.$isShow2) {
-                        Text("退出登录")
-                            .foregroundColor(.orange)
+                    if account == nil {
+                        NavigationLink(destination: MyDetailView(controller: BKLiveController())) {
+                            Image("live_small_icon")
+                                .background(Color.red)
+                            Text("开始直播")
+                                .foregroundColor(.orange)
+                        }
+                        NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOffController(showing: self.$isShow))), isActive: self.$isShow) {
+                            Text("注销账号")
+                                .foregroundColor(.orange)
+                        }
+                        NavigationLink(destination: MyDetailView(controller:UINavigationController(rootViewController:logOutController(showing: self.$isShow2))), isActive: self.$isShow2) {
+                            Text("退出登录")
+                                .foregroundColor(.orange)
+                        }
                     }
                 }
             }
-            .navigationBarTitle("hi，"+(UserAccountViewModel.sharedUserAccount.account?.user ?? "未登录的用户"))
+            .navigationBarTitle("Name: "+(account?.user.user != nil ? "\(account!.user.user ?? "")" : (UserAccountViewModel.sharedUserAccount.account?.user ?? "")))
             .accentColor(.orange)
         }
     }
@@ -112,11 +127,22 @@ struct MyDetailView: UIViewRepresentable {
     typealias UIViewType = UIView
 }
 struct ImageDetailView: UIViewRepresentable {
+    var account: UserViewModel?
     func makeUIView(context: Context) -> UIView {
-        //let view = ProfilePictureView(viewModel: UserAccountViewModel.sharedUserAccount.portraitUrl)
+        //let view = ProfilePictureView(viewModel: account.portraitUrl)
         let view = UIView()
         let imageView = UIImageView()
-        imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+        var label: UILabel
+        var MIDLabel: UILabel
+        if let account = account {
+            imageView.sd_setImage(with: account.userProfileUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+            label = UILabel(title: "\(account.user.user ?? "")")
+            MIDLabel = UILabel(title:"MID: "+"\(account.user.uid)")
+        } else {
+            imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+            label = UILabel(title: UserAccountViewModel.sharedUserAccount.account?.user ?? "")
+            MIDLabel = UILabel(title:"MID: "+(UserAccountViewModel.sharedUserAccount.account?.uid ?? ""))
+        }
         imageView.layer.cornerRadius = 5
         imageView.clipsToBounds = true
         view.addSubview(imageView)
@@ -125,13 +151,11 @@ struct ImageDetailView: UIViewRepresentable {
             make.width.equalTo(35)
             make.height.equalTo(35)
         }
-        let label = UILabel(title: UserAccountViewModel.sharedUserAccount.account!.user!)
         view.addSubview(label)
         label.snp.makeConstraints { make in
             make.top.equalTo(view.snp.top)
             make.left.equalTo(imageView.snp.right).offset(10)
         }
-        let MIDLabel = UILabel(title:"MID: "+UserAccountViewModel.sharedUserAccount.account!.uid!)
         view.addSubview(MIDLabel)
         MIDLabel.snp.makeConstraints { make in
             make.bottom.equalTo(view.snp.bottom)

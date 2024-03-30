@@ -15,15 +15,11 @@ class ChatListViewModel {
                 finished(false)
                 return
             }
+            var arr = [MessageItem]()
             for n in 0..<array.count {
-                NetworkTools.shared.loadUserInfo(uid: array[n]["userId"] as! Int) { Result, Error in
-                    guard let Result else{
-                        return
-                    }
-                    self.chatList.append(MessageItem(body: array[n]["content"] as! String as NSString, logo: (Result as! [String:Any])["portrait"]as! String, date: NSDate(timeIntervalSince1970:array[n]["timeInterval"] as! TimeInterval), mtype: array[n]["userId"] as? Int == Int(UserAccountViewModel.sharedUserAccount.account!.uid!) ? .Mine : .Someone))
-                }
-                self.loadChatList(array: self.chatList, finished: finished)
+                arr.append(MessageItem(body: array[n]["content"] as! String as NSString, logo: (array[n]["portrait"] as! String), date: NSDate(timeIntervalSince1970:array[n]["timeInterval"] as! TimeInterval), mtype: array[n]["userId"] as? Int == Int(UserAccountViewModel.sharedUserAccount.account!.uid!) ? .Mine : .Someone))
             }
+            self.loadChatList(array: arr, finished: finished)
         }
     }
     func loadChatList(array: [MessageItem],finished: @escaping (_ isSuccessed: Bool)->()) {

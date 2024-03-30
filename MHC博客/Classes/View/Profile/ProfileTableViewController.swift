@@ -9,17 +9,58 @@ import UIKit
 import SwiftUI
 
 class ProfileTableViewController: VisitorTableViewController {
+    var account: UserViewModel?
+    private lazy var addButton = UIButton(title: "添加好友", fontSize: 14, color: UIColor(white: 0.6, alpha: 1.0), imageName: nil)
     private var usernameLabel: String {
-        return UserAccountViewModel.sharedUserAccount.account?.user ?? "用户未登录"
+        if account == nil {
+            return "MID:" + (UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+        }
+        return account?.user.user ?? "用户未登录"
     }
+    @objc func action() {
+        NetworkTools.shared.addFriend("\(account!.user.uid)") { Result, Error in
+                if Error != nil {
+                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    return
+                }
+                guard let result = Result as? [String:Any] else {
+                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    return
+                }
+                if (result["error"] != nil) {
+                    SVProgressHUD.showInfo(withStatus: result["error"] as? String)
+                    return
+                }
+                guard let code = result["code"] as? String else {
+                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    print(result)
+                    return
+                }
+                if (code != "delete") {
+                    SVProgressHUD.showInfo(withStatus: "成功添加好友")
+                    return
+                }
+                SVProgressHUD.showInfo(withStatus: "成功删除/拉黑好友")
+            }
+        }
     private var label: String {
         let lb = "用户名："
             return lb
     }
+    init(account: UserViewModel?) {
+        self.account = account
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     private lazy var MIDLabel: UILabel = UILabel(title: label)
     private var uidLabel: String {
-        let lb = "MID:"+(UserAccountViewModel.sharedUserAccount.account?.uid ?? "用户登录后可查看")
-            return lb
+        if account == nil {
+            return "MID:" + (UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+        }
+        let lb = "MID:\(account?.user.uid ?? 0)"
+        return lb
     }
     private var renameButton: UIButton = UIButton(title: "编辑", color: .orange, backImageName: nil)
     private var name: UITextField = UITextField()
@@ -32,6 +73,9 @@ class ProfileTableViewController: VisitorTableViewController {
             return
         }
         view.addSubview(iconView)
+        if account != nil {
+            iconView.sd_setImage(with: account?.userProfileUrl)
+        }
         iconView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action2))
         iconView.addGestureRecognizer(g)
@@ -42,16 +86,34 @@ class ProfileTableViewController: VisitorTableViewController {
             make.height.equalTo(90)
         }
         iconView.layer.cornerRadius = 15
+        if !isMe {
+            view.addSubview(addButton)
+        }
         view.addSubview(Label)
-        view.addSubview(renameButton)
+        if isMe {
+            view.addSubview(renameButton)
+        }
         //view.addSubview(liveButton)
         view.addSubview(MIDLabel)
         loadData()
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
     }
+    var isMe: Bool {
+        if account == nil {
+            return true
+        }
+        return false
+    }
     @objc func action2() {
-        let vc = UserProfileBrowserViewController(url: UserAccountViewModel.sharedUserAccount.portraitUrl,style: .Me)
+        var vc: UserProfileBrowserViewController
+        if isMe {
+            vc = UserProfileBrowserViewController(url: UserAccountViewModel.sharedUserAccount.portraitUrl,style: .Me)
+        } else if let account = account{
+            vc = UserProfileBrowserViewController(url: account.userProfileUrl,style: .SomeBody)
+        } else {
+            return
+        }
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: true,completion: nil)
@@ -60,13 +122,15 @@ class ProfileTableViewController: VisitorTableViewController {
     @objc func loadData() {
         refreshControl?.beginRefreshing()
             iconView.removeFromSuperview()
+        if account != nil {
+            iconView.sd_setImage(with: account?.userProfileUrl)
+        }
         iconView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl)
         iconView.layer.cornerRadius = 5
         iconView.clipsToBounds = true
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action2))
         iconView.isUserInteractionEnabled = true
         iconView.addGestureRecognizer(g)
-        
         view.addSubview(iconView)
             iconView.snp.makeConstraints { make in
                 make.centerX.equalTo(view.snp.centerX)
@@ -74,12 +138,26 @@ class ProfileTableViewController: VisitorTableViewController {
                 make.width.equalTo(90)
                 make.height.equalTo(90)
             }
+        if account != nil {
+            addButton.removeFromSuperview()
+            view.addSubview(addButton)
+            addButton.addTarget(self, action: #selector(self.action), for: .touchUpInside)
+            addButton.snp.makeConstraints { make in
+                make.top.equalTo(iconView.snp.bottom)
+            }
+        }
             MIDLabel.removeFromSuperview()
             MIDLabel = UILabel(title: uidLabel)
             view.addSubview(MIDLabel)
+        if isMe {
             MIDLabel.snp.makeConstraints { make in
                 make.top.equalTo(iconView.snp.bottom)
             }
+        } else {
+            MIDLabel.snp.makeConstraints { make in
+                make.top.equalTo(addButton.snp.bottom)
+            }
+        }
             Label.removeFromSuperview()
             Label = UILabel(title: label)
             view.addSubview(Label)
@@ -96,13 +174,15 @@ class ProfileTableViewController: VisitorTableViewController {
             make.top.equalTo(MIDLabel.snp.bottom).offset(-3)
         }
         name.isEnabled = false
-        renameButton.removeFromSuperview()
-        view.addSubview(renameButton)
-    renameButton.snp.makeConstraints { make in
-        make.top.equalTo(Label.snp.bottom)
-    }
-        renameButton.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
-            name.sizeToFit()
+        if isMe {
+            renameButton.removeFromSuperview()
+            view.addSubview(renameButton)
+            renameButton.snp.makeConstraints { make in
+                make.top.equalTo(Label.snp.bottom)
+            }
+            renameButton.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
+        }
+        name.sizeToFit()
         //renameButton.sizeToFit()
         /*
             view.addSubview(userAgreementButton)

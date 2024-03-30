@@ -428,7 +428,6 @@
 		2EB2943529EB7243009E0439 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EE29EB7243009E0439 /* UIButton+WebCache.m */; };
 		2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EF29EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m */; };
 		2EDC44CE2A78C21E003D7E63 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */; };
-		2EDC44D62A7A4888003D7E63 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */; };
 		2EDC44D82A7F2FFB003D7E63 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC44D72A7F2FFB003D7E63 /* readme.md */; };
 		2EDC452C2A7FE2D0003D7E63 /* StatusPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC452B2A7FE2D0003D7E63 /* StatusPictureView.swift */; };
 		2EDC453C2A80846F003D7E63 /* UserProfileBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC453B2A80846F003D7E63 /* UserProfileBrowserViewController.swift */; };
@@ -587,13 +586,6 @@
 		2EA71BE129B94DBF004742CA /* StatusCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusCommentCell.swift; sourceTree = "<group>"; };
 		2EA71BE929B94FE6004742CA /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; };
 		2EA71BEB29B9501B004742CA /* CommentListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentListViewModel.swift; sourceTree = "<group>"; };
-		2EA71BF729BDB328004742CA /* yoububble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yoububble@2x.png"; sourceTree = "<group>"; };
-		2EA71BF829BDB328004742CA /* xiaohua.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xiaohua.png; sourceTree = "<group>"; };
-		2EA71BF929BDB328004742CA /* xiaoming.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xiaoming.png; sourceTree = "<group>"; };
-		2EA71BFE29BDB328004742CA /* sz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sz.png; sourceTree = "<group>"; };
-		2EA71BFF29BDB328004742CA /* mebubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mebubble.png; sourceTree = "<group>"; };
-		2EA71C0029BDB328004742CA /* yoububble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yoububble.png; sourceTree = "<group>"; };
-		2EA71C0129BDB328004742CA /* mebubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mebubble@2x.png"; sourceTree = "<group>"; };
 		2EA71C3629C2066B004742CA /* MessageMainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageMainTableViewController.swift; sourceTree = "<group>"; };
 		2EA71C3A29C6A4BB004742CA /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		2EA71C3C29C6A6E4004742CA /* FriendListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListViewModel.swift; sourceTree = "<group>"; };
@@ -1212,7 +1204,6 @@
 		2EB293F029EB7243009E0439 /* SDImageCodersManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCodersManager.h; sourceTree = "<group>"; };
 		2EB293F129EB7243009E0439 /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
 		2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
-		2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		2EDC44D72A7F2FFB003D7E63 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = SOURCE_ROOT; };
 		2EDC450D2A7FA5F2003D7E63 /* 测试.anps */ = {isa = PBXFileReference; lastKnownFileType = text; path = "测试.anps"; sourceTree = "<group>"; };
 		2EDC450F2A7FC2E7003D7E63 /* MHC博客Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MHC博客Release.entitlements"; sourceTree = "<group>"; };
@@ -1506,7 +1497,6 @@
 		2E738A7729AA38510014FA12 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				2EDC44D42A7A4888003D7E63 /* UserProfile */,
 				2E738A7829AA38510014FA12 /* Home */,
 				2E738A8529AA38510014FA12 /* Discover */,
 				2E738A8729AA38510014FA12 /* OAuth */,
@@ -1616,7 +1606,6 @@
 		2E738A8F29AA38510014FA12 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				2EA71BF629BDB328004742CA /* images */,
 				2E738A9029AA38510014FA12 /* NewFeature */,
 				2E738A9329AA38510014FA12 /* MainViewController.swift */,
 				2E738A9429AA38510014FA12 /* Visitor */,
@@ -1640,20 +1629,6 @@
 				2E738A9629AA38510014FA12 /* VisitorView.swift */,
 			);
 			path = Visitor;
-			sourceTree = "<group>";
-		};
-		2EA71BF629BDB328004742CA /* images */ = {
-			isa = PBXGroup;
-			children = (
-				2EA71BF729BDB328004742CA /* yoububble@2x.png */,
-				2EA71BF829BDB328004742CA /* xiaohua.png */,
-				2EA71BF929BDB328004742CA /* xiaoming.png */,
-				2EA71BFE29BDB328004742CA /* sz.png */,
-				2EA71BFF29BDB328004742CA /* mebubble.png */,
-				2EA71C0029BDB328004742CA /* yoububble.png */,
-				2EA71C0129BDB328004742CA /* mebubble@2x.png */,
-			);
-			path = images;
 			sourceTree = "<group>";
 		};
 		2EAA96A92A6B85380058481E /* LFLiveKit */ = {
@@ -2411,14 +2386,6 @@
 			path = WebImage;
 			sourceTree = "<group>";
 		};
-		2EDC44D42A7A4888003D7E63 /* UserProfile */ = {
-			isa = PBXGroup;
-			children = (
-				2EDC44D52A7A4888003D7E63 /* UserProfileViewController.swift */,
-			);
-			path = UserProfile;
-			sourceTree = "<group>";
-		};
 		98AC79562FF92B973FE3D084 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2798,7 +2765,6 @@
 				2EAA98A82A6B85380058481E /* GPUImageSphereRefractionFilter.m in Sources */,
 				2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */,
 				2EB2941829EB7243009E0439 /* UIImage+ExtendedCacheData.m in Sources */,
-				2EDC44D62A7A4888003D7E63 /* UserProfileViewController.swift in Sources */,
 				2EAA98A72A6B85380058481E /* GPUImage3x3TextureSamplingFilter.m in Sources */,
 				2EB2941F29EB7243009E0439 /* NSBezierPath+SDRoundedCorners.m in Sources */,
 				2EAA98EE2A6B85390058481E /* GPUImagePinchDistortionFilter.m in Sources */,

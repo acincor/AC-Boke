@@ -14,7 +14,7 @@ Installation
 
 You can download the zip or clone this repository.
 
-**改进了直播的方面，将nginx配置放在了Resource内，将端口统一为80（所以可以省略），可以通过以下配置**
+**改进了直播的方面，将nginx、php配置放在了Resource内，将端口统一为80（所以可以省略），可以通过以下配置**
 
 ```brew install nginx-full```
 
@@ -30,7 +30,9 @@ You can download the zip or clone this repository.
 
 ```brew services start php.ini```
 
-**localhost内的所有文件添加到/opt/homebrew/var/www**
+**target/localhost内的所有文件添加到/opt/homebrew/var/www**
+
+**target/wss项目（springboot）运行，用于连接websocket**
 
 **更改配置**
 

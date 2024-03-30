@@ -16,20 +16,27 @@ class WebSocketController: UIViewController,ChatDataSource {
         return self.chatListViewModel.chatList[dataForRow]
     }
     /// tcp握手
+    init(to_uid: Int, username: String) {
+        self.to_uid = to_uid
+        self.username = username
+        self.urlRequest = URLRequest(url: URL(string:"ws://localhost:8081/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     var chatListViewModel = ChatListViewModel()
-    //对方和自己将会是两个连接，这个urlRequestToUid是对方的，因为我们在实例化后才会传参，所以要先设URLRequest的url为空(NSURL() as URL())，我们要接收两者的
-    var urlRequestToUid = URLRequest(url: NSURL() as URL) // variable
-        //let urlRequest = URLRequest(url: URL(string:"http://localhost:8080/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
-    let urlRequest = URLRequest(url: URL(string:"wss://wss.lmyz6.cn/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)
+    //let urlRequest = URLRequest(url: URL(string:"http://localhost:8080/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
     lazy var urlSession = URLSession(configuration: .default)
+    var urlRequest: URLRequest
     lazy var task = urlSession.webSocketTask(with: urlRequest)
-    lazy var urlRequestToUidTask = urlSession.webSocketTask(with: urlRequestToUid)
-    var to_uid: Int?
-    var username: String?
+    var to_uid: Int
+    var username: String
     lazy var textField = UITextField()
     lazy var sendButton = UIButton()
     lazy var table:TableView = TableView(frame: CGRectZero, style: .plain)
-    lazy var viewTitle = UILabel(title: username!)
+    lazy var viewTitle = UILabel(title: username)
     override func viewDidLoad() {
         connect()
         SVProgressHUD.dismiss()
@@ -72,29 +79,6 @@ class WebSocketController: UIViewController,ChatDataSource {
                 sendButton.backgroundColor = .red
                 textField.sizeToFit()
                 sendButton.sizeToFit()
-        urlRequestToUidTask.receive {[weak self]result in
-            switch result {
-            case .failure(_):
-                break
-            case .success(.string(let str)):
-                let data = str.data(using: String.Encoding.utf8)
-                            let dict = try! JSONSerialization.jsonObject(with: data!,
-                                                                            options: .mutableContainers) as! [String : Any]
-                if(dict["isHESHE"] as! Int == 0) {
-                                    SVProgressHUD.showInfo(withStatus: "对方未在线")
-                                    DispatchQueue.main.async {
-                                        self?.sendButton.tag = 0
-                                    }
-                                } else {
-                                    SVProgressHUD.showInfo(withStatus: "对方在线了 sb is on line.")
-                                    DispatchQueue.main.async {
-                                        self?.sendButton.tag = 1
-                                    }
-                                }
-            default:
-                break
-            }
-        }
         let leftbar = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(self.close))
         leftbar.tintColor = .red
         leftbar.title = "关闭"
@@ -109,40 +93,34 @@ class WebSocketController: UIViewController,ChatDataSource {
     func connect() {
         SVProgressHUD.show()
             task.resume()
-        guard let uid = to_uid else {
-            SVProgressHUD.dismiss()
-            return
-        }
+        isConnect = 1
         //urlRequestToUid = URLRequest(url: URL(string:"http://localhost:8080/\(uid)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
-        urlRequestToUid = URLRequest(url: URL(string:"wss://wss.lmyz6.cn/\(uid)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)
-        urlRequestToUidTask = urlSession.webSocketTask(with: urlRequestToUid)
-        urlRequestToUidTask.sendPing { error in
+        task.sendPing { error in
             SVProgressHUD.dismiss()
             guard error == nil else {
                 SVProgressHUD.showInfo(withStatus: "出错了")
                 return
             }
         }
-        urlRequestToUidTask.resume()
     }
     @objc func send(_ sender: UIButton) {
-        if textField.hasText && sender.tag == 1 {
+        if textField.hasText {
             let text = self.textField.text!//UITextField.text must be used from main thread only
             SVProgressHUD.show()
             sendButton.isEnabled = false
             DispatchQueue.main.asyncAfter(deadline: .now()+1){
-                self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"content\":\"\(self.textField.text!)\",\"to_uid\":\(self.to_uid!),\"timeInterval\":\(Date().timeIntervalSince1970)}")) { error in
+                self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"content\":\"\(self.textField.text!)\",\"to_uid\":\(self.to_uid),\"timeInterval\":\(Date().timeIntervalSince1970)}")) { error in
                     guard error != nil else {
                         SVProgressHUD.dismiss()
-                        ChatDAL.saveCache(array: ["uid":Int(UserAccountViewModel.sharedUserAccount.account!.uid!)!,"content":text,"to_uid":self.to_uid!,"timeInterval":Date().timeIntervalSince1970])
+                        ChatDAL.saveCache(array: ["uid":Int(UserAccountViewModel.sharedUserAccount.account!.uid!)!,"portrait":UserAccountViewModel.sharedUserAccount.account!.portrait!,"content":text,"to_uid":self.to_uid,"timeInterval":Date().timeIntervalSince1970])
+                        DispatchQueue.main.async {
+                            self.sendButton.isEnabled = true
+                        }
                         return
                     }
                     SVProgressHUD.dismiss()
-                    self.sendButton.isEnabled = true
                 }
             }
-        } else {
-            SVProgressHUD.showInfo(withStatus: "对方未在线或您没有发送文字 sb isn't on line or you send blank text.")
         }
     }
     
@@ -151,59 +129,44 @@ class WebSocketController: UIViewController,ChatDataSource {
     }
     var messageList = [[String:Any]]()
     private func receiveMessage(){
-        self.chatListViewModel.loadStatus(to_uid: self.to_uid!) { isSuccessed in
-            if isSuccessed {
+        self.chatListViewModel.loadStatus(to_uid: self.to_uid) { isSuccessed in
+            print(isSuccessed)
+            if !isSuccessed {
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "出错了")
         }
         table.reloadData()
-        //table.removeFromSuperview()
-        //self.view.addSubview(table)
-        self.chatListViewModel.chatList.removeAll()
-        urlRequestToUidTask.receive {[weak self]result in
+        task.receive {result in
             switch result {
             case .failure(_):
                 break
             case .success(.string(let str)):
                 let data = str.data(using: String.Encoding.utf8)
-                let dict = try! JSONSerialization.jsonObject(with: data!,
-                                                             options: .mutableContainers) as! [String : Any]
-                if(dict["isHESHE"] as! Int == 1) {
-                    SVProgressHUD.showInfo(withStatus: "对方在线了 sb is on line.")
-                    DispatchQueue.main.async {
-                        self?.sendButton.tag = 1
-                    }
-                } else {
-                    SVProgressHUD.showInfo(withStatus: "对方未在线 sb isn't on line.")
-                    DispatchQueue.main.async {
-                        self?.sendButton.tag = 0
-                    }
-                }
+                let dict = try! JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as! [String : Any]
                 if(dict["to_uid"] as? Int == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)) {
-                    ChatDAL.saveCache(array: ["uid":dict["uid"] as! Int,"content":dict["content"] as! String,"to_uid":Int(UserAccountViewModel.sharedUserAccount.account!.uid!)!,"timeInterval":dict["timeInterval"] as! TimeInterval])
+                    ChatDAL.saveCache(array: ["uid":dict["uid"] as! Int,"portrait":dict["portrait"] as! String,"content":dict["content"] as! String,"to_uid":Int(UserAccountViewModel.sharedUserAccount.account!.uid!)!,"timeInterval":dict["timeInterval"] as! TimeInterval])
                 }
             default:
                 break
             }
         }
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false){ _ in
+            if self.isConnect == 0 {
+                return
+            }
             self.task.sendPing { error in
                 guard error != nil else {
                     return
                 }
             }
-            self.urlRequestToUidTask.sendPing { error in
-                guard error != nil else {
-                    return
-                }
-            }
             self.receiveMessage()
-            
         }
     }
+    var isConnect = 0
     @objc func close() {
-        self.dismiss(animated: false)
+        self.task.cancel()
+        isConnect = 0
+        self.dismiss(animated: true)
     }
     @objc func clearData() {
         ChatDAL.clearDataCache()

@@ -50,7 +50,7 @@ class TableView:UITableView,UITableViewDelegate, UITableViewDataSource
                 for i in 0 ... count - 1
                 {
                      
-                    let object =  self.chatDataSource.chatTableView(tableView: self, dataForRow:i)
+                    let object = self.chatDataSource.chatTableView(tableView: self, dataForRow:i)
                     bubbleSection.append(object)
                      
                 }

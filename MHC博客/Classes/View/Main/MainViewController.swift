@@ -65,10 +65,10 @@ extension MainViewController {
         addChild(UIViewController())
         addChild(DiscoverTableViewController(), "发现", "tabbar_discover")
         if UserAccountViewModel.sharedUserAccount.userLogon {
-            addChild(UIHostingController(rootView: NavigationLinkView()), "我", "tabbar_profile")
+            addChild(UIHostingController(rootView: UserNavigationLinkView(account: nil)), "我", "tabbar_profile")
             //个人喜欢四个登陆界面相同，若想改成NavigationView的ViewController也可以，只是不美观，因为不同，但是我们是处理好的
         } else {
-            addChild(ProfileTableViewController(), "我", "tabbar_profile")
+            addChild(ProfileTableViewController(account: nil), "我", "tabbar_profile")
         }
     }
     private func addChild(_ vc: UIViewController,_ title: String, _ imageName: String) {

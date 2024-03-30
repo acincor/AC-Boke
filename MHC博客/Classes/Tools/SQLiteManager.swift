@@ -18,6 +18,7 @@ class SQLiteManager {
         path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
         path = (path as NSString).appendingPathComponent(chatName)
         chatQueue = FMDatabaseQueue(path: path)!
+        print(path)
         createTable()
     }
     private func createTable() {

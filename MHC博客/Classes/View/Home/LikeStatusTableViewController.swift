@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 
 let LikeStatusCellNormalId = "LikeStatusCellNormalId"
@@ -85,8 +86,10 @@ class LikeStatusTableViewController: VisitorTableViewController {
         prepareTableView()
     }
     @objc func action(sender: UITapGestureRecognizer) {
-        present(UserProfileViewController(portrait: sender.sender3, usernameLabel: sender.sender2, MID: sender.sender), animated: true)
-        }
+        let dict = ["portrait": sender.sender3, "user": sender.sender2, "uid": sender.sender]
+        let uvm = UserViewModel(user: Account(dict: dict))
+        present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm))), animated: true)
+    }
 
     var cell: StatusCell?
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()

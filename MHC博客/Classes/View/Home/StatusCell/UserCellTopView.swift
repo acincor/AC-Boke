@@ -52,7 +52,7 @@ class UserCellTopView: UIView {
 extension UserCellTopView {
     private func setupUI() {
         let sepView = UIView()
-        sepView.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
+        //sepView.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
         addSubview(sepView)
         addSubview(iconView)
         addSubview(nameLabel)
