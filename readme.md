@@ -34,7 +34,7 @@ You can download the zip or clone this repository.
 
 **project/wss项目（springboot）运行，用于连接websocket**
 
-**更改配置**
+**如何更改配置**
 
 ```nginx -s reload```
 
