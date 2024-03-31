@@ -30,9 +30,9 @@ You can download the zip or clone this repository.
 
 ```brew services start php.ini```
 
-**target/localhost内的所有文件添加到/opt/homebrew/var/www**
+**project/localhost内的所有文件添加到/opt/homebrew/var/www**
 
-**target/wss项目（springboot）运行，用于连接websocket**
+**project/wss项目（springboot）运行，用于连接websocket**
 
 **更改配置**
 
