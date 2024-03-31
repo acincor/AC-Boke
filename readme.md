@@ -45,14 +45,16 @@ Stories
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！例如可以分享出去游玩的照片、快乐的瞬间，点赞高的还有可能在退出app时被被精选哦**
 
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/c1/37/70/c13770f4-d1db-caf5-6c8c-17ed511ee38b/e459b9bd-309e-4fa1-a866-e3dbeff3ff53_Simulator_Screenshot_-_iPhone_14_Plus_-_2023-08-24_at_17.17.03.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/e3/bc/df/e3bcdf77-6eb6-4e3c-6c4f-ca1f5cae11c4/ffb2acb8-36d6-47e8-8702-c3f1cd730fc6_Simulator_Screenshot_-_iPhone_14_Plus_-_2023-08-24_at_17.15.56.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/aa/67/c1/aa67c148-c586-6140-78e9-87c7d521dedf/5dad917b-dcbf-43b9-9ca5-e79a88f942bb_Simulator_Screenshot_-_iPhone_14_Plus_-_2023-08-24_at_17.17.19.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/ef/3c/8d/ef3c8def-bbac-a6cd-06ae-826ba6ad7cc2/8e455a78-c04e-4fa4-ba18-4dab4904f471_Simulator_Screenshot_-_iPhone_14_Plus_-_2023-08-24_at_17.18.55.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/4e/0c/27/4e0c2725-777f-9d8a-59c6-882482df2945/44fd3453-1488-4418-95d4-850e92878991_Simulator_Screenshot_-_iPhone_14_Plus_-_2023-08-24_at_17.52.45.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/eb/9c/4b/eb9c4be6-2388-7d77-a297-2ea7250196e2/4ee97072-be59-4834-8425-47f62a3cc21c_Simulator_Screenshot_-_iPhone_14_Plus_-_2023-08-24_at_17.55.56.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/c0/b2/6b/c0b26be0-02d5-c009-f074-be7f8988e676/67c0a416-b27f-4d6d-864f-969076fb7e01_Simulator_Screenshot_-_iPhone_14_Plus_-_2023-08-24_at_17.56.12.png/400x800bb.png)
-
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/37/cc/e5/37cce569-cfab-d509-f3c8-9725018b207b/e6bfac15-617d-45f1-a966-49b265d80dc8_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_10.58.50.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/f4/aa/3e/f4aa3e8a-2c7b-50dc-09f3-5cdd1442cb0f/34a6c79b-3d6d-4d8b-bdcc-7d442bd9d4b2_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_10.59.32.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/d2/90/9e/d2909ed3-3cf6-4f23-f3ed-6d32f15a0a16/1d3e92fa-5a69-4bee-9917-7a026dba488b_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_10.59.44.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/86/df/b0/86dfb0e2-c114-195e-7bc2-ed6a36c2c7f6/418b53f9-6a1e-4504-97c0-cb952b2e21c3_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_10.59.48.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/72/3d/59/723d5909-33d2-5d82-3913-b10d0c7adca2/53e9cccf-d3c4-4bee-b06f-537658b7cf6a_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_10.59.53.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/6f/e0/0b/6fe00b15-4729-2b02-7369-e6cc6b003f7d/fac6e250-14a9-43fb-ab42-8d2fe54c11b5_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_11.02.51.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/98/81/5c/98815cfa-bc38-29ce-1341-556e94873206/884ae8e7-5a75-4ff5-bf03-1c61ed33064f_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_11.03.23.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/6c/5e/f5/6c5ef5a7-7cf8-7725-4033-3bd870364f6d/7991c427-d0e9-4831-94ea-a83a30d3045d_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_11.34.33.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/df/eb/b1/dfebb17d-fc1a-3128-ab7f-ecd5ebf192bf/96726472-6638-4ad8-93a8-c610d182ceaf_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_11.35.16.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/69/95/09/699509a1-9561-97dd-b50c-043c6f3ef0c4/ba8372c9-fdfb-41ca-bb8a-05c0eed01b86_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_11.35.58.png/400x800bb.png)
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
 Copyright © Mhc.

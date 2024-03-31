@@ -258,6 +258,7 @@ extension NetworkTools {
                 data.append(i.jpegData(compressionQuality: 0.8)!)
             }
             upload(urlString, data, params) { Result, Error in
+                print(Result)
                 finished(Result, Error)
             }
         }

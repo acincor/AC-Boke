@@ -23,6 +23,7 @@ class MessageTableViewController: VisitorTableViewController{
             self.refreshControl?.endRefreshing()
             self.pullupView.stopAnimating()
             if !isSuccessed {
+                
                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                 return
             }

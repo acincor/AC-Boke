@@ -55,7 +55,7 @@ extension PicturePickerController: PicturePickerCellDelegate {
             return
         }
         pictures.remove(at: indexPath!.item)
-        collectionView.deleteItems(at: [indexPath!])
+        collectionView.reloadData()
     }
 }
 extension PicturePickerController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

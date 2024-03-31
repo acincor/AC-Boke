@@ -13,7 +13,7 @@ class ProfileTableViewController: VisitorTableViewController {
     private lazy var addButton = UIButton(title: "添加好友", fontSize: 14, color: UIColor(white: 0.6, alpha: 1.0), imageName: nil)
     private var usernameLabel: String {
         if account == nil {
-            return "MID:" + (UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+            return (UserAccountViewModel.sharedUserAccount.account?.user ?? "")
         }
         return account?.user.user ?? "用户未登录"
     }
