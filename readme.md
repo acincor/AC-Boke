@@ -1,4 +1,4 @@
-MHC-Boke 2.1版本
+MHC-Boke 2.2版本
 ---------------
 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Mhc-Inc/MHC-Boke)
