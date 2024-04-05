@@ -12,6 +12,7 @@ if(isset($_POST['access_token'])) {
             }
             exit(json_encode(["msg"=>0],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         }
+        exit(json_encode(["msg"=>1],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     }
 }
 exit(json_encode(["msg"=>"params error!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));

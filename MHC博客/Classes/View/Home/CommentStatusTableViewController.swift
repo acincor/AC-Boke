@@ -12,11 +12,6 @@ import SwiftUI
 let commentStatusCellNormalId = "CommentStatusCellNormalId"
 let commentListViewModel = CommentStatusListViewModel()
 class CommentStatusTableViewController: VisitorTableViewController {
-    private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .systemBackground
-        return indicator
-    }()
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -27,7 +22,6 @@ class CommentStatusTableViewController: VisitorTableViewController {
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
-        tableView.tableFooterView = pullupView
     }
     init(uid: String) {
         self.uid = uid
@@ -43,7 +37,6 @@ class CommentStatusTableViewController: VisitorTableViewController {
         StatusDAL.clearDataCache()
         commentListViewModel.loadStatus(uid) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
-            self.pullupView.stopAnimating()
             if !isSuccessed {
                 SVProgressHUD.showInfo(withStatus: "暂无评论任何博客哦！")
                 commentListViewModel.statusList = []

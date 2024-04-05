@@ -6,9 +6,9 @@ if(isset($_POST['access_token'])) {
     if(!is_bool($query)) {
         $array = mysqli_fetch_assoc($query);
         if($array != NULL) {
-            $select_bool = mysqli_query($mysql,"SELECT * FROM access_tokens WHERE uid = '".$array['uid']."'");
+            $select_bool = mysqli_query($mysql,"SELECT * FROM access_tokens WHERE uid = ".$array['uid']);
             while($arr = mysqli_fetch_assoc($select_bool)) {
-                mysqli_query($mysql,"DELETE FROM access_tokens WHERE uid = '".$array['uid']."'");
+                mysqli_query($mysql,"DELETE FROM access_tokens WHERE uid = ".$array['uid']);
             }
             $file = mysqli_query($mysql,"select id from blogs WHERE uid = ".$array['uid']);
             while($arr = mysqli_fetch_assoc($file)){
@@ -19,29 +19,33 @@ if(isset($_POST['access_token'])) {
                              unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
                         }
                     }
-                    $select_bool = mysqli_query($mysql,"SELECT * FROM likes WHERE id = ".$arr['id']."");
+                    $select_bool = mysqli_query($mysql,"SELECT * FROM likes WHERE id = ".$arr['id']);
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
-                        mysqli_query($mysql,"DELETE FROM likes WHERE id = ".$arr['id']."");
+                        mysqli_query($mysql,"DELETE FROM likes WHERE id = ".$arr['id']);
                     }
-                    $select_bool = mysqli_query($mysql,"SELECT * FROM clikes WHERE id = ".$arr['id']."");
+                    $select_bool = mysqli_query($mysql,"SELECT * FROM clikes WHERE id = ".$arr['id']);
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
-                        mysqli_query($mysql,"DELETE FROM clikes WHERE id = ".$arr['id']."");
+                        mysqli_query($mysql,"DELETE FROM clikes WHERE id = ".$arr['id']);
                     }
-                    $select_bool = mysqli_query($mysql,"SELECT * FROM qlikes WHERE id = ".$arr['id']."");
+                    $select_bool = mysqli_query($mysql,"SELECT * FROM qlikes WHERE id = ".$arr['id']);
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
-                        mysqli_query($mysql,"DELETE FROM qlikes WHERE id = ".$arr['id']."");
+                        mysqli_query($mysql,"DELETE FROM qlikes WHERE id = ".$arr['id']);
                     }
-                    $select_bool = mysqli_query($mysql,"SELECT * FROM comments WHERE id = ".$arr['id']."");
+                    $select_bool = mysqli_query($mysql,"SELECT * FROM comments WHERE id = ".$arr['id']);
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
-                        mysqli_query($mysql,"DELETE FROM comments WHERE id = ".$arr['id']."");
+                        mysqli_query($mysql,"DELETE FROM comments WHERE id = ".$arr['id']);
                     }
-                    $select_bool = mysqli_query($mysql,"SELECT * FROM quote WHERE id = ".$arr['id']."");
+                    $select_bool = mysqli_query($mysql,"SELECT * FROM quote WHERE id = ".$arr['id']);
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
-                        mysqli_query($mysql,"DELETE FROM quote WHERE id = ".$arr['id']."");
+                        mysqli_query($mysql,"DELETE FROM quote WHERE id = ".$arr['id']);
                     }
-                    $delete_bool = mysqli_query($mysql,"DELETE FROM blogs WHERE id = ".$arr['id']."");
+                    $delete_bool = mysqli_query($mysql,"DELETE FROM blogs WHERE id = ".$arr['id']);
         }
-        $select_bool = mysqli_query($mysql,"SELECT * FROM users WHERE uid = '".$array['uid']."'");
+            $select_bool = mysqli_query($mysql,"SELECT * FROM trends WHERE uid = ".$array['uid']);
+            while($arr0 = mysqli_fetch_assoc($select_bool)) {
+                mysqli_query($mysql,"DELETE FROM trends WHERE uid = ".$array['uid']);
+            }
+        $select_bool = mysqli_query($mysql,"SELECT * FROM users WHERE uid = ".$array['uid']);
             if(!is_bool($select_bool)) {
                 $arr = mysqli_fetch_assoc($select_bool);
                 if($arr != NULL) {

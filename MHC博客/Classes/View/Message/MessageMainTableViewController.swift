@@ -12,16 +12,10 @@ let UserCellNormalId = "UserCellNormalId"
 let UserNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{
     var friendListViewModel = FriendListViewModel()
-    private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .systemBackground
-        return indicator
-    }()
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         friendListViewModel.loadFriend { (isSuccessed) in
             self.refreshControl?.endRefreshing()
-            self.pullupView.stopAnimating()
             if !isSuccessed {
                 
                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
@@ -39,7 +33,6 @@ class MessageTableViewController: VisitorTableViewController{
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCellNormalId)
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
-        tableView.tableFooterView = pullupView
         loadData()
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

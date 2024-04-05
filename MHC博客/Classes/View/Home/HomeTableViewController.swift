@@ -13,12 +13,50 @@ let StatusCellNormalId = "StatusCellNormalId"
 //let StatusCellNormalId2 = "StatusCellNormalId2"
 
 var viewModel: StatusViewModel?
-class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
-    private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .systemBackground
+class CustomRefreshView: UIView {
+    lazy var pullupView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
         return indicator
     }()
+    var refreshAction: ((UIActivityIndicatorView)->())?
+ 
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubview(pullupView)
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+        addGestureRecognizer(gesture)
+    }
+ 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+ 
+    @objc func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            // 开始刷新
+            pullupView.startAnimating()
+            pullupView.snp.makeConstraints { make in
+                make.center.equalTo(self.snp.center)
+            }
+            refreshAction?(pullupView)
+        default:
+            break
+        }
+    }
+}
+class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
+    lazy var refreshView = CustomRefreshView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 30))
+    @objc func refresh(pullup: UIActivityIndicatorView) {
+        if listViewModel.statusList.count >= 10{
+            if pullup.isAnimating {
+                // 开始动画
+                loadData()
+                pullup.stopAnimating()
+            }//十条刷新一次
+        }
+    }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -31,7 +69,11 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
-        tableView.tableFooterView = pullupView
+        refreshView.refreshAction = { pullup in
+                    // 执行刷新操作
+            self.refresh(pullup: pullup)
+        }
+        tableView.tableFooterView = refreshView
         liveView.delegate = self
         liveView.dataSource = self
         tableView.tableHeaderView = liveListViewModel.liveList.isEmpty ? nil : liveView
@@ -61,9 +103,9 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //StatusDAL.clearDataCache()//删除缓存
-        listViewModel.loadStatus(isPullup: self.pullupView.isAnimating) { (isSuccessed) in
+        listViewModel.loadStatus(isPullup: self.refreshView.pullupView.isAnimating) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
-            self.pullupView.stopAnimating()
+            self.refreshView.pullupView.stopAnimating()
             if !isSuccessed {
                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
                 return
@@ -151,13 +193,6 @@ extension HomeTableViewController {
         g.sender2 = "\(viewModel.status.user ?? "")"
         g.sender3 = "\(viewModel.status.portrait ?? "")"
         cell.topView.iconView.addGestureRecognizer(g)
-        if listViewModel.statusList.count % 10 == 0 {
-            if indexPath.row == listViewModel.statusList.count - 1 && !pullupView.isAnimating {
-                // 开始动画
-                pullupView.startAnimating()
-                loadData()
-            }//十条刷新一次
-        }
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
         let result = ["id":"\(listViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]

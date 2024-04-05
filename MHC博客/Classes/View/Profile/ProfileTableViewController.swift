@@ -240,14 +240,36 @@ class ProfileTableViewController: VisitorTableViewController {
         present(nav, animated: true)
     }
     @objc func touchUpInside() {
-        name.isEnabled = true
-        renameButton.removeFromSuperview()
-        renameButton = UIButton(title: "完成", color: .orange, backImageName: nil)
-        view.addSubview(renameButton)
-    renameButton.snp.makeConstraints { make in
-        make.top.equalTo(Label.snp.bottom)
-    }
-        renameButton.addTarget(self, action: #selector(self.action1), for: .touchUpInside)
+        if renameButton.largeContentTitle == "编辑" {
+            name.isEnabled = true
+            renameButton.removeFromSuperview()
+            renameButton = UIButton(title: "完成", color: .orange, backImageName: nil)
+            view.addSubview(renameButton)
+            renameButton.snp.makeConstraints { make in
+                make.top.equalTo(Label.snp.bottom)
+            }
+        } else {
+            NetworkTools.shared.rename(rename: name.text!) { Result, Error in
+                if Error != nil {
+                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    return
+                }
+                if(Result as! [String:Any])["msg"] != nil {
+                    UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) { [self]isSuccessed in
+                        if isSuccessed {
+                            SVProgressHUD.showInfo(withStatus: "改名成功")
+                            renameButton.removeFromSuperview()
+                            renameButton = UIButton(title: "编辑", color: .orange, backImageName: nil)
+                            view.addSubview(renameButton)
+                            renameButton.snp.makeConstraints { make in
+                                make.top.equalTo(Label.snp.bottom)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        renameButton.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
     }
     /*
     @objc func userAgreementButtonTouchAction() {
@@ -271,27 +293,6 @@ class ProfileTableViewController: VisitorTableViewController {
         }
     }
      */
-    @objc func action1(){
-        NetworkTools.shared.rename(rename: name.text!) { Result, Error in
-            if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
-                return
-            }
-            if(Result as! [String:Any])["msg"] != nil {
-                UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) { [self]isSuccessed in
-                    if isSuccessed {
-                        SVProgressHUD.showInfo(withStatus: "改名成功")
-                        renameButton.removeFromSuperview()
-                        renameButton = UIButton(title: "编辑", color: .orange, backImageName: nil)
-                        view.addSubview(renameButton)
-                        renameButton.snp.makeConstraints { make in
-                            make.top.equalTo(Label.snp.bottom)
-                        }
-                    }
-                }
-            }
-        }
-    }
     // MARK: - Table view data source
 
     /*

@@ -32,7 +32,21 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                         $lq = mysqli_query($mysql,"select * from likes where id = ".$blog['id']);
                         while($like = mysqli_fetch_assoc($lq)) {
                             $like['id'] = intval($like['id']);
-                            array_push($blog["like_list"],$like);
+                            $mess = mysqli_query($mysql,"select user,portrait from users where uid = ".$like['like_uid']);
+                            if(!is_bool($mess)) {
+                                $m = mysqli_fetch_assoc($mess);
+                                if($m != NULL) {
+                                    array_push($blog["like_list"],$like);
+                                } else {
+                                    mysqli_query($mysql,"delete from likes where like_uid = ".$like['like_uid']." && id = ".$blog['id']);
+                                    $s = intval($blog["like_count"])-1;
+                                    mysqli_query($mysql,"update blogs set like_count = ".$s." where id = ".$blog['id']);
+                                }
+                            } else {
+                                mysqli_query($mysql,"delete from likes where like_uid = ".$like['like_uid']." && id = ".$blog['id']);
+                                $s = intval($blog["like_count"])-1;
+                                mysqli_query($mysql,"update blogs set like_count = ".$s." where id = ".$blog['id']);
+                            }
                         }
                         while($comment = mysqli_fetch_assoc($cq)) {
                             $comment['id'] = intval($comment['id']);
@@ -40,7 +54,21 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                             $clq = mysqli_query($mysql,"select * from clikes where comment_id = ".$comment['comment_id']);
                             $comment["like_list"] = [];
                             while($clike = mysqli_fetch_assoc($clq)) {
-                                array_push($comment["like_list"],$clike);
+                                $mess = mysqli_query($mysql,"select user,portrait from users where uid = ".$clike['like_uid']);
+                                if(!is_bool($mess)) {
+                                    $m = mysqli_fetch_assoc($mess);
+                                    if($m != NULL) {
+                                        array_push($comment["like_list"],$clike);
+                                    } else {
+                                        mysqli_query($mysql,"delete from clikes where like_uid = ".$clike['like_uid']." && comment_id = ".$comment['comment_id']);
+                                        $s = intval($comment["like_count"])-1;
+                                        mysqli_query($mysql,"update comments set like_count = ".$s." where comment_id = ".$comment['comment_id']);
+                                    }
+                                } else {
+                                    mysqli_query($mysql,"delete from clikes where like_uid = ".$clike['like_uid']." && comment_id = ".$comment['comment_id']);
+                                    $s = intval($comment["like_count"])-1;
+                                    mysqli_query($mysql,"update comments set like_count = ".$s." where comment_id = ".$comment['comment_id']);
+                                }
                             }
                             $cuq = mysqli_query($mysql,"select user,portrait from users where uid = ".$comment['comment_uid']);
                             if(!is_bool($cuq)) {
@@ -55,7 +83,21 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                                         $qlq = mysqli_query($mysql,"select * from qlikes where quote_id = ".$quote['quote_id']);
                                         while($qlike = mysqli_fetch_assoc($qlq)) {
                                             $qlike['comment_id'] = $qlike['quote_id'];
-                                            array_push($quote["like_list"],$qlike);
+                                            $mess = mysqli_query($mysql,"select user,portrait from users where uid = ".$qlike['like_uid']);
+                                            if(!is_bool($mess)) {
+                                                $m = mysqli_fetch_assoc($mess);
+                                                if($m != NULL) {
+                                                    array_push($quote["like_list"],$qlike);
+                                                } else {
+                                                    mysqli_query($mysql,"delete from qlikes where like_uid = ".$qlike['like_uid']." && quote_id = ".$quote['quote_id']);
+                                                    $s = intval($quote["like_count"])-1;
+                                                    mysqli_query($mysql,"update quote set like_count = ".$s." where quote_id = ".$quote['quote_id']);
+                                                }
+                                            } else {
+                                                mysqli_query($mysql,"delete from qlikes where like_uid = ".$qlike['like_uid']." && quote_id = ".$quote['quote_id']);
+                                                $s = intval($quote["like_count"])-1;
+                                                mysqli_query($mysql,"update quote set like_count = ".$s." where quote_id = ".$quote['quote_id']);
+                                            }
                                         }
                                         $quote['id'] = intval($quote['id']);
                                         $quote['comment_id'] = $quote['quote_id'];
@@ -65,13 +107,29 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                                             if($array != NULL) {
                                                 $quote['user'] = $array['user'];
                                                 $quote['portrait'] = $array['portrait'];
+                                                array_push($comment["comment_list"],$quote);
+                                            } else {
+                                                mysqli_query($mysql,"delete from quote where quote_id = ".$quote['quote_id']);
+                                                $s = intval($comment["comment_count"])-1;
+                                                mysqli_query($mysql,"update comments set comment_count = ".$s." where comment_id = ".$comment['comment_id']);
                                             }
+                                        } else {
+                                            mysqli_query($mysql,"delete from quote where quote_id = ".$quote['quote_id']);
+                                            $s = intval($comment["comment_count"])-1;
+                                            mysqli_query($mysql,"update comments set comment_count = ".$s." where comment_id = ".$comment['comment_id']);
                                         }
-                                        array_push($comment["comment_list"],$quote);
                                     }
+                                    array_push($blog["comment_list"],$comment);
+                                } else {
+                                    mysqli_query($mysql,"delete from comments where comment_id = ".$comment['comment_id']);
+                                    $s = intval($blog["comment_count"])-1;
+                                    mysqli_query($mysql,"update blogs set comment_count = ".$s." where id = ".$blog['id']);
                                 }
+                            } else {
+                                mysqli_query($mysql,"delete from comments where comment_id = ".$comment['comment_id']);
+                                $s = intval($blog["comment_count"])-1;
+                                mysqli_query($mysql,"update blogs set comment_count = ".$s." where id = ".$blog['id']);
                             }
-                            array_push($blog["comment_list"],$comment);
                         }
                         unset($blog['createTime']);
                         exit(json_encode($blog,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));

@@ -12,11 +12,6 @@ import SwiftUI
 let LikeStatusCellNormalId = "LikeStatusCellNormalId"
 let likeListViewModel = LikeStatusListViewModel()
 class LikeStatusTableViewController: VisitorTableViewController {
-    private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .systemBackground
-        return indicator
-    }()
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -27,7 +22,6 @@ class LikeStatusTableViewController: VisitorTableViewController {
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
-        tableView.tableFooterView = pullupView
     }
     init(uid: String) {
         self.uid = uid
@@ -42,7 +36,6 @@ class LikeStatusTableViewController: VisitorTableViewController {
         self.refreshControl?.beginRefreshing()
         likeListViewModel.loadStatus(uid) { (isSuccessed) in
             self.refreshControl?.endRefreshing()
-            self.pullupView.stopAnimating()
             if !isSuccessed {
                 SVProgressHUD.showInfo(withStatus: "暂无点赞任何博客哦！")
                 likeListViewModel.statusList = []

@@ -2,7 +2,7 @@
 header('Content-Type:application/json; charset=utf-8');
 $mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
 function hasSpecialCharacters($password) {
-    $pattern = '/[!@#$%^&*()\-_=+{};:\'",.<>]/'; // 定义特殊字符的正则表达式模式
+    $pattern = '/[!@#$%^&*()\_=+{};:\'",.<>]/'; // 定义特殊字符的正则表达式模式
     
     if (preg_match($pattern,$password)) {
         return false; // 如果密码中有任何一个特殊字符，返回true

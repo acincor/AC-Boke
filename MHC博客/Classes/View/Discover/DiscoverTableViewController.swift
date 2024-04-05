@@ -137,7 +137,6 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         refreshControl = WBRefreshControl()
         //tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .plain)
         refreshControl?.addTarget(self, action: #selector(self.refresh), for: .valueChanged)
-        tableView.tableFooterView = pullupView
         //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)//StatusCellNormalId has been exist
         prepare()
@@ -147,11 +146,6 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-    private lazy var pullupView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .systemBackground
-        return indicator
-    }()
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //var cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewController", for: indexPath) as! StatusNormalCell
