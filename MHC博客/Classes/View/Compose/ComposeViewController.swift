@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ComposeViewController: UIViewController, UIWebViewDelegate {
+class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
     private lazy var picturesPickerController = PicturePickerController()
     var toolbar: UIToolbar = UIToolbar()
     private lazy var textView:UITextView = {

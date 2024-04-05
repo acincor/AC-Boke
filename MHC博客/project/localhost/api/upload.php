@@ -1,7 +1,7 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
 date_default_timezone_set("Etc/GMT-8");
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("192.168.31.128", "root", "Ls713568","mhc_inc");
 $sql = "create table if not exists blogs (".
 "uid BIGINT NOT NULL,".
 "id BIGINT NOT NULL,".
@@ -157,7 +157,7 @@ if(isset($_POST['access_token']) && isset($_POST['status'])) {
                             }
                         }
                         if (move_uploaded_file($sourcePath, $targetPath)) {
-                            array_push($pic_urls,['pic'.$index=>'http://localhost/api/'.$data['uid']."/".$fd.".".explode('/',$fileType)[1]]);
+                            array_push($pic_urls,['pic'.$index=>'http://192.168.31.128/api/'.$data['uid']."/".$fd.".".explode('/',$fileType)[1]]);
                             $index++;
                         } else {
                             exit(json_encode(['error'=>"the file of upload emerged fatal error when it moved"]));

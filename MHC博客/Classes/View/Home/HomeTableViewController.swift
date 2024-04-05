@@ -89,7 +89,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vm = liveListViewModel.liveList[indexPath.row]
-        guard let url = ("http://localhost/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+        guard let url = ("http://192.168.31.128/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
             return
         }

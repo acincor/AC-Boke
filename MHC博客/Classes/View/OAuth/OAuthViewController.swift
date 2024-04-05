@@ -126,15 +126,16 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
 }
 extension OAuthViewController {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        guard let url = webView.url, url.absoluteString.hasPrefix(rootHost+"") else {
+        print(1)
+        guard let url = webView.url, url.absoluteString.hasPrefix(rootHost) else {
             return .allow
         }
         guard let query = url.query,query.hasPrefix("code=") else {
             return .allow
         }
-
         let code = String(query["code=".endIndex...])
         UserAccountViewModel.sharedUserAccount.loadAccessToken(code: code) { (isSuccessed) -> () in
+            print(1)
             if !isSuccessed {
                 return
             }

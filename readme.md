@@ -14,7 +14,7 @@ Installation
 
 You can download the zip or clone this repository.
 
-**改进了直播的方面，将nginx、php配置放在了Resource内，将端口统一为80（所以可以省略），可以通过以下配置**
+**改进了直播的方面，将nginx、php配置放在了Resource内，将ip统一为192.168.31.128，可以通过以下配置**
 
 ```brew install nginx-full```
 

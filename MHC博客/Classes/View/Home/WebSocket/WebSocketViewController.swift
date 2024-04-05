@@ -19,7 +19,7 @@ class WebSocketController: UIViewController,ChatDataSource {
     init(to_uid: Int, username: String) {
         self.to_uid = to_uid
         self.username = username
-        self.urlRequest = URLRequest(url: URL(string:"ws://localhost:8081/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
+        self.urlRequest = URLRequest(url: URL(string:"ws://192.168.31.128:8081/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -27,7 +27,7 @@ class WebSocketController: UIViewController,ChatDataSource {
         fatalError("init(coder:) has not been implemented")
     }
     var chatListViewModel = ChatListViewModel()
-    //let urlRequest = URLRequest(url: URL(string:"http://localhost:8080/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
+    //let urlRequest = URLRequest(url: URL(string:"http://192.168.31.128:8080/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
     lazy var urlSession = URLSession(configuration: .default)
     var urlRequest: URLRequest
     lazy var task = urlSession.webSocketTask(with: urlRequest)
@@ -94,7 +94,7 @@ class WebSocketController: UIViewController,ChatDataSource {
         SVProgressHUD.show()
             task.resume()
         isConnect = 1
-        //urlRequestToUid = URLRequest(url: URL(string:"http://localhost:8080/\(uid)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
+        //urlRequestToUid = URLRequest(url: URL(string:"http://192.168.31.128:8080/\(uid)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
         task.sendPing { error in
             SVProgressHUD.dismiss()
             guard error == nil else {

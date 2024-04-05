@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("192.168.31.128", "root", "Ls713568","mhc_inc");
 if(isset($_GET['access_token'])) {
     $query = mysqli_query($mysql,"select uid,UNIX_TIMESTAMP(createTime) AS seconds,expires_in from access_tokens where access_token = '".$_GET['access_token']."'");
     if(!is_bool($query)) {
