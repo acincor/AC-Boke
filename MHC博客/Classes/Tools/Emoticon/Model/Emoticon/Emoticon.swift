@@ -41,7 +41,6 @@ class Emoticon: NSObject {
         if png == nil {
             return ""
         }
-        
         // 拼接完整路径
         return Bundle.main.bundlePath + "/Emoticons.bundle/" + png!
     }

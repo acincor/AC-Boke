@@ -14,7 +14,7 @@ class EmoticonView: UIView {
     init(selectedEmoticon: @escaping(_ emoticon: Emoticon)->()) {
         selectedEmoticonCallBack = selectedEmoticon
         var rect = UIScreen.main.bounds
-        rect.size.height = 226
+        rect.size.height /= 4
         super.init(frame: rect)
         backgroundColor = .systemBackground
         setupUI()
@@ -57,12 +57,21 @@ class EmoticonView: UIView {
             super.prepare()
             let col: CGFloat = 7
             let row: CGFloat = 3
+                let deviceType = UIDevice.current.userInterfaceIdiom
             let w = collectionView!.bounds.width / col
-            let margin = CGFloat(Int((collectionView!.bounds.height - row * w) * 0.5))
-            itemSize = CGSize(width: w, height: w)
+            var margin: CGFloat
+            switch deviceType {
+            case .pad:
+                let h = collectionView!.bounds.height / row
+                margin  = CGFloat(Int((collectionView!.bounds.height - row * h) * 0.5))
+                itemSize = CGSize(width: w, height: h)
+            default:
+                margin  = CGFloat(Int((collectionView!.bounds.height - row * w) * 0.5))
+                itemSize = CGSize(width: w, height: w)
+            }
+            sectionInset = UIEdgeInsets(top: margin, left: 0, bottom: margin, right: 0)
             minimumInteritemSpacing = 0
             minimumLineSpacing = 0
-            sectionInset = UIEdgeInsets(top: margin, left: 0, bottom: margin, right: 0)
             scrollDirection = .horizontal
             collectionView?.isPagingEnabled = true
             collectionView?.bounces = false

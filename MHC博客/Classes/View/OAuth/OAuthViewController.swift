@@ -34,8 +34,10 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
         }catch _ {
         }
     }
+    
     override func loadView() {
         view = webView
+        webView.uiDelegate = self
         webView.navigationDelegate = self
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(OAuthViewController.close))
         navigationItem.leftBarButtonItem?.tintColor = .red
@@ -126,7 +128,6 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
 }
 extension OAuthViewController {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        print(1)
         guard let url = webView.url, url.absoluteString.hasPrefix(rootHost) else {
             return .allow
         }
@@ -135,7 +136,6 @@ extension OAuthViewController {
         }
         let code = String(query["code=".endIndex...])
         UserAccountViewModel.sharedUserAccount.loadAccessToken(code: code) { (isSuccessed) -> () in
-            print(1)
             if !isSuccessed {
                 return
             }
@@ -144,5 +144,15 @@ extension OAuthViewController {
             }
         }
         return .cancel
+    }
+}
+extension OAuthViewController : WKUIDelegate{
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    completionHandler()
+                }))
+                present(alertController, animated: true, completion: nil)
+                print("dsf")
     }
 }
