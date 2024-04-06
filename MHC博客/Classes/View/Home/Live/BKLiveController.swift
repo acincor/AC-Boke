@@ -5,18 +5,14 @@
 //  Created by mhc team on 2023/7/21.
 //
 
-import Foundation
+import AVFoundation
 import UIKit
+import HaishinKit
 class BKLiveController: UIViewController {
+    let stopButton = UIButton(title: "结束直播", color: .white, backImageName: nil,backColor: .red)
+    let startButton = UIButton(title: "开始直播", color: .white, backImageName: nil,backColor: .red)
     //MARK: - Getters and Setters
-    lazy var session: LFLiveSession = {
-        let audioConfiguration = LFLiveAudioConfiguration.default()
-        let videoConfiguration = LFLiveVideoConfiguration.defaultConfiguration(for: .low3, outputImageOrientation: .portrait)
-        let session = LFLiveSession(audioConfiguration: audioConfiguration, videoConfiguration: videoConfiguration)
-        
-        session?.preView = self.view
-        return session!
-    }()
+    let session = AVAudioSession.sharedInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,10 +32,9 @@ class BKLiveController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))
         navigationItem.leftBarButtonItem?.tintColor = .white
         // Do any additional setup after loading the view, typically from a nib.
-        let startButton = UIButton(title: "开始直播", color: .white, backImageName: nil,backColor: .red)
         startButton.layer.cornerRadius = 15
         view.addSubview(startButton)
-        let stopButton = UIButton(title: "结束直播", color: .white, backImageName: nil,backColor: .red)
+        
         stopButton.layer.cornerRadius = 15
         view.addSubview(stopButton)
         startButton.snp.makeConstraints { make in
@@ -55,15 +50,39 @@ class BKLiveController: UIViewController {
     @objc func close() {
         self.dismiss(animated: true)
     }
+    let connection = RTMPConnection()
+    lazy var stream = RTMPStream(connection: connection)
     @objc func startLive(_ sender: Any) {
-        let stream = LFLiveStreamInfo()
-        stream.url = "rtmp://192.168.31.128:1935/live/\(UserAccountViewModel.sharedUserAccount.account!.uid!)";
-        //stream.url = "rtmp://localhost:1935/live?uid=888505392646/Mhc-inc";
-        //stream.streamId = UserAccountViewModel.sharedUserAccount.account?.user
-        session.startLive(stream)
-        session.running = true
+        do {
+            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+            try session.setActive(true)
+        } catch {
+            print(error)
+        }
+
+        stream.attachAudio(AVCaptureDevice.default(for: .audio)) { error in
+          // print(error)
+        }
+
+        stream.attachCamera(AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back), channel: 0) { _, error in
+          if let error {
+            print(error)
+          }
+        }
+
+        let hkView = MTHKView(frame: view.bounds)
+        hkView.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        hkView.attachStream(stream)
+
+        // add ViewController#view
+        view.insertSubview(hkView, belowSubview: stopButton)
+
+        connection.connect("rtmp://localhost/appName/instanceName")
+        stream.publish("streamName")
     }
     @objc func stopLive(_ sender: Any) {
-        session.stopLive()
+        DispatchQueue.main.async {
+            self.stream.close()
+        }
     }
 }
