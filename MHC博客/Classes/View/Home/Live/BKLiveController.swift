@@ -8,6 +8,8 @@
 import AVFoundation
 import UIKit
 import HaishinKit
+import DispatchIntrospection
+
 class BKLiveController: UIViewController {
     let stopButton = UIButton(title: "结束直播", color: .white, backImageName: nil,backColor: .red)
     let startButton = UIButton(title: "开始直播", color: .white, backImageName: nil,backColor: .red)
@@ -50,39 +52,43 @@ class BKLiveController: UIViewController {
     @objc func close() {
         self.dismiss(animated: true)
     }
+    /*
+     var sessionQueue: DispatchQueue {
+         if #available(iOS 17.0, *){
+             return DispatchSerialQueue(label: "com.Mhc-inc.serialQueue")
+         } else {
+             return dispatch_queue_t(label: "com.Mhc-inc.serialQueue")
+         }
+     }
+     */
     let connection = RTMPConnection()
     lazy var stream = RTMPStream(connection: connection)
+    lazy var hkView = MTHKView(frame: view.bounds)
     @objc func startLive(_ sender: Any) {
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
-            try session.setActive(true)
+            try self.session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+            try self.session.setActive(true)
         } catch {
             print(error)
         }
-
-        stream.attachAudio(AVCaptureDevice.default(for: .audio)) { error in
-          // print(error)
+        
+        self.stream.attachAudio(AVCaptureDevice.default(for: .audio)) { error in
+            // print(error)
         }
-
-        stream.attachCamera(AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back), channel: 0) { _, error in
-          if let error {
-            print(error)
-          }
+        
+        self.stream.attachCamera(AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back), channel: 0) { _, error in
+            if let error {
+                print(error)
+            }
         }
-
-        let hkView = MTHKView(frame: view.bounds)
-        hkView.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        hkView.attachStream(stream)
-
-        // add ViewController#view
-        view.insertSubview(hkView, belowSubview: stopButton)
-
-        connection.connect("rtmp://192.168.31.128:1935/live")
-        stream.publish(UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+        self.hkView.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        self.hkView.attachStream(self.stream)
+        self.view.insertSubview(self.hkView, belowSubview: self.stopButton)
+        self.connection.connect("rtmp://192.168.31.128:1935/live")
+        self.stream.publish(UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
     }
     @objc func stopLive(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.stream.close()
-        }
+        self.stream.close()
+        hkView.removeFromSuperview()
     }
 }

@@ -266,7 +266,9 @@ extension IOCaptureSession: Running {
         }
         if #available(tvOS 17.0, *) {
             addSessionObservers(session)
-            session.startRunning()
+            DispatchQueue.global(qos: .background).async {
+                self.session.startRunning()
+            }
             isRunning.mutate { $0 = session.isRunning }
         } else {
             isRunning.mutate { $0 = true }
