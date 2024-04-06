@@ -77,8 +77,8 @@ class BKLiveController: UIViewController {
         // add ViewController#view
         view.insertSubview(hkView, belowSubview: stopButton)
 
-        connection.connect("rtmp://localhost/appName/instanceName")
-        stream.publish("streamName")
+        connection.connect("rtmp://192.168.31.128:1935/live")
+        stream.publish(UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
     }
     @objc func stopLive(_ sender: Any) {
         DispatchQueue.main.async {
