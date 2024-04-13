@@ -6,6 +6,7 @@ if(isset($_POST['user']) && isset($_POST['password'])) {
     $query = mysqli_query($mysql,"select password,uid from users where user = '".$_POST['user']."'");
     if(!is_bool($query)) {
         $array = mysqli_fetch_array($query);
+        if($array != null) {
     if(password_verify($_POST['password'],$array['password'])) {
     //生成code
     $code = "";
@@ -32,8 +33,9 @@ if(isset($_POST['user']) && isset($_POST['password'])) {
             mysqli_query($mysql, $sql);
     exit(json_encode(["code"=>$code],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         }
-        exit(json_encode(["msg"=>"password error!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            }
+        exit(json_encode(["msg"=>"user error!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         }
-    exit(json_encode(["msg"=>"user error!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    exit(json_encode(["msg"=>"password error!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 }
 exit(json_encode(["msg"=>"params error!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));

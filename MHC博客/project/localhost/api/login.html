@@ -94,6 +94,9 @@
                           } else {
                       　　   location = "http://192.168.31.128/api/?code="+xhr["responseJSON"]["code"];
                       }
+                      　　},
+                      error:function(response,status){
+                          alert(JSON.stringify(stauts));
                       　　}
 
                       　});
