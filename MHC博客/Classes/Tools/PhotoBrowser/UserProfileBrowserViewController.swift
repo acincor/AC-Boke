@@ -59,6 +59,15 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
                 SDImageCache.shared.clearDisk()
             }
         }
+        portraitButton.removeFromSuperview()
+        portraitButton = UIButton(title: "更换头像", fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
+        portraitButton.addTarget(self, action: #selector(self.sendPortrait), for: .touchUpInside)
+        view.addSubview(portraitButton)
+        portraitButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.snp.bottom).offset(-8)
+            make.left.equalTo(view.snp.left).offset(28)
+            make.size.equalTo(CGSize(width: 100, height: 36))
+        }
     }
     var url: URL
     enum User: String {

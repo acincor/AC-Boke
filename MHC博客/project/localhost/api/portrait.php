@@ -11,14 +11,13 @@ if(isset($_FILES['pic']) && isset($_POST['access_token'])) {
                         exit(json_encode(["msg"=>"access_token expired!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
                     }
                     $fileType = $_FILES['pic']['type']; // 获取文件的MIME类型
-                    
                     if($fileType == 'image/png' || $fileType == 'image/jpeg' || $fileType == 'video/mp4'){
                         $sourcePath = $_FILES['pic']['tmp_name'];
                         $query = mysqli_query($mysql,"select portrait from users where uid = ".$array["uid"]);
                         if(!is_bool($query)){
                             $arr = mysqli_fetch_assoc($query);
                             if($arr != null) {
-                                unlink(".".explode("http://192.168.31.128/api",$arr["portrait"]));
+                                unlink(".".explode("http://192.168.31.128/api",$arr["portrait"])[1]);
                                 exit(json_encode(["msg"=>move_uploaded_file($_FILES["pic"]['tmp_name'], ".".explode("http://192.168.31.128/api",$arr["portrait"])[1])],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
                             }
                         }
