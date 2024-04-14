@@ -11,7 +11,6 @@
 		04BAB8B22BC0FDC8007DBA7C /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04BAB8B12BC0FDC8007DBA7C /* SRTHaishinKit */; };
 		2E03D3BA29DD30B300C46867 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E03D3B929DD30B300C46867 /* ImageIO.framework */; };
 		2E03D3C129DD311F00C46867 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E887F8A29CE8F5C007CA93B /* libsqlite3.tbd */; };
-		2E0FD9972A8864060001C401 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E0FD9962A8864060001C401 /* Launch Screen.storyboard */; };
 		2E2AAA532A71EE2D0023417C /* WebSocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */; };
 		2E2AAA832A72A6690023417C /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA822A72A6690023417C /* MessageModel.swift */; };
 		2E2AAA852A72A7170023417C /* ChatDataSourch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA842A72A7170023417C /* ChatDataSourch.swift */; };
@@ -269,7 +268,6 @@
 		2E03D3B629DD2F1F00C46867 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge.h; sourceTree = "<group>"; };
 		2E03D3B929DD30B300C46867 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		2E03D41429DD324D00C46867 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		2E0FD9962A8864060001C401 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketViewController.swift; sourceTree = "<group>"; };
 		2E2AAA822A72A6690023417C /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
 		2E2AAA842A72A7170023417C /* ChatDataSourch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDataSourch.swift; sourceTree = "<group>"; };
@@ -757,7 +755,6 @@
 				2E738A9D29AA38510014FA12 /* Info.plist */,
 				2E03D3B629DD2F1F00C46867 /* bridge.h */,
 				2EAA992B2A6D48C70058481E /* 用户协议.txt */,
-				2E0FD9962A8864060001C401 /* Launch Screen.storyboard */,
 			);
 			path = "MHC博客";
 			sourceTree = "<group>";
@@ -1352,7 +1349,6 @@
 				2E704C0B29FA2977003FE541 /* README.md in Resources */,
 				2EA71C3329BDB779004742CA /* WBRefreshView.xib in Resources */,
 				2E738AD129AA38510014FA12 /* Assets.xcassets in Resources */,
-				2E0FD9972A8864060001C401 /* Launch Screen.storyboard in Resources */,
 				2E66A4FE2A376116009C8207 /* db.sql in Resources */,
 				2E738AB229AA38510014FA12 /* Emoticons.bundle in Resources */,
 				2EDC44D82A7F2FFB003D7E63 /* readme.md in Resources */,
@@ -1748,9 +1744,8 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MHC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "MHC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INSTALL_PATH = /Application;
@@ -1808,9 +1803,8 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MHC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "MHC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INSTALL_PATH = /Application;

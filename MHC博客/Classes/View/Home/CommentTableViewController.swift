@@ -45,7 +45,7 @@ class CommentTableViewController: VisitorTableViewController {
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: nil, title: "关注一些人，回这里看看有什么惊喜")
+            visitorView?.setupInfo(imageName: nil, title: "登陆一下，随时随地发现新鲜事")
             return
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))

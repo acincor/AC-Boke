@@ -27,7 +27,7 @@ class MessageTableViewController: VisitorTableViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         if !userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，别人评论你的微博，发给你的消息，都会在这里收到通知")
+            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，别人发给你的消息，你能在这里回复")
             return
         }
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCellNormalId)

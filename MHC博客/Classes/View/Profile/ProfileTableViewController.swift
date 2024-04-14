@@ -69,7 +69,7 @@ class ProfileTableViewController: VisitorTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if !userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: "登陆后，你的微博，相册、个人资料会显示在这里，展示给别人")
+            visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: "登陆后，你的个人信息、直播操作、退登注销将会在这里展示")
             return
         }
         view.addSubview(iconView)

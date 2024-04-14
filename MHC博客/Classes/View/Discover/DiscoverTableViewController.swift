@@ -130,7 +130,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，最新、最热博客尽在掌握，不再会与时事潮流擦肩而过")
+            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，能用搜索框搜索出自己想要的全新世界")
             return
         }
         filterContentForSearchText("")

@@ -71,7 +71,7 @@ class LikeStatusTableViewController: VisitorTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: nil, title: "关注一些人，回这里看看有什么惊喜")
+            visitorView?.setupInfo(imageName: nil, title: "登陆一下，随时随地发现新鲜事")
             return
         }
         

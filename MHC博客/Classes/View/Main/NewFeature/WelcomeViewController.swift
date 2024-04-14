@@ -25,6 +25,8 @@ class WelcomeViewController: UIViewController {
         }
     }
     override func loadView() {
+        backImageView.contentMode = .scaleAspectFit
+        backImageView.backgroundColor = UIColor(named: "ad_backColor")
         view = backImageView
         setupUI()
     }
