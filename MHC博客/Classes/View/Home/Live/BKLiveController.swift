@@ -9,13 +9,16 @@ import AVFoundation
 import UIKit
 import HaishinKit
 import DispatchIntrospection
-
 class BKLiveController: UIViewController {
     let stopButton = UIButton(title: "结束直播", color: .white, backImageName: nil,backColor: .red)
     let startButton = UIButton(title: "开始直播", color: .white, backImageName: nil,backColor: .red)
     //MARK: - Getters and Setters
     let session = AVAudioSession.sharedInstance()
-    
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     override func viewDidLoad() {
         super.viewDidLoad()
         let image = UIImage(named: "Live")

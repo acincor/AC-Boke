@@ -12,7 +12,11 @@ class CommentViewController: UIViewController{
     override var description: String {
         return "这是一个comment类，啥也没有"
     }
-    
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     var toolbar: UIToolbar = UIToolbar()
     lazy var textView:UITextView = {
         let tv = UITextView()

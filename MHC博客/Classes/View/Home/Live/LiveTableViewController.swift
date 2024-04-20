@@ -18,6 +18,11 @@ class LiveTableView: UICollectionView{
         return indicator
     }()
      */
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     @objc func loadData() {
         refreshControl?.beginRefreshing()
         liveListViewModel.loadLive { (isSuccessed) in

@@ -10,6 +10,11 @@ import UIKit
 import WebKit
 import SwiftUI
 class MainViewController: UITabBarController {
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     override func viewDidLoad() {
         super.viewDidLoad()
         addChilds()
@@ -65,7 +70,7 @@ extension MainViewController {
         addChild(UIViewController())
         addChild(DiscoverTableViewController(), "发现", "tabbar_discover")
         if UserAccountViewModel.sharedUserAccount.userLogon {
-            addChild(UIHostingController(rootView: UserNavigationLinkView(account: nil)), "我", "tabbar_profile")
+            addChild(UIHostingController(rootView: UserNavigationLinkView(account: nil, uid: UserAccountViewModel.sharedUserAccount.account!.uid!)), "我", "tabbar_profile")
             //个人喜欢四个登陆界面相同，若想改成NavigationView的ViewController也可以，只是不美观，因为不同，但是我们是处理好的
         } else {
             addChild(ProfileTableViewController(account: nil), "我", "tabbar_profile")

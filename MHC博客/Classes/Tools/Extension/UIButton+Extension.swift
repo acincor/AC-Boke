@@ -12,6 +12,13 @@ struct UserNavigationLinkView: View {
     @State var isShow = false
     @State var isShow2 = false
     var account: UserViewModel?
+    var name: String {
+        if account == nil {
+            return "我的博客"
+        }
+        return "TA的博客"
+    }
+    var uid: String
     var likeController:LikeStatusTableViewController {
         if let account = account {
             return LikeStatusTableViewController(uid: "\(account.user.uid)")
@@ -33,8 +40,12 @@ struct UserNavigationLinkView: View {
                         Text("用户协议")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller: UINavigationController(rootViewController: ProfileTableViewController(account: account)))) {
+                    NavigationLink(destination: MyDetailView(controller: ProfileTableViewController(account: account))) {
                         Text("主页")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller: BlogsTableViewController(uid: uid))) {
+                        Text(name)
                             .foregroundColor(.orange)
                     }
                     NavigationLink(destination: MyDetailView(controller: likeController)) {
@@ -80,8 +91,12 @@ struct UserNavigationLinkView: View {
                         Text("用户协议")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller: UINavigationController(rootViewController: ProfileTableViewController(account: account)))) {
+                    NavigationLink(destination: MyDetailView(controller: ProfileTableViewController(account: account))) {
                         Text("主页")
+                            .foregroundColor(.orange)
+                    }
+                    NavigationLink(destination: MyDetailView(controller:  BlogsTableViewController(uid: uid))) {
+                        Text(name)
                             .foregroundColor(.orange)
                     }
                     NavigationLink(destination: MyDetailView(controller: likeController)) {
@@ -117,15 +132,18 @@ struct UserNavigationLinkView: View {
         }
     }
 }
-struct MyDetailView: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        return controller.view
-    }
-    func updateUIView(_ uiView: UIView, context: Context) {
-    }
+struct MyDetailView: UIViewControllerRepresentable {
     var controller: UIViewController
-    typealias UIViewType = UIView
+    func makeUIViewController(context: Context) -> UIViewController {
+        // 返回你想展示的 UIViewController 实例
+        return controller
+    }
+ 
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // 如果需要更新 UIViewController 的状态，可以在这里实现
+    }
 }
+
 struct ImageDetailView: UIViewRepresentable {
     var account: UserViewModel?
     func makeUIView(context: Context) -> UIView {

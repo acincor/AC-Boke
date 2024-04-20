@@ -32,6 +32,11 @@ class PhotoBrowserAnimator: NSObject, UIViewControllerTransitioningDelegate {
         isPresented = true
         return self
     }
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     func setDelegateParams(present Delegate: PhotoBrowserPresentDelegate, using indexPath: IndexPath, dimissDelegate: PhotoBrowserDismissDelegate) {
         self.presentDelegate = Delegate
         self.indexPath = indexPath

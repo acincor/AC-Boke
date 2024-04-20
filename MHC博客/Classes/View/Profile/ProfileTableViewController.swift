@@ -7,7 +7,6 @@
 
 import UIKit
 import SwiftUI
-
 class ProfileTableViewController: VisitorTableViewController {
     var account: UserViewModel?
     private lazy var addButton = UIButton(title: "添加好友", fontSize: 14, color: UIColor(white: 0.6, alpha: 1.0), imageName: nil)

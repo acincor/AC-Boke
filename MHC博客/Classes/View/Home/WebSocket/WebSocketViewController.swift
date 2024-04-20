@@ -11,7 +11,11 @@ class WebSocketController: UIViewController,ChatDataSource {
     func rowsForChatTable(tableView: TableView) -> Int {
         return chatListViewModel.chatList.count
     }
-    
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     func chatTableView(tableView: TableView, dataForRow: Int) -> MessageItem {
         return self.chatListViewModel.chatList[dataForRow]
     }

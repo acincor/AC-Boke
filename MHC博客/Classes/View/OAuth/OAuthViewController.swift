@@ -15,6 +15,11 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
     @objc private func closeUserAgreement() {
         controller.dismiss(animated: true,completion: nil)
     }
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     let controller = UIViewController()
     @objc private func userAgreement() {
         let textView = UITextView(frame: UIScreen.main.bounds)

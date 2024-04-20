@@ -93,6 +93,11 @@ extension NetworkTools {
         }
         tokenRequest(.GET, urlString, params, finished: finished)
     }
+    func profile(uid: String,finished: @escaping HMRequstCallBack) {
+        let urlString = rootHost+"/api/profileBlog.php"
+        let params = ["uid":uid]
+        request(.GET, urlString, params, finished: finished)
+    }
     func loadOneStatus(id: Int,finished: @escaping HMRequstCallBack) {
         let urlString = rootHost+"/api/loadBlogOfId.php"
         let params = ["id":id]

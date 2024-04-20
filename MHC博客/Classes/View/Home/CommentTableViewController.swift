@@ -17,6 +17,7 @@ class CommentTableViewController: VisitorTableViewController {
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
     }
+    
     @objc func loadData() {
         guard let viewModel = viewModel else{
             return

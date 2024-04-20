@@ -19,6 +19,11 @@ class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
         tv.delegate = self
         return tv
     }()
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     private func preparePicturePicker() {
         addChild(picturesPickerController)
         view.insertSubview(picturesPickerController.view, belowSubview: toolbar)

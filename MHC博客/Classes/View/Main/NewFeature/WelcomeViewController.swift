@@ -8,6 +8,11 @@
 import UIKit
 
 class WelcomeViewController: UIViewController {
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         iconView.snp.updateConstraints { make in

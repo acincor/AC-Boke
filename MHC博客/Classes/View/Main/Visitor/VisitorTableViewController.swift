@@ -20,6 +20,11 @@ class VisitorTableViewController: UITableViewController {
         //view.backgroundColor = UIColor.red
         visitorView?.loginButton.addTarget(self, action: #selector(VisitorTableViewController.visitorViewDidLogin), for: .touchUpInside)
     }
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment the following line to preserve selection between presentations

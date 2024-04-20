@@ -14,7 +14,11 @@ private let WBNewFeatureViewCellId = "WBNewFeatureViewCellId"
 private let WBNewFeatureImageCount = 4
 
 class NewFeatureViewController: UICollectionViewController {
-    
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     // MARK: - 构造函数
     init() {
         // super.指定的构造函数

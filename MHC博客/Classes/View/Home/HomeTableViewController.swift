@@ -20,7 +20,6 @@ class CustomRefreshView: UIView {
         return indicator
     }()
     var refreshAction: ((UIActivityIndicatorView)->())?
- 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(pullupView)
@@ -167,7 +166,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     @objc func action(sender: UITapGestureRecognizer) {
         let dict = ["portrait": sender.sender3, "user": sender.sender2, "uid": sender.sender]
         let uvm = UserViewModel(user: Account(dict: dict))
-        present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm))), animated: true)
+        present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm, uid: sender.sender))), animated: true)
         }
 
     var cell: StatusCell?

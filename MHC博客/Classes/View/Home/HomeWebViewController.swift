@@ -14,6 +14,11 @@ class HomeWebViewController: UIViewController,WKNavigationDelegate {
         self.url = url
         super.init(nibName: nil, bundle: nil)
     }
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     private lazy var webView = WKWebView()
     override func loadView() {
         view = webView

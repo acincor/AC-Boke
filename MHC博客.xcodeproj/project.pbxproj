@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		04BAB8B02BC0FDC8007DBA7C /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04BAB8AF2BC0FDC8007DBA7C /* HaishinKit */; };
 		04BAB8B22BC0FDC8007DBA7C /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04BAB8B12BC0FDC8007DBA7C /* SRTHaishinKit */; };
+		04D496C22BD35D8F00055E61 /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04D496C12BD35D8F00055E61 /* HaishinKit */; };
+		04D496C42BD35D8F00055E61 /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04D496C32BD35D8F00055E61 /* SRTHaishinKit */; };
+		04DC74E32BD3B45900B8034A /* BlogsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC74E22BD3B45900B8034A /* BlogsTableViewController.swift */; };
 		2E03D3BA29DD30B300C46867 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E03D3B929DD30B300C46867 /* ImageIO.framework */; };
 		2E03D3C129DD311F00C46867 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E887F8A29CE8F5C007CA93B /* libsqlite3.tbd */; };
 		2E2AAA532A71EE2D0023417C /* WebSocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */; };
@@ -265,6 +268,7 @@
 		04589C612BBFF17900B8ED18 /* my.cnf.default */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = my.cnf.default; sourceTree = "<group>"; };
 		049775F52BB7078F00990CFD /* php.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = php.ini; sourceTree = "<group>"; };
 		04C0F4DB2BAFC75700122624 /* nginx.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nginx.conf; sourceTree = "<group>"; };
+		04DC74E22BD3B45900B8034A /* BlogsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlogsTableViewController.swift; sourceTree = "<group>"; };
 		2E03D3B629DD2F1F00C46867 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge.h; sourceTree = "<group>"; };
 		2E03D3B929DD30B300C46867 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		2E03D41429DD324D00C46867 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -613,8 +617,10 @@
 			files = (
 				2E03D3C129DD311F00C46867 /* libsqlite3.tbd in Frameworks */,
 				04BAB8B22BC0FDC8007DBA7C /* SRTHaishinKit in Frameworks */,
+				04D496C42BD35D8F00055E61 /* SRTHaishinKit in Frameworks */,
 				2E85007929DD345A00B7A018 /* QuartzCore.framework in Frameworks */,
 				04BAB8B02BC0FDC8007DBA7C /* HaishinKit in Frameworks */,
+				04D496C22BD35D8F00055E61 /* HaishinKit in Frameworks */,
 				2E03D3BA29DD30B300C46867 /* ImageIO.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -904,6 +910,7 @@
 		2E738A7829AA38510014FA12 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				04DC74E22BD3B45900B8034A /* BlogsTableViewController.swift */,
 				2EDC45452A823195003D7E63 /* CommentStatusTableViewController.swift */,
 				2EDC453F2A81EC38003D7E63 /* LikeStatusTableViewController.swift */,
 				2E2AA9D02A711B4E0023417C /* WebSocket */,
@@ -1297,6 +1304,8 @@
 			packageProductDependencies = (
 				04BAB8AF2BC0FDC8007DBA7C /* HaishinKit */,
 				04BAB8B12BC0FDC8007DBA7C /* SRTHaishinKit */,
+				04D496C12BD35D8F00055E61 /* HaishinKit */,
+				04D496C32BD35D8F00055E61 /* SRTHaishinKit */,
 			);
 			productName = "MHC博客";
 			productReference = 2E738A3529AA33CF0014FA12 /* MHC博客.app */;
@@ -1327,7 +1336,7 @@
 			);
 			mainGroup = 2E738A2C29AA33CF0014FA12;
 			packageReferences = (
-				04BAB8AE2BC0FDC8007DBA7C /* XCLocalSwiftPackageReference "MHC博客/HaishinKit.swift" */,
+				04D496C02BD35D8F00055E61 /* XCLocalSwiftPackageReference "MHC博客/HaishinKit.swift" */,
 			);
 			productRefGroup = 2E738A2C29AA33CF0014FA12;
 			projectDirPath = "";
@@ -1576,6 +1585,7 @@
 				2E704C1929FA2977003FE541 /* AFNetworkReachabilityManager.m in Sources */,
 				2E738ABB29AA38510014FA12 /* Comment.swift in Sources */,
 				2EB293F629EB7243009E0439 /* SDCallbackQueue.m in Sources */,
+				04DC74E32BD3B45900B8034A /* BlogsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1761,6 +1771,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "MHC博客/bridge.h";
 				SWIFT_VERSION = 5.0;
@@ -1820,6 +1831,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "MHC博客/bridge.h";
 				SWIFT_VERSION = 5.0;
@@ -1852,7 +1864,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		04BAB8AE2BC0FDC8007DBA7C /* XCLocalSwiftPackageReference "MHC博客/HaishinKit.swift" */ = {
+		04D496C02BD35D8F00055E61 /* XCLocalSwiftPackageReference "MHC博客/HaishinKit.swift" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "MHC博客/HaishinKit.swift";
 		};
@@ -1864,6 +1876,14 @@
 			productName = HaishinKit;
 		};
 		04BAB8B12BC0FDC8007DBA7C /* SRTHaishinKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SRTHaishinKit;
+		};
+		04D496C12BD35D8F00055E61 /* HaishinKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HaishinKit;
+		};
+		04D496C32BD35D8F00055E61 /* SRTHaishinKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SRTHaishinKit;
 		};

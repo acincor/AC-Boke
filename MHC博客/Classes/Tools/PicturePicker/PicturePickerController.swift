@@ -22,6 +22,11 @@ class PicturePickerController: UICollectionViewController {
         self.collectionView!.register(PicturePickerCell.self, forCellWithReuseIdentifier: PicturePickerCellID)
         // Do any additional setup after loading the view.
     }
+    #if os(visionOS)
+    override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+        return .glass
+    }
+    #endif
     init() {
         super.init(collectionViewLayout: PicturePickerLayout())
     }

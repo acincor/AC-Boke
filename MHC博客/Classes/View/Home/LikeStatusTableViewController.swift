@@ -15,6 +15,11 @@ class LikeStatusTableViewController: VisitorTableViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     private func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: LikeStatusCellNormalId)
@@ -81,7 +86,7 @@ class LikeStatusTableViewController: VisitorTableViewController {
     @objc func action(sender: UITapGestureRecognizer) {
         let dict = ["portrait": sender.sender3, "user": sender.sender2, "uid": sender.sender]
         let uvm = UserViewModel(user: Account(dict: dict))
-        present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm))), animated: true)
+        present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm, uid: sender.sender))), animated: true)
     }
 
     var cell: StatusCell?

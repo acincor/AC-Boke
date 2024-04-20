@@ -14,6 +14,11 @@ class PhotoBrowserViewController: UIViewController, UICollectionViewDataSource {
         super.viewDidLoad()
         collectionView.scrollToItem(at: current, at: .centeredHorizontally, animated: false)
     }
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     private class PhotoBrowserViewLayout: UICollectionViewFlowLayout {
         override func prepare() {
             super.prepare()

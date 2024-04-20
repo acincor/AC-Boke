@@ -10,7 +10,11 @@ import Photos
 import UIKit
 private let UserProfileBrowserCellId = "UserProfileBrowserCellId"
 class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
-    
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     weak var photoDelegate: PhotoBrowserCellDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()

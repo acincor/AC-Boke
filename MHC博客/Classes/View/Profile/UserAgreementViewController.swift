@@ -8,7 +8,11 @@
 import UIKit
 
 class UserAgreementViewController: UIViewController {
-
+#if os(visionOS)
+override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
+    return .glass
+}
+#endif
     override func viewDidLoad() {
         super.viewDidLoad()
         let textView = UITextView(frame: UIScreen.main.bounds)
