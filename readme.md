@@ -1,4 +1,4 @@
-MHC-Boke 2.3版本 支持中英文
+MHC-Boke 2.4版本 支持中英文
 ---------------
 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Mhc-Inc/MHC-Boke)
@@ -14,7 +14,7 @@ Installation
 
 You can download the zip or clone this repository.
 
-**改进了直播的方面，将nginx、php配置放在了Resource内，将ip统一为localhost，可以通过以下配置**
+**改进了直播的方面，将@后更改为用户的MID，以便我们实现升起视图控制器来查看用户信息，将富文本FFLabelDelegate在评论区无法正常点击的bug fixed，同时在一段时间后会添加查看话题的api（敬请期待）将nginx、php配置放在了Resource内，将ip统一为localhost，可以通过以下配置**
 
 ```brew install nginx-full```
 
