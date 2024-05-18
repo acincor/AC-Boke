@@ -275,4 +275,7 @@ extension BlogsTableViewController: StatusCellDelegate {
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
+    func present(_ controller: UIViewController) {
+        self.present(controller, animated: true)
+    }
 }

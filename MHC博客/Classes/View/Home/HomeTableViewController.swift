@@ -307,6 +307,9 @@ extension HomeTableViewController: StatusCellDelegate {
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
+    func present(_ controller: UIViewController) {
+        self.present(controller, animated: true)
+    }
 }
 extension Dictionary where Key: Equatable {
     func isEqualTo(_ dictionary: Dictionary, excluding: [Key] = []) -> Bool {

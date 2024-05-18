@@ -119,6 +119,7 @@ extension CommentTableViewController {
         cell.bottomView.likeButton.tag = indexPath.row
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        cell.cellDelegate = self
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -186,10 +187,13 @@ extension CommentTableViewController {
         return commentlistViewModel.commentList[indexPath.row].rowHeight
     }
 }
-extension CommentTableViewController: StatusCellDelegate {
+extension CommentTableViewController: StatusCommentCellDelegate {
     func statusCellDidClickUrl(url: URL) {
         let vc = HomeWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
+    }
+    func present(_ controller: UIViewController) {
+        self.present(controller, animated: true)
     }
 }

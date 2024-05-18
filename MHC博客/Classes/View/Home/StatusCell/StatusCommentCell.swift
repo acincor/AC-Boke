@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import SwiftUI
 
 let CommentCellMargin: CGFloat = 12
 let CommentCellIconWidth: CGFloat = 35
 class StatusCommentCell: UITableViewCell, FFLabelDelegate {
-    weak var cellDelegate: StatusCellDelegate?
+    weak var cellDelegate: StatusCommentCellDelegate?
     var viewModel: CommentViewModel? {
         didSet {
             let text = viewModel?.comment.comment ?? ""
@@ -62,5 +63,32 @@ extension StatusCommentCell {
             make.height.equalTo(44)
         }
         contentLabel.labelDelegate = self
+    }
+}
+extension StatusCommentCell {
+    func labelDidSelectedLinkText(label: FFLabel, text: String) {
+        if text.hasPrefix("http://") {
+            guard let url = URL(string: text) else {
+                return
+            }
+            cellDelegate?.statusCellDidClickUrl(url: url)
+        }
+        if text.hasPrefix("https://") {
+            guard let url = URL(string: text) else {
+                return
+            }
+            cellDelegate?.statusCellDidClickUrl(url: url)
+        }
+        if text.hasPrefix("@") {
+            NetworkTools.shared.loadUserInfo(uid: Int(text.split(separator: "@")[0]) ?? 0) { Result, Error in
+                guard let res = Result as? [String:Any], let uid = res["uid"] as? String else {
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
+                    return
+                }
+                
+                self.cellDelegate?.present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: UserViewModel(user: Account(dict: res)),uid: uid))))
+            }
+            
+        }
     }
 }

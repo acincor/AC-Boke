@@ -42,10 +42,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         self.textView.insertEmoticon(emoticon)
     }
     private lazy var userCollectionView: UserCollectionCellView = UserCollectionCellView { viewModel in
-        guard let user = viewModel.user.user else {
-            return
-        }
-        self.textView.text.append(contentsOf: "@"+user)
+        self.textView.text.append(contentsOf: "@\(viewModel.user.uid)")
         self.textView.delegate?.textViewDidChange!(self.textView)
     }
     @objc private func createTrend() {

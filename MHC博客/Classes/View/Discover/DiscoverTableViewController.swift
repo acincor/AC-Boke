@@ -10,6 +10,10 @@ import UIKit
 var MySearchTextField: UISearchController?
 
 class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUpdating, UISearchBarDelegate, StatusCellDelegate {
+    func present(_ controller: UIViewController) {
+        self.present(controller, animated: true)
+    }
+    
     func statusCellDidClickUrl(url: URL) {
         let vc = HomeWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true

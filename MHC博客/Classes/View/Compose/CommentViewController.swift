@@ -27,6 +27,21 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         tv.delegate = self
         return tv
     }()
+    private lazy var userCollectionView: UserCollectionCellView = UserCollectionCellView { viewModel in
+        self.textView.text.append(contentsOf: "@\(viewModel.user.uid)")
+        self.textView.delegate?.textViewDidChange!(self.textView)
+    }
+    @objc private func selectUser() {
+        userCollectionView.friendListViewModel.loadFriend { isSuccessed in
+            print(isSuccessed)
+            self.userCollectionView.collectionView.reloadData()
+        }
+        self.userCollectionView.setupUI()
+        print(self.userCollectionView.friendListViewModel.friendList)
+        textView.resignFirstResponder()
+        textView.inputView = textView.inputView == nil ? userCollectionView : nil
+        textView.becomeFirstResponder()
+    }
     private lazy var emoticonView: EmoticonView = EmoticonView { emoticon in
         self.textView.insertEmoticon(emoticon)
     }
@@ -133,7 +148,7 @@ extension CommentViewController {
             make.right.equalTo(view.snp.right)
             make.height.equalTo(44)
         }
-        let itemSettings = [["imageName": "compose_mentionbutton_background"], ["imageName":"compose_trendbutton_background"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_pic_big_add"]]
+        let itemSettings = [["imageName": "compose_mentionbutton_background","actionName":"selectUser"], ["imageName":"compose_trendbutton_background"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_pic_big_add"]]
         var items = [UIBarButtonItem]()
         for dict in itemSettings {
             items.append(UIBarButtonItem(imageName: dict["imageName"]!, target: self, actionName: dict["actionName"]))

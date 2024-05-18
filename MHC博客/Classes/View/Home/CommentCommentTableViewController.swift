@@ -179,10 +179,13 @@ extension CommentCommentTableViewController {
         return commentlistViewModel.commentCommentList[indexPath.row].rowHeight
     }
 }
-extension CommentCommentTableViewController: StatusCellDelegate {
+extension CommentCommentTableViewController: StatusCommentCellDelegate {
     func statusCellDidClickUrl(url: URL) {
         let vc = HomeWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
+    }
+    func present(_ controller: UIViewController) {
+        self.present(controller, animated: true)
     }
 }

@@ -6,11 +6,17 @@
 //
 
 import UIKit
+import SwiftUI
 
 let StatusCellMargin: CGFloat = 12
 let StatusCellIconWidth: CGFloat = 35
 protocol StatusCellDelegate: NSObjectProtocol {
     func statusCellDidClickUrl(url:URL)
+    func present(_ controller: UIViewController)
+}
+protocol StatusCommentCellDelegate: NSObjectProtocol {
+    func statusCellDidClickUrl(url:URL)
+    func present(_ controller: UIViewController)
 }
 class StatusCell: UITableViewCell {
     weak var cellDelegate: StatusCellDelegate?
@@ -90,6 +96,17 @@ extension StatusCell: FFLabelDelegate {
                 return
             }
             cellDelegate?.statusCellDidClickUrl(url: url)
+        }
+        if text.hasPrefix("@") {
+            NetworkTools.shared.loadUserInfo(uid: Int(text.split(separator: "@")[0]) ?? 0) { Result, Error in
+                guard let res = Result as? [String:Any], let uid = res["uid"] as? String else {
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
+                    return
+                }
+                
+                self.cellDelegate?.present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: UserViewModel(user: Account(dict: res)),uid: uid))))
+            }
+            
         }
     }
 }
