@@ -12,6 +12,7 @@
 		04D496C22BD35D8F00055E61 /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04D496C12BD35D8F00055E61 /* HaishinKit */; };
 		04D496C42BD35D8F00055E61 /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04D496C32BD35D8F00055E61 /* SRTHaishinKit */; };
 		04DC74E32BD3B45900B8034A /* BlogsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC74E22BD3B45900B8034A /* BlogsTableViewController.swift */; };
+		04E374A12BF8286E004C5F34 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 04E374A02BF8286E004C5F34 /* Localizable.xcstrings */; };
 		2E03D3BA29DD30B300C46867 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E03D3B929DD30B300C46867 /* ImageIO.framework */; };
 		2E03D3C129DD311F00C46867 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E887F8A29CE8F5C007CA93B /* libsqlite3.tbd */; };
 		2E2AAA532A71EE2D0023417C /* WebSocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */; };
@@ -269,6 +270,7 @@
 		049775F52BB7078F00990CFD /* php.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = php.ini; sourceTree = "<group>"; };
 		04C0F4DB2BAFC75700122624 /* nginx.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nginx.conf; sourceTree = "<group>"; };
 		04DC74E22BD3B45900B8034A /* BlogsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlogsTableViewController.swift; sourceTree = "<group>"; };
+		04E374A02BF8286E004C5F34 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2E03D3B629DD2F1F00C46867 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge.h; sourceTree = "<group>"; };
 		2E03D3B929DD30B300C46867 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		2E03D41429DD324D00C46867 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -628,6 +630,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04E3749F2BF827EB004C5F34 /* Localized */ = {
+			isa = PBXGroup;
+			children = (
+				04E374A02BF8286E004C5F34 /* Localizable.xcstrings */,
+			);
+			path = Localized;
+			sourceTree = "<group>";
+		};
 		2E2AA9D02A711B4E0023417C /* WebSocket */ = {
 			isa = PBXGroup;
 			children = (
@@ -744,6 +754,7 @@
 		2E738A4C29AA38510014FA12 /* MHC博客 */ = {
 			isa = PBXGroup;
 			children = (
+				04E3749F2BF827EB004C5F34 /* Localized */,
 				2EDC450F2A7FC2E7003D7E63 /* MHC博客Release.entitlements */,
 				2EDC44D72A7F2FFB003D7E63 /* readme.md */,
 				2E66A5212A416173009C8207 /* SVProgressHUD */,
@@ -1319,7 +1330,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					2E738A3429AA33CF0014FA12 = {
 						CreatedOnToolsVersion = 14.2;
@@ -1328,11 +1339,12 @@
 			};
 			buildConfigurationList = 2E738A3029AA33CF0014FA12 /* Build configuration list for PBXProject "MHC博客" */;
 			compatibilityVersion = "Xcode 15.3";
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 2E738A2C29AA33CF0014FA12;
 			packageReferences = (
@@ -1357,6 +1369,7 @@
 				2E66A52F2A416173009C8207 /* SVProgressHUD.bundle in Resources */,
 				2E704C0B29FA2977003FE541 /* README.md in Resources */,
 				2EA71C3329BDB779004742CA /* WBRefreshView.xib in Resources */,
+				04E374A12BF8286E004C5F34 /* Localizable.xcstrings in Resources */,
 				2E738AD129AA38510014FA12 /* Assets.xcassets in Resources */,
 				2E66A4FE2A376116009C8207 /* db.sql in Resources */,
 				2E738AB229AA38510014FA12 /* Emoticons.bundle in Resources */,
@@ -1596,6 +1609,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1661,6 +1675,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

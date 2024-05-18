@@ -17,10 +17,10 @@ class UserCellTopView: UIView {
     private lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)
     
     /// 时间标签
-    private lazy var timeLabel: UILabel = UILabel(title: "现在", fontSize: 11, color: UIColor.red)
+    private lazy var timeLabel: UILabel = UILabel(title: NSLocalizedString("现在", comment: ""), fontSize: 11, color: UIColor.red)
     
     /// 可更改来源标签
-    lazy var sourceLabel: UILabel = UILabel(title: "你的伙伴", fontSize: 11)
+    lazy var sourceLabel: UILabel = UILabel(title: NSLocalizedString("你的伙伴", comment: ""), fontSize: 11)
     var viewModel: UserViewModel? {
         didSet {
             // 姓名

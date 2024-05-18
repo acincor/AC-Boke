@@ -85,6 +85,8 @@ class StatusPictureViewCell: UICollectionViewCell {
     var imageURL: URL? {
         didSet {
             iconView.sd_setImage(with: imageURL, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+            iconView.clipsToBounds = true
+            iconView.layer.cornerRadius = 20
             let ext = ((imageURL?.absoluteString ?? "") as NSString).pathExtension.lowercased()
             gifIconView.isHidden = (ext != "gif")
         }

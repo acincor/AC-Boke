@@ -18,16 +18,16 @@ extension Date {
         if calendar.isDateInToday(self) {
             let delta = Int(Date().timeIntervalSince(self))
             if delta < 60 {
-                return "刚刚"
+                return NSLocalizedString("刚刚", comment: "")
             }
             if delta < 3600 {
-                return "\(delta / 60)分钟前"
+                return String.localizedStringWithFormat(NSLocalizedString("%@分钟前", comment: ""), String(delta / 60))
             }
-            return "\(delta / 3600)小时前"
+            return String.localizedStringWithFormat(NSLocalizedString("%@小时前", comment: ""), String(delta / 3600))
         }
         var fmt = " HH:mm"
         if calendar.isDateInYesterday(self) {
-            fmt = "昨天" + fmt
+            fmt = NSLocalizedString("昨天", comment: "") + fmt
         } else {
             fmt = "MM-dd" + fmt
             let comps = calendar.component(.year, from: Date())

@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("192.168.31.128", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
 if(isset($_POST['access_token']) && isset($_POST['id'])) {
     $query = mysqli_query($mysql,"select uid,UNIX_TIMESTAMP(createTime) AS seconds,expires_in from access_tokens where access_token = '".$_POST['access_token']."'");
     if(!is_bool($query)) {
@@ -18,7 +18,7 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                     if(!is_bool($pic_urls)){
                         $pic_urls = json_decode(mysqli_fetch_array($pic_urls,MYSQLI_ASSOC)['pic_urls'],true);
                         for ($i = 0; $i < count($pic_urls); $i++) {
-                             unlink(".".explode("http://192.168.31.128/api",$pic_urls[$i]['pic'.$i])[1]);
+                             unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
                         }
                     }
                     $select_bool = mysqli_query($mysql,"SELECT * FROM likes WHERE id = ".$_POST['id']."");

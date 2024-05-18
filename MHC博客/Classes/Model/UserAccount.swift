@@ -67,7 +67,7 @@ class UserAccount: NSObject,NSCoding,NSSecureCoding {
             let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true)
             try data.write(to: NSURL(fileURLWithPath: path) as URL)
         } catch {
-            SVProgressHUD.showInfo(withStatus: "出错了")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
         }
     }
 }

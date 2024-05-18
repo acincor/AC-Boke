@@ -86,7 +86,7 @@ class PhotoBrowserCell: UICollectionViewCell {
                     
                     // 判断图像下载是否成功
                     if image == nil {
-                        SVProgressHUD.showInfo(withStatus: "图片下载失败")
+                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
                         return
                     }
                     

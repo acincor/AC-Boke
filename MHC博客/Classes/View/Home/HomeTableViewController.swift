@@ -88,7 +88,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vm = liveListViewModel.liveList[indexPath.row]
-        guard let url = ("http://192.168.31.128/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+        guard let url = ("http://localhost/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
             return
         }
@@ -126,7 +126,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         guard let count = listViewModel.pulldownCount else {
             return
         }
-        pulldownTipLabel.text = (count == 0) ? "没有博客" : "刷新到\(count)条博客"
+        pulldownTipLabel.text = (count == 0) ? NSLocalizedString("没有博客", comment: "") : String.localizedStringWithFormat(NSLocalizedString("刷新到%@条博客", comment: ""),"\(count)")
         let height: CGFloat = 44
         let rect = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
         pulldownTipLabel.frame = CGRectOffset(rect, 0, -2 * height)
@@ -141,7 +141,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: nil, title: "登陆一下，随时随地发现新鲜事")
+            visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
             return
         }
         prepareTableView()
@@ -228,15 +228,15 @@ extension HomeTableViewController {
         return cell
     }
     @objc func action2(_ sender: UIButton) {
-        SVProgressHUD.show(withStatus: "加载中")
+        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
         NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
             SVProgressHUD.dismiss()
             if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
             }
             sender.nav.close()
@@ -250,10 +250,10 @@ extension HomeTableViewController {
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("不能删除别人的博客哦", comment: ""))
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "删除成功")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
             StatusDAL.removeCache(listViewModel.statusList[sender.tag].status.id)
             listViewModel.statusList.remove(at: sender.tag)
             self.tableView.reloadData()
@@ -261,9 +261,9 @@ extension HomeTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发布", color: .red,backImageName: nil)
+        let button = UIButton(title: NSLocalizedString("发布",comment: ""), color: .red,backImageName: nil)
         guard (listViewModel.statusList[sender.tag].status.id > 0) else {
-            SVProgressHUD.showInfo(withStatus: "出错了")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了",comment: ""))
             return
         }
         button.nav = nav
@@ -276,9 +276,9 @@ extension HomeTableViewController {
         NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
                 if (Result as! [String:Any])["code"] as! String == "add" {
-                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: "你的点赞TA收到了")
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
                 } else {
-                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: "你的取消TA收到了")
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: NSLocalizedString("你的取消TA收到了", comment: ""))
                 }
                 self.tableView.reloadData()
                 DispatchQueue.main.asyncAfter(deadline: .now()+1){
@@ -286,7 +286,7 @@ extension HomeTableViewController {
                 }
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "出错了")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
     }

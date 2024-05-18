@@ -23,7 +23,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
     init(to_uid: Int, username: String) {
         self.to_uid = to_uid
         self.username = username
-        self.urlRequest = URLRequest(url: URL(string:"ws://192.168.31.128:8081/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
+        self.urlRequest = URLRequest(url: URL(string:"ws://localhost:8081/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,7 +31,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         fatalError("init(coder:) has not been implemented")
     }
     var chatListViewModel = ChatListViewModel()
-    //let urlRequest = URLRequest(url: URL(string:"http://192.168.31.128:8080/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
+    //let urlRequest = URLRequest(url: URL(string:"http://localhost:8080/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
     lazy var urlSession = URLSession(configuration: .default)
     var urlRequest: URLRequest
     lazy var task = urlSession.webSocketTask(with: urlRequest)
@@ -77,19 +77,19 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
          */
                 sendButton.layer.cornerRadius = 15
                 sendButton.layer.masksToBounds = true
-                textField.placeholder = "说些话吧，哪怕是一个标点符号也行..."
-                sendButton.setTitle("发送", for: .normal)
+                textField.placeholder = NSLocalizedString("说些话吧，哪怕是一个标点符号也行...", comment: "")
+                sendButton.setTitle(NSLocalizedString("发送", comment: ""), for: .normal)
                 sendButton.setTitleColor(.white, for: .normal)
                 sendButton.backgroundColor = .red
                 textField.sizeToFit()
                 sendButton.sizeToFit()
         let leftbar = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(self.close))
         leftbar.tintColor = .red
-        leftbar.title = "关闭"
+        leftbar.title = NSLocalizedString("关闭", comment: "")
         navigationItem.leftBarButtonItem = leftbar
         let rightbar = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(self.clearData))
         rightbar.tintColor = .red
-        rightbar.title = "删除聊天记录"
+        rightbar.title = NSLocalizedString("删除聊天记录", comment: "")
         navigationItem.rightBarButtonItem = rightbar
         sendButton.addTarget(self, action: #selector(self.send(_:)), for: .touchUpInside)
         receiveMessage()
@@ -98,11 +98,11 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         SVProgressHUD.show()
             task.resume()
         isConnect = 1
-        //urlRequestToUid = URLRequest(url: URL(string:"http://192.168.31.128:8080/\(uid)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
+        //urlRequestToUid = URLRequest(url: URL(string:"http://localhost:8080/\(uid)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
         task.sendPing { error in
             SVProgressHUD.dismiss()
             guard error == nil else {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
             }
         }

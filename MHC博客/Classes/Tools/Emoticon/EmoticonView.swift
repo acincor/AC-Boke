@@ -103,7 +103,7 @@ private extension EmoticonView {
         var items = [UIBarButtonItem]()
         var index = 0
         for p in packages {
-            items.append(UIBarButtonItem(title: p.group_name_cn, style: .plain, target: self, action: #selector(EmoticonView.clickItem(item:))))
+            items.append(UIBarButtonItem(title: NSLocalizedString(p.group_name_cn ?? "", comment: ""), style: .plain, target: self, action: #selector(EmoticonView.clickItem(item:))))
             items.last?.tag = index
             index += 1
             items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil))

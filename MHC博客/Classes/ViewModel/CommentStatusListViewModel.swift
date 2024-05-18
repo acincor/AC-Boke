@@ -27,18 +27,22 @@ class CommentStatusListViewModel {
     }
     private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping (_ isSuccessed: Bool) -> ()) {
         let group = DispatchGroup()
-        //var dataLength = 0
+        var dataLength = 0
         for vm in dataList {
             if vm.thumbnailUrls?.count != 1 {
                 continue
             }
             let url = vm.thumbnailUrls![0]
             group.enter()
-            SDWebImageManager.shared.loadImage(with: url,options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached], progress: nil,completed: { (_,_,_,_,_,_) -> Void in
+            SDWebImageManager.shared.loadImage(with: url,options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached], progress: nil,completed: { (image, data, error, type, bool, url) -> Void in
+                if let data = data {
+                    dataLength = dataLength + data.count
+                }
+                group.leave()
             })
-            group.leave()
         }
         group.notify(queue: DispatchQueue.main) {
+            NSLog("缓存\(dataLength/1024)Kb")
             finished(true)
         }
     }

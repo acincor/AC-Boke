@@ -39,7 +39,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         textView.inputView = textView.inputView == nil ? emoticonView : nil
         textView.becomeFirstResponder()
     }
-    private lazy var placeHolderLabel: UILabel = UILabel(title: "善言感动人心，恶语伤人心...",fontSize: 18,color: UIColor(white: 0.6, alpha: 1.0))
+    private lazy var placeHolderLabel: UILabel = UILabel(title: NSLocalizedString("善言感动人心，恶语伤人心...", comment: ""),fontSize: 10,color: UIColor(white: 0.6, alpha: 1.0))
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         textView.becomeFirstResponder()
@@ -91,12 +91,12 @@ extension CommentViewController {
         prepareTextView()
     }
     private func prepare() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(self.close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("取消", comment: ""), style: .plain, target: self, action: #selector(self.close))
         navigationItem.leftBarButtonItem?.tintColor = .red
         navigationItem.rightBarButtonItem?.tintColor = .red
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 36))
         navigationItem.titleView = titleView
-        let titleLabel = UILabel(title: "发评论",fontSize: 15)
+        let titleLabel = UILabel(title: NSLocalizedString("发评论", comment: ""),fontSize: 15)
         let nameLabel = UILabel(title: UserAccountViewModel.sharedUserAccount.account?.user ?? "", fontSize: 13,color:UIColor(white: 0.6, alpha: 1.0))
         titleView.addSubview(titleLabel)
         titleView.addSubview(nameLabel)

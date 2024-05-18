@@ -20,7 +20,7 @@ class StatusCommentCell: UITableViewCell, FFLabelDelegate {
     }
     lazy var topView: StatusCellTopView = StatusCellTopView()
     var bottomView: StatusCellBottomView = StatusCellBottomView()
-    lazy var contentLabel: FFLabel = FFLabel(title: "微博正文", fontSize: 15, color: .label, screenInset: CommentCellMargin)
+    lazy var contentLabel: FFLabel = FFLabel(title:NSLocalizedString("微博正文", comment: ""), fontSize: 15, color: .label, screenInset: CommentCellMargin)
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()

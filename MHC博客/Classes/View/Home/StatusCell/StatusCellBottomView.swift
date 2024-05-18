@@ -23,7 +23,7 @@ class StatusCellBottomView: UIView {
     
     // MARK: - 懒加载控件
     /// 评论按钮
-    lazy var deleteButton: UIButton = UIButton(title: " 删除", fontSize: 12, color: UIColor(white: 0.6, alpha: 1.0), imageName:
+    lazy var deleteButton: UIButton = UIButton(title: NSLocalizedString(" 删除",comment: ""), fontSize: 12, color: UIColor(white: 0.6, alpha: 1.0), imageName:
     "timeline_icon_retweet")
     lazy var commentButton: UIButton = UIButton(title: " 评论", fontSize: 12, color: UIColor(white: 0.6, alpha: 1.0), imageName: "timeline_icon_comment")
     

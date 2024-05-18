@@ -33,7 +33,7 @@ class StatusListViewModel {
     }
     private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping (_ isSuccessed: Bool) -> ()) {
         let group = DispatchGroup()
-        //var dataLength = 0
+        var dataLength = 0
         for vm in dataList {
             if vm.thumbnailUrls?.count != 1 {
                 continue
@@ -42,10 +42,14 @@ class StatusListViewModel {
                 group.enter()
             SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed],progress: nil) {
                 (image, data, error, type, bool, url) in
+                if let data = data {
+                    dataLength = dataLength + data.count
+                }
                 group.leave()
             }
         }
        group.notify(queue: DispatchQueue.main) {
+           NSLog("缓存\(dataLength/1024)Kb")
             finished(true)
         }
     }

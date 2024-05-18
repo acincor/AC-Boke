@@ -11,6 +11,6 @@ let WBStatusSelectedPhotoNotification = "WBStatusSelectedPhotoNotification"
 let WBStatusSelectedPhotoIndexPathKey = "WBStatusSelectedPhotoIndexPathKey"
 let WBStatusSelectedPhotoURLsKey = "WBStatusSelectedPhotoURLsKey"
 var rootHost:String {
-    return "http://192.168.31.128"
+    return "http://localhost"
 }
 var listViewModel = StatusListViewModel()

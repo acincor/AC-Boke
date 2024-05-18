@@ -53,7 +53,7 @@ class EmoticonManager {
         packages[0].emoticons.sort { $0.times > $1.times }
     }
     init() {
-        packages.append(EmoticonPackage(dict: ["group_name_cn":"最近"]))
+        packages.append(EmoticonPackage(dict: ["group_name_cn":NSLocalizedString("最近", comment: "")]))
         guard let path = Bundle.main.path(forResource: "emoticons", ofType: "plist", inDirectory: "Emoticons.bundle") else {
             return
         }

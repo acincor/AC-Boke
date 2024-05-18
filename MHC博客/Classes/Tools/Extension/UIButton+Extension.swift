@@ -14,9 +14,9 @@ struct UserNavigationLinkView: View {
     var account: UserViewModel?
     var name: String {
         if account == nil {
-            return "我的博客"
+            return NSLocalizedString("我的博客", comment: "")
         }
-        return "TA的博客"
+        return NSLocalizedString("TA的博客", comment: "")
     }
     var uid: String
     var likeController:LikeStatusTableViewController {

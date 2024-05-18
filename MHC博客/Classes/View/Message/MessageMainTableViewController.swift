@@ -18,7 +18,7 @@ class MessageTableViewController: VisitorTableViewController{
             self.refreshControl?.endRefreshing()
             if !isSuccessed {
                 
-                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
                 return
             }
             self.tableView.reloadData()
@@ -27,7 +27,7 @@ class MessageTableViewController: VisitorTableViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         if !userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，别人发给你的消息，你能在这里回复")
+            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: NSLocalizedString("登陆后，别人发给你的消息，你能在这里回复", comment: ""))
             return
         }
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCellNormalId)

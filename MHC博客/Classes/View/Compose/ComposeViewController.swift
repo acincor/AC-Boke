@@ -49,13 +49,13 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         self.textView.delegate?.textViewDidChange!(self.textView)
     }
     @objc private func createTrend() {
-        let controller = UIAlertController(title: "创建话题", message: "输入你的话题：", preferredStyle: .alert)
+        let controller = UIAlertController(title: NSLocalizedString("创建话题", comment: ""), message: NSLocalizedString("输入你的话题：", comment: ""), preferredStyle: .alert)
         controller.addTextField { textField in
-            textField.placeholder = "创建你的话题"
+            textField.placeholder = NSLocalizedString("创建你的话题", comment: "")
             textField.textColor = .label
         }
-        controller.addAction(UIAlertAction(title: "关闭", style: .cancel))
-        controller.addAction(UIAlertAction(title: "创建", style: .default) { action in
+        controller.addAction(UIAlertAction(title: NSLocalizedString("关闭", comment: ""), style: .cancel))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("创建", comment: ""), style: .default) { action in
             guard let fields = controller.textFields else {
                 return
             }
@@ -113,7 +113,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         textView.inputView = textView.inputView == nil ? emoticonView : nil
         textView.becomeFirstResponder()
     }
-    private lazy var placeHolderLabel: UILabel = UILabel(title: "分享新鲜事...",fontSize: 18,color: UIColor(white: 0.6, alpha: 1.0))
+    private lazy var placeHolderLabel: UILabel = UILabel(title: NSLocalizedString("分享新鲜事...", comment: ""),fontSize: 18,color: UIColor(white: 0.6, alpha: 1.0))
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         textView.becomeFirstResponder()
@@ -160,13 +160,13 @@ extension ComposeViewController {
         preparePicturePicker()
     }
     private func prepare() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "创建一个话题", style: .plain, target: self, action: #selector(self.createTrend))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "发布", style: .plain, target: self, action: #selector(self.sendStatus))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("创建一个话题", comment: ""), style: .plain, target: self, action: #selector(self.createTrend))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.sendStatus))
         navigationItem.leftBarButtonItem?.tintColor = .red
         navigationItem.rightBarButtonItem?.tintColor = .red
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 36))
         navigationItem.titleView = titleView
-        let titleLabel = UILabel(title: "写博客",fontSize: 15)
+        let titleLabel = UILabel(title: NSLocalizedString("写博客", comment: ""),fontSize: 15)
         let nameLabel = UILabel(title: UserAccountViewModel.sharedUserAccount.account?.user ?? "", fontSize: 13,color: UIColor(white: 0.6, alpha: 1.0))
         titleView.addSubview(titleLabel)
         titleView.addSubview(nameLabel)
@@ -183,13 +183,12 @@ extension ComposeViewController {
     @objc private func sendStatus() {
         let text = textView.emoticonText
         let image = picturesPickerController.pictures
-        SVProgressHUD.show(withStatus: "加载中")
+        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
         if image != [] {
             NetworkTools.shared.sendStatus(status: text, image: image) { (Result, Error) -> () in
                 SVProgressHUD.dismiss()
                 if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: "您的网络不给力")
-                    print(Error)
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
                     return
                 }
                 self.textView.resignFirstResponder()
@@ -199,7 +198,7 @@ extension ComposeViewController {
             NetworkTools.shared.sendStatus(status: text, image: nil) { (Result, Error) -> () in
                 SVProgressHUD.dismiss()
                 if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: "您的网络不给力")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
                     return
                 }
                 self.textView.resignFirstResponder()

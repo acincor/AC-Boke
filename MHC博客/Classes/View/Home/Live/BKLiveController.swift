@@ -10,8 +10,8 @@ import UIKit
 import HaishinKit
 import DispatchIntrospection
 class BKLiveController: UIViewController {
-    let stopButton = UIButton(title: "结束直播", color: .white, backImageName: nil,backColor: .red)
-    let startButton = UIButton(title: "开始直播", color: .white, backImageName: nil,backColor: .red)
+    let stopButton = UIButton(title: NSLocalizedString("结束直播", comment: ""), color: .white, backImageName: nil,backColor: .red)
+    let startButton = UIButton(title: NSLocalizedString("开始直播", comment: ""), color: .white, backImageName: nil,backColor: .red)
     //MARK: - Getters and Setters
     let session = AVAudioSession.sharedInstance()
 #if os(visionOS)
@@ -29,12 +29,12 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         view.backgroundColor = .red
         for i in liveListViewModel.liveList {
             if i.user.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
-                SVProgressHUD.showInfo(withStatus: "你的直播已在其他设备上进行...")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("你的直播已在其他设备上进行...", comment: ""))
                 return
             }
         }
-        title = "hi，一起直播鸭！"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))
+        title = NSLocalizedString("hi，一起直播鸭！",comment: "")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.close))
         navigationItem.leftBarButtonItem?.tintColor = .white
         // Do any additional setup after loading the view, typically from a nib.
         startButton.layer.cornerRadius = 15
@@ -87,7 +87,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         self.hkView.videoGravity = AVLayerVideoGravity.resizeAspectFill
         self.hkView.attachStream(self.stream)
         self.view.insertSubview(self.hkView, belowSubview: self.stopButton)
-        self.connection.connect("rtmp://192.168.31.128:1935/live")
+        self.connection.connect("rtmp://localhost:1935/live")
         self.stream.publish(UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
     }
     @objc func stopLive(_ sender: Any) {

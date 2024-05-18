@@ -42,7 +42,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
                 
                 // 判断图像下载是否成功
                 if image == nil {
-                    SVProgressHUD.showInfo(withStatus: "您的网络不给力")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
                     return
                 }
                 
@@ -59,12 +59,12 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         }
         NetworkTools.shared.sendPortrait(image: imageView.image!) { Result, Error in
             if Result != nil {
-                SVProgressHUD.showInfo(withStatus: "成功啦")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("成功啦", comment: ""))
                 SDImageCache.shared.clearDisk()
             }
         }
         portraitButton.removeFromSuperview()
-        portraitButton = UIButton(title: "更换头像", fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
+        portraitButton = UIButton(title: NSLocalizedString("更换头像", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
         portraitButton.addTarget(self, action: #selector(self.sendPortrait), for: .touchUpInside)
         view.addSubview(portraitButton)
         portraitButton.snp.makeConstraints { make in
@@ -93,9 +93,9 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         view = UIView(frame: rect)
         setupUI()
     }
-    private lazy var closeButton: UIButton = UIButton(title: "关闭", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
-    private lazy var saveButton: UIButton = UIButton(title: "保存", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
-    private lazy var portraitButton: UIButton = UIButton(title: "更换头像", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var closeButton: UIButton = UIButton(title: NSLocalizedString("关闭", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var saveButton: UIButton = UIButton(title: NSLocalizedString("保存",comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var portraitButton: UIButton = UIButton(title: NSLocalizedString("更换头像", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
     private lazy var imageView = UIImageView()
     @objc func close() {
         dismiss(animated: true) {
@@ -262,7 +262,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(image:didFinishSavingWithError:contextInfo:)), nil)
     }
     @objc private func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: Any?) {
-        let message = (error == nil) ? "保存成功" : "保存失败"
+        let message = (error == nil) ? NSLocalizedString("保存成功", comment: "") : NSLocalizedString("保存失败", comment: "")
         SVProgressHUD.showInfo(withStatus: message)
     }
     var picture : UIImage?
@@ -270,7 +270,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         if picture != nil {
             imageView.image = picture
             portraitButton.removeFromSuperview()
-            portraitButton = UIButton(title: "完成", fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
+            portraitButton = UIButton(title: NSLocalizedString("完成", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
                 portraitButton.addTarget(self, action: #selector(self.send), for: .touchUpInside)
             view.addSubview(portraitButton)
             portraitButton.snp.makeConstraints { make in

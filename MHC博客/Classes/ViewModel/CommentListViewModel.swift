@@ -14,11 +14,11 @@ class CommentListViewModel {
     func loadComment(id: Int,finished: @escaping (_ isSuccessed: Bool) -> ()) {
             NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
                 guard let status = Result as? [String:Any] else {
-                    SVProgressHUD.showInfo(withStatus: "博客加载错误")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("博客加载错误", comment: ""))
                     return
                 }
                 guard let comment_list = status["comment_list"] as? [[String:Any]] else {
-                    SVProgressHUD.showInfo(withStatus: "评论加载错误")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("评论加载错误", comment: ""))
                     return
                 }
                 var dataList = [CommentViewModel]()
@@ -32,11 +32,11 @@ class CommentListViewModel {
     func loadComment(id: Int,comment_id: Int,finished: @escaping (_ isSuccessed: Bool) -> ()) {
         NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
             guard let status = Result as? [String:Any] else {
-                SVProgressHUD.showInfo(withStatus: "博客加载错误")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("博客加载错误", comment: ""))
                 return
             }
             guard let comment_list = status["comment_list"] as? [[String:Any]] else {
-                SVProgressHUD.showInfo(withStatus: "评论加载错误")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("评论加载错误", comment: ""))
                 return
             }
             var dataList = [CommentViewModel]()

@@ -33,7 +33,7 @@ class TrendCell: UICollectionViewCell {
     @objc func deleteTrend() {
         let controller = UIAlertController(title: "创建话题", message: "删除你的话题", preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "取消", style: .cancel))
-        controller.addAction(UIAlertAction(title: "删除", style: .default) { action in
+        controller.addAction(UIAlertAction(title: NSLocalizedString("删除",comment: ""), style: .default) { action in
             NetworkTools.shared.deleteTrend(self.model) { Result, Error in
             }
         }

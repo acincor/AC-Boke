@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("192.168.31.128", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
 $str = explode(".","A.B.C.D.E.F.G.H.I.J.K.L.M.N.O.P.Q.R.S.T.U.V.W.X.Y.Z.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s.t.u.v.w.x.y.z");
 if(isset($_POST['user']) && isset($_POST['password'])) {
     $query = mysqli_query($mysql,"select password,uid from users where user = '".$_POST['user']."'");

@@ -61,7 +61,7 @@ extension UserAccountViewModel {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: account, requiringSecureCoding: true)
                 try data.write(to: NSURL(fileURLWithPath: self.accountPath) as URL)
             } catch {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             }
             finished(true)
         }

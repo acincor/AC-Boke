@@ -24,7 +24,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
     @objc private func userAgreement() {
         let textView = UITextView(frame: UIScreen.main.bounds)
         guard let userAgreement = Bundle.main.path(forResource: "用户协议", ofType: "txt") else {
-            SVProgressHUD.showInfo(withStatus: "似乎找不到目录")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎找不到目录", comment: ""))
             return
         }
         do{
@@ -32,8 +32,8 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
             textView.text = readStr as String
             textView.isEditable = false
             controller.view = textView
-            controller.title = "用户协议"
-            controller.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(OAuthViewController.closeUserAgreement))
+            controller.title = NSLocalizedString("用户协议",comment: "")
+            controller.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭",comment: ""), style: .plain, target: self, action: #selector(OAuthViewController.closeUserAgreement))
             controller.navigationItem.leftBarButtonItem?.tintColor = .red
             present(UINavigationController(rootViewController: controller), animated: true)
         }catch _ {
@@ -44,9 +44,9 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         view = webView
         webView.uiDelegate = self
         webView.navigationDelegate = self
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(OAuthViewController.close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭",comment: ""), style: .plain, target: self, action: #selector(OAuthViewController.close))
         navigationItem.leftBarButtonItem?.tintColor = .red
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "用户协议", style: .plain, target: self, action: #selector(OAuthViewController.userAgreement))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("用户协议",comment: ""), style: .plain, target: self, action: #selector(OAuthViewController.userAgreement))
         navigationItem.rightBarButtonItem?.tintColor = .red
     }
     
@@ -56,11 +56,12 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
     }
     convenience init(_ 方式: 登录方式) {
         self.init()
-        title = "\(方式.rawValue)Mhc博客"
         if 方式.rawValue == "注册" {
             oauthURL = URL(string: NetworkTools.OAuthURL.注册.rawValue)
+            title = NSLocalizedString("注册Mhc博客", comment: "")
         } else {
             oauthURL = URL(string: NetworkTools.OAuthURL.登陆.rawValue)
+            title = NSLocalizedString("登录Mhc博客", comment: "")
         }
     }
     //默认注册

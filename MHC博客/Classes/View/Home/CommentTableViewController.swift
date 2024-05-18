@@ -27,7 +27,7 @@ class CommentTableViewController: VisitorTableViewController {
         commentlistViewModel.loadComment(id: viewModel.status.id) { (isSuccessed) in
              self.refreshControl?.endRefreshing()
              if !isSuccessed {
-                 SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
                  return
              }
              self.tableView.reloadData()
@@ -46,10 +46,10 @@ class CommentTableViewController: VisitorTableViewController {
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: nil, title: "登陆一下，随时随地发现新鲜事")
+            visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
             return
         }
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.close))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.close))
         navigationItem.rightBarButtonItem?.tintColor = .red
         NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeIsTrueLightIt"), object: nil, queue: nil) { n in
             if commentlistViewModel.commentList.isEmpty {
@@ -91,14 +91,14 @@ extension CommentTableViewController {
         NetworkTools.shared.deleteComment((sender.vm?.comment.id)!, (sender.vm?.comment.comment_id)!) { Result, Error in
             
             if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("不能删除别人的博客哦", comment: ""))
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "删除成功")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
             self.loadData()
         }
     }
@@ -133,7 +133,7 @@ extension CommentTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发布", color: .red,backImageName: nil)
+        let button = UIButton(title: NSLocalizedString("发布", comment: ""), color: .red,backImageName: nil)
         button.tag = sender.tag
         button.nav = nav
         button.vm = sender.vm
@@ -147,9 +147,9 @@ extension CommentTableViewController {
             if Error == nil {
                 //sender.int = 0
                 if (Result as! [String:Any])["code"] as! String == "add" {
-                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: "你的点赞TA收到了")
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
                 } else {
-                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: "你的取消TA收到了")
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: NSLocalizedString("你的取消TA收到了", comment: ""))
                 }
                 self.loadData()
                 //sender.setTitle("\(commentlistViewModel.commentList[sender.tag].comment.like_count)", for: .normal)
@@ -158,25 +158,25 @@ extension CommentTableViewController {
                 }
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "出错了")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
     }
     @objc func action2(_ sender: UIButton) {
         guard (commentlistViewModel.commentList[sender.tag].comment.comment_id > 0) else {
             sender.nav.close()
-            SVProgressHUD.showInfo(withStatus: "出错了")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
-        SVProgressHUD.show(withStatus: "加载中")
+        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
         NetworkTools.shared.addComment(id: sender.vm!.comment.id, comment_id: sender.vm!.comment.comment_id, sender.nav.textView.emoticonText) { Result, Error in
             SVProgressHUD.dismiss()
                 if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                     return
                 }
                 if (Result as! [String:Int])["error"] != nil {
-                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                     return
                 }
             sender.nav.close()

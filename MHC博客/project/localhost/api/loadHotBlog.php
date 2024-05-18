@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("192.168.31.128", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
                 $q = mysqli_query($mysql,"select * from blogs where like_count > 1000 and TIMESTAMPDIFF(HOUR, createTime, NOW()) < 24"." ORDER BY createTime DESC LIMIT 10");
                 if($blog = mysqli_fetch_assoc($q)) {
                     $q1 = mysqli_query($mysql,"select user,portrait from users where uid = ".$blog["uid"]);

@@ -63,8 +63,8 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         setupUI()
     }
     lazy var collectionView: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: PhotoBrowserViewLayout())
-    private lazy var closeButton: UIButton = UIButton(title: "关闭", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
-    private lazy var saveButton: UIButton = UIButton(title: "保存", fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var closeButton: UIButton = UIButton(title: NSLocalizedString("关闭", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
+    private lazy var saveButton: UIButton = UIButton(title: NSLocalizedString("保存", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
     private func setupUI() {
         view.addSubview(collectionView)
         view.addSubview(closeButton)
@@ -96,7 +96,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(image:didFinishSavingWithError:contextInfo:)), nil)
     }
     @objc private func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: Any?) {
-        let message = (error == nil) ? "保存成功" : "保存失败"
+        let message = (error == nil) ? NSLocalizedString("保存成功", comment: "") : NSLocalizedString("保存失败", comment: "")
         SVProgressHUD.showInfo(withStatus: message)
     }
 }

@@ -17,16 +17,16 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         super.viewDidLoad()
         let textView = UITextView(frame: UIScreen.main.bounds)
         guard let userAgreement = Bundle.main.path(forResource: "用户协议", ofType: "txt") else {
-            SVProgressHUD.showInfo(withStatus: "似乎找不到目录")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎找不到目录", comment: ""))
             return
         }
         do{
             let readStr:NSString=try NSString(contentsOfFile: userAgreement, encoding: String.Encoding.utf8.rawValue)
             textView.text = readStr as String
             textView.isEditable = false
-            title = "用户协议"
+            title = NSLocalizedString("用户协议", comment: "")
             view = textView
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(self.closeUserAgreement))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.closeUserAgreement))
             navigationItem.leftBarButtonItem?.tintColor = .red
         }catch _ {
         }

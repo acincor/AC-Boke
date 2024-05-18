@@ -62,15 +62,15 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     var listFilterTeams: [StatusViewModel]?
     @objc func action2(_ sender: UIButton) {
-        SVProgressHUD.show(withStatus: "加载中")
+        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
         NetworkTools.shared.addComment(id: listFilterTeams![sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
             SVProgressHUD.dismiss()
             if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
             }
             sender.nav.close()
@@ -79,14 +79,14 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     @objc func action1(_ sender: UIButton) {
         sender.identifier.bottomView.deleteBlog(listFilterTeams![sender.tag].status.id) { Result, Error in
             if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("不能删除别人的博客哦", comment: ""))
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "删除成功")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
             StatusDAL.removeCache(self.listFilterTeams![sender.tag].status.id)
             for i in 0 ..< listViewModel.statusList.count {
                 if listViewModel.statusList[i].status.id == self.listFilterTeams![sender.tag].status.id {
@@ -98,9 +98,9 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: "发布", color: .red,backImageName: nil)
+        let button = UIButton(title: NSLocalizedString("发布", comment: ""), color: .red,backImageName: nil)
         guard (listFilterTeams![sender.tag].status.id > 0) else {
-            SVProgressHUD.showInfo(withStatus: "出错了")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
         button.nav = nav
@@ -113,9 +113,9 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         NetworkTools.shared.like(listFilterTeams![sender.tag].status.id) { Result, Error in
             if Error == nil {
                 if (Result as! [String:Any])["code"] as! String == "add" {
-                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: "你的点赞TA收到了")
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
                 } else {
-                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: "你的取消TA收到了")
+                    SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: NSLocalizedString("你的取消TA收到了", comment: ""))
                 }
                 self.tableView.reloadData()
                 DispatchQueue.main.asyncAfter(deadline: .now()+1){
@@ -123,14 +123,14 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                 }
                 return
             }
-            SVProgressHUD.showInfo(withStatus: "出错了")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: "登陆后，能用搜索框搜索出自己想要的全新世界")
+            visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: NSLocalizedString("登陆后，能用搜索框搜索出自己想要的全新世界", comment: ""))
             return
         }
         filterContentForSearchText("")
@@ -170,7 +170,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                     SVProgressHUD.showInfo(withStatus: "不能删除别人的博客哦")
                     return
                 }
-                SVProgressHUD.showInfo(withStatus: "删除成功")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
             }
         }, for: .touchUpInside)
          */

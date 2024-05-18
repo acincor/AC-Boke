@@ -160,6 +160,6 @@ private class NewFeatureCell: UICollectionViewCell {
     private lazy var iconView: UIImageView = UIImageView()
 
     /// 开始体验按钮
-    private lazy var startButton: UIButton = UIButton(title: "开始体验", color:.white, backImageName: "new_feature_finish_button")
+    private lazy var startButton: UIButton = UIButton(title: NSLocalizedString("开始体验", comment: ""), color:.white, backImageName: "new_feature_finish_button")
 }
 

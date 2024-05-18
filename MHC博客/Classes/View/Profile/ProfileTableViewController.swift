@@ -9,21 +9,21 @@ import UIKit
 import SwiftUI
 class ProfileTableViewController: VisitorTableViewController {
     var account: UserViewModel?
-    private lazy var addButton = UIButton(title: "添加好友", fontSize: 14, color: UIColor(white: 0.6, alpha: 1.0), imageName: nil)
+    private lazy var addButton = UIButton(title: NSLocalizedString("添加好友", comment: ""), fontSize: 14, color: UIColor(white: 0.6, alpha: 1.0), imageName: nil)
     private var usernameLabel: String {
         if account == nil {
             return (UserAccountViewModel.sharedUserAccount.account?.user ?? "")
         }
-        return account?.user.user ?? "用户未登录"
+        return account?.user.user ?? NSLocalizedString("用户未登录", comment: "")
     }
     @objc func action() {
         NetworkTools.shared.addFriend("\(account!.user.uid)") { Result, Error in
                 if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                     return
                 }
                 guard let result = Result as? [String:Any] else {
-                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                     return
                 }
                 if (result["error"] != nil) {
@@ -31,19 +31,19 @@ class ProfileTableViewController: VisitorTableViewController {
                     return
                 }
                 guard let code = result["code"] as? String else {
-                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                     print(result)
                     return
                 }
                 if (code != "delete") {
-                    SVProgressHUD.showInfo(withStatus: "成功添加好友")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("成功添加好友", comment: ""))
                     return
                 }
-                SVProgressHUD.showInfo(withStatus: "成功删除/拉黑好友")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("成功删除/拉黑好友", comment: ""))
             }
         }
     private var label: String {
-        let lb = "用户名："
+        let lb = NSLocalizedString("用户名：", comment: "")
             return lb
     }
     init(account: UserViewModel?) {
@@ -61,14 +61,14 @@ class ProfileTableViewController: VisitorTableViewController {
         let lb = "MID:\(account?.user.uid ?? 0)"
         return lb
     }
-    private var renameButton: UIButton = UIButton(title: "编辑", color: .orange, backImageName: nil)
+    private var renameButton: UIButton = UIButton(title: NSLocalizedString("编辑", comment: ""), color: .orange, backImageName: nil)
     private var name: UITextField = UITextField()
     private lazy var Label: UILabel = UILabel(title: label)
     //let liveButton = UIButton(title: "开始直播", fontSize: 18, color: .red, imageName: nil, backColor: UIColor.gray.withAlphaComponent(0.1))
     override func viewDidLoad() {
         super.viewDidLoad()
         if !userLogon {
-            visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: "登陆后，你的个人信息、直播操作、退登注销将会在这里展示")
+            visitorView?.setupInfo(imageName: "visitordiscover_image_profile", title: NSLocalizedString("登陆后，你的个人信息、直播操作、退登注销将会在这里展示", comment: ""))
             return
         }
         view.addSubview(iconView)
@@ -239,36 +239,48 @@ class ProfileTableViewController: VisitorTableViewController {
         present(nav, animated: true)
     }
     @objc func touchUpInside() {
-        if renameButton.largeContentTitle == "编辑" {
+        if renameButton.largeContentTitle == NSLocalizedString("编辑", comment: "") {
             name.isEnabled = true
             renameButton.removeFromSuperview()
-            renameButton = UIButton(title: "完成", color: .orange, backImageName: nil)
+            renameButton = UIButton(title: NSLocalizedString("完成", comment: ""), color: .orange, backImageName: nil)
             view.addSubview(renameButton)
             renameButton.snp.makeConstraints { make in
                 make.top.equalTo(Label.snp.bottom)
             }
+            renameButton.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
         } else {
+            name.isEnabled = false
             NetworkTools.shared.rename(rename: name.text!) { Result, Error in
                 if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: "出错了")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                     return
                 }
-                if(Result as! [String:Any])["msg"] != nil {
+                guard let res = Result as? [String:Any] else {
+                    let controller = UIAlertController(title: NSLocalizedString("错误", comment: ""), message: NSLocalizedString("加载数据错误，请稍后重试", comment: ""), preferredStyle: .alert)
+                    controller.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(controller, animated: true)
+                    return
+                }
+                guard let msg = res["msg"] as? Int else{
+                    let controller = UIAlertController(title: NSLocalizedString("错误", comment: ""), message: NSLocalizedString("改名失败", comment: ""), preferredStyle: .alert)
+                    controller.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(controller, animated: true)
+                    return
+                }
                     UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) { [self]isSuccessed in
                         if isSuccessed {
-                            SVProgressHUD.showInfo(withStatus: "改名成功")
+                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("改名成功", comment: ""))
                             renameButton.removeFromSuperview()
-                            renameButton = UIButton(title: "编辑", color: .orange, backImageName: nil)
+                            renameButton = UIButton(title: NSLocalizedString("编辑", comment: ""), color: .orange, backImageName: nil)
                             view.addSubview(renameButton)
                             renameButton.snp.makeConstraints { make in
                                 make.top.equalTo(Label.snp.bottom)
                             }
+                            renameButton.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
                         }
                     }
                 }
             }
-        }
-        renameButton.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
     }
     /*
     @objc func userAgreementButtonTouchAction() {
