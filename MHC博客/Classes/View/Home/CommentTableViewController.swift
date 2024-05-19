@@ -134,13 +134,12 @@ extension CommentTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: NSLocalizedString("发布", comment: ""), color: .red,backImageName: nil)
+        let button = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.action2(_:)))
         button.tag = sender.tag
         button.nav = nav
         button.vm = sender.vm
-        button.addTarget(self, action: #selector(self.action2(_:)), for: .touchUpInside)
         sender.cell.cellDelegate = self
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        nav.navigationItem.rightBarButtonItem = button
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
@@ -163,7 +162,7 @@ extension CommentTableViewController {
             return
         }
     }
-    @objc func action2(_ sender: UIButton) {
+    @objc func action2(_ sender: UIBarButtonItem) {
         guard (commentlistViewModel.commentList[sender.tag].comment.comment_id > 0) else {
             sender.nav.close()
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))

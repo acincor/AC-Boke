@@ -65,7 +65,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.tableView.reloadData()
     }
     var listFilterTeams: [StatusViewModel]?
-    @objc func action2(_ sender: UIButton) {
+    @objc func action2(_ sender: UIBarButtonItem) {
         SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
         NetworkTools.shared.addComment(id: listFilterTeams![sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
             SVProgressHUD.dismiss()
@@ -92,25 +92,25 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             }
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
             StatusDAL.removeCache(self.listFilterTeams![sender.tag].status.id)
-            for i in 0 ..< listViewModel.statusList.count {
-                if listViewModel.statusList[i].status.id == self.listFilterTeams![sender.tag].status.id {
-                    listViewModel.statusList.remove(at: i)
-                }
+            if let i = listViewModel.statusList.firstIndex(where: { vm in
+                vm.status.id == self.listFilterTeams![sender.tag].status.id
+            }){
+                listViewModel.statusList.remove(at: i)
             }
+            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
             self.filterContentForSearchText("")
         }
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: NSLocalizedString("发布", comment: ""), color: .red,backImageName: nil)
         guard (listFilterTeams![sender.tag].status.id > 0) else {
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
-        button.nav = nav
+        let button = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.action2(_:)))
         button.tag = sender.tag
-        button.addTarget(self, action: #selector(self.action2(_:)), for: .touchUpInside)
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        button.nav = nav
+        nav.navigationItem.rightBarButtonItem = button
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {

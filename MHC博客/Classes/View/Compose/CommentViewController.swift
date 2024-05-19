@@ -31,6 +31,25 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         self.textView.text.append(contentsOf: "@\(viewModel.user.uid)")
         self.textView.delegate?.textViewDidChange!(self.textView)
     }
+    private lazy var trendView: TrendCellView = TrendCellView { viewModel in
+        self.textView.text.append(contentsOf: "#"+viewModel+"#")
+        self.textView.delegate?.textViewDidChange!(self.textView)
+    }
+    @objc private func selectTrend() {
+        NetworkTools.shared.trend { result,error in
+            guard let Result = result as? [String] else {
+                return
+            }
+            print(Result)
+            self.trendView.collectionView.reloadData()
+            self.trendView.trendList = Result
+        }
+        self.trendView.setupUI()
+        print(self.trendView.trendList)
+        textView.resignFirstResponder()
+        textView.inputView = textView.inputView == nil ? self.trendView : nil
+        textView.becomeFirstResponder()
+    }
     @objc private func selectUser() {
         userCollectionView.friendListViewModel.loadFriend { isSuccessed in
             print(isSuccessed)
@@ -148,7 +167,7 @@ extension CommentViewController {
             make.right.equalTo(view.snp.right)
             make.height.equalTo(44)
         }
-        let itemSettings = [["imageName": "compose_mentionbutton_background","actionName":"selectUser"], ["imageName":"compose_trendbutton_background"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_pic_big_add"]]
+        let itemSettings = [["imageName": "compose_mentionbutton_background","actionName":"selectUser"], ["imageName":"compose_trendbutton_background","actionName":"selectTrend"],["imageName":"compose_emoticonbutton_background","actionName":"selectEmoticon"],["imageName": "compose_pic_big_add"]]
         var items = [UIBarButtonItem]()
         for dict in itemSettings {
             items.append(UIBarButtonItem(imageName: dict["imageName"]!, target: self, actionName: dict["actionName"]))

@@ -89,12 +89,12 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vm = liveListViewModel.liveList[indexPath.row]
         guard let url = ("http://localhost/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试",comment: ""))
             return
         }
         print(url)
         guard let urlEncoded = URL(string:url) else {
-            SVProgressHUD.showInfo(withStatus: "似乎出了点问题，请刷新重试")
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试",comment: ""))
             return
         }
         present(HomeWebViewController(url: urlEncoded),animated: true)
@@ -106,7 +106,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             self.refreshControl?.endRefreshing()
             self.refreshView.pullupView.stopAnimating()
             if !isSuccessed {
-                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试",comment: ""))
                 return
             }
             self.showPulldownTip()
@@ -160,6 +160,9 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             vc.transitioningDelegate = self?.photoBrowserAnimator
             self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
             self?.present(vc, animated: true,completion: nil)
+        }
+        NotificationCenter.default.addObserver(forName: Notification.Name("BKReloadHomePageDataNotification"), object: nil, queue: nil) { n in
+            self.tableView.reloadData()
         }
         self.loadData()
     }
@@ -227,7 +230,7 @@ extension HomeTableViewController {
         cell.cellDelegate = self
         return cell
     }
-    @objc func action2(_ sender: UIButton) {
+    @objc func action2(_ sender: UIBarButtonItem) {
         SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
         NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
             SVProgressHUD.dismiss()
@@ -246,7 +249,7 @@ extension HomeTableViewController {
     @objc func action1(_ sender: UIButton) {
         sender.identifier.bottomView.deleteBlog(listViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
-                SVProgressHUD.showInfo(withStatus: "出错了")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了",comment:""))
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
@@ -261,15 +264,14 @@ extension HomeTableViewController {
     }
     @objc func action3(_ sender: UIButton) {
         let nav = CommentViewController()
-        let button = UIButton(title: NSLocalizedString("发布",comment: ""), color: .red,backImageName: nil)
+        let button = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.action2(_:)))
         guard (listViewModel.statusList[sender.tag].status.id > 0) else {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了",comment: ""))
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
-        button.nav = nav
         button.tag = sender.tag
-        button.addTarget(self, action: #selector(self.action2(_:)), for: .touchUpInside)
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        button.nav = nav
+        nav.navigationItem.rightBarButtonItem = button
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
@@ -398,6 +400,29 @@ extension UIButton {
         
         set {
             objc_setAssociatedObject(self, &AssociatedKey.int, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
+}
+extension UIBarButtonItem {
+    private struct AssociatedKey {
+        static var nav = CommentViewController()
+        static var vm: CommentViewModel?
+    }
+    var nav: CommentViewController {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.nav) as? CommentViewController ?? CommentViewController()
+        }
+        
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.nav, newValue as CommentViewController?, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    var vm: CommentViewModel? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.vm) as? CommentViewModel
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.vm, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }

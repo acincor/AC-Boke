@@ -108,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             content.sound = UNNotificationSound.default
             NetworkTools.shared.loadHotStatus { Result, Error in
                 if Result == nil {
-                    SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试",comment: ""))
                     return
                 }
                 if((Result as! [String:Any])["user"] != nil || (Result as! [String:Any])["status"] != nil) {

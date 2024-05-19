@@ -28,7 +28,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         liveListViewModel.loadLive { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             if !isSuccessed {
-                SVProgressHUD.showInfo(withStatus: "加载数据错误，请稍后再试")
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
                 return
             }
             self.reloadData()
