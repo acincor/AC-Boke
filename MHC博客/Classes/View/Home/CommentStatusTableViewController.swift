@@ -8,8 +8,6 @@
 import UIKit
 import SwiftUI
 
-
-let commentStatusCellNormalId = "CommentStatusCellNormalId"
 let commentListViewModel = CommentStatusListViewModel()
 class CommentStatusTableViewController: VisitorTableViewController {
     deinit {
@@ -22,7 +20,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
 #endif
     private func prepareTableView() {
         tableView.separatorStyle = .none
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: commentStatusCellNormalId)
+        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
@@ -99,10 +97,9 @@ extension CommentStatusTableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = commentListViewModel.statusList[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: commentStatusCellNormalId, for: indexPath) as! StatusCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: StatusCellNormalId, for: indexPath) as! StatusCell
         // Configure the cell...
         cell.viewModel = vm
-        cell.bottomView.deleteButton.identifier = cell
         cell.bottomView.deleteButton.tag = indexPath.row
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
@@ -148,23 +145,8 @@ extension CommentStatusTableViewController {
         cell.cellDelegate = self
         return cell
     }
-    @objc func action2(_ sender: UIBarButtonItem) {
-        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
-        NetworkTools.shared.addComment(id: commentListViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
-            SVProgressHUD.dismiss()
-            if Error != nil {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                return
-            }
-            if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                return
-            }
-            sender.nav.close()
-        }
-    }
     @objc func action1(_ sender: UIButton) {
-        sender.identifier.bottomView.deleteBlog(commentListViewModel.statusList[sender.tag].status.id) { Result, Error in
+        NetworkTools.shared.deleteStatus(nil, nil, commentListViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
@@ -185,15 +167,11 @@ extension CommentStatusTableViewController {
         }
     }
     @objc func action3(_ sender: UIButton) {
-        let nav = CommentViewController()
-        let button = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.action2(_:)))
         guard (commentListViewModel.statusList[sender.tag].status.id > 0) else {
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
-        button.tag = sender.tag
-        button.nav = nav
-        nav.navigationItem.rightBarButtonItem = button
+        let nav = ComposeViewController(nil,commentListViewModel.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {

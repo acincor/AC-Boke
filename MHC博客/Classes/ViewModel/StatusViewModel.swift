@@ -22,7 +22,9 @@ class StatusViewModel: CustomStringConvertible {
     var userDefaultIconView: UIImage {
         return UIImage(named: "avatar_default_big")!
     }
-    lazy var rowHeight: CGFloat = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId).rowHeight(self)
+    var rowHeight: CGFloat {
+        return StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId).rowHeight(self)
+    }
     var cellId: String {
         return StatusCellNormalId
     }

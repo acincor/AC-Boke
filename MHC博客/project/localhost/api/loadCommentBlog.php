@@ -3,7 +3,7 @@ header('Content-Type:application/json; charset=utf-8');
 $mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
             if(isset($_POST["uid"])) {
             $arr0 = [];
-            $query = mysqli_query($mysql,"select id from comments where comment_uid = ".$_POST["uid"]);
+            $query = mysqli_query($mysql,"select DISTINCT id from comments where comment_uid = ".$_POST["uid"]);
             while($arr = mysqli_fetch_assoc($query)) {
                 $q = mysqli_query($mysql,"select * from blogs where id = ".$arr['id']);
                 if(!is_bool($q)) {
@@ -70,7 +70,7 @@ $mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
                             array_push($blog["comment_list"],$comment);
                         }
                         unset($blog['createTime']);
-                        array_push($arr0,$blog);
+                        array_unshift($arr0,$blog);
                     }
                 }
                     }

@@ -235,6 +235,17 @@
         }
       }
     },
+    "写" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "write"
+          }
+        }
+      }
+    },
     "写博客" : {
       "localizations" : {
         "en" : {
@@ -1051,7 +1062,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Home Page"
+            "value" : "Home"
           }
         },
         "zh-Hans" : {

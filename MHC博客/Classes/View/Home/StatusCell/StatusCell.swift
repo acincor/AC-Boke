@@ -23,7 +23,7 @@ class StatusCell: UITableViewCell {
     lazy var pictureView: StatusPictureView = StatusPictureView()
     var viewModel: StatusViewModel? {
         didSet {
-            let text = viewModel?.status.status ?? ""
+            let text = viewModel?.status.status ?? viewModel?.status.comment ?? ""
             contentLabel.attributedText = EmoticonManager.sharedManager.emoticonText(string: text, font: contentLabel.font)
             topView.viewModel = viewModel
             pictureView.backgroundColor = .systemBackground

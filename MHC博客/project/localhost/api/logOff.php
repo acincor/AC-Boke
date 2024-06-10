@@ -33,10 +33,18 @@ if(isset($_POST['access_token'])) {
                     }
                     $select_bool = mysqli_query($mysql,"SELECT * FROM comments WHERE id = ".$arr['id']);
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
+                        $pic_urls = json_decode($arr0['pic_urls'],true);
+                        for ($i = 0; $i < count($pic_urls); $i++) {
+                            unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                        }
                         mysqli_query($mysql,"DELETE FROM comments WHERE id = ".$arr['id']);
                     }
                     $select_bool = mysqli_query($mysql,"SELECT * FROM quote WHERE id = ".$arr['id']);
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
+                        $pic_urls = json_decode($arr0['pic_urls'],true);
+                        for ($i = 0; $i < count($pic_urls); $i++) {
+                            unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                        }
                         mysqli_query($mysql,"DELETE FROM quote WHERE id = ".$arr['id']);
                     }
                     $delete_bool = mysqli_query($mysql,"DELETE FROM blogs WHERE id = ".$arr['id']);

@@ -24,22 +24,6 @@ class StatusCellTopView: UIView {
         didSet {
             // 姓名
             guard let viewModel = viewModel as? StatusViewModel else {
-                guard let viewModel = viewModel as? CommentViewModel else {
-                    return
-                }
-                timeLabel.text = viewModel.createAt
-                self.nameLabel.text = viewModel.comment.user
-                nameLabel.textColor = .red
-                if viewModel.comment.source != nil ? viewModel.comment.source != "unknown": false{
-                    sourceLabel.text = viewModel.comment.source
-                }else {
-                    sourceLabel.text = "未知"
-                }
-                // 头像
-                iconView.sd_setImage(with: viewModel.userProfileUrl, placeholderImage: viewModel.userDefaultIconView)
-                iconView.layer.cornerRadius = 5
-                iconView.clipsToBounds = true
-                iconView.isUserInteractionEnabled = true
                 return
             }
             timeLabel.text = viewModel.createAt

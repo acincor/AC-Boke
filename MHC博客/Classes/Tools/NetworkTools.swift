@@ -165,40 +165,20 @@ extension NetworkTools {
         let urlString = rootHost+"/api/addFriend.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
-    func deleteStatus(_ id: Int,finished: @escaping HMRequstCallBack) {
+    func deleteStatus(_ comment_id: Int?,_ comment_comment_id: Int?,_ id: Int,finished: @escaping HMRequstCallBack) {
         guard var params = tokenDict else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             return
         }
         params["id"] = id
-        let urlString = rootHost+"/api/deleteBlog.php"
-        request(.POST, urlString, params, finished: finished)
-    }
-    func addComment(id: Int, comment_id: Int? = nil,_ comment: String,finished: @escaping HMRequstCallBack) {
-        guard var params = tokenDict else {
-            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
-            return
-        }
-        if comment_id != nil {
+        if(comment_id != nil) {
             params["comment_id"] = comment_id
+            if comment_comment_id != nil {
+                params["to_comment_id"] = comment_id
+                params["comment_id"] = comment_comment_id
+            }
         }
-        params["id"] = id
-        params["comment"] = comment
-        let urlString = rootHost+"/api/addComment.php"
-        request(.POST, urlString, params, finished: finished)
-    }
-    func deleteComment(_ id: Int,_ comment_id: Int,comment_id comment_comment_id: Int? = nil,finished: @escaping HMRequstCallBack) {
-        guard var params = tokenDict else {
-            finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
-            return
-        }
-        params["id"] = id
-        params["comment_id"] = comment_id
-        if comment_comment_id != nil {
-            params["to_comment_id"] = comment_id
-            params["comment_id"] = comment_comment_id
-        }
-        let urlString = rootHost+"/api/deleteComment.php"
+        let urlString = rootHost+"/api/deleteBlog.php"
         request(.POST, urlString, params, finished: finished)
     }
     /*
@@ -248,25 +228,25 @@ extension NetworkTools {
     }
 }
 extension NetworkTools {
-    func sendStatus(status: String,image: [UIImage]?, finished: @escaping HMRequstCallBack) {
+    func sendStatus(status: String,comment_id: Int?,id: Int?,image: [UIImage], finished: @escaping HMRequstCallBack) {
         // 1. 创建参数字典
         var params = [String: Any]()
         // 2. 设置参数
-        params["status"] = status
-        if image == nil {
-            let urlString = rootHost+"/api/upload.php"
-            tokenRequest(.POST, urlString, params, finished: finished)
+        let urlString = rootHost+"/api/upload.php"
+        if let id = id{
+            if comment_id != nil {
+                params["comment_id"] = comment_id
+            }
+            params["id"] = id
+            params["comment"] = status
         } else {
-            let urlString = rootHost+"/api/upload.php"
-            var data: [Data] = []
-            for i in image! {
-                data.append(i.jpegData(compressionQuality: 0.8)!)
-            }
-            upload(urlString, data, params) { Result, Error in
-                print(Result)
-                finished(Result, Error)
-            }
+            params["status"] = status
         }
+        var data: [Data] = []
+        for i in image {
+            data.append(i.jpegData(compressionQuality: 0.8)!)
+        }
+        upload(urlString, data, params,finished: finished)
     }
     func sendPortrait(image: UIImage?, finished: @escaping HMRequstCallBack) {
         // 1. 创建参数字典
@@ -290,7 +270,8 @@ extension NetworkTools {
         parameters!["access_token"] = token
 
         post(URLString, parameters: parameters,headers: nil,constructingBodyWith: { formData in
-            for d in 0...data.count - 1{
+            
+            for d in 0..<data.count{
                 formData.appendPart(withFileData: data[d], name: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), fileName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), mimeType: "image/png")
             }
         }, progress: nil, success: { _, result in

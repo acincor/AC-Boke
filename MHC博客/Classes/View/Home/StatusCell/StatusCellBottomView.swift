@@ -14,9 +14,6 @@ class StatusCellBottomView: UIView {
         super.init(frame: frame)
         setupUI()
     }
-    func deleteBlog(_ id: Int, finished: @escaping NetworkTools.HMRequstCallBack) {
-        NetworkTools.shared.deleteStatus(id, finished: finished)
-    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

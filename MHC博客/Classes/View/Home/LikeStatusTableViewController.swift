@@ -101,7 +101,6 @@ extension LikeStatusTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: LikeStatusCellNormalId, for: indexPath) as! StatusCell
         // Configure the cell...
         cell.viewModel = vm
-        cell.bottomView.deleteButton.identifier = cell
         cell.bottomView.deleteButton.tag = indexPath.row
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
@@ -148,23 +147,8 @@ extension LikeStatusTableViewController {
         cell.cellDelegate = self
         return cell
     }
-    @objc func action2(_ sender: UIBarButtonItem) {
-        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
-        NetworkTools.shared.addComment(id: likeListViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
-            SVProgressHUD.dismiss()
-            if Error != nil {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                return
-            }
-            if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                return
-            }
-            sender.nav.close()
-        }
-    }
     @objc func action1(_ sender: UIButton) {
-        sender.identifier.bottomView.deleteBlog(likeListViewModel.statusList[sender.tag].status.id) { Result, Error in
+        NetworkTools.shared.deleteStatus(nil, nil, likeListViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
@@ -185,15 +169,11 @@ extension LikeStatusTableViewController {
         }
     }
     @objc func action3(_ sender: UIButton) {
-        let nav = CommentViewController()
-        let button = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.action2(_:)))
         guard (likeListViewModel.statusList[sender.tag].status.id > 0) else {
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
-        button.tag = sender.tag
-        button.nav = nav
-        nav.navigationItem.rightBarButtonItem = button
+        let nav = ComposeViewController(nil,likeListViewModel.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {

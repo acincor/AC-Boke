@@ -70,7 +70,7 @@ $mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
                             array_push($blog["comment_list"],$comment);
                         }
                         unset($blog['createTime']);
-                        array_push($arr0,$blog);
+                        array_unshift($arr0,$blog);
                     }
                 }
                     }

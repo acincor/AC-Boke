@@ -23,9 +23,9 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                         $blog['portrait'] = $array['portrait'];
                         $blog['have_pic'] = intval($blog['have_pic']);
                         $blog['pic_urls'] = json_decode($blog['pic_urls'],true);
+                        $blog['pic_count'] = intval($blog['pic_count']);
                         $blog['uid'] = intval($blog['uid']);
                         $blog['id'] = intval($blog['id']);
-                        $blog['pic_count'] = intval($blog['pic_count']);
                         $cq = mysqli_query($mysql,"select * from comments where id = ".$blog['id']);
                         $blog["comment_list"] = [];
                         $blog["like_list"] = [];
@@ -51,6 +51,9 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                         while($comment = mysqli_fetch_assoc($cq)) {
                             $comment['id'] = intval($comment['id']);
                             $comment['comment_uid'] = intval($comment['comment_uid']);
+                            $comment['have_pic'] = intval($comment['have_pic']);
+                            $comment['pic_urls'] = json_decode($comment['pic_urls'],true);
+                            $comment['pic_count'] = intval($comment['pic_count']);
                             $clq = mysqli_query($mysql,"select * from clikes where comment_id = ".$comment['comment_id']);
                             $comment["like_list"] = [];
                             while($clike = mysqli_fetch_assoc($clq)) {
@@ -101,6 +104,9 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                                         }
                                         $quote['id'] = intval($quote['id']);
                                         $quote['comment_id'] = $quote['quote_id'];
+                                        $quote['have_pic'] = intval($quote['have_pic']);
+                                        $quote['pic_urls'] = json_decode($quote['pic_urls'],true);
+                                        $quote['pic_count'] = intval($quote['pic_count']);
                                         $quq = mysqli_query($mysql,"select user,portrait from users where uid = ".$quote['comment_uid']);
                                         if(!is_bool($quq)) {
                                             $array = mysqli_fetch_assoc($quq);

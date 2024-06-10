@@ -95,7 +95,6 @@ class StatusPictureViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

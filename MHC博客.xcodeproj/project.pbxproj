@@ -25,8 +25,6 @@
 		2E3F87682AA31DAF00353BBF /* UserCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */; };
 		2E557E6B2A9AD1B800C13474 /* UserAgreementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */; };
 		2E557E6D2A9AD81100C13474 /* logOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6C2A9AD81100C13474 /* logOutViewController.swift */; };
-		2E557E6F2A9CEF7E00C13474 /* CommentCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */; };
-		2E66A4B82A33E09D009C8207 /* CommentCommentCellBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4B42A33E09D009C8207 /* CommentCommentCellBottomView.swift */; };
 		2E66A4BD2A33E116009C8207 /* CommentCommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4BC2A33E116009C8207 /* CommentCommentTableViewController.swift */; };
 		2E66A4C12A375CEC009C8207 /* SQLiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4C02A375CEC009C8207 /* SQLiteManager.swift */; };
 		2E66A4FE2A376116009C8207 /* db.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2E66A4FD2A376116009C8207 /* db.sql */; };
@@ -76,7 +74,6 @@
 		2E738AB729AA38510014FA12 /* ProgressImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7029AA38510014FA12 /* ProgressImageView.swift */; };
 		2E738AB829AA38510014FA12 /* PhotoBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7129AA38510014FA12 /* PhotoBrowserViewController.swift */; };
 		2E738AB929AA38510014FA12 /* PhotoBrowserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7229AA38510014FA12 /* PhotoBrowserCell.swift */; };
-		2E738ABB29AA38510014FA12 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7529AA38510014FA12 /* Comment.swift */; };
 		2E738ABC29AA38510014FA12 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7629AA38510014FA12 /* UserAccount.swift */; };
 		2E738ABE29AA38510014FA12 /* WBRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7B29AA38510014FA12 /* WBRefreshView.swift */; };
 		2E738AC029AA38510014FA12 /* StatusNormalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A7E29AA38510014FA12 /* StatusNormalCell.swift */; };
@@ -102,10 +99,7 @@
 		2E969AED2AAD2D3400219FF6 /* TrendCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E969AEC2AAD2D3300219FF6 /* TrendCellView.swift */; };
 		2E9B6D022A9DC2B20033AC91 /* UserCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9B6D012A9DC2B20033AC91 /* UserCollectionCell.swift */; };
 		2EA71BD229AF897F004742CA /* StatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BD129AF897F004742CA /* StatusListViewModel.swift */; };
-		2EA71BDA29B48EED004742CA /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BD929B48EED004742CA /* CommentViewController.swift */; };
 		2EA71BDC29B94932004742CA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BDB29B94932004742CA /* Status.swift */; };
-		2EA71BDE29B94CD6004742CA /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BDD29B94CD6004742CA /* CommentViewModel.swift */; };
-		2EA71BE229B94DBF004742CA /* StatusCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BE129B94DBF004742CA /* StatusCommentCell.swift */; };
 		2EA71BEA29B94FE6004742CA /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BE929B94FE6004742CA /* CommentTableViewController.swift */; };
 		2EA71BEC29B9501B004742CA /* CommentListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BEB29B9501B004742CA /* CommentListViewModel.swift */; };
 		2EA71C3329BDB779004742CA /* WBRefreshView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E738A7A29AA38510014FA12 /* WBRefreshView.xib */; };
@@ -284,8 +278,6 @@
 		2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionView.swift; sourceTree = "<group>"; };
 		2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementViewController.swift; sourceTree = "<group>"; };
 		2E557E6C2A9AD81100C13474 /* logOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logOutViewController.swift; sourceTree = "<group>"; };
-		2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentCell.swift; sourceTree = "<group>"; };
-		2E66A4B42A33E09D009C8207 /* CommentCommentCellBottomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentCellBottomView.swift; sourceTree = "<group>"; };
 		2E66A4BC2A33E116009C8207 /* CommentCommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCommentTableViewController.swift; sourceTree = "<group>"; };
 		2E66A4C02A375CEC009C8207 /* SQLiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteManager.swift; sourceTree = "<group>"; };
 		2E66A4FD2A376116009C8207 /* db.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db.sql; sourceTree = "<group>"; };
@@ -358,7 +350,6 @@
 		2E738A7029AA38510014FA12 /* ProgressImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressImageView.swift; sourceTree = "<group>"; };
 		2E738A7129AA38510014FA12 /* PhotoBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoBrowserViewController.swift; sourceTree = "<group>"; };
 		2E738A7229AA38510014FA12 /* PhotoBrowserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoBrowserCell.swift; sourceTree = "<group>"; };
-		2E738A7529AA38510014FA12 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		2E738A7629AA38510014FA12 /* UserAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		2E738A7A29AA38510014FA12 /* WBRefreshView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WBRefreshView.xib; sourceTree = "<group>"; };
 		2E738A7B29AA38510014FA12 /* WBRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WBRefreshView.swift; sourceTree = "<group>"; };
@@ -387,10 +378,7 @@
 		2E969AEC2AAD2D3300219FF6 /* TrendCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrendCellView.swift; sourceTree = "<group>"; };
 		2E9B6D012A9DC2B20033AC91 /* UserCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionCell.swift; sourceTree = "<group>"; };
 		2EA71BD129AF897F004742CA /* StatusListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusListViewModel.swift; sourceTree = "<group>"; };
-		2EA71BD929B48EED004742CA /* CommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		2EA71BDB29B94932004742CA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
-		2EA71BDD29B94CD6004742CA /* CommentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
-		2EA71BE129B94DBF004742CA /* StatusCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusCommentCell.swift; sourceTree = "<group>"; };
 		2EA71BE929B94FE6004742CA /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; };
 		2EA71BEB29B9501B004742CA /* CommentListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentListViewModel.swift; sourceTree = "<group>"; };
 		2EA71C3629C2066B004742CA /* MessageMainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageMainTableViewController.swift; sourceTree = "<group>"; };
@@ -798,7 +786,6 @@
 				2E738A5229AA38510014FA12 /* StatusViewModel.swift */,
 				2EA71C4229C6B78B004742CA /* UserViewModel.swift */,
 				2EA71BD129AF897F004742CA /* StatusListViewModel.swift */,
-				2EA71BDD29B94CD6004742CA /* CommentViewModel.swift */,
 				2EA71BEB29B9501B004742CA /* CommentListViewModel.swift */,
 				2EA71C3C29C6A6E4004742CA /* FriendListViewModel.swift */,
 				2EAA991B2A6C06760058481E /* LiveListViewModel.swift */,
@@ -897,7 +884,6 @@
 			isa = PBXGroup;
 			children = (
 				2EA71BDB29B94932004742CA /* Status.swift */,
-				2E738A7529AA38510014FA12 /* Comment.swift */,
 				2E738A7629AA38510014FA12 /* UserAccount.swift */,
 				2EA71C3A29C6A4BB004742CA /* Account.swift */,
 			);
@@ -950,9 +936,7 @@
 			children = (
 				2E969AEC2AAD2D3300219FF6 /* TrendCellView.swift */,
 				2E969AE62AA8A23000219FF6 /* TrendCell.swift */,
-				2E557E6E2A9CEF7E00C13474 /* CommentCommentCell.swift */,
 				2EDC452B2A7FE2D0003D7E63 /* StatusPictureView.swift */,
-				2E66A4B42A33E09D009C8207 /* CommentCommentCellBottomView.swift */,
 				2E738A7E29AA38510014FA12 /* StatusNormalCell.swift */,
 				2E738A8029AA38510014FA12 /* StatusCellBottomView.swift */,
 				2E738A8129AA38510014FA12 /* StatusCellTopView.swift */,
@@ -962,7 +946,6 @@
 				2EA71C3E29C6B6B7004742CA /* UserCellTopView.swift */,
 				2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */,
 				2E969AEA2AAC989D00219FF6 /* UserCollectionCellView.swift */,
-				2EA71BE129B94DBF004742CA /* StatusCommentCell.swift */,
 			);
 			path = StatusCell;
 			sourceTree = "<group>";
@@ -987,7 +970,6 @@
 			isa = PBXGroup;
 			children = (
 				2E738A8A29AA38510014FA12 /* ComposeViewController.swift */,
-				2EA71BD929B48EED004742CA /* CommentViewController.swift */,
 			);
 			path = Compose;
 			sourceTree = "<group>";
@@ -1393,7 +1375,6 @@
 				2E557E6B2A9AD1B800C13474 /* UserAgreementViewController.swift in Sources */,
 				2EB2908829EAE465009E0439 /* ConstraintMakerRelatable.swift in Sources */,
 				2E2AAA832A72A6690023417C /* MessageModel.swift in Sources */,
-				2EA71BDE29B94CD6004742CA /* CommentViewModel.swift in Sources */,
 				2EB2942D29EB7243009E0439 /* SDImageCacheConfig.m in Sources */,
 				2E704C0E29FA2977003FE541 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				2EB293FF29EB7243009E0439 /* SDAnimatedImageView.m in Sources */,
@@ -1403,7 +1384,6 @@
 				2EA71BDC29B94932004742CA /* Status.swift in Sources */,
 				2EB2908729EAE465009E0439 /* ConstraintLayoutSupportDSL.swift in Sources */,
 				2E738AA329AA38510014FA12 /* NetworkTools.swift in Sources */,
-				2EA71BE229B94DBF004742CA /* StatusCommentCell.swift in Sources */,
 				2E738ACF29AA38510014FA12 /* VisitorTableViewController.swift in Sources */,
 				2E704C1629FA2977003FE541 /* AFHTTPSessionManager.m in Sources */,
 				2E738AAC29AA38510014FA12 /* PicturePickerController.swift in Sources */,
@@ -1491,14 +1471,12 @@
 				2EB293FE29EB7243009E0439 /* SDAnimatedImage.m in Sources */,
 				2EB2942B29EB7243009E0439 /* SDImageCacheDefine.m in Sources */,
 				2E704C1329FA2977003FE541 /* AFAutoPurgingImageCache.m in Sources */,
-				2EA71BDA29B48EED004742CA /* CommentViewController.swift in Sources */,
 				2EB2940E29EB7243009E0439 /* SDWebImageCompat.m in Sources */,
 				2EB2942929EB7243009E0439 /* SDDisplayLink.m in Sources */,
 				2E738AB529AA38510014FA12 /* EmoticonPackage.swift in Sources */,
 				2EB2908329EAE465009E0439 /* ConstraintRelatableTarget.swift in Sources */,
 				2E738AA529AA38510014FA12 /* Date+Extension.swift in Sources */,
 				2EB2907D29EAE465009E0439 /* ConstraintRelation.swift in Sources */,
-				2E557E6F2A9CEF7E00C13474 /* CommentCommentCell.swift in Sources */,
 				2EB2907B29EAE465009E0439 /* ConstraintMakerEditable.swift in Sources */,
 				2EB2906429EAE465009E0439 /* ConstraintMultiplierTarget.swift in Sources */,
 				2EB2907729EAE465009E0439 /* ConstraintLayoutSupport.swift in Sources */,
@@ -1509,7 +1487,6 @@
 				2E738ACB29AA38510014FA12 /* ProfileTableViewController.swift in Sources */,
 				2E738AB329AA38510014FA12 /* EmoticonAttachment.swift in Sources */,
 				2E66A52B2A416173009C8207 /* SVRadialGradientLayer.m in Sources */,
-				2E66A4B82A33E09D009C8207 /* CommentCommentCellBottomView.swift in Sources */,
 				2EB2941929EB7243009E0439 /* SDDeviceHelper.m in Sources */,
 				2EDC45442A82316C003D7E63 /* CommentStatusListViewModel.swift in Sources */,
 				2EB2940029EB7243009E0439 /* UIImage+ForceDecode.m in Sources */,
@@ -1596,7 +1573,6 @@
 				2EB2908529EAE465009E0439 /* ConstraintLayoutGuide+Extensions.swift in Sources */,
 				2E738AA129AA38510014FA12 /* StatusViewModel.swift in Sources */,
 				2E704C1929FA2977003FE541 /* AFNetworkReachabilityManager.m in Sources */,
-				2E738ABB29AA38510014FA12 /* Comment.swift in Sources */,
 				2EB293F629EB7243009E0439 /* SDCallbackQueue.m in Sources */,
 				04DC74E32BD3B45900B8034A /* BlogsTableViewController.swift in Sources */,
 			);
@@ -1774,10 +1750,10 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INSTALL_PATH = /Application;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 4;
+				MARKETING_VERSION = 5;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHCBlog";
@@ -1834,10 +1810,10 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INSTALL_PATH = /Application;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 4;
+				MARKETING_VERSION = 5;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mhc-inc.MHCBlog";

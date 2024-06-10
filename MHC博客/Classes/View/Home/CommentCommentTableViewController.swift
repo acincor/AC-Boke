@@ -7,21 +7,30 @@
 
 import UIKit
 
-
-let CommentCommentCellNormalId = "CommentCommentCellNormalId"
-var comment_id: Int?
-var comment_comment_id: Int?
 var commentlistViewModel = CommentListViewModel()
 class CommentCommentTableViewController: VisitorTableViewController {
-    var cell: CommentCommentCell?
+    var cell: StatusNormalCell?
+    var comment_id: Int
+    var id: Int
+    var comment_comment_id: Int
+    init(id: Int,comment_id: Int, comment_comment_id: Int) {
+        self.id = id
+        self.comment_id = comment_id
+        self.comment_comment_id = comment_comment_id
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     private func prepareTableView() {
         tableView.separatorStyle = .none
-        tableView.register(CommentCommentCell.self, forCellReuseIdentifier: CommentCommentCellNormalId)
+        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
     }
     @objc func action5(_ sender: UIButton) {
-        NetworkTools.shared.like(comment_id!,comment_id: commentlistViewModel.commentCommentList[sender.tag].comment.comment_id,comment_comment_id!) { Result, Error in
+        NetworkTools.shared.like(comment_id,comment_id: commentlistViewModel.commentCommentList[sender.tag].status.comment_id,comment_comment_id) { Result, Error in
             if Error == nil {
                 if (Result as! [String:Any])["code"] as! String == "add" {
                     SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
@@ -39,14 +48,8 @@ class CommentCommentTableViewController: VisitorTableViewController {
         }
     }
     @objc func loadData() {
-        guard let id = comment_id else{
-            return
-        }
-        guard let comment_id = comment_comment_id else{
-            return
-        }
             self.refreshControl?.beginRefreshing()
-            commentlistViewModel.loadComment(id: id, comment_id: comment_id) { (isSuccessed) in
+            commentlistViewModel.loadComment(id: comment_id, comment_id: comment_comment_id) { (isSuccessed) in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessed {
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
@@ -68,9 +71,9 @@ class CommentCommentTableViewController: VisitorTableViewController {
         refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeLightIt"), object: nil, queue: nil) { n in
             if n.object != nil {
-                let result = ["id":"\(commentlistViewModel.commentCommentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].comment.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                let like_list = commentlistViewModel.commentCommentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].comment.like_list
-                self.cell = ((n.object as! [String:Any])["cell"] as! CommentCommentCell)
+                let result = ["id":"\(commentlistViewModel.commentCommentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+                let like_list = commentlistViewModel.commentCommentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
+                self.cell = ((n.object as! [String:Any])["cell"] as! StatusNormalCell)
                 for s in like_list {
                     if s["like_uid"] as! String == result["like_uid"] as! String {
                         
@@ -87,10 +90,7 @@ class CommentCommentTableViewController: VisitorTableViewController {
         }
         loadData()
         prepareTableView()
-        guard let id = id else {
-            return
-        }
-        let cell = StatusCommentCell(style: .default, reuseIdentifier: CommentCellNormalId)
+        let cell = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId)
         cell.viewModel = commentlistViewModel.commentList[id]
         cell.bottomView.removeFromSuperview()
         tableView.tableHeaderView = cell
@@ -108,14 +108,14 @@ extension CommentCommentTableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = commentlistViewModel.commentCommentList[indexPath.row]
-        var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! CommentCommentCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusNormalCell
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.vm2 = vm
         NotificationCenter.default.post(name: Notification.Name("BKLikeLightIt"), object: ["cell":cell,"indexPath":indexPath] as [String : Any])
         cell = self.cell!
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
-        cell.bottomView.likeButton.setTitle("\(commentlistViewModel.commentCommentList[indexPath.row].comment.like_count)", for: .normal)
+        cell.bottomView.likeButton.setTitle("\(commentlistViewModel.commentCommentList[indexPath.row].status.like_count)", for: .normal)
         cell.bottomView.likeButton.tag = indexPath.row
         //action5(cell.commentBottomView.likeButton)
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.action5(_:)), for: .touchUpInside)
@@ -126,6 +126,14 @@ extension CommentCommentTableViewController {
         cell.bottomView.commentButton.cell2 = cell
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
          */
+        cell.bottomView.likeButton.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(cell.bottomView.deleteButton.snp.top)
+            make.left.equalTo(cell.bottomView.deleteButton.snp.right)
+            make.width.equalTo(cell.bottomView.deleteButton.snp.width)
+            make.height.equalTo(cell.bottomView.deleteButton.snp.height)
+            make.right.equalTo(cell.bottomView.snp.right)
+        }
+        cell.bottomView.commentButton.removeFromSuperview()
         return cell
     }
     /*
@@ -142,7 +150,7 @@ extension CommentCommentTableViewController {
     }
      */
     @objc func action4(_ sender: UIButton) {
-        NetworkTools.shared.deleteComment(sender.vm2!.comment.id,  comment_comment_id! , comment_id: sender.vm2!.comment.comment_id) { Result, Error in
+        NetworkTools.shared.deleteStatus(comment_comment_id,sender.vm2!.status.comment_id,sender.vm2!.status.id) { Result, Error in
                 if Error != nil {
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                     return
@@ -155,31 +163,11 @@ extension CommentCommentTableViewController {
             self.loadData()
             }
     }
-    @objc func action2(_ sender: UIButton) {
-        guard (commentlistViewModel.commentCommentList[sender.tag].comment.comment_id > 0) else {
-            sender.nav.close()
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-            return
-        }
-        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
-        NetworkTools.shared.addComment(id: sender.vm2!.comment.id, comment_id: sender.vm2!.comment.comment_id, sender.nav.textView.emoticonText) { Result, Error in
-            SVProgressHUD.dismiss()
-                if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                    return
-                }
-                if (Result as! [String:Int])["error"] != nil {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                    return
-                }
-            sender.nav.close()
-            }
-    }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return commentlistViewModel.commentCommentList[indexPath.row].rowHeight
     }
 }
-extension CommentCommentTableViewController: StatusCommentCellDelegate {
+extension CommentCommentTableViewController: StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
         let vc = HomeWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true

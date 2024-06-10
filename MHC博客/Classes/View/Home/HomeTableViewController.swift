@@ -56,6 +56,22 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             }//十条刷新一次
         }
     }
+    private lazy var composedButton: UIBarButtonItem = UIBarButtonItem(title: NSLocalizedString("写", comment: ""), image: UIImage(systemName: "pencil"), target: self, action: #selector(self.clickComposedButton))
+    private func setupComposedButton() {
+        composedButton.tintColor = .red
+        navigationItem.rightBarButtonItem = composedButton
+    }
+    @objc private func clickComposedButton() {
+        var vc: UIViewController
+        if UserAccountViewModel.sharedUserAccount.userLogon {
+            vc = ComposeViewController(nil,nil)
+        } else {
+            vc = OAuthViewController(.登录)
+        }
+        
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
+    }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -63,7 +79,6 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     private func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
-        //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
         refreshControl = WBRefreshControl()
@@ -140,6 +155,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupComposedButton()
         if !UserAccountViewModel.sharedUserAccount.userLogon {
             visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
             return
@@ -181,10 +197,9 @@ extension HomeTableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = listViewModel.statusList[indexPath.row]
-        var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
         // Configure the cell...
         cell.viewModel = vm
-        cell.bottomView.deleteButton.identifier = cell
         cell.bottomView.deleteButton.tag = indexPath.row
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
@@ -230,24 +245,9 @@ extension HomeTableViewController {
         cell.cellDelegate = self
         return cell
     }
-    @objc func action2(_ sender: UIBarButtonItem) {
-        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
-        NetworkTools.shared.addComment(id: listViewModel.statusList[sender.tag].status.id, sender.nav.textView.emoticonText) { Result, Error in
-            SVProgressHUD.dismiss()
-            if Error != nil {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                return
-            }
-            if (Result as! [String:Any])["error"] != nil {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                return
-            }
-            sender.nav.close()
-            self.tableView.reloadData()
-        }
-    }
     @objc func action1(_ sender: UIButton) {
-        sender.identifier.bottomView.deleteBlog(listViewModel.statusList[sender.tag].status.id) { Result, Error in
+        print(listViewModel.statusList[sender.tag].status.id)
+        NetworkTools.shared.deleteStatus(nil, nil, listViewModel.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了",comment:""))
                 return
@@ -263,15 +263,11 @@ extension HomeTableViewController {
         }
     }
     @objc func action3(_ sender: UIButton) {
-        let nav = CommentViewController()
-        let button = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.action2(_:)))
         guard (listViewModel.statusList[sender.tag].status.id > 0) else {
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
             return
         }
-        button.tag = sender.tag
-        button.nav = nav
-        nav.navigationItem.rightBarButtonItem = button
+        let nav = ComposeViewController(nil,listViewModel.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
@@ -322,8 +318,9 @@ extension Dictionary where Key: Equatable {
 }
 extension UITextField {
     private struct AssociatedKey {
-        static var identifier = ""
+        static var identifier = String()
     }
+    /*
     var identifier: String {
         get {
             return objc_getAssociatedObject(self, &AssociatedKey.identifier) as? String ?? ""
@@ -332,94 +329,57 @@ extension UITextField {
             objc_setAssociatedObject(self, &AssociatedKey.identifier, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
     }
+     */
 }
 extension UIButton {
     private struct AssociatedKey {
-           static var identifier: StatusCell = StatusCell()
-        static var cell: StatusCommentCell = StatusCommentCell()
-        static var cell2: CommentCommentCell = CommentCommentCell()
-        static var nav: CommentViewController = CommentViewController()
-        static var int: Int = 0
-        static var vm: CommentViewModel? = CommentListViewModel().commentList.first
-        static var vm2: CommentViewModel? = CommentListViewModel().commentCommentList.first
+        static var nav: ComposeViewController = ComposeViewController(nil,nil)
+        static var vm: StatusViewModel? = CommentListViewModel().commentList.first
+        static var vm2: StatusViewModel? = CommentListViewModel().commentCommentList.first
        }
-       
-       var identifier: StatusCell {
-           get {
-               return objc_getAssociatedObject(self, &AssociatedKey.identifier) as? StatusCell ?? StatusCell()
-           }
-           set {
-               objc_setAssociatedObject(self, &AssociatedKey.identifier, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-           }
-       }
-    var cell: StatusCommentCell {
+    var vm: StatusViewModel? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.cell) as? StatusCommentCell ?? StatusCommentCell()
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.cell, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
-    var cell2: CommentCommentCell {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.cell2) as? CommentCommentCell ?? CommentCommentCell()
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.cell2, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
-    var vm: CommentViewModel? {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.vm) as? CommentViewModel
+            return objc_getAssociatedObject(self, &AssociatedKey.vm) as? StatusViewModel
         }
         set {
             objc_setAssociatedObject(self, &AssociatedKey.vm, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    var vm2: CommentViewModel? {
+    var vm2: StatusViewModel? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.vm2) as? CommentViewModel
+            return objc_getAssociatedObject(self, &AssociatedKey.vm2) as? StatusViewModel
         }
         set {
             objc_setAssociatedObject(self, &AssociatedKey.vm2, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    var nav: CommentViewController {
+    var nav: ComposeViewController {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.nav) as? CommentViewController ?? CommentViewController()
+            return objc_getAssociatedObject(self, &AssociatedKey.nav) as? ComposeViewController ?? ComposeViewController(nil,nil)
         }
         
         set {
             objc_setAssociatedObject(self, &AssociatedKey.nav, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    var int: Int {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKey.int) as? Int ?? 0
-        }
-        
-        set {
-            objc_setAssociatedObject(self, &AssociatedKey.int, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
 }
 extension UIBarButtonItem {
     private struct AssociatedKey {
-        static var nav = CommentViewController()
-        static var vm: CommentViewModel?
+        static var nav = ComposeViewController(nil, nil)
+        static var vm: StatusViewModel?
     }
-    var nav: CommentViewController {
+    var nav: ComposeViewController {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.nav) as? CommentViewController ?? CommentViewController()
+            return objc_getAssociatedObject(self, &AssociatedKey.nav) as? ComposeViewController ?? ComposeViewController(nil,nil)
         }
         
         set {
-            objc_setAssociatedObject(self, &AssociatedKey.nav, newValue as CommentViewController?, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKey.nav, newValue as ComposeViewController?, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    var vm: CommentViewModel? {
+    var vm: StatusViewModel? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKey.vm) as? CommentViewModel
+            return objc_getAssociatedObject(self, &AssociatedKey.vm) as? StatusViewModel
         }
         set {
             objc_setAssociatedObject(self, &AssociatedKey.vm, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)

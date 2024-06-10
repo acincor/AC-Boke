@@ -19,6 +19,17 @@ class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
         tv.delegate = self
         return tv
     }()
+    var comment_id: Int?
+    var id: Int?
+    init(_ comment_id: Int?, _ id: Int?) {
+        self.comment_id = comment_id
+        self.id = id
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 #if os(visionOS)
 override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
     return .glass
@@ -181,26 +192,14 @@ extension ComposeViewController {
         let text = textView.emoticonText
         let image = picturesPickerController.pictures
         SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
-        if image != [] {
-            NetworkTools.shared.sendStatus(status: text, image: image) { (Result, Error) -> () in
-                SVProgressHUD.dismiss()
-                if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
-                    return
-                }
-                self.textView.resignFirstResponder()
-                self.dismiss(animated: true,completion: nil)
+        NetworkTools.shared.sendStatus(status: text, comment_id: comment_id, id: id, image: image) { (Result, Error) -> () in
+            SVProgressHUD.dismiss()
+            if Error != nil {
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
+                return
             }
-        } else {
-            NetworkTools.shared.sendStatus(status: text, image: nil) { (Result, Error) -> () in
-                SVProgressHUD.dismiss()
-                if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
-                    return
-                }
-                self.textView.resignFirstResponder()
-                self.dismiss(animated: true,completion: nil)
-            }
+            self.textView.resignFirstResponder()
+            self.dismiss(animated: true,completion: nil)
         }
     }
     private func prepareTextView() {
