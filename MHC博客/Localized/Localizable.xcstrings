@@ -747,7 +747,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Register as an user at Mhc Boke"
+            "value" : "Register"
           }
         }
       }
@@ -889,7 +889,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Log in Mhc Boke"
+            "value" : "Login"
           }
         }
       }

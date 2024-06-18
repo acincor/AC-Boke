@@ -52,15 +52,16 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         table.register(TableViewCell.self, forCellReuseIdentifier: "MsgCell")
                 //数据协议
                     //代理方法
+        textField.snp.makeConstraints { make in
+            make.bottom.equalTo(textField.frame.height)
+            make.width.equalTo((UIScreen.main.bounds.width - self.sendButton.frame.width) / 2)
+            make.centerX.equalTo(self.table.snp.centerX)
+        }
         table.chatDataSource = self
-                textField.snp.makeConstraints { make in
-                    make.left.equalTo(20)
-                    make.bottom.equalTo(view.snp.bottom).offset(-10)
-                }
-                sendButton.snp.makeConstraints { make in
-                    make.left.equalTo(textField.snp.right)
-                    make.bottom.equalTo(textField.snp.bottom)
-                }
+        sendButton.snp.makeConstraints { make in
+            make.left.equalTo(textField.snp.right)
+            make.bottom.equalTo(textField.snp.bottom)
+        }
         table.snp.makeConstraints { make in
             make.bottom.equalTo(sendButton.snp.top).offset(-20)
             make.left.equalTo(view.snp.left).offset(20)
@@ -78,9 +79,12 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
                 sendButton.layer.cornerRadius = 15
                 sendButton.layer.masksToBounds = true
                 textField.placeholder = NSLocalizedString("说些话吧，哪怕是一个标点符号也行...", comment: "")
+        
                 sendButton.setTitle(NSLocalizedString("发送", comment: ""), for: .normal)
                 sendButton.setTitleColor(.white, for: .normal)
                 sendButton.backgroundColor = .red
+        textField.textAlignment = .natural
+        textField.adjustsFontSizeToFitWidth = true
                 textField.sizeToFit()
                 sendButton.sizeToFit()
         let leftbar = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(self.close))
