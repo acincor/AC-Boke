@@ -53,14 +53,14 @@ Stories
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！例如可以分享出去游玩的照片、快乐的瞬间，点赞高的还有可能在退出app时被被精选哦**
 
-![avatar](https://www.z4a.net/image/ja8IwK)
-![avatar](https://www.z4a.net/image/ja8Mc0)
-![avatar](https://www.z4a.net/image/ja8Prj)
-![avatar](https://www.z4a.net/image/ja8hOa)
-![avatar](https://www.z4a.net/image/jaCSCO)
-![avatar](https://www.z4a.net/image/jaCfNK)
-![avatar](https://www.z4a.net/image/jaCvu0)
-![avatar](https://www.z4a.net/image/jaC3Jj)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro-Max---2024-06-18-at-18.56.18.png)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro-Max---2024-06-18-at-18.57.47.png)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro---2024-06-18-at-19.00.36.png)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro---2024-06-18-at-19.09.06.png)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro---2024-06-18-at-21.14.55.png)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro---2024-06-18-at-21.19.08.png)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro---2024-06-18-at-21.19.39.png)
+![avatar](https://www.z4a.net/images/2024/06/18/Simulator-Screenshot---iPhone-15-Pro-Max---2024-06-18-at-21.19.55.png)
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
