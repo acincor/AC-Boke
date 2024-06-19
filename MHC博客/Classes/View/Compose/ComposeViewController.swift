@@ -46,7 +46,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         }
     }
     private lazy var trendView: TrendCellView = TrendCellView { viewModel in
-        self.textView.text.append(contentsOf: "#"+viewModel+"#")
+        self.textView.insertText("#"+viewModel+"#")
         self.textView.delegate?.textViewDidChange!(self.textView)
     }
     private lazy var emoticonView: EmoticonView = EmoticonView { emoticon in
