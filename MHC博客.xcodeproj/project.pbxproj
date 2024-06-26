@@ -20,7 +20,6 @@
 		2E2AAA852A72A7170023417C /* ChatDataSourch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA842A72A7170023417C /* ChatDataSourch.swift */; };
 		2E2AAA872A72A74D0023417C /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA862A72A74D0023417C /* TableView.swift */; };
 		2E2AAA892A72A7890023417C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA882A72A7890023417C /* TableViewCell.swift */; };
-		2E2AAAF62A73538D0023417C /* chat.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF52A73538D0023417C /* chat.sql */; };
 		2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF72A7354470023417C /* ChatDAL.swift */; };
 		2E3F87682AA31DAF00353BBF /* UserCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */; };
 		2E557E6B2A9AD1B800C13474 /* UserAgreementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */; };
@@ -273,7 +272,6 @@
 		2E2AAA842A72A7170023417C /* ChatDataSourch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDataSourch.swift; sourceTree = "<group>"; };
 		2E2AAA862A72A74D0023417C /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		2E2AAA882A72A7890023417C /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
-		2E2AAAF52A73538D0023417C /* chat.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chat.sql; sourceTree = "<group>"; };
 		2E2AAAF72A7354470023417C /* ChatDAL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDAL.swift; sourceTree = "<group>"; };
 		2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionView.swift; sourceTree = "<group>"; };
 		2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementViewController.swift; sourceTree = "<group>"; };
@@ -598,6 +596,7 @@
 		2EDC45412A81ECBC003D7E63 /* LikeStatusListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeStatusListViewModel.swift; sourceTree = "<group>"; };
 		2EDC45432A82316C003D7E63 /* CommentStatusListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentStatusListViewModel.swift; sourceTree = "<group>"; };
 		2EDC45452A823195003D7E63 /* CommentStatusTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentStatusTableViewController.swift; sourceTree = "<group>"; };
+		E40C1B272C2C517200BAB94C /* nginx.conf */ = {isa = PBXFileReference; lastKnownFileType = text; path = nginx.conf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -637,12 +636,12 @@
 		2E66A4FC2A376116009C8207 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				E40C1B282C2C517200BAB94C /* old_version */,
 				04589C612BBFF17900B8ED18 /* my.cnf.default */,
 				04589C5F2BBFF17300B8ED18 /* my.cnf */,
 				049775F52BB7078F00990CFD /* php.ini */,
 				04C0F4DB2BAFC75700122624 /* nginx.conf */,
 				2E66A4FD2A376116009C8207 /* db.sql */,
-				2E2AAAF52A73538D0023417C /* chat.sql */,
 			);
 			name = Resource;
 			path = "MHC博客/Resource";
@@ -1276,6 +1275,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E40C1B282C2C517200BAB94C /* old_version */ = {
+			isa = PBXGroup;
+			children = (
+				E40C1B272C2C517200BAB94C /* nginx.conf */,
+			);
+			path = old_version;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1312,7 +1319,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					2E738A3429AA33CF0014FA12 = {
 						CreatedOnToolsVersion = 14.2;
@@ -1346,7 +1353,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E2AAAF62A73538D0023417C /* chat.sql in Resources */,
 				2EAA992E2A6D55E00058481E /* 用户协议.txt in Resources */,
 				2E66A52F2A416173009C8207 /* SVProgressHUD.bundle in Resources */,
 				2E704C0B29FA2977003FE541 /* README.md in Resources */,
@@ -1713,7 +1719,6 @@
 		2E738A4A29AA33CF0014FA12 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1776,7 +1781,6 @@
 		2E738A4B29AA33CF0014FA12 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -15,7 +15,7 @@ class ChatDAL {
         df.dateFormat = "yyyy-MM-dd HH:mm:ss"
         _ = df.string(from: date)
         let sql = "DELETE FROM T_Chats;"
-        SQLiteManager.shared.chatQueue.inDatabase { db in
+        SQLiteManager.shared.queue.inDatabase { db in
             try? db.executeUpdate(sql, values: nil)
         }
     }
@@ -23,7 +23,7 @@ class ChatDAL {
         let sql = "DELETE FROM T_Chats WHERE content = '';"
         
         // 3. 遍历数组 - 如果不能确认数据插入的消耗时间，可以在实际开发中写测试代码
-        SQLiteManager.shared.chatQueue.inTransaction { (db, rollback) -> Void in
+        SQLiteManager.shared.queue.inTransaction { (db, rollback) -> Void in
             do{
                 try db.executeQuery(sql, values: nil)
             } catch{
@@ -44,11 +44,11 @@ class ChatDAL {
         var sql = "SELECT to_uid, content, portrait, userId, timeInterval FROM T_Chats \n"
         sql += "WHERE userId = \(userId) \n"
         sql += "    AND to_uid = \(to_uid) \n"
-        let array = SQLiteManager.shared.chatExecRecordSet(sql: sql)
+        let array = SQLiteManager.shared.execRecordSet(sql: sql)
         sql = "SELECT to_uid, content, userId, portrait, timeInterval FROM T_Chats \n"
         sql += "WHERE userId = \(to_uid) \n"
         sql += "    AND to_uid = \(userId) \n"
-        let to_uidArray = SQLiteManager.shared.chatExecRecordSet(sql: sql)
+        let to_uidArray = SQLiteManager.shared.execRecordSet(sql: sql)
         var arrayM = [[String:Any]]()
         for dict in array {
             arrayM.append(dict)
@@ -62,7 +62,7 @@ class ChatDAL {
         let sql = "INSERT INTO T_Chats(to_uid, content, portrait, timeInterval, userId) VALUES (?, ?, ?, ?, ?);"
         
         // 3. 遍历数组 - 如果不能确认数据插入的消耗时间，可以在实际开发中写测试代码
-        SQLiteManager.shared.chatQueue.inTransaction { (db, rollback) -> Void in
+        SQLiteManager.shared.queue.inTransaction { (db, rollback) -> Void in
             
             // 微博id
             let userId = data["uid"] as! Int
