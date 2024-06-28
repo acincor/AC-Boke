@@ -87,7 +87,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         self.hkView.videoGravity = AVLayerVideoGravity.resizeAspectFill
         self.hkView.attachStream(self.stream)
         self.view.insertSubview(self.hkView, belowSubview: self.stopButton)
-        self.connection.connect("rtmp://localhost:1935/live")
+        self.connection.connect("rtmp://mhcincapi.top:1935/live")
         self.stream.publish(UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
     }
     @objc func stopLive(_ sender: Any) {

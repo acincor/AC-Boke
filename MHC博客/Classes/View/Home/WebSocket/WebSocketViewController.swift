@@ -23,7 +23,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
     init(to_uid: Int, username: String) {
         self.to_uid = to_uid
         self.username = username
-        self.urlRequest = URLRequest(url: URL(string:"ws://localhost:8081/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
+        self.urlRequest = URLRequest(url: URL(string:"ws://wss.mhcincapi.top/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
         super.init(nibName: nil, bundle: nil)
     }
     

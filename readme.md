@@ -19,6 +19,9 @@ Installation
 **评论可以发送图片、创建话题、将中心button删除，改为右上角的笔**
 **注意！记得将所有的内容都测试，否则可能注销会因为数据库没有统一创建导致出现用户没有成功注销的问题，本人在考虑要不要统一建数据库在一个文件**
 **支持中英文**
+
+#*OLD VERSION*
+
 **将nginx、php配置放在了Resource内，将ip统一为localhost，可以通过以下配置**
 
 ```brew install nginx-full```
@@ -50,6 +53,10 @@ Installation
 **如何重载**
 
 ```nginx -s reload```
+
+#*OLD VERSION*
+
+**已经上传云端，域名mhcincapi.top**
 
 Stories
 ---------------
