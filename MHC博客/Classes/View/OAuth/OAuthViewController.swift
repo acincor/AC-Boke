@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 class OAuthViewController: UIViewController,WKNavigationDelegate {
     private lazy var webView = WKWebView()
     @objc private func close() {
@@ -134,10 +134,12 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
 }
 extension OAuthViewController {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        guard let url = webView.url, url.absoluteString.hasPrefix(rootHost) else {
+        guard let url = webView.url, url.host(percentEncoded: false) == "mhcincapi.top" else {
+            print("problem1")
             return .allow
         }
         guard let query = url.query,query.hasPrefix("code=") else {
+            print("problem2")
             return .allow
         }
         let code = String(query["code=".endIndex...])

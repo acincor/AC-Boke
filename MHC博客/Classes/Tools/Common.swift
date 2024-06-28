@@ -11,6 +11,6 @@ let WBStatusSelectedPhotoNotification = "WBStatusSelectedPhotoNotification"
 let WBStatusSelectedPhotoIndexPathKey = "WBStatusSelectedPhotoIndexPathKey"
 let WBStatusSelectedPhotoURLsKey = "WBStatusSelectedPhotoURLsKey"
 var rootHost:String {
-    return "http://mhcincapi.top"
+    return "https://mhcincapi.top"
 }
 var listViewModel = StatusListViewModel()
