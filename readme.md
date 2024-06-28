@@ -54,7 +54,7 @@ Installation
 
 ```nginx -s reload```
 
-#*OLD VERSION*
+#*NEW VERSION*
 
 **已经上传云端，域名mhcincapi.top**
 
