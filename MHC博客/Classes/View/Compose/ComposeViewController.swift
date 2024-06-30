@@ -106,12 +106,12 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         textView.becomeFirstResponder()
     }
     @objc private func selectUser() {
-        userCollectionView.friendListViewModel.loadFriend { isSuccessed in
+        userCollectionView.friendListViewModel.load { isSuccessed in
             print(isSuccessed)
             self.userCollectionView.collectionView.reloadData()
         }
         self.userCollectionView.setupUI()
-        print(self.userCollectionView.friendListViewModel.friendList)
+        print(self.userCollectionView.friendListViewModel.list)
         textView.resignFirstResponder()
         textView.inputView = textView.inputView == nil ? userCollectionView : nil
         textView.becomeFirstResponder()

@@ -13,4 +13,4 @@ let WBStatusSelectedPhotoURLsKey = "WBStatusSelectedPhotoURLsKey"
 var rootHost:String {
     return "https://mhcincapi.top"
 }
-var listViewModel = StatusListViewModel()
+var listViewModel = TypeNeedCacheListViewModel()

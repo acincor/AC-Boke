@@ -1,5 +1,5 @@
 //
-//  LikeStatusTableViewController.swift
+//  BlogsTableViewController.swift
 //  MHC微博
 //
 //  Created by Monkey hammer on 2022/9/10.
@@ -9,47 +9,84 @@ import UIKit
 import SwiftUI
 
 
-let LikeStatusCellNormalId = "LikeStatusCellNormalId"
-let likeListViewModel = LikeStatusListViewModel()
-class LikeStatusTableViewController: VisitorTableViewController {
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+//let StatusCellNormalId2 = "StatusCellNormalId2"
+
+class TypeStatusTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
+    var clas0: Clas0?
+    enum Clas0: String {
+        case comment = "comment"
+        case like = "like"
     }
-#if os(visionOS)
-override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
-    return .glass
-}
-#endif
-    private func prepareTableView() {
-        tableView.separatorStyle = .none
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: LikeStatusCellNormalId)
-        tableView.estimatedRowHeight = 400
-        tableView.rowHeight = 400
-        refreshControl = WBRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
-    }
-    init(uid: String) {
+    var typeNeedCache: TypeStatusListViewModel
+    var uid: String
+    init(uid: String, clas: Clas0? = nil) {
         self.uid = uid
-        super.init(style: .plain)
+        self.clas0 = clas
+        if let clas = clas {
+            self.typeNeedCache = TypeStatusListViewModel(clas: TypeStatusListViewModel.Clas(rawValue: clas.rawValue)!)
+        } else {
+            self.typeNeedCache = TypeStatusListViewModel(clas: .blog)
+        }
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    var uid: String
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    let liveView = LiveTableView()
+    private func prepareTableView() {
+        tableView.separatorStyle = .none
+        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
+        //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
+        tableView.estimatedRowHeight = 400
+        tableView.rowHeight = 400
+        refreshControl = WBRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
+        liveView.delegate = self
+        liveView.dataSource = self
+        tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : liveView
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return liveListViewModel.list.count
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let vm = liveListViewModel.list[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! UserCollectionCell
+        cell.viewModel = vm
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vm = liveListViewModel.list[indexPath.row]
+        guard let url = ("https://mhcincapi.top/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试", comment: ""))
+            return
+        }
+        print(url)
+        guard let urlEncoded = URL(string:url) else {
+            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试", comment: ""))
+            return
+        }
+        present(HomeWebViewController(url: urlEncoded),animated: true)
+    }
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        likeListViewModel.loadStatus(uid) { (isSuccessed) in
+        //StatusDAL.clearDataCache()//删除缓存
+        typeNeedCache.loadStatus(uid) { isSuccessed in
             self.refreshControl?.endRefreshing()
             if !isSuccessed {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("暂无点赞任何博客哦！", comment: ""))
-                likeListViewModel.statusList = []
-                self.tableView.reloadData()
+                SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
                 return
             }
             self.showPulldownTip()
             self.tableView.reloadData()
         }
+        
+            self.liveView.loadData()
+            self.liveView.reloadData()
+            self.tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : self.liveView
     }
     private lazy var pulldownTipLabel: UILabel = {
         let label = UILabel(title: "", fontSize: 18,color: .white)
@@ -58,7 +95,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         return label
     }()
     private func showPulldownTip() {
-        guard let count = likeListViewModel.pulldownCount else {
+        guard let count = listViewModel.pulldownCount else {
             return
         }
         pulldownTipLabel.text = (count == 0) ? NSLocalizedString("没有博客", comment: "") : String.localizedStringWithFormat(NSLocalizedString("刷新到%@条博客", comment: ""),"\(count)")
@@ -79,26 +116,41 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
             visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
             return
         }
-        
-        loadData()
         prepareTableView()
+        NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
+            guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
+                return
+            }
+            guard let urls = n.userInfo?[WBStatusSelectedPhotoURLsKey] as? [URL] else {
+                return
+            }
+            guard let cell = n.object as? PhotoBrowserPresentDelegate else {
+                return
+            }
+            let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
+            vc.modalPresentationStyle = .custom
+            vc.transitioningDelegate = self?.photoBrowserAnimator
+            self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
+            self?.present(vc, animated: true,completion: nil)
+        }
+        self.loadData()
     }
     @objc func action(sender: UITapGestureRecognizer) {
         let dict = ["portrait": sender.sender3, "user": sender.sender2, "uid": sender.sender]
         let uvm = UserViewModel(user: Account(dict: dict))
         present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm, uid: sender.sender))), animated: true)
-    }
+        }
 
     var cell: StatusCell?
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }
-extension LikeStatusTableViewController {
+extension TypeStatusTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return likeListViewModel.statusList.count
+        return typeNeedCache.statusList.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = likeListViewModel.statusList[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: LikeStatusCellNormalId, for: indexPath) as! StatusCell
+        let vm = typeNeedCache.statusList[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.tag = indexPath.row
@@ -111,12 +163,11 @@ extension LikeStatusTableViewController {
         g.sender2 = "\(viewModel.status.user ?? "")"
         g.sender3 = "\(viewModel.status.portrait ?? "")"
         cell.topView.iconView.addGestureRecognizer(g)
-        //cell.bottomView.commentButton.setTitle("\(likeListViewModel.statusList[indexPath.row].status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
-        let result = ["id":"\(likeListViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-        cell.bottomView.likeButton.setTitle("\(likeListViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        NetworkTools.shared.loadOneStatus(id: likeListViewModel.statusList[indexPath.row].status.id) { res, error in
+        let result = ["id":"\(typeNeedCache.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+        cell.bottomView.likeButton.setTitle("\(typeNeedCache.statusList[indexPath.row].status.like_count)", for: .normal)
+        NetworkTools.shared.loadOneStatus(id: typeNeedCache.statusList[indexPath.row].status.id) { res, error in
             if error != nil {
                 return
             }
@@ -148,7 +199,7 @@ extension LikeStatusTableViewController {
         return cell
     }
     @objc func action1(_ sender: UIButton) {
-        NetworkTools.shared.deleteStatus(nil, nil, likeListViewModel.statusList[sender.tag].status.id) { Result, Error in
+        NetworkTools.shared.deleteStatus(nil, nil, typeNeedCache.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
                 return
@@ -158,33 +209,30 @@ extension LikeStatusTableViewController {
                 return
             }
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
-            self.loadData()
-            StatusDAL.removeCache(likeListViewModel.statusList[sender.tag].status.id)
+            StatusDAL.removeCache(self.typeNeedCache.statusList[sender.tag].status.id)
             if let i = listViewModel.statusList.firstIndex(where: { vm in
-                vm.status.id == likeListViewModel.statusList[sender.tag].status.id
+                vm.status.id == self.typeNeedCache.statusList[sender.tag].status.id
             }){
                 listViewModel.statusList.remove(at: i)
             }
             NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
+            self.typeNeedCache.statusList.remove(at: sender.tag)
+            self.tableView.reloadData()
         }
     }
     @objc func action3(_ sender: UIButton) {
-        guard (likeListViewModel.statusList[sender.tag].status.id > 0) else {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-            return
-        }
-        let nav = ComposeViewController(nil,likeListViewModel.statusList[sender.tag].status.id)
+        let nav = ComposeViewController(nil,typeNeedCache.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        NetworkTools.shared.like(likeListViewModel.statusList[sender.tag].status.id) { Result, Error in
+        NetworkTools.shared.like(typeNeedCache.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
                 if (Result as! [String:Any])["code"] as! String == "add" {
                     SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
                 } else {
                     SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: NSLocalizedString("你的取消TA收到了", comment: ""))
                 }
-                self.loadData()
+                self.tableView.reloadData()
                 DispatchQueue.main.asyncAfter(deadline: .now()+1){
                     SVProgressHUD.dismiss()
                 }
@@ -195,17 +243,16 @@ extension LikeStatusTableViewController {
         }
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return likeListViewModel.statusList[indexPath.row].rowHeight
+        return typeNeedCache.statusList[indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel = likeListViewModel.statusList[indexPath.row]
-        let vc = CommentTableViewController()
+        let vc = CommentTableViewController(viewModel: typeNeedCache.statusList[indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)
     }
 }
-extension LikeStatusTableViewController: StatusCellDelegate {
+extension TypeStatusTableViewController: StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
         let vc = HomeWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true

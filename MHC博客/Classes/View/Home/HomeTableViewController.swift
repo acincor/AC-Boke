@@ -12,7 +12,6 @@ import SwiftUI
 let StatusCellNormalId = "StatusCellNormalId"
 //let StatusCellNormalId2 = "StatusCellNormalId2"
 
-var viewModel: StatusViewModel?
 class CustomRefreshView: UIView {
     lazy var pullupView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
@@ -90,19 +89,19 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         tableView.tableFooterView = refreshView
         liveView.delegate = self
         liveView.dataSource = self
-        tableView.tableHeaderView = liveListViewModel.liveList.isEmpty ? nil : liveView
+        tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : liveView
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return liveListViewModel.liveList.count
+        return liveListViewModel.list.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let vm = liveListViewModel.liveList[indexPath.row]
+        let vm = liveListViewModel.list[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! UserCollectionCell
         cell.viewModel = vm
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vm = liveListViewModel.liveList[indexPath.row]
+        let vm = liveListViewModel.list[indexPath.row]
         guard let url = ("http://mhcincapi.top/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试",comment: ""))
             return
@@ -129,7 +128,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         }
             self.liveView.loadData()
             self.liveView.reloadData()
-            self.tableView.tableHeaderView = liveListViewModel.liveList.isEmpty ? nil : self.liveView
+            self.tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : self.liveView
     }
     private lazy var pulldownTipLabel: UILabel = {
         let label = UILabel(title: "", fontSize: 18,color: .white)
@@ -292,8 +291,7 @@ extension HomeTableViewController {
         return listViewModel.statusList[indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel = listViewModel.statusList[indexPath.row]
-        let vc = CommentTableViewController()
+        let vc = CommentTableViewController(viewModel: listViewModel.statusList[indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)
@@ -334,8 +332,8 @@ extension UITextField {
 extension UIButton {
     private struct AssociatedKey {
         static var nav: ComposeViewController = ComposeViewController(nil,nil)
-        static var vm: StatusViewModel? = CommentListViewModel().commentList.first
-        static var vm2: StatusViewModel? = CommentListViewModel().commentCommentList.first
+        static var vm: StatusViewModel? = TypeNeedCacheListViewModel(clas: .comment).statusList.first
+        static var vm2: StatusViewModel? = TypeNeedCacheListViewModel(clas: .quote).statusList.first
        }
     var vm: StatusViewModel? {
         get {

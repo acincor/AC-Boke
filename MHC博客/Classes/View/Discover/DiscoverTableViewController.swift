@@ -215,8 +215,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         return self.listFilterTeams?[indexPath.row].rowHeight ?? 0
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel = listFilterTeams![indexPath.row]
-        let vc = CommentTableViewController()
+        let vc = CommentTableViewController(viewModel: listFilterTeams![indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)

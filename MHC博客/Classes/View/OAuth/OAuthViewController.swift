@@ -138,7 +138,8 @@ extension OAuthViewController {
             print("problem1")
             return .allow
         }
-        guard let query = url.query,query.hasPrefix("code=") else {
+        print("query",url.query)
+        guard let query = url.query,query.contains("code=") else {
             print("problem2")
             return .allow
         }

@@ -27,7 +27,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         live.frame = UIScreen.main.bounds
         view.addSubview(live)
         view.backgroundColor = .red
-        for i in liveListViewModel.liveList {
+        for i in liveListViewModel.list {
             if i.user.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("你的直播已在其他设备上进行...", comment: ""))
                 return

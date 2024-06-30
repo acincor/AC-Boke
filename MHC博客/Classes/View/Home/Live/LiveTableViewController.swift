@@ -9,7 +9,7 @@ import UIKit
 
 //var live_to_user: String?
 let LiveNormalCellMargin = 1.5
-var liveListViewModel = LiveListViewModel()
+var liveListViewModel = ElseListViewModel(clas: .live)
 class LiveTableView: UICollectionView{
     /*
     private lazy var pullupView: UIActivityIndicatorView = {
@@ -25,7 +25,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
 #endif
     @objc func loadData() {
         refreshControl?.beginRefreshing()
-        liveListViewModel.loadLive { (isSuccessed) in
+        liveListViewModel.load { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             if !isSuccessed {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))

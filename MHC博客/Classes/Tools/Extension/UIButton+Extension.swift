@@ -19,17 +19,17 @@ struct UserNavigationLinkView: View {
         return NSLocalizedString("TA的博客", comment: "")
     }
     var uid: String
-    var likeController:LikeStatusTableViewController {
+    var likeController:TypeStatusTableViewController {
         if let account = account {
-            return LikeStatusTableViewController(uid: "\(account.user.uid)")
+            return TypeStatusTableViewController(uid: "\(account.user.uid)", clas: .like)
         }
-        return LikeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+        return TypeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "", clas: .like)
     }
-    var commentController : CommentStatusTableViewController {
+    var commentController : TypeStatusTableViewController {
         if let account = account {
-            return CommentStatusTableViewController(uid: "\(account.user.uid)")
+            return TypeStatusTableViewController(uid: "\(account.user.uid)", clas: .comment)
         }
-        return CommentStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+        return TypeStatusTableViewController(uid: UserAccountViewModel.sharedUserAccount.account?.uid ?? "", clas: .comment)
     }
     var body: some View {
         if #available(iOS 15.0, *) {
@@ -44,7 +44,7 @@ struct UserNavigationLinkView: View {
                         Text("主页")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller: BlogsTableViewController(uid: uid))) {
+                    NavigationLink(destination: MyDetailView(controller: TypeStatusTableViewController(uid: uid))) {
                         Text(name)
                             .foregroundColor(.orange)
                     }
@@ -95,7 +95,7 @@ struct UserNavigationLinkView: View {
                         Text("主页")
                             .foregroundColor(.orange)
                     }
-                    NavigationLink(destination: MyDetailView(controller:  BlogsTableViewController(uid: uid))) {
+                    NavigationLink(destination: MyDetailView(controller:  TypeStatusTableViewController(uid: uid))) {
                         Text(name)
                             .foregroundColor(.orange)
                     }

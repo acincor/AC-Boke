@@ -11,10 +11,10 @@ var to_user: String?
 let UserCellNormalId = "UserCellNormalId"
 let UserNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{
-    var friendListViewModel = FriendListViewModel()
+    var friendListViewModel = ElseListViewModel(clas: .friend)
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        friendListViewModel.loadFriend { (isSuccessed) in
+        friendListViewModel.load { (isSuccessed) in
             self.refreshControl?.endRefreshing()
             if !isSuccessed {
                 
@@ -36,22 +36,22 @@ class MessageTableViewController: VisitorTableViewController{
         loadData()
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.friendListViewModel.friendList.count
+        return self.friendListViewModel.list.count
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let socketController = WebSocketController(to_uid: friendListViewModel.friendList[indexPath.row].user.uid, username: friendListViewModel.friendList[indexPath.row].user.user ?? "")
+        let socketController = WebSocketController(to_uid: friendListViewModel.list[indexPath.row].user.uid, username: friendListViewModel.list[indexPath.row].user.user ?? "")
         let nav = UINavigationController(rootViewController: socketController)
         nav.modalPresentationStyle = .custom
         present(nav, animated: false)
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = friendListViewModel.friendList[indexPath.row]
+        let vm = friendListViewModel.list[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: UserCellNormalId, for: indexPath) as! UserCell
         cell.viewModel = vm
         return cell
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.friendListViewModel.friendList[indexPath.row].rowHeight * UserNormalCellMargin
+        return self.friendListViewModel.list[indexPath.row].rowHeight * UserNormalCellMargin
     }
 }
 

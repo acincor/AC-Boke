@@ -8,7 +8,7 @@
 import UIKit
 private let UserCollectionViewCellId = "UserCollectionViewCellId"
 class UserCollectionCellView: UIView {
-    let friendListViewModel = FriendListViewModel()
+    let friendListViewModel = ElseListViewModel(clas: .friend)
     private var selectedViewModelCallBack: (_ viewModel: UserViewModel)->()
     init(selectedViewModel: @escaping(_ viewModel: UserViewModel)->()) {
         selectedViewModelCallBack = selectedViewModel
@@ -44,20 +44,20 @@ extension UserCollectionCellView {
 }
 extension UserCollectionCellView: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return friendListViewModel.friendList.count
+        return friendListViewModel.list.count
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return friendListViewModel.friendList.count
+        return friendListViewModel.list.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserCollectionViewCellId, for: indexPath) as! UserCollectionCell
-        cell.viewModel = friendListViewModel.friendList[indexPath.row]
-        cell.topView.nameLabel.text = friendListViewModel.friendList[indexPath.row].user.user
+        cell.viewModel = friendListViewModel.list[indexPath.row]
+        cell.topView.nameLabel.text = friendListViewModel.list[indexPath.row].user.user
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = friendListViewModel.friendList[indexPath.row]
+        let user = friendListViewModel.list[indexPath.row]
         selectedViewModelCallBack(user)
     }
 }

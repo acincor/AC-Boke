@@ -10,20 +10,26 @@ import UIKit
 
 
 class CommentTableViewController: VisitorTableViewController {
+    var commentListViewModel = TypeNeedCacheListViewModel(clas: .comment)
     private func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 400
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
         tableView.rowHeight = 400
     }
+    var viewModel: StatusViewModel
+    init(viewModel: StatusViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     @objc func loadData() {
-        guard let viewModel = viewModel else{
-            return
-        }
         refreshControl?.beginRefreshing()
         //StatusDAL.clearDataCache()
-        commentlistViewModel.loadComment(id: viewModel.status.id) { (isSuccessed) in
+        commentListViewModel.loadStatus(id: viewModel.status.id) { (isSuccessed) in
              self.refreshControl?.endRefreshing()
              if !isSuccessed {
                  SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
@@ -34,9 +40,6 @@ class CommentTableViewController: VisitorTableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let viewModel = viewModel else{
-            return
-        }
         let cell = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId)
         cell.viewModel = viewModel
         cell.bottomView.removeFromSuperview()
@@ -50,14 +53,30 @@ class CommentTableViewController: VisitorTableViewController {
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.close))
         navigationItem.rightBarButtonItem?.tintColor = .red
+        NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
+            guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
+                return
+            }
+            guard let urls = n.userInfo?[WBStatusSelectedPhotoURLsKey] as? [URL] else {
+                return
+            }
+            guard let cell = n.object as? PhotoBrowserPresentDelegate else {
+                return
+            }
+            let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
+            vc.modalPresentationStyle = .custom
+            vc.transitioningDelegate = self?.photoBrowserAnimator
+            self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
+            self?.present(vc, animated: true,completion: nil)
+        }
         NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeIsTrueLightIt"), object: nil, queue: nil) { n in
-            if commentlistViewModel.commentList.isEmpty {
+            if self.commentListViewModel.statusList.isEmpty {
                 return
             }
             
                 if n.object != nil {
-                    let result = ["id":"\(commentlistViewModel.commentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                    let like_list = commentlistViewModel.commentList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
+                    let result = ["id":"\(self.commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+                    let like_list = self.commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
                     self.cell = ((n.object as! [String:Any])["cell"] as! StatusNormalCell)
                     for s in like_list {
                         if result["like_uid"] as? String == s["like_uid"] as? String {
@@ -76,6 +95,7 @@ class CommentTableViewController: VisitorTableViewController {
         loadData()
         prepareTableView()
     }
+    private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
     var cell: StatusNormalCell?
     @objc func close() {
         self.dismiss(animated: true)
@@ -84,7 +104,7 @@ class CommentTableViewController: VisitorTableViewController {
 }
 extension CommentTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return commentlistViewModel.commentList.count
+        return commentListViewModel.statusList.count
     }
     @objc func action(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus((sender.vm?.status.comment_id)!,nil,(sender.vm?.status.id)!) { Result, Error in
@@ -102,7 +122,7 @@ extension CommentTableViewController {
         }
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = commentlistViewModel.commentList[indexPath.row]
+        let vm = commentListViewModel.statusList[indexPath.row]
         var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusNormalCell
         // Configure the cell...
         cell.viewModel = vm
@@ -114,7 +134,7 @@ extension CommentTableViewController {
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.vm = vm
         
-        cell.bottomView.likeButton.setTitle("\(commentlistViewModel.commentList[indexPath.row].status.like_count)", for: .normal)
+        cell.bottomView.likeButton.setTitle("\(commentListViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
         cell.bottomView.likeButton.tag = indexPath.row
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
@@ -122,8 +142,8 @@ extension CommentTableViewController {
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vm = commentlistViewModel.commentList[indexPath.row]
-        let vc = CommentCommentTableViewController(id: indexPath.row, comment_id: vm.status.id, comment_comment_id: vm.status.comment_id)
+        let vm = commentListViewModel.statusList[indexPath.row]
+        let vc = QuoteTableViewController(vm:vm)
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         present(nav, animated: true)
@@ -133,7 +153,7 @@ extension CommentTableViewController {
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     @objc func action4(_ sender: UIButton) {
-        NetworkTools.shared.like((viewModel?.status.id)!,commentlistViewModel.commentList[sender.tag].status.comment_id) { Result, Error in
+        NetworkTools.shared.like(viewModel.status.id,commentListViewModel.statusList[sender.tag].status.comment_id) { Result, Error in
             if Error == nil {
                 //sender.int = 0
                 if (Result as! [String:Any])["code"] as! String == "add" {
@@ -142,7 +162,7 @@ extension CommentTableViewController {
                     SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: NSLocalizedString("你的取消TA收到了", comment: ""))
                 }
                 self.loadData()
-                //sender.setTitle("\(commentlistViewModel.commentList[sender.tag].comment.like_count)", for: .normal)
+                //sender.setTitle("\(commentListViewModel.commentList[sender.tag].comment.like_count)", for: .normal)
                 DispatchQueue.main.asyncAfter(deadline: .now()+1){
                     SVProgressHUD.dismiss()
                 }
@@ -153,7 +173,7 @@ extension CommentTableViewController {
         }
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return commentlistViewModel.commentList[indexPath.row].rowHeight
+        return commentListViewModel.statusList[indexPath.row].rowHeight
     }
 }
 extension CommentTableViewController: StatusCellDelegate {
