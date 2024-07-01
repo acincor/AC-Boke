@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.wss.WssApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.952 s -- in com.example.wss.WssApplicationTests
