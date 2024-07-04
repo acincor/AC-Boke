@@ -68,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         if UserAccountViewModel.sharedUserAccount.userLogon {
             NetworkTools.shared.tokenIsExpires { Result, Error in
-                if (Result as! [String:Any])["msg"] as! Int == 1 {
+                if (Result as? [String:Any])?["msg"] as? Int == 1 {
                     var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
                     path = (path as NSString).appendingPathComponent("account.plist")
                     if FileManager.default.fileExists(atPath: path) {
@@ -99,7 +99,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     let content = UNMutableNotificationContent()
     func applicationDidEnterBackground(_ application: UIApplication) {
-        SDImageCache.shared.clearDisk()
         StatusDAL.clearDataCache()
         if UserAccountViewModel.sharedUserAccount.userLogon {
             content.title = "MHC博客"

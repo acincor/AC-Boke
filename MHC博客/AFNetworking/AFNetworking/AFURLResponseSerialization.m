@@ -31,6 +31,10 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+#ifdef DEBUG
+NSString * const AFNetworkingOperationFailingURLResponseStringErrorKey = @"com.alamofire.serialization.response.error.string";
+#endif
+
 NSString * const AFURLResponseSerializationErrorDomain = @"com.alamofire.error.serialization.response";
 NSString * const AFNetworkingOperationFailingURLResponseErrorKey = @"com.alamofire.serialization.response.error.response";
 NSString * const AFNetworkingOperationFailingURLResponseDataErrorKey = @"com.alamofire.serialization.response.error.data";
@@ -126,6 +130,9 @@ id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions 
                                                         } mutableCopy];
                 if (data) {
                     mutableUserInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] = data;
+                    #ifdef DEBUG
+                        mutableUserInfo[AFNetworkingOperationFailingURLResponseStringErrorKey] = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                    #endif
                 }
 
                 validationError = AFErrorWithUnderlyingError([NSError errorWithDomain:AFURLResponseSerializationErrorDomain code:NSURLErrorCannotDecodeContentData userInfo:mutableUserInfo], validationError);
@@ -143,6 +150,9 @@ id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions 
 
             if (data) {
                 mutableUserInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] = data;
+                #ifdef DEBUG
+                    mutableUserInfo[AFNetworkingOperationFailingURLResponseStringErrorKey] = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                #endif
             }
 
             validationError = AFErrorWithUnderlyingError([NSError errorWithDomain:AFURLResponseSerializationErrorDomain code:NSURLErrorBadServerResponse userInfo:mutableUserInfo], validationError);

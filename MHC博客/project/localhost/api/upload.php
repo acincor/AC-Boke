@@ -1,7 +1,7 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
 date_default_timezone_set("Etc/GMT-8");
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "mhc_inc", "Ls713568","mhc_inc");
 $sql = "create table if not exists blogs (".
 "uid BIGINT NOT NULL,".
 "id BIGINT NOT NULL,".
@@ -28,6 +28,7 @@ $sql = "create table if not exists comments (".
 "have_pic INTEGER NOT NULL,".
 "id BIGINT NOT NULL,".
 "create_at TEXT,".
+"createTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,".
 "source TEXT,".
 "primary key(comment_id)".
 ");";
@@ -44,6 +45,7 @@ $sql = "create table if not exists quote (".
 "quote_id BIGINT NOT NULL,".
 "id BIGINT NOT NULL,".
 "create_at TEXT,".
+"createTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,".
 "source TEXT,".
 "primary key(quote_id)".
 ");";
@@ -167,6 +169,10 @@ if(isset($_POST['access_token'])) {
                     $data['quote_id'] = $id;
                     $pic_urls = [];
                     $index = 0;
+                    if(!file_exists('./'.$data['uid']."/thumbnail/")) {
+                                        mkdir('./'.$data['uid']."/thumbnail/");
+                                        chmod('./'.$data['uid']."/thumbnail/",0777);
+                                    }
                     while(isset($_FILES["pic".$index])) {
                         if(isset($_FILES['pic'.$index]) && $_FILES['pic'.$index]['error'] === UPLOAD_ERR_OK) {
                             $fileType = $_FILES['pic'.$index]['type']; // 获取文件的MIME类型
@@ -185,7 +191,25 @@ if(isset($_POST['access_token'])) {
                                     }
                                 }
                                 if (move_uploaded_file($sourcePath, $targetPath)) {
-                                    array_push($pic_urls,['pic'.$index=>'http://localhost/api/'.$data['uid']."/".$fd.".".explode('/',$fileType)[1]]);
+                                    $thumbnailWidth = 100;
+                                    $quality = 90;
+                                    list($width, $height) = getimagesize($targetPath);
+                                    $sourceImage = imagecreatefromstring(file_get_contents($targetPath));
+                                    // 计算缩放比例
+                                    $ratio = $width / $height;
+                                    $thumbnailHeight = $thumbnailWidth / $ratio;
+                                    // 创建缩略图像
+                                    $thumbnail = imagecreatetruecolor(intval($thumbnailWidth), intval($thumbnailHeight));
+                                    imagecopyresampled($thumbnail, $sourceImage, 0, 0, 0, 0, intval($thumbnailWidth), intval($thumbnailHeight), $width, $height);
+                                    if($fileType == 'image/png') {
+                                        imagepng($thumbnail, './'.$data['uid']."/thumbnail/".$fd.".".explode('/',$fileType)[1], 9);
+                                    } else if($fileType == 'image/jpeg') {
+                                        imagejpeg($thumbnail, './'.$data['uid']."/thumbnail/".$fd.".".explode('/',$fileType)[1], $quality);
+                                    }
+                                    // 释放内存
+                                    imagedestroy($sourceImage);
+                                    imagedestroy($thumbnail);
+                                    array_push($pic_urls,['pic'.$index=>'https://mhcincapi.top/api/'.$data['uid']."/thumbnail/".$fd.".".explode('/',$fileType)[1]]);
                                     $index++;
                                 } else {
                                     exit(json_encode(['error'=>"the file of upload emerged fatal error when it moved"]));

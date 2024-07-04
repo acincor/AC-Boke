@@ -198,6 +198,7 @@ extension ComposeViewController {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
                 return
             }
+            print(Result)
             self.textView.resignFirstResponder()
             self.dismiss(animated: true,completion: nil)
         }

@@ -60,7 +60,6 @@ class TypeNeedCacheListViewModel {
                             self.cacheSingleImage(dataList: dataList, finished: finished)
                         }
                     }
-                    
                 }
             } else {
                 NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
@@ -90,8 +89,8 @@ class TypeNeedCacheListViewModel {
                 continue
             }
             let url = vm.thumbnailUrls![0]
-                group.enter()
-            SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed],progress: nil) {
+            group.enter()
+            SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached],progress: nil) {
                 (image, data, error, type, bool, url) in
                 if let data = data {
                     dataLength = dataLength + data.count

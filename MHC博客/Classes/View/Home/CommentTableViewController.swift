@@ -75,8 +75,8 @@ class CommentTableViewController: VisitorTableViewController {
             }
             
                 if n.object != nil {
-                    let result = ["id":"\(self.commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                    let like_list = self.commentListViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
+                    let result = ["id":"\(((n.object as! [String:Any])["viewModel"] as! StatusViewModel).status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+                    let like_list = ((n.object as! [String:Any])["viewModel"] as! StatusViewModel).status.like_list
                     self.cell = ((n.object as! [String:Any])["cell"] as! StatusNormalCell)
                     for s in like_list {
                         if result["like_uid"] as? String == s["like_uid"] as? String {
@@ -127,7 +127,7 @@ extension CommentTableViewController {
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.vm = vm
-        NotificationCenter.default.post(name: Notification.Name("BKLikeIsTrueLightIt"), object: ["cell":cell,"indexPath":indexPath] as [String : Any])
+        NotificationCenter.default.post(name: Notification.Name("BKLikeIsTrueLightIt"), object: ["cell":cell,"viewModel":vm] as [String : Any])
         cell = self.cell!
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action(_:)), for: .touchUpInside)
         cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)

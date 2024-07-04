@@ -671,7 +671,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yesterday"
+            "value" : "yday"
           }
         }
       }

@@ -244,7 +244,7 @@ extension NetworkTools {
         }
         var data: [Data] = []
         for i in image {
-            data.append(i.jpegData(compressionQuality: 0.8)!)
+            data.append(i.sd_imageData()!)
         }
         upload(urlString, data, params,finished: finished)
     }
@@ -272,7 +272,7 @@ extension NetworkTools {
         post(URLString, parameters: parameters,headers: nil,constructingBodyWith: { formData in
             
             for d in 0..<data.count{
-                formData.appendPart(withFileData: data[d], name: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), fileName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), mimeType: "image/png")
+                formData.appendPart(withFileData: data[d], name: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), fileName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), mimeType: data[d].detectImageType().rawValue)
             }
         }, progress: nil, success: { _, result in
             finished(result, nil)
@@ -297,6 +297,64 @@ extension NetworkTools {
             finished(result, nil)
         }) { _ , error in
             finished(nil,error)
+        }
+    }
+}
+extension Data {
+    enum ImageType : String {
+        case unknown = "unknown"
+        case jpeg = "image/jpeg"
+        case png = "image/png"
+    }
+    
+    func detectImageType() -> Data.ImageType {
+        if self.count < 16 { return .unknown }
+        
+        var value = [UInt8](repeating:0, count:1)
+        
+        self.copyBytes(to: &value, count: 1)
+        
+        switch value[0] {
+        case 0x89:
+            return .png
+        case 0xFF:
+            return .jpeg
+        default:
+            break
+        }
+        
+        return .unknown
+    }
+    
+    static func detectImageType(with data: Data) -> Data.ImageType {
+        return data.detectImageType()
+    }
+    
+    static func detectImageType(with url: URL) -> Data.ImageType {
+        if let data = try? Data(contentsOf: url) {
+            return data.detectImageType()
+        } else {
+            return .unknown
+        }
+    }
+    
+    static func detectImageType(with filePath: String) -> Data.ImageType {
+        let pathUrl = URL(fileURLWithPath: filePath)
+        if let data = try? Data(contentsOf: pathUrl) {
+            return data.detectImageType()
+        } else {
+            return .unknown
+        }
+    }
+    
+    static func detectImageType(with imageName: String, bundle: Bundle = Bundle.main) -> Data.ImageType? {
+        
+        guard let path = bundle.path(forResource: imageName, ofType: "") else { return nil }
+        let pathUrl = URL(fileURLWithPath: path)
+        if let data = try? Data(contentsOf: pathUrl) {
+            return data.detectImageType()
+        } else {
+            return nil
         }
     }
 }

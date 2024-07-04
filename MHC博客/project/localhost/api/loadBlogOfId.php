@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "mhc_inc", "Ls713568","mhc_inc");
 if(isset($_POST['access_token']) && isset($_POST['id'])) {
     $query = mysqli_query($mysql,"select uid,UNIX_TIMESTAMP(createTime) AS seconds,expires_in from access_tokens where access_token = '".$_POST['access_token']."'");
     if(!is_bool($query)) {
@@ -26,7 +26,7 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                         $blog['pic_count'] = intval($blog['pic_count']);
                         $blog['uid'] = intval($blog['uid']);
                         $blog['id'] = intval($blog['id']);
-                        $cq = mysqli_query($mysql,"select * from comments where id = ".$blog['id']);
+                        $cq = mysqli_query($mysql,"select * from comments where id = ".$blog['id']." ORDER BY createTime DESC");
                         $blog["comment_list"] = [];
                         $blog["like_list"] = [];
                         $lq = mysqli_query($mysql,"select * from likes where id = ".$blog['id']);
@@ -79,7 +79,7 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                                 if($array != NULL) {
                                     $comment['user'] = $array['user'];
                                     $comment['portrait'] = $array['portrait'];
-                                    $qq = mysqli_query($mysql,"select * from quote where comment_id = ".$comment['comment_id']);
+                                    $qq = mysqli_query($mysql,"select * from quote where comment_id = ".$comment['comment_id']." ORDER BY createTime DESC");
                                     $comment["comment_list"] = [];
                                     while($quote = mysqli_fetch_assoc($qq)) {
                                         $quote["like_list"] = [];

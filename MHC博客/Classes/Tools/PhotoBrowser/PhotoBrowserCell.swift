@@ -74,27 +74,28 @@ class PhotoBrowserCell: UICollectionViewCell {
                 return
             }
             reset()
-            _ = SDImageCache.shared.imageFromDiskCache(forKey: url.absoluteString)
-            imageView.sd_setImage(with: url,
-                placeholderImage: nil,
-                                         options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached],
-                progress:{ current, total,  _ in
-                DispatchQueue.main.async(execute: { () -> Void in
-                    self.placeHolder.progress = CGFloat(current) / CGFloat(total)
-                })
-                }) { (image, _, _, _) -> Void in
-                    
-                    // 判断图像下载是否成功
-                    if image == nil {
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
-                        return
+            let placeholderImage = SDImageCache.shared.imageFromDiskCache(forKey: url.absoluteString)
+            
+            set(placeholderImage)
+            let urlString = url.absoluteString.replacingOccurrences(of: "/thumbnail", with: "")
+            if let updatedURL = URL(string: urlString) {
+                imageView.sd_setImage(with: updatedURL,placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.continueInBackground]) { receivedSize, expectedSize, url in
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            self.placeHolder.progress = CGFloat(receivedSize) / CGFloat(expectedSize)
+                            
+                        })
+                    } completed: { image, e, _, _ in
+                        // 判断图像下载是否成功
+                        if image == nil {
+                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
+                            return
+                        }
+                        // 隐藏占位图像
+                        self.placeHolder.isHidden = true
+                        
+                        // 设置图像视图位置
+                        self.setPosition(image!)
                     }
-                    
-                    // 隐藏占位图像
-                    self.placeHolder.isHidden = true
-                    
-                    // 设置图像视图位置
-                    self.setPosition(image!)
             }
         }
     }
@@ -104,10 +105,20 @@ extension PhotoBrowserCell: UIScrollViewDelegate {
         return imageView
     }
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        // 如果缩放比例 < 1，直接关闭
+        if scale < 1 {
+            photoDelegate?.photoBrowserCellDidTapImage()
+            
+            return
+        }
+        
         var offsetY = (scrollView.bounds.height - view!.frame.height) * 0.5
         offsetY = offsetY < 0 ? 0 : offsetY
+        
         var offsetX = (scrollView.bounds.width - view!.frame.width) * 0.5
         offsetX = offsetX < 0 ? 0 : offsetX
+        
+        // 设置间距
         scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
 }

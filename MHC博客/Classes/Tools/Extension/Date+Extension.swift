@@ -9,7 +9,7 @@ import Foundation
 extension Date {
     static func sina(_ string: String) -> Date? {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "ch")
+        //df.locale = Locale(identifier: "ch")
         df.dateFormat = "YYYY/MM/dd HH:mm:ss"
         return df.date(from: string)
     }
@@ -26,18 +26,17 @@ extension Date {
             return String.localizedStringWithFormat(NSLocalizedString("%@小时前", comment: ""), String(delta / 3600))
         }
         var fmt = " HH:mm"
-        if calendar.isDateInYesterday(self) {
-            fmt = NSLocalizedString("昨天", comment: "") + fmt
-        } else {
-            fmt = "MM-dd" + fmt
-            let comps = calendar.component(.year, from: Date())
-            if comps > 0 {
-                fmt = "yyyy-" + fmt
-            }
-        }
         let df = DateFormatter()
+        if calendar.isDateInYesterday(self) {
+            df.dateFormat = fmt
+            return NSLocalizedString("昨天", comment: "") + df.string(from: self)
+        }
+        fmt = "MM-dd" + fmt
+        let comps = calendar.component(.year, from: Date())
+        if comps > 0 {
+            fmt = "yyyy-" + fmt
+        }
         df.dateFormat = fmt
-        df.locale = .init(identifier: "ch")
         return df.string(from: self)
     }
 }

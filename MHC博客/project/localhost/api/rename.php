@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "mhc_inc", "Ls713568","mhc_inc");
 function hasSpecialCharacters($password) {
     $pattern = '/[!@#$%^&*()\_=+{};:\'",.<>]/'; // 定义特殊字符的正则表达式模式
     

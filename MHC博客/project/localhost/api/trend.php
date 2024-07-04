@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "mhc_inc", "Ls713568","mhc_inc");
 $sql = "create table if not exists trends (".
 "uid BIGINT NOT NULL,".
 "trend VARCHAR(190) NOT NULL,".

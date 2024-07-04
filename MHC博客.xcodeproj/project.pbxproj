@@ -1705,6 +1705,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"GLES_SILENCE_DEPRECATION=1",
+					"SD_WEBP=1",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1765,7 +1766,10 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/MHC博客",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = "GLES_SILENCE_DEPRECATION=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"GLES_SILENCE_DEPRECATION=1",
+					"SD_WEBP=1",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"${PROJECT_DIR}/MHC博客/SDWebImage/WebImage\"",
@@ -1817,7 +1821,7 @@
 				2E738A4829AA33CF0014FA12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		2E738A4929AA33CF0014FA12 /* Build configuration list for PBXNativeTarget "MHC博客" */ = {
 			isa = XCConfigurationList;
@@ -1826,7 +1830,7 @@
 				2E738A4B29AA33CF0014FA12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

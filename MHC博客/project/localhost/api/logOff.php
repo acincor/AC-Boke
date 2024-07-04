@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "mhc_inc", "Ls713568","mhc_inc");
 if(isset($_POST['access_token'])) {
     $query = mysqli_query($mysql,"select uid from access_tokens where access_token = '".$_POST['access_token']."'");
     if(!is_bool($query)) {
@@ -16,7 +16,8 @@ if(isset($_POST['access_token'])) {
                     if(!is_bool($pic_urls)){
                         $pic_urls = json_decode(mysqli_fetch_array($pic_urls,MYSQLI_ASSOC)['pic_urls'],true);
                         for ($i = 0; $i < count($pic_urls); $i++) {
-                             unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                             unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                             unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                         }
                     }
                     $select_bool = mysqli_query($mysql,"SELECT * FROM likes WHERE id = ".$arr['id']);
@@ -35,7 +36,8 @@ if(isset($_POST['access_token'])) {
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
                         $pic_urls = json_decode($arr0['pic_urls'],true);
                         for ($i = 0; $i < count($pic_urls); $i++) {
-                            unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                            unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                            unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                         }
                         mysqli_query($mysql,"DELETE FROM comments WHERE id = ".$arr['id']);
                     }
@@ -43,7 +45,8 @@ if(isset($_POST['access_token'])) {
                     while($arr0 = mysqli_fetch_assoc($select_bool)) {
                         $pic_urls = json_decode($arr0['pic_urls'],true);
                         for ($i = 0; $i < count($pic_urls); $i++) {
-                            unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                            unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                            unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                         }
                         mysqli_query($mysql,"DELETE FROM quote WHERE id = ".$arr['id']);
                     }
@@ -57,11 +60,14 @@ if(isset($_POST['access_token'])) {
             if(!is_bool($select_bool)) {
                 $arr = mysqli_fetch_assoc($select_bool);
                 if($arr != NULL) {
-                    if(file_exists(".".explode("http://localhost/api",$arr['portrait'])[1])) {
-                        unlink(".".explode("http://localhost/api",$arr['portrait'])[1]);
+                    if(file_exists(".".explode("https://mhcincapi.top/api",$arr['portrait'])[1])) {
+                        unlink(".".explode("https://mhcincapi.top/api",$arr['portrait'])[1]);
                     }
                     if(is_dir("./".$array["uid"]."/portrait")) {
                         rmdir("./".$array["uid"]."/portrait");
+                    }
+                    if(is_dir("./".$array["uid"]."/thumbnail")) {
+                        rmdir("./".$array["uid"]."/thumbnail");
                     }
                     if(is_dir("./".$array["uid"])) {
                         rmdir("./".$array["uid"]);

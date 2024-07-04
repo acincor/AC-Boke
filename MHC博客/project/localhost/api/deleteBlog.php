@@ -1,6 +1,6 @@
 <?php
 header('Content-Type:application/json; charset=utf-8');
-$mysql = mysqli_connect("localhost", "root", "Ls713568","mhc_inc");
+$mysql = mysqli_connect("localhost", "mhc_inc", "Ls713568","mhc_inc");
 if(isset($_POST['access_token']) && isset($_POST['id'])) {
     $query = mysqli_query($mysql,"select uid,UNIX_TIMESTAMP(createTime) AS seconds,expires_in from access_tokens where access_token = '".$_POST['access_token']."'");
     if(!is_bool($query)) {
@@ -20,7 +20,8 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                             if(!is_bool($pic_urls)){
                                 $pic_urls = json_decode(mysqli_fetch_array($pic_urls,MYSQLI_ASSOC)['pic_urls'],true);
                                 for ($i = 0; $i < count($pic_urls); $i++) {
-                                    unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                                    unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                                    unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                                 }
                             }
                             $select_bool = mysqli_query($mysql,"SELECT * FROM qlikes WHERE quote_id = ".$_POST['comment_id']."");
@@ -50,7 +51,8 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                             if(!is_bool($pic_urls)){
                                 $pic_urls = json_decode(mysqli_fetch_array($pic_urls,MYSQLI_ASSOC)['pic_urls'],true);
                                 for ($i = 0; $i < count($pic_urls); $i++) {
-                                    unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                                    unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                                    unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                                 }
                             }
                             $select_bool = mysqli_query($mysql,"SELECT * FROM qlikes WHERE comment_id = ".$_POST['comment_id']."");
@@ -65,7 +67,8 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                             while($arr = mysqli_fetch_assoc($select_bool)) {
                                     $pic_urls = json_decode($arr['pic_urls'],true);
                                     for ($i = 0; $i < count($pic_urls); $i++) {
-                                        unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                                        unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                                        unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                                     }
                                 mysqli_query($mysql,"DELETE FROM quote WHERE comment_id = ".$_POST['comment_id']."");
                             }
@@ -93,7 +96,8 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                         if(!is_bool($pic_urls)){
                             $pic_urls = json_decode(mysqli_fetch_array($pic_urls,MYSQLI_ASSOC)['pic_urls'],true);
                             for ($i = 0; $i < count($pic_urls); $i++) {
-                                unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                                unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                                unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                             }
                         }
                         $select_bool = mysqli_query($mysql,"SELECT * FROM likes WHERE id = ".$_POST['id']."");
@@ -112,7 +116,8 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                         while($arr = mysqli_fetch_assoc($select_bool)) {
                             $pic_urls = json_decode($arr['pic_urls'],true);
                             for ($i = 0; $i < count($pic_urls); $i++) {
-                                unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                                unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                                unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                             }
                             mysqli_query($mysql,"DELETE FROM comments WHERE id = ".$_POST['id']."");
                         }
@@ -120,7 +125,8 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                         while($arr = mysqli_fetch_assoc($select_bool)) {
                                 $pic_urls = json_decode($arr['pic_urls'],true);
                                 for ($i = 0; $i < count($pic_urls); $i++) {
-                                    unlink(".".explode("http://localhost/api",$pic_urls[$i]['pic'.$i])[1]);
+                                    unlink(".".explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1]);
+                                    unlink(".".explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[0].explode("thumbnail",explode("https://mhcincapi.top/api",$pic_urls[$i]['pic'.$i])[1])[1]);
                                 }
                             mysqli_query($mysql,"DELETE FROM quote WHERE id = ".$_POST['id']."");
                         }

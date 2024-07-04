@@ -60,9 +60,9 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         NetworkTools.shared.sendPortrait(image: imageView.image!) { Result, Error in
             if Result != nil {
                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("成功啦", comment: ""))
-                SDImageCache.shared.clearDisk()
             }
         }
+        SDImageCache.shared.removeImageFromDisk(forKey: imageView.sd_imageURL?.absoluteString)
         portraitButton.removeFromSuperview()
         portraitButton = UIButton(title: NSLocalizedString("更换头像", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
         portraitButton.addTarget(self, action: #selector(self.sendPortrait), for: .touchUpInside)
@@ -98,9 +98,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
     private lazy var portraitButton: UIButton = UIButton(title: NSLocalizedString("更换头像", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: UIColor.systemFill)
     private lazy var imageView = UIImageView()
     @objc func close() {
-        dismiss(animated: true) {
-            SDImageCache.shared.clearDisk()
-        }
+        dismiss(animated: true)
     }
     lazy var scrollView: UIScrollView = UIScrollView()
     /// 返回被缩放的视图

@@ -82,8 +82,8 @@ class QuoteTableViewController: VisitorTableViewController {
         }
         NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeLightIt"), object: nil, queue: nil) { n in
             if n.object != nil {
-                let result = ["id":"\(self.commentlistViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                let like_list = self.commentlistViewModel.statusList[((n.object as! [String:Any])["indexPath"] as! IndexPath).row].status.like_list
+                let result = ["id":"\(((n.object as! [String:Any])["viewModel"] as! StatusViewModel).status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+                let like_list = ((n.object as! [String:Any])["viewModel"] as! StatusViewModel).status.like_list
                 self.cell = ((n.object as! [String:Any])["cell"] as! StatusNormalCell)
                 for s in like_list {
                     if s["like_uid"] as! String == result["like_uid"] as! String {
@@ -123,7 +123,7 @@ extension QuoteTableViewController {
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.vm2 = vm
-        NotificationCenter.default.post(name: Notification.Name("BKLikeLightIt"), object: ["cell":cell,"indexPath":indexPath] as [String : Any])
+        NotificationCenter.default.post(name: Notification.Name("BKLikeLightIt"), object: ["cell":cell,"viewModel":vm] as [String : Any])
         cell = self.cell!
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.bottomView.likeButton.setTitle("\(commentlistViewModel.statusList[indexPath.row].status.like_count)", for: .normal)

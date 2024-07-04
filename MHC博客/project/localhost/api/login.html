@@ -78,7 +78,7 @@
                       $password = document.getElementById("login_box").getElementsByClassName("input_box")[0].getElementsByTagName('input')[1].value;
                       $.ajax({
 
-                      　　url:"http://localhost/api/login.php",
+                      　　url:"https://mhcincapi.top/api/login.php",
 
                       　　type:"POST",
                           
@@ -91,7 +91,7 @@
                           if(xhr["responseJSON"]["code"] == null) {
                               alert(xhr["responseJSON"]["msg"]);
                           } else {
-                      　　   location = "http://localhost/api/?code="+xhr["responseJSON"]["code"];
+                      　　   location = "https://mhcincapi.top/api/?code="+xhr["responseJSON"]["code"];
                       }
                       　　},
                       error:function(response,status){
