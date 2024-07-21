@@ -1,0 +1,7 @@
+project: "AC\u535A\u5BA2.xcodeproj"
+retain_objc_accessible: true
+retain_public: true
+schemes:
+- "MHC\u535A\u5BA2"
+targets:
+- "AC\u535A\u5BA2"
