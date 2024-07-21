@@ -65,8 +65,6 @@ Stories
 # What is AC-Boke?
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！例如可以分享出去游玩的照片、快乐的瞬间，点赞高的还有可能在退出app时被被精选哦**
-
-![avatar]()
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/98/81/5c/98815cfa-bc38-29ce-1341-556e94873206/884ae8e7-5a75-4ff5-bf03-1c61ed33064f_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_11.03.23.png/400x800bb.png)
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/3b/eb/22/3beb2214-23be-61cf-6bf1-a3bd5c794604/2cb5f101-fa30-47ca-a434-0f03bf51af87_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.32.38.png/400x800bb.png)
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/46/85/df/4685df96-837e-56b7-c13d-a626686db7cf/3211467e-5a3c-4758-ae07-bfed1b444713_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.33.36.png/400x800bb.png)
