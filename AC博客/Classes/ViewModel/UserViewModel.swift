@@ -7,6 +7,7 @@
 
 import UIKit
 let LiveCellNormalId = "LiveCellNormalId"
+let UserCellNormalId = "UserCellNormalId"
 /// 微博视图模型 - 处理单条微博的业务逻辑
 class UserViewModel: CustomStringConvertible {
     

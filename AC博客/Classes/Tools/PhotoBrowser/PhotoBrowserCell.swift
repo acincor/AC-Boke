@@ -79,23 +79,36 @@ class PhotoBrowserCell: UICollectionViewCell {
             let urlString = url.absoluteString.replacingOccurrences(of: "/thumbnail", with: "")
             if let updatedURL = URL(string: urlString) {
                 imageView.sd_setImage(with: updatedURL,placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.continueInBackground]) { receivedSize, expectedSize, url in
-                        DispatchQueue.main.async(execute: { () -> Void in
-                            self.placeHolder.progress = CGFloat(receivedSize) / CGFloat(expectedSize)
-                            
-                        })
-                    } completed: { image, e, _, _ in
-                        // 判断图像下载是否成功
-                        if image == nil {
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
-                            return
-                        }
-                        // 隐藏占位图像
-                        self.placeHolder.isHidden = true
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        self.placeHolder.progress = CGFloat(receivedSize) / CGFloat(expectedSize)
                         
-                        // 设置图像视图位置
-                        self.setPosition(image!)
+                    })
+                } completed: { image, e, _, _ in
+                    // 判断图像下载是否成功
+                    if image == nil {
+                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
+                        return
                     }
+                    // 隐藏占位图像
+                    self.placeHolder.isHidden = true
+                    
+                    // 设置图像视图位置
+                    self.setPosition(image!)
+                }
             }
+        }
+    }
+    var image: UIImage? {
+        didSet {
+            guard let image = image else {
+                return
+            }
+            reset()
+            imageView.image = image
+            self.placeHolder.isHidden = true
+                    
+            // 设置图像视图位置
+            self.setPosition(image)
         }
     }
 }

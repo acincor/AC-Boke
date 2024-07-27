@@ -55,7 +55,6 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试", comment: ""))
             return
         }
-        print(url)
         guard let urlEncoded = URL(string:url) else {
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试", comment: ""))
             return
@@ -198,10 +197,10 @@ extension TypeStatusTableViewController {
                 return
             }
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
-            StatusDAL.removeCache(self.typeStatus.statusList[sender.tag].status.id)
+            StatusDAL.removeCache(self.typeStatus.statusList[sender.tag].status.id, .status)
             if let i = listViewModel.statusList.firstIndex(where: { vm in
                 vm.status.id == self.typeStatus.statusList[sender.tag].status.id
-            }){
+            }) {
                 listViewModel.statusList.remove(at: i)
             }
             NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)

@@ -10,26 +10,45 @@ import UIKit
 class TypeNeedCacheListViewModel {
     lazy var statusList = [StatusViewModel]()
     var pulldownCount: Int?
-    func loadStatus(isPullup: Bool? = nil, id: Int? = nil, comment_id: Int? = nil,finished: @escaping (_ isSuccessed: Bool) -> ()) {
+    func loadStatus(isPullup: Bool? = nil, id: Int? = nil, comment_id: Int? = nil,to_uid: Int? = nil,finished: @escaping (_ isSuccessed: Bool) -> ()) {
         if let isPullup = isPullup {
             let since_id = isPullup ? 0 : (statusList.first?.status.id ?? 0)
             let max_id = isPullup ? (statusList.last?.status.id ?? 0) : 0
-            StatusDAL.loadStatus(since_id: since_id, max_id: max_id) { (array) -> () in
-                guard let array = array else {
-                    finished(false)
-                    return
+            if to_uid == nil {
+                StatusDAL.loadStatus(since_id: since_id, max_id: max_id, type: .status, to_uid: nil) { (array) -> () in
+                    guard let array = array else {
+                        finished(false)
+                        return
+                    }
+                    var dataList = [StatusViewModel]()
+                    for dict in array {
+                        dataList.append(StatusViewModel(status: Status(dict: dict)))
+                    }
+                    self.pulldownCount = (since_id > 0) ? dataList.count : nil
+                    if max_id > 0 {
+                        self.statusList += dataList
+                    } else {
+                        self.statusList = dataList + self.statusList
+                    }
+                    self.cacheSingleImage(dataList: dataList, finished: finished)
                 }
-                var dataList = [StatusViewModel]()
-                for dict in array {
-                    dataList.append(StatusViewModel(status: Status(dict: dict)))
+            } else {
+                StatusDAL.loadStatus(since_id: since_id, max_id: max_id, type: .msg, to_uid: to_uid) { (array) -> () in
+                    guard let array = array else {
+                        finished(false)
+                        return
+                    }
+                    var dataList = [StatusViewModel]()
+                    for dict in array {
+                        dataList.append(StatusViewModel(status: Status(dict: dict)))
+                    }
+                    if max_id > 0 {
+                        self.statusList += dataList
+                    } else {
+                        self.statusList = dataList + self.statusList
+                    }
+                    self.cacheSingleImage(dataList: dataList, finished: finished)
                 }
-                self.pulldownCount = (since_id > 0) ? dataList.count : nil
-                if max_id > 0 {
-                    self.statusList += dataList
-                } else {
-                    self.statusList = dataList + self.statusList
-                }
-                self.cacheSingleImage(dataList: dataList, finished: finished)
             }
         } else if let id = id {
             if let comment_id = comment_id {
@@ -75,23 +94,36 @@ class TypeNeedCacheListViewModel {
     }
     private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping (_ isSuccessed: Bool) -> ()) {
         let group = DispatchGroup()
-        var dataLength = 0
+        //var dataLength = 0
         for vm in dataList {
-            if vm.thumbnailUrls?.count != 1 {
+            if vm.thumbnailUrls?.count != 1 && vm.status.image == nil {
                 continue
             }
-            let url = vm.thumbnailUrls![0]
             group.enter()
-            SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached],progress: nil) {
-                (image, data, error, type, bool, url) in
-                if let data = data {
-                    dataLength = dataLength + data.count
+            if let i = vm.status.image {
+                    if let d = Data(base64Encoded: i) {
+                        var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
+                        path = (path as NSString).appendingPathComponent(String(vm.status.id)+"."+d.detectImageType().1.rawValue)
+                        vm.status.image = path
+                        do {
+                            try d.write(to: URL(fileURLWithPath: path))
+                        } catch {
+                            SVProgressHUD.show(withStatus: "缓存第"+String(vm.status.id)+"图片失败")
+                        }
+                        group.leave()
+                    }
+            } else {
+                let url = vm.thumbnailUrls![0]
+                SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached],progress: nil) {
+                    (image, data, error, type, bool, url) in
+                    if data != nil {
+                        //dataLength = dataLength + data.count
+                    }
+                    group.leave()
                 }
-                group.leave()
             }
         }
        group.notify(queue: DispatchQueue.main) {
-           NSLog("缓存\(dataLength/1024)Kb")
             finished(true)
         }
     }

@@ -12,11 +12,6 @@
 		2E03D3BA29DD30B300C46867 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E03D3B929DD30B300C46867 /* ImageIO.framework */; };
 		2E03D3C129DD311F00C46867 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E887F8A29CE8F5C007CA93B /* libsqlite3.tbd */; };
 		2E2AAA532A71EE2D0023417C /* WebSocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */; };
-		2E2AAA832A72A6690023417C /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA822A72A6690023417C /* MessageModel.swift */; };
-		2E2AAA852A72A7170023417C /* ChatDataSourch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA842A72A7170023417C /* ChatDataSourch.swift */; };
-		2E2AAA872A72A74D0023417C /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA862A72A74D0023417C /* TableView.swift */; };
-		2E2AAA892A72A7890023417C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAA882A72A7890023417C /* TableViewCell.swift */; };
-		2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2AAAF72A7354470023417C /* ChatDAL.swift */; };
 		2E3F87682AA31DAF00353BBF /* UserCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */; };
 		2E557E6B2A9AD1B800C13474 /* UserAgreementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */; };
 		2E557E6D2A9AD81100C13474 /* logOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E557E6C2A9AD81100C13474 /* logOutViewController.swift */; };
@@ -94,7 +89,6 @@
 		2EA71BDC29B94932004742CA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BDB29B94932004742CA /* Status.swift */; };
 		2EA71BEA29B94FE6004742CA /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71BE929B94FE6004742CA /* CommentTableViewController.swift */; };
 		2EA71C3329BDB779004742CA /* WBRefreshView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E738A7A29AA38510014FA12 /* WBRefreshView.xib */; };
-		2EA71C3729C2066B004742CA /* MessageMainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71C3629C2066B004742CA /* MessageMainTableViewController.swift */; };
 		2EA71C3B29C6A4BB004742CA /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71C3A29C6A4BB004742CA /* Account.swift */; };
 		2EA71C3D29C6A6E4004742CA /* ElseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71C3C29C6A6E4004742CA /* ElseListViewModel.swift */; };
 		2EA71C3F29C6B6B7004742CA /* UserCellTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA71C3E29C6B6B7004742CA /* UserCellTopView.swift */; };
@@ -215,13 +209,13 @@
 		2EB2943429EB7243009E0439 /* UIImage+Metadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EC29EB7243009E0439 /* UIImage+Metadata.m */; };
 		2EB2943529EB7243009E0439 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EE29EB7243009E0439 /* UIButton+WebCache.m */; };
 		2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB293EF29EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m */; };
-		2EDC44CE2A78C21E003D7E63 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */; };
 		2EDC452C2A7FE2D0003D7E63 /* StatusPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC452B2A7FE2D0003D7E63 /* StatusPictureView.swift */; };
 		2EDC453C2A80846F003D7E63 /* UserProfileBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC453B2A80846F003D7E63 /* UserProfileBrowserViewController.swift */; };
 		2EDC45422A81ECBC003D7E63 /* TypeStatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC45412A81ECBC003D7E63 /* TypeStatusListViewModel.swift */; };
 		583B73AE2C4C985B00D47C74 /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 583B73AD2C4C985B00D47C74 /* HaishinKit */; };
 		583B73B02C4C985B00D47C74 /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 583B73AF2C4C985B00D47C74 /* SRTHaishinKit */; };
 		583B73B12C4C99FF00D47C74 /* db.sql in Resources */ = {isa = PBXBuildFile; fileRef = 584617B12C4C946F00BEE6BF /* db.sql */; };
+		5892505F2C4E1DE20038DAA2 /* MessageMainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5892505E2C4E1DE20038DAA2 /* MessageMainTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -254,11 +248,6 @@
 		2E03D3B929DD30B300C46867 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		2E03D41429DD324D00C46867 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2E2AAA522A71EE2D0023417C /* WebSocketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketViewController.swift; sourceTree = "<group>"; };
-		2E2AAA822A72A6690023417C /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
-		2E2AAA842A72A7170023417C /* ChatDataSourch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDataSourch.swift; sourceTree = "<group>"; };
-		2E2AAA862A72A74D0023417C /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
-		2E2AAA882A72A7890023417C /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
-		2E2AAAF72A7354470023417C /* ChatDAL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDAL.swift; sourceTree = "<group>"; };
 		2E3F87672AA31DAF00353BBF /* UserCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionView.swift; sourceTree = "<group>"; };
 		2E557E6A2A9AD1B800C13474 /* UserAgreementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementViewController.swift; sourceTree = "<group>"; };
 		2E557E6C2A9AD81100C13474 /* logOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logOutViewController.swift; sourceTree = "<group>"; };
@@ -363,7 +352,6 @@
 		2EA71BD129AF897F004742CA /* TypeNeedCacheListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeNeedCacheListViewModel.swift; sourceTree = "<group>"; };
 		2EA71BDB29B94932004742CA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		2EA71BE929B94FE6004742CA /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; };
-		2EA71C3629C2066B004742CA /* MessageMainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageMainTableViewController.swift; sourceTree = "<group>"; };
 		2EA71C3A29C6A4BB004742CA /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		2EA71C3C29C6A6E4004742CA /* ElseListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElseListViewModel.swift; sourceTree = "<group>"; };
 		2EA71C3E29C6B6B7004742CA /* UserCellTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCellTopView.swift; sourceTree = "<group>"; };
@@ -569,7 +557,6 @@
 		2EB293EF29EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWebImageDownloaderRequestModifier.m; sourceTree = "<group>"; };
 		2EB293F029EB7243009E0439 /* SDImageCodersManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCodersManager.h; sourceTree = "<group>"; };
 		2EB293F129EB7243009E0439 /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
-		2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		2EDC44D72A7F2FFB003D7E63 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = SOURCE_ROOT; };
 		2EDC450D2A7FA5F2003D7E63 /* 测试.anps */ = {isa = PBXFileReference; lastKnownFileType = text; path = "测试.anps"; sourceTree = "<group>"; };
 		2EDC450F2A7FC2E7003D7E63 /* AC博客Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AC博客Release.entitlements"; sourceTree = "<group>"; };
@@ -582,6 +569,7 @@
 		584617B32C4C946F00BEE6BF /* my.cnf.default */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = my.cnf.default; sourceTree = "<group>"; };
 		584617B42C4C946F00BEE6BF /* nginx.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nginx.conf; sourceTree = "<group>"; };
 		584617B52C4C946F00BEE6BF /* php.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = php.ini; sourceTree = "<group>"; };
+		5892505E2C4E1DE20038DAA2 /* MessageMainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageMainTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -747,14 +735,12 @@
 			isa = PBXGroup;
 			children = (
 				2EDC45412A81ECBC003D7E63 /* TypeStatusListViewModel.swift */,
-				2E2AAAF72A7354470023417C /* ChatDAL.swift */,
 				2E66A4FF2A37617E009C8207 /* StatusDAL.swift */,
 				2E738A5029AA38510014FA12 /* UserAccountViewModel.swift */,
 				2E738A5229AA38510014FA12 /* StatusViewModel.swift */,
 				2EA71C4229C6B78B004742CA /* UserViewModel.swift */,
 				2EA71BD129AF897F004742CA /* TypeNeedCacheListViewModel.swift */,
 				2EA71C3C29C6A6E4004742CA /* ElseListViewModel.swift */,
-				2EDC44CD2A78C21E003D7E63 /* ChatListViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -862,7 +848,6 @@
 				2E738A8529AA38510014FA12 /* Discover */,
 				2E738A8729AA38510014FA12 /* OAuth */,
 				2E738A8929AA38510014FA12 /* Compose */,
-				2E738A8B29AA38510014FA12 /* Message */,
 				2E738A8D29AA38510014FA12 /* Profile */,
 				2E738A8F29AA38510014FA12 /* Main */,
 			);
@@ -873,7 +858,7 @@
 			isa = PBXGroup;
 			children = (
 				04DC74E22BD3B45900B8034A /* TypeStatusTableViewController.swift */,
-				2E2AA9D02A711B4E0023417C /* WebSocket */,
+				5892505D2C4E1DDE0038DAA2 /* Message */,
 				2EAA99182A6BE35D0058481E /* Live */,
 				2E738A7929AA38510014FA12 /* RefreshView */,
 				2E738A7C29AA38510014FA12 /* StatusCell */,
@@ -935,18 +920,6 @@
 				2E738A8A29AA38510014FA12 /* ComposeViewController.swift */,
 			);
 			path = Compose;
-			sourceTree = "<group>";
-		};
-		2E738A8B29AA38510014FA12 /* Message */ = {
-			isa = PBXGroup;
-			children = (
-				2EA71C3629C2066B004742CA /* MessageMainTableViewController.swift */,
-				2E2AAA822A72A6690023417C /* MessageModel.swift */,
-				2E2AAA842A72A7170023417C /* ChatDataSourch.swift */,
-				2E2AAA862A72A74D0023417C /* TableView.swift */,
-				2E2AAA882A72A7890023417C /* TableViewCell.swift */,
-			);
-			path = Message;
 			sourceTree = "<group>";
 		};
 		2E738A8D29AA38510014FA12 /* Profile */ = {
@@ -1250,6 +1223,15 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		5892505D2C4E1DDE0038DAA2 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				5892505E2C4E1DE20038DAA2 /* MessageMainTableViewController.swift */,
+				2E2AA9D02A711B4E0023417C /* WebSocket */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
 		98AC79562FF92B973FE3D084 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1353,7 +1335,6 @@
 				2E66A5002A37617E009C8207 /* StatusDAL.swift in Sources */,
 				2E557E6B2A9AD1B800C13474 /* UserAgreementViewController.swift in Sources */,
 				2EB2908829EAE465009E0439 /* ConstraintMakerRelatable.swift in Sources */,
-				2E2AAA832A72A6690023417C /* MessageModel.swift in Sources */,
 				2EB2942D29EB7243009E0439 /* SDImageCacheConfig.m in Sources */,
 				2E704C0E29FA2977003FE541 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				2EB293FF29EB7243009E0439 /* SDAnimatedImageView.m in Sources */,
@@ -1366,7 +1347,6 @@
 				2E738ACF29AA38510014FA12 /* VisitorTableViewController.swift in Sources */,
 				2E704C1629FA2977003FE541 /* AFHTTPSessionManager.m in Sources */,
 				2E738AAC29AA38510014FA12 /* PicturePickerController.swift in Sources */,
-				2E2AAA892A72A7890023417C /* TableViewCell.swift in Sources */,
 				2EB2940729EB7243009E0439 /* SDWebImageCacheSerializer.m in Sources */,
 				2EB2941E29EB7243009E0439 /* SDImageCache.m in Sources */,
 				2EB2921B29EAE979009E0439 /* FMDatabaseQueue.m in Sources */,
@@ -1387,7 +1367,6 @@
 				2E738AA429AA38510014FA12 /* UIImageView+Extension.swift in Sources */,
 				2E9B6D022A9DC2B20033AC91 /* UserCollectionCell.swift in Sources */,
 				2EB2907229EAE465009E0439 /* ConstraintMakerRelatable+Extensions.swift in Sources */,
-				2EDC44CE2A78C21E003D7E63 /* ChatListViewModel.swift in Sources */,
 				2EB2940629EB7243009E0439 /* SDImageLoader.m in Sources */,
 				2EB2908129EAE465009E0439 /* Constraint.swift in Sources */,
 				2E738AC229AA38510014FA12 /* StatusCellBottomView.swift in Sources */,
@@ -1419,7 +1398,6 @@
 				2E738AB029AA38510014FA12 /* EmoticonManager.swift in Sources */,
 				2EB2943029EB7243009E0439 /* SDWebImageOptionsProcessor.m in Sources */,
 				2EB2906829EAE465009E0439 /* ConstraintAttributes.swift in Sources */,
-				2E2AAA852A72A7170023417C /* ChatDataSourch.swift in Sources */,
 				2E738AC829AA38510014FA12 /* OAuthViewController.swift in Sources */,
 				2EB2941D29EB7243009E0439 /* SDWebImageDownloaderConfig.m in Sources */,
 				2E66A52C2A416173009C8207 /* SVProgressAnimatedView.m in Sources */,
@@ -1479,7 +1457,6 @@
 				2EA71BEA29B94FE6004742CA /* CommentTableViewController.swift in Sources */,
 				2EDC45422A81ECBC003D7E63 /* TypeStatusListViewModel.swift in Sources */,
 				2E738AAA29AA38510014FA12 /* String+emoji.swift in Sources */,
-				2EA71C3729C2066B004742CA /* MessageMainTableViewController.swift in Sources */,
 				2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */,
 				2EB2941829EB7243009E0439 /* UIImage+ExtendedCacheData.m in Sources */,
 				2EB2941F29EB7243009E0439 /* NSBezierPath+SDRoundedCorners.m in Sources */,
@@ -1493,7 +1470,7 @@
 				2EB2907129EAE465009E0439 /* ConstraintDirectionalInsetTarget.swift in Sources */,
 				2EB2906A29EAE465009E0439 /* ConstraintPriorityTarget.swift in Sources */,
 				2E738AC729AA38510014FA12 /* DiscoverTableViewController.swift in Sources */,
-				2E2AAAF82A7354470023417C /* ChatDAL.swift in Sources */,
+				5892505F2C4E1DE20038DAA2 /* MessageMainTableViewController.swift in Sources */,
 				2E738AAD29AA38510014FA12 /* PicturePickerCell.swift in Sources */,
 				2EB2908029EAE465009E0439 /* ConstraintItem.swift in Sources */,
 				2E738ACD29AA38510014FA12 /* WelcomeViewController.swift in Sources */,
@@ -1501,7 +1478,6 @@
 				2EB2906529EAE465009E0439 /* LayoutConstraintItem.swift in Sources */,
 				2EB2941129EB7243009E0439 /* SDWebImageError.m in Sources */,
 				2EB2908229EAE465009E0439 /* Debugging.swift in Sources */,
-				2E2AAA872A72A74D0023417C /* TableView.swift in Sources */,
 				2EB2906C29EAE465009E0439 /* ConstraintMakerFinalizable.swift in Sources */,
 				2E738A9F29AA38510014FA12 /* UserAccountViewModel.swift in Sources */,
 				2E3F87682AA31DAF00353BBF /* UserCollectionView.swift in Sources */,

@@ -12,7 +12,7 @@ class StatusNormalCell: StatusCell {
         didSet {
             pictureView.snp.updateConstraints { (make) -> Void in
                 // 根据配图数量，决定配图视图的顶部间距
-                let offset = viewModel?.thumbnailUrls?.count == 0 ? 0 : StatusCellMargin
+                let offset = viewModel?.thumbnailUrls?.count == 0 ? (viewModel?.status.image == nil ? 0 : StatusCellMargin) : StatusCellMargin
                 make.top.equalTo(contentLabel.snp.bottom).offset(offset)
             }
         }

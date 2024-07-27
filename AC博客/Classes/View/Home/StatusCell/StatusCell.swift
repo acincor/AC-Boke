@@ -20,7 +20,7 @@ class StatusCell: UITableViewCell {
     var viewModel: StatusViewModel? {
         didSet {
             let text = viewModel?.status.status ?? viewModel?.status.comment ?? ""
-            contentLabel.attributedText = EmoticonManager.sharedManager.emoticonText(string: text, font: contentLabel.font)
+            contentLabel.attributedText = viewModel?.attributedStatus ?? EmoticonManager.sharedManager.emoticonText(string: text, font: contentLabel.font)
             topView.viewModel = viewModel
             pictureView.backgroundColor = .systemBackground
             pictureView.viewModel = viewModel
@@ -51,6 +51,9 @@ class StatusCell: UITableViewCell {
     func rowHeight(_ vm: StatusViewModel) -> CGFloat {
         viewModel = vm
         contentView.layoutIfNeeded()
+        if vm.status.code == "recalled" || vm.status.code == "like"{
+            return contentLabel.frame.maxY
+        }
         return bottomView.frame.maxY
     }
 }

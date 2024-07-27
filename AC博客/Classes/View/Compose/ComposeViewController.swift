@@ -21,15 +21,17 @@ class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
     }()
     var comment_id: Int?
     var id: Int?
-    init(_ comment_id: Int?, _ id: Int?) {
+    init(_ comment_id: Int?, _ id: Int?,_ chat: Bool? = nil) {
         self.comment_id = comment_id
         self.id = id
+        self.chat = chat
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    var finished: ((String,[UIImage])->())?
 #if os(visionOS)
 override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
     return .glass
@@ -45,6 +47,7 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
             make.height.equalTo(0)
         }
     }
+    var chat: Bool? = false
     private lazy var trendView: TrendCellView = TrendCellView { viewModel in
         self.textView.insertText("#"+viewModel+"#")
         self.textView.delegate?.textViewDidChange!(self.textView)
@@ -188,10 +191,15 @@ extension ComposeViewController {
         }
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
-    @objc private func sendStatus() {
+    @objc private func sendStatus(){
         let text = textView.emoticonText
         let image = picturesPickerController.pictures
         SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
+        if chat ?? false {
+            finished?(text,image)
+            self.dismiss(animated: true)
+            return
+        }
         NetworkTools.shared.sendStatus(status: text, comment_id: comment_id, id: id, image: image) { (Result, Error) -> () in
             SVProgressHUD.dismiss()
             if Error != nil {

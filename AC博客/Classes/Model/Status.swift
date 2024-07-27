@@ -9,7 +9,10 @@ import UIKit
 
 class Status: NSObject {
     @objc var id: Int = 0
-    @objc var status: String?
+    @objc var image: String?
+    @objc var status: String = ""
+    @objc var to_uid: Int = 0
+    @objc var code: String?
     @objc var create_at: String?
     /// 用户昵称
     /// 用户头像地址（中图），50×50像素
@@ -33,7 +36,7 @@ class Status: NSObject {
     }
     override func setValue(_ value: Any?, forUndefinedKey key: String) {}
     override var description: String {
-        let keys = ["user","uid","id","status","create_at", "pic_urls","pic_count","have_pic","portrait","source","comment_list","like_list","comment_count","like_count","comment_id","comment","comment_uid"]
+        let keys = ["code","user","uid","id","status","create_at", "pic_urls","pic_count","have_pic","portrait","source","comment_list","like_list","comment_count","like_count","comment_id","comment","comment_uid"]
         return dictionaryWithValues(forKeys: keys).description
     }
 }

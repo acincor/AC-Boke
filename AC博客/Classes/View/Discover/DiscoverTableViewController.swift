@@ -76,7 +76,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                 return
             }
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
-            StatusDAL.removeCache(self.listFilterTeams![sender.tag].status.id)
+            StatusDAL.removeCache(self.listFilterTeams![sender.tag].status.id, .status)
             if let i = listViewModel.statusList.firstIndex(where: { vm in
                 vm.status.id == self.listFilterTeams![sender.tag].status.id
             }){

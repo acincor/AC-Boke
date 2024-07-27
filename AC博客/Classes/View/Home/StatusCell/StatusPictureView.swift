@@ -41,13 +41,15 @@ extension StatusPictureView {
         let itemWidth = (maxWidth - 2 * StatusPictureViewItemMargin) / rowCount
         let layout = collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-        let count = viewModel?.thumbnailUrls?.count ?? 0
+        let count = viewModel?.status.have_pic == 1 ? viewModel?.thumbnailUrls?.count ?? 0 : (viewModel?.status.image == nil ? 0 : 1)
         if count == 0 {
             return CGSizeZero
         }
         if count == 1 {
             var size = CGSize(width: 150, height: 120)
-            if let key = viewModel?.thumbnailUrls?.first?.absoluteString {
+            if let i = viewModel?.status.image {
+                size = UIImage(contentsOfFile: i)?.size ?? CGSizeZero
+            } else if let key = viewModel?.thumbnailUrls?.first?.absoluteString{
                 let image = SDImageCache.shared.imageFromDiskCache(forKey: key)
                 size = image?.size ?? CGSizeZero
             }
@@ -72,12 +74,16 @@ extension StatusPictureView {
 }
 extension StatusPictureView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel?.thumbnailUrls?.count ?? 0
+        return viewModel?.status.have_pic == 1 ? viewModel?.thumbnailUrls?.count ?? 0 : (viewModel?.status.image == nil ? 0 : 1)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StatusPictureCellId, for: indexPath) as! StatusPictureViewCell
-        cell.imageURL = viewModel!.thumbnailUrls![indexPath.item]
+        if let i = viewModel?.status.image {
+            cell.image = UIImage(contentsOfFile: i)
+        } else {
+            cell.imageURL = viewModel?.thumbnailUrls?[indexPath.item]
+        }
         return cell
     }
 }
@@ -89,6 +95,15 @@ class StatusPictureViewCell: UICollectionViewCell {
             iconView.layer.cornerRadius = 20
             let ext = ((imageURL?.absoluteString ?? "") as NSString).pathExtension.lowercased()
             gifIconView.isHidden = (ext != "gif")
+        }
+    }
+    var image: UIImage? {
+        didSet {
+            iconView.image = image
+            iconView.clipsToBounds = true
+            iconView.layer.cornerRadius = 20
+            let ext = image?.sd_imageData()?.detectImageType().0
+            gifIconView.isHidden = (ext != .gif)
         }
     }
     override init(frame: CGRect) {
@@ -114,7 +129,7 @@ class StatusPictureViewCell: UICollectionViewCell {
 }
 extension StatusPictureView:UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let userInfo = [WBStatusSelectedPhotoIndexPathKey: indexPath, WBStatusSelectedPhotoURLsKey: viewModel!.thumbnailUrls!] as [String : Any]
+        let userInfo = [WBStatusSelectedPhotoIndexPathKey: indexPath, WBStatusSelectedPhotoURLsKey: viewModel!.thumbnailUrls! == [] ? viewModel!.status.image! : viewModel!.thumbnailUrls!] as [String : Any]
         NotificationCenter.default.post(name: Notification.Name(WBStatusSelectedPhotoNotification), object: self, userInfo: userInfo)
         //photoBrowserPresentFromRect(indexPath: indexPath)
         _ = photoBrowserPresentToRect(indexPath: indexPath)
@@ -134,16 +149,33 @@ extension StatusPictureView: PhotoBrowserPresentDelegate{
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        if let url = viewModel?.thumbnailUrls?[indexPath.item] {
-            iv.sd_setImage(with: url)
+        if viewModel?.thumbnailUrls != [] {
+            if let url = viewModel?.thumbnailUrls?[indexPath.item] {
+                iv.sd_setImage(with: url)
+            }
+        } else {
+            if let imaP = viewModel?.status.image {
+                if let ima = UIImage(contentsOfFile: imaP) {
+                    iv.image = ima
+                }
+            }
         }
         return iv
     }
     func photoBrowserPresentToRect(indexPath: IndexPath) -> CGRect {
-        guard let key = viewModel?.thumbnailUrls?[indexPath.item].absoluteString else {
-            return CGRectZero
+        var temp: UIImage?
+        if (viewModel?.thumbnailUrls?.count ?? 0) - 1 < indexPath.item {
+            guard let key = viewModel?.status.image else {
+                return CGRectZero
+            }
+            temp = UIImage(contentsOfFile: key)
+        } else {
+            guard let key = viewModel?.thumbnailUrls?[indexPath.item].absoluteString else {
+                return CGRectZero
+            }
+            temp = SDImageCache.shared.imageFromDiskCache(forKey: key)
         }
-        guard let image = SDImageCache.shared.imageFromDiskCache(forKey: key) else {
+        guard let image = temp else {
             return CGRectZero
         }
         let w = UIScreen.main.bounds.width

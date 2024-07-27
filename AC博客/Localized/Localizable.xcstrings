@@ -644,6 +644,16 @@
         }
       }
     },
+    "撤回" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recall"
+          }
+        }
+      }
+    },
     "改名失败" : {
       "localizations" : {
         "en" : {
@@ -1009,15 +1019,8 @@
         }
       }
     },
-    "说些话吧，哪怕是一个标点符号也行..." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Say something, even if it's just a punctuation mark..."
-          }
-        }
-      }
+    "赞" : {
+
     },
     "输入你的话题：" : {
       "localizations" : {

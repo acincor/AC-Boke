@@ -23,11 +23,15 @@ class StatusViewModel: CustomStringConvertible {
         return UIImage(named: "avatar_default_big")!
     }
     var rowHeight: CGFloat {
+        if self.status.image != nil {
+            return StatusNormalCell(style: .default, reuseIdentifier: chatID).rowHeight(self)
+        }
         return StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId).rowHeight(self)
     }
     var cellId: String {
         return StatusCellNormalId
     }
+    var attributedStatus: NSMutableAttributedString?
     /// 用户认证图标
     /// 认证类型，-1：没有认证，0，认证用户，2,3,5: 企业认证，220: 达人
     var createAt: String? {
@@ -41,20 +45,20 @@ class StatusViewModel: CustomStringConvertible {
         self.status = status
         
         // 根据模型，来生成缩略图的数组
-        let urls = status.pic_urls 
-            // 创建缩略图数组
-            thumbnailUrls = [URL]()
-            
-            // 遍历字典数组 - 数组如果是可选的，不允许遍历，原因：数组是通过下标来检索数据
+        let urls = status.pic_urls
+        // 创建缩略图数组
+        thumbnailUrls = [URL]()
+        
+        // 遍历字典数组 - 数组如果是可选的，不允许遍历，原因：数组是通过下标来检索数据
         if urls.count != 0 {
             for dict in 0 ... urls.count - 1{
-                    
-                    // 因为字典是按照 key 来取值，如果 key 错误，会返回 nil
+                
+                // 因为字典是按照 key 来取值，如果 key 错误，会返回 nil
                 let url = URL(string: urls[dict]["pic\(dict)"]!)
-                    
-                    // 相信服务器返回的 url 字符串一定能够生成
-                    thumbnailUrls?.append(url!)
-                }
+                
+                // 相信服务器返回的 url 字符串一定能够生成
+                thumbnailUrls?.append(url!)
+            }
         }
     }
     

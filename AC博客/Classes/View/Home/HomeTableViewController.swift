@@ -252,7 +252,7 @@ extension HomeTableViewController {
                 return
             }
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
-            StatusDAL.removeCache(listViewModel.statusList[sender.tag].status.id)
+            StatusDAL.removeCache(listViewModel.statusList[sender.tag].status.id, .status)
             listViewModel.statusList.remove(at: sender.tag)
             self.tableView.reloadData()
         }

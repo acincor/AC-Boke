@@ -32,24 +32,30 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return urls.count
+        return urls.count == 0 ? 1 : urls.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoBrowserCellId, for: indexPath) as! PhotoBrowserCell
         cell.backgroundColor = .black
-        cell.imageURL = urls[indexPath.item]
+        if urls.count == 0 {
+            cell.image = self.image
+        } else {
+            cell.imageURL = urls[indexPath.item]
+        }
         cell.photoDelegate = self
         return cell
     }
     
     private var urls: [URL]
+    private var image: UIImage?
     private func prepare() {
         collectionView.register(PhotoBrowserCell.self, forCellWithReuseIdentifier: PhotoBrowserCellId)
         collectionView.dataSource = self
     }
     private var current: IndexPath
-    init(urls: [URL], indexPath: IndexPath) {
+    init(urls: [URL],image: UIImage? = nil, indexPath: IndexPath) {
         self.urls = urls
+        self.image = image
         self.current = indexPath
         super.init(nibName: nil, bundle: nil)
     }

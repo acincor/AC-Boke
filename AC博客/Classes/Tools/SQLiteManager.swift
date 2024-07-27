@@ -13,6 +13,7 @@ class SQLiteManager {
         var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
         path = (path as NSString).appendingPathComponent(dbName)
         queue = FMDatabaseQueue(path: path)!
+        print(path)
         createTable()
     }
     private func createTable() {

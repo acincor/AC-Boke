@@ -57,8 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             path = (path as NSString).appendingPathComponent("account.plist")
                             if FileManager.default.fileExists(atPath: path) {
                                 try! FileManager.default.removeItem(atPath: path)
-                                ChatDAL.clearDataCache()
-                                StatusDAL.clearDataCache()
+                                StatusDAL.clearDataCache(type: nil)
                                 NotificationCenter.default.post(name: .init(rawValue: .init(WBSwitchRootViewControllerNotification)), object: nil)
                             }
                         }
@@ -99,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     let content = UNMutableNotificationContent()
     func applicationDidEnterBackground(_ application: UIApplication) {
-        StatusDAL.clearDataCache()
+        StatusDAL.clearDataCache(type: nil)
         if UserAccountViewModel.sharedUserAccount.userLogon {
             content.title = "AC博客"
             content.sound = .default
@@ -111,13 +110,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     return
                 }
                 if((Result as! [String:Any])["user"] != nil || (Result as! [String:Any])["status"] != nil) {
-                    StatusDAL.clearDataCache()
+                    StatusDAL.clearDataCache(type: nil)
                     self.content.badge = true
-                    StatusDAL.clearDataCache()
+                    StatusDAL.clearDataCache(type: nil)
                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
                     let request = UNNotificationRequest(identifier: "com.Ac-inc.ACBlog", content: self.content, trigger: trigger)
                     let status = Status(dict: Result as! [String:Any])
-                    self.content.body = status.status!
+                    self.content.body = status.status
                     self.content.title = status.user!
                     self.content.subtitle = status.create_at!
                     UNUserNotificationCenter.current().add(request) { error in
@@ -127,7 +126,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             // 通知已发送到设备
                         }
                     }
-
                 }
             }
         }

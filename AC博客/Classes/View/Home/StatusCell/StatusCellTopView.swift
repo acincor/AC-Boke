@@ -20,22 +20,19 @@ class StatusCellTopView: UIView {
     
     /// 来源标签
     private lazy var sourceLabel: UILabel = UILabel(title: "来源", fontSize: 11)
-    var viewModel: CustomStringConvertible? {
+    var viewModel: StatusViewModel? {
         didSet {
             // 姓名
-            guard let viewModel = viewModel as? StatusViewModel else {
-                return
-            }
-            timeLabel.text = viewModel.createAt
-            self.nameLabel.text = viewModel.status.user
+            timeLabel.text = viewModel?.createAt
+            self.nameLabel.text = viewModel?.status.user
             nameLabel.textColor = .red
-            if viewModel.status.source != nil ? viewModel.status.source != "unknown": false{
-                sourceLabel.text = viewModel.status.source
+            if viewModel?.status.source != nil ? viewModel?.status.source != "unknown": false{
+                sourceLabel.text = viewModel?.status.source
             }else {
                 sourceLabel.text = "未知"
             }
             // 头像
-            iconView.sd_setImage(with: viewModel.userProfileUrl, placeholderImage: viewModel.userDefaultIconView)
+            iconView.sd_setImage(with: viewModel?.userProfileUrl, placeholderImage: viewModel?.userDefaultIconView)
             iconView.layer.cornerRadius = 5
             iconView.clipsToBounds = true
             iconView.isUserInteractionEnabled = true
