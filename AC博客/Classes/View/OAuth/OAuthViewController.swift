@@ -6,7 +6,7 @@
 //
 
 import UIKit
-@preconcurrency import WebKit
+import WebKit
 class OAuthViewController: UIViewController,WKNavigationDelegate {
     private lazy var webView = WKWebView()
     @objc private func close() {

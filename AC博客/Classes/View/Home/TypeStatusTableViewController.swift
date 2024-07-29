@@ -144,7 +144,7 @@ extension TypeStatusTableViewController {
         cell.bottomView.deleteButton.tag = indexPath.row
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
-        guard let viewModel = cell.topView.viewModel as? StatusViewModel else {
+        guard let viewModel = cell.topView.viewModel else {
             return cell
         }
         g.sender = "\(viewModel.status.uid)"

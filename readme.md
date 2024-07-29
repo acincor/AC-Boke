@@ -20,6 +20,7 @@ Installation
 **聊天系统升级！添加点赞、撤回功能，并且界面与博客卡一样**
 **create database ac_inc**
 **暗色模式下，漏洞已修复，如登录、注册界面无法看到控制器标题（这个原因是因为网页视图（webView）没有完全贴合登录、注册授权视图控制器（OAuthViewController）留有空白，苹果称之为（Safe Area），导航栏是透明的，所以透出了底下的空白，导致下滑才会出现导航栏标题和深色，对此我们深表歉意），启动页面图标背景为白色**
+**去除了对老库AFNetworking的支持，更换Alamofire**
 **支持中英文**
 
 #*OLD VERSION*

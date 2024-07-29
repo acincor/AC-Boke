@@ -8,4 +8,3 @@
 #import "SDWebImage/WebImage/SDWebImage.h"
 #import "SVProgressHUD/SVProgressHUD.h"
 #import "fmdb/FMDB.h"
-#import "AFNetworking/AFNetworking/AFNetworking.h"

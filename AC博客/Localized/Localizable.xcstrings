@@ -35,6 +35,7 @@
       }
     },
     "Err-1202.w" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -7,10 +7,9 @@
 
 import Foundation
 
-class NetworkTools: AFHTTPSessionManager{
+class NetworkTools{
     static let shared: NetworkTools = {
-        let tools = NetworkTools(baseURL: nil)
-        tools.responseSerializer.acceptableContentTypes?.insert("text/plain")
+        let tools = NetworkTools()
         return tools
     }()
     var tokenDict: [String: Any]? {
@@ -27,17 +26,25 @@ class NetworkTools: AFHTTPSessionManager{
 }
 extension NetworkTools {
     func request(_ method: HMRequestMethod, _ URLString: String, _ parameters: [String: Any]?, finished: @escaping HMRequstCallBack) {
-        let success = {(task: URLSessionDataTask?, Result: Any?) -> Void in
-            finished(Result,nil)
-        }
-        let failure = {(task: URLSessionDataTask?, Error: Error) -> Void in
-            finished(nil,Error)
+        let completion = {(task: AFDataResponse<Data?>) -> Void in
+            if let any = try? JSONSerialization.jsonObject(with: task.data ?? Data(), options: .allowFragments){
+                if let dict = any as? [[String: Any]] {
+                    finished(dict,task.error)
+                }
+                if let dict = any as? [String: Any] {
+                    finished(dict,task.error)
+                }
+                return
+            }
+            finished(task.data,task.error)
         }
         if method == HMRequestMethod.GET {
-            get(URLString, parameters: parameters,headers: nil,progress: nil,success:success,failure: failure)
+            AF.request(URLString,method: .get, parameters: parameters, headers: HTTPHeaders([HTTPHeader(name: "Accept", value: "text/plain")]))
+                .response(completionHandler: completion)
+            
         } else {
-            post(URLString, parameters: parameters, headers: nil, progress: nil,
-            success: success,failure: failure)
+            AF.request(URLString,method: .post, parameters: parameters, headers: HTTPHeaders([HTTPHeader(name: "Accept", value: "text/plain")]))
+                .response(completionHandler: completion)
 
         }
     }
@@ -252,7 +259,7 @@ extension NetworkTools {
                 finished(Result, Error)
             }
     }
-    private func upload(_ URLString: String, _ data: [Data], _ parameters: [String: Any]?, finished: @escaping HMRequstCallBack) {
+    private func upload(_ URLString: String, _ data: [Data], _ parameters: Parameters?, finished: @escaping HMRequstCallBack) {
         guard let token = UserAccountViewModel.sharedUserAccount.accessToken else {
             finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
             
@@ -263,17 +270,18 @@ extension NetworkTools {
             parameters = [String:Any]()
         }
         parameters!["access_token"] = token
-
-        post(URLString, parameters: parameters,headers: nil,constructingBodyWith: { formData in
-            
-            for d in 0..<data.count{
-                formData.appendPart(withFileData: data[d], name: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), fileName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), mimeType: data[d].detectImageType().0.rawValue)
-            }
-        }, progress: nil, success: { _, result in
-            finished(result, nil)
-        }) { _ , error in
-            finished(nil,error)
+        let completion = {(task: AFDataResponse<Data?>) -> Void in
+            finished(task.data,task.error)
         }
+        AF.upload(multipartFormData: { formData in
+            for d in 0..<data.count{
+                formData.append(data[d], withName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)), fileName: "pic{number}".replacingOccurrences(of: "{number}", with: String(d)),mimeType: data[d].detectImageType().0.rawValue)
+            }
+            for (key,value) in parameters ?? [:]{
+                formData.append("\(value)".data(using: .utf8)!, withName: key)
+            }
+        }, to: URLString)
+            .response(completionHandler: completion)
     }
     func sendPortrait(_ URLString: String, _ data: Data, _ parameters: [String: Any]?, finished: @escaping HMRequstCallBack) {
         guard let token = UserAccountViewModel.sharedUserAccount.accessToken else {
@@ -286,13 +294,16 @@ extension NetworkTools {
             parameters = [String:Any]()
         }
         parameters!["access_token"] = token
-        post(URLString, parameters: parameters,headers: nil,constructingBodyWith: { formData in
-            formData.appendPart(withFileData: data, name: "pic", fileName: "pic", mimeType: "image/png")
-        }, progress: nil, success: { _, result in
-            finished(result, nil)
-        }) { _ , error in
-            finished(nil,error)
+        let completion = {(task: AFDataResponse<Data?>) -> Void in
+            finished(task.data,task.error)
         }
+        AF.upload(multipartFormData: { formData in
+            formData.append(data, withName: "pic", fileName: "pic", mimeType: data.detectImageType().0.rawValue)
+            for (key,value) in parameters ?? [:]{
+                formData.append("\(value)".data(using: .utf8)!, withName: key)
+            }
+        }, to: URLString)
+            .response(completionHandler: completion)
     }
 }
 
@@ -356,10 +367,6 @@ extension NetworkTools {
             }
             
             return (.unknown,.unknown)
-        }
-        
-        static func detectImageType() -> (Data.ImageType,Data.Extended) {
-            return self.detectImageType()
         }
         
         static func detectImageType(with url: URL) -> (Data.ImageType,Data.Extended) {
