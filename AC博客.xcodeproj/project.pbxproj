@@ -18,11 +18,6 @@
 		2E66A4BD2A33E116009C8207 /* QuoteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4BC2A33E116009C8207 /* QuoteTableViewController.swift */; };
 		2E66A4C12A375CEC009C8207 /* SQLiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4C02A375CEC009C8207 /* SQLiteManager.swift */; };
 		2E66A5002A37617E009C8207 /* StatusDAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A4FF2A37617E009C8207 /* StatusDAL.swift */; };
-		2E66A52B2A416173009C8207 /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A5222A416173009C8207 /* SVRadialGradientLayer.m */; };
-		2E66A52C2A416173009C8207 /* SVProgressAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A5252A416173009C8207 /* SVProgressAnimatedView.m */; };
-		2E66A52D2A416173009C8207 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A5272A416173009C8207 /* SVProgressHUD.m */; };
-		2E66A52E2A416173009C8207 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E66A5282A416173009C8207 /* SVIndefiniteAnimatedView.m */; };
-		2E66A52F2A416173009C8207 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2E66A5292A416173009C8207 /* SVProgressHUD.bundle */; };
 		2E738A9F29AA38510014FA12 /* UserAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A5029AA38510014FA12 /* UserAccountViewModel.swift */; };
 		2E738AA129AA38510014FA12 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A5229AA38510014FA12 /* StatusViewModel.swift */; };
 		2E738AA329AA38510014FA12 /* NetworkTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E738A5529AA38510014FA12 /* NetworkTools.swift */; };
@@ -242,7 +237,11 @@
 		587BD2FE2C579FD70026788E /* URLEncodedFormEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587BD2D02C579FD60026788E /* URLEncodedFormEncoder.swift */; };
 		587BD2FF2C579FD70026788E /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587BD2D12C579FD60026788E /* Validation.swift */; };
 		587BD3002C579FD70026788E /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587BD2D32C579FD60026788E /* Alamofire.swift */; };
-		587BD3022C579FD70026788E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 587BD2D52C579FD60026788E /* PrivacyInfo.xcprivacy */; };
+		587BD3152C57B94B0026788E /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 587BD30A2C57B94B0026788E /* SVIndefiniteAnimatedView.m */; };
+		587BD3162C57B94B0026788E /* SVProgressAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 587BD30C2C57B94B0026788E /* SVProgressAnimatedView.m */; };
+		587BD3172C57B94B0026788E /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 587BD30E2C57B94B0026788E /* SVProgressHUD.bundle */; };
+		587BD3182C57B94B0026788E /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 587BD3102C57B94B0026788E /* SVProgressHUD.m */; };
+		587BD3192C57B94B0026788E /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 587BD3122C57B94B0026788E /* SVRadialGradientLayer.m */; };
 		5892505F2C4E1DE20038DAA2 /* MessageMainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5892505E2C4E1DE20038DAA2 /* MessageMainTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -282,15 +281,6 @@
 		2E66A4BC2A33E116009C8207 /* QuoteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteTableViewController.swift; sourceTree = "<group>"; };
 		2E66A4C02A375CEC009C8207 /* SQLiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteManager.swift; sourceTree = "<group>"; };
 		2E66A4FF2A37617E009C8207 /* StatusDAL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusDAL.swift; sourceTree = "<group>"; };
-		2E66A5222A416173009C8207 /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
-		2E66A5232A416173009C8207 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
-		2E66A5242A416173009C8207 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
-		2E66A5252A416173009C8207 /* SVProgressAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressAnimatedView.m; sourceTree = "<group>"; };
-		2E66A5262A416173009C8207 /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
-		2E66A5272A416173009C8207 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
-		2E66A5282A416173009C8207 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
-		2E66A5292A416173009C8207 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
-		2E66A52A2A416173009C8207 /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressAnimatedView.h; sourceTree = "<group>"; };
 		2E738A3529AA33CF0014FA12 /* AC博客.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AC博客.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E738A5029AA38510014FA12 /* UserAccountViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccountViewModel.swift; sourceTree = "<group>"; };
 		2E738A5229AA38510014FA12 /* StatusViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
@@ -606,6 +596,21 @@
 		587BD2D32C579FD60026788E /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
 		587BD2D42C579FD60026788E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		587BD2D52C579FD60026788E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		587BD3032C57B94B0026788E /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		587BD3042C57B94B0026788E /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressAnimatedView.h; sourceTree = "<group>"; };
+		587BD3052C57B94B0026788E /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		587BD3062C57B94B0026788E /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
+		587BD3082C57B94B0026788E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		587BD3092C57B94B0026788E /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		587BD30A2C57B94B0026788E /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		587BD30B2C57B94B0026788E /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressAnimatedView.h; sourceTree = "<group>"; };
+		587BD30C2C57B94B0026788E /* SVProgressAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressAnimatedView.m; sourceTree = "<group>"; };
+		587BD30D2C57B94B0026788E /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		587BD30E2C57B94B0026788E /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		587BD30F2C57B94B0026788E /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		587BD3102C57B94B0026788E /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		587BD3112C57B94B0026788E /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
+		587BD3122C57B94B0026788E /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
 		5892505E2C4E1DE20038DAA2 /* MessageMainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageMainTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -641,22 +646,6 @@
 			path = WebSocket;
 			sourceTree = "<group>";
 		};
-		2E66A5212A416173009C8207 /* SVProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				2E66A5222A416173009C8207 /* SVRadialGradientLayer.m */,
-				2E66A5232A416173009C8207 /* SVIndefiniteAnimatedView.h */,
-				2E66A5242A416173009C8207 /* SVProgressHUD.h */,
-				2E66A5252A416173009C8207 /* SVProgressAnimatedView.m */,
-				2E66A5262A416173009C8207 /* SVRadialGradientLayer.h */,
-				2E66A5272A416173009C8207 /* SVProgressHUD.m */,
-				2E66A5282A416173009C8207 /* SVIndefiniteAnimatedView.m */,
-				2E66A5292A416173009C8207 /* SVProgressHUD.bundle */,
-				2E66A52A2A416173009C8207 /* SVProgressAnimatedView.h */,
-			);
-			path = SVProgressHUD;
-			sourceTree = "<group>";
-		};
 		2E738A2C29AA33CF0014FA12 = {
 			isa = PBXGroup;
 			children = (
@@ -677,11 +666,11 @@
 		2E738A4C29AA38510014FA12 /* AC博客 */ = {
 			isa = PBXGroup;
 			children = (
+				587BD3132C57B94B0026788E /* SVProgressHUD */,
 				587BD2D62C579FD60026788E /* Alamofire */,
 				04E3749F2BF827EB004C5F34 /* Localized */,
 				2EDC450F2A7FC2E7003D7E63 /* AC博客Release.entitlements */,
 				2EDC44D72A7F2FFB003D7E63 /* readme.md */,
-				2E66A5212A416173009C8207 /* SVProgressHUD */,
 				584617B62C4C946F00BEE6BF /* Resource */,
 				2EB2922229EAED51009E0439 /* FFLabel.swift */,
 				2EB2920F29EAE979009E0439 /* fmdb */,
@@ -1277,6 +1266,36 @@
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
+		587BD3072C57B94B0026788E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				587BD3032C57B94B0026788E /* SVIndefiniteAnimatedView.h */,
+				587BD3042C57B94B0026788E /* SVProgressAnimatedView.h */,
+				587BD3052C57B94B0026788E /* SVProgressHUD.h */,
+				587BD3062C57B94B0026788E /* SVRadialGradientLayer.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		587BD3132C57B94B0026788E /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				587BD3072C57B94B0026788E /* include */,
+				587BD3082C57B94B0026788E /* PrivacyInfo.xcprivacy */,
+				587BD3092C57B94B0026788E /* SVIndefiniteAnimatedView.h */,
+				587BD30A2C57B94B0026788E /* SVIndefiniteAnimatedView.m */,
+				587BD30B2C57B94B0026788E /* SVProgressAnimatedView.h */,
+				587BD30C2C57B94B0026788E /* SVProgressAnimatedView.m */,
+				587BD30D2C57B94B0026788E /* SVProgressHUD-Prefix.pch */,
+				587BD30E2C57B94B0026788E /* SVProgressHUD.bundle */,
+				587BD30F2C57B94B0026788E /* SVProgressHUD.h */,
+				587BD3102C57B94B0026788E /* SVProgressHUD.m */,
+				587BD3112C57B94B0026788E /* SVRadialGradientLayer.h */,
+				587BD3122C57B94B0026788E /* SVRadialGradientLayer.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 		5892505D2C4E1DDE0038DAA2 /* Message */ = {
 			isa = PBXGroup;
 			children = (
@@ -1366,9 +1385,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				583B73B12C4C99FF00D47C74 /* db.sql in Resources */,
+				587BD3172C57B94B0026788E /* SVProgressHUD.bundle in Resources */,
 				2EAA992E2A6D55E00058481E /* 用户协议.txt in Resources */,
-				587BD3022C579FD70026788E /* PrivacyInfo.xcprivacy in Resources */,
-				2E66A52F2A416173009C8207 /* SVProgressHUD.bundle in Resources */,
 				2EA71C3329BDB779004742CA /* WBRefreshView.xib in Resources */,
 				04E374A12BF8286E004C5F34 /* Localizable.xcstrings in Resources */,
 				2E738AD129AA38510014FA12 /* Assets.xcassets in Resources */,
@@ -1418,12 +1436,15 @@
 				2EB2941729EB7243009E0439 /* SDAnimatedImageRep.m in Sources */,
 				2EB2907F29EAE465009E0439 /* ConstraintView+Extensions.swift in Sources */,
 				2EB2940F29EB7243009E0439 /* SDImageAPNGCoder.m in Sources */,
+				587BD3162C57B94B0026788E /* SVProgressAnimatedView.m in Sources */,
 				587BD2E32C579FD70026788E /* Response.swift in Sources */,
 				2EB2921C29EAE979009E0439 /* FMDatabaseAdditions.m in Sources */,
 				2E738AD329AA38510014FA12 /* AppDelegate.swift in Sources */,
 				2EB293FB29EB7243009E0439 /* SDImageIOAnimatedCoder.m in Sources */,
 				2E738AA429AA38510014FA12 /* UIImageView+Extension.swift in Sources */,
+				587BD3152C57B94B0026788E /* SVIndefiniteAnimatedView.m in Sources */,
 				2E9B6D022A9DC2B20033AC91 /* UserCollectionCell.swift in Sources */,
+				587BD3182C57B94B0026788E /* SVProgressHUD.m in Sources */,
 				2EB2907229EAE465009E0439 /* ConstraintMakerRelatable+Extensions.swift in Sources */,
 				2EB2940629EB7243009E0439 /* SDImageLoader.m in Sources */,
 				587BD2ED2C579FD70026788E /* URLRequest+Alamofire.swift in Sources */,
@@ -1461,7 +1482,6 @@
 				2EB2906829EAE465009E0439 /* ConstraintAttributes.swift in Sources */,
 				2E738AC829AA38510014FA12 /* OAuthViewController.swift in Sources */,
 				2EB2941D29EB7243009E0439 /* SDWebImageDownloaderConfig.m in Sources */,
-				2E66A52C2A416173009C8207 /* SVProgressAnimatedView.m in Sources */,
 				2E969AEB2AAC989D00219FF6 /* UserCollectionCellView.swift in Sources */,
 				2E969AED2AAD2D3400219FF6 /* TrendCellView.swift in Sources */,
 				587BD2E42C579FD70026788E /* Session.swift in Sources */,
@@ -1495,7 +1515,6 @@
 				2EB2906929EAE465009E0439 /* ConstraintViewDSL.swift in Sources */,
 				2EB293F729EB7243009E0439 /* SDWebImageOperation.m in Sources */,
 				2EB2941529EB7243009E0439 /* SDImageIOCoder.m in Sources */,
-				2E66A52E2A416173009C8207 /* SVIndefiniteAnimatedView.m in Sources */,
 				2EB293FE29EB7243009E0439 /* SDAnimatedImage.m in Sources */,
 				2EB2942B29EB7243009E0439 /* SDImageCacheDefine.m in Sources */,
 				2EB2940E29EB7243009E0439 /* SDWebImageCompat.m in Sources */,
@@ -1514,7 +1533,6 @@
 				2EB2943429EB7243009E0439 /* UIImage+Metadata.m in Sources */,
 				2E738ACB29AA38510014FA12 /* ProfileTableViewController.swift in Sources */,
 				2E738AB329AA38510014FA12 /* EmoticonAttachment.swift in Sources */,
-				2E66A52B2A416173009C8207 /* SVRadialGradientLayer.m in Sources */,
 				2EB2941929EB7243009E0439 /* SDDeviceHelper.m in Sources */,
 				2EB2940029EB7243009E0439 /* UIImage+ForceDecode.m in Sources */,
 				587BD2E82C579FD70026788E /* WebSocketRequest.swift in Sources */,
@@ -1530,6 +1548,7 @@
 				2EA71BEA29B94FE6004742CA /* CommentTableViewController.swift in Sources */,
 				2EDC45422A81ECBC003D7E63 /* TypeStatusListViewModel.swift in Sources */,
 				587BD2DD2C579FD70026788E /* Notifications.swift in Sources */,
+				587BD3192C57B94B0026788E /* SVRadialGradientLayer.m in Sources */,
 				2E738AAA29AA38510014FA12 /* String+emoji.swift in Sources */,
 				2EB2943629EB7243009E0439 /* SDWebImageDownloaderRequestModifier.m in Sources */,
 				2EB2941829EB7243009E0439 /* UIImage+ExtendedCacheData.m in Sources */,
@@ -1560,7 +1579,6 @@
 				2EB2921D29EAE979009E0439 /* FMDatabase.m in Sources */,
 				2EB2942C29EB7243009E0439 /* UIImage+MemoryCacheCost.m in Sources */,
 				2EB2906729EAE465009E0439 /* ConstraintDescription.swift in Sources */,
-				2E66A52D2A416173009C8207 /* SVProgressHUD.m in Sources */,
 				2EDC452C2A7FE2D0003D7E63 /* StatusPictureView.swift in Sources */,
 				2EB2940429EB7243009E0439 /* SDWebImageDownloader.m in Sources */,
 				587BD2D92C579FD70026788E /* DataStreamRequest.swift in Sources */,
