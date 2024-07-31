@@ -9,15 +9,7 @@ import Foundation
 import UIKit
 extension UITextView {
     func insertEmoticon(_ em: Emoticon) {
-        
-        // 1. 空白表情
         if em.isEmpty {
-            return
-        }
-        
-        // 2. 删除按钮
-        if em.isRemoved {
-            deleteBackward()
             return
         }
         if let emoji = em.emoji {

@@ -11,8 +11,12 @@ private let EmoticonViewCellId = "EmoticonViewCellId"
 class EmoticonView: UIView {
     private lazy var packages = EmoticonManager.sharedManager.packages
     private var selectedEmoticonCallBack: (_ emoticon: Emoticon)->()
-    init(selectedEmoticon: @escaping(_ emoticon: Emoticon)->()) {
+    private var deleteCompletion: () -> ()
+    private let deleteButton = UIButton(imageName: "compose_emotion_delete", backImageName: nil)
+    private lazy var maskIconView: UIImageView = UIImageView(image: UIImage(named: "visitordiscover_feed_mask_smallicon"))
+    init(selectedEmoticon: @escaping(_ emoticon: Emoticon)->(),deleteCompletionCallBack: @escaping () -> ()) {
         selectedEmoticonCallBack = selectedEmoticon
+        deleteCompletion = deleteCompletionCallBack
         var rect = UIScreen.main.bounds
         rect.size.height /= 4
         super.init(frame: rect)
@@ -49,12 +53,27 @@ private extension EmoticonView {
     func setupUI() {
         backgroundColor = .systemBackground
         addSubview(collectionView)
+        addSubview(maskIconView)
+        maskIconView.addSubview(deleteButton)
+        maskIconView.isUserInteractionEnabled = true
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top)
             make.bottom.equalTo(self.snp.bottom)
             make.left.equalTo(self.snp.left)
             make.right.equalTo(self.snp.right)
         }
+        maskIconView.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(self.snp.right)
+            make.height.equalTo(80)
+            make.bottom.equalTo(self.snp.bottom)
+            make.width.equalTo(80)
+        }
+        deleteButton.snp.makeConstraints { make in
+            make.center.equalTo(maskIconView.snp.center)
+        }
+        deleteButton.addAction(UIAction(handler: { _ in
+            self.deleteCompletion()
+        }), for: .touchUpInside)
         prepareCollectionView()
     }
     func prepareCollectionView() {

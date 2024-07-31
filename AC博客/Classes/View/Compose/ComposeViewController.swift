@@ -52,8 +52,10 @@ override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
         self.textView.insertText("#"+viewModel+"#")
         self.textView.delegate?.textViewDidChange!(self.textView)
     }
-    private lazy var emoticonView: EmoticonView = EmoticonView { emoticon in
+    private lazy var emoticonView: EmoticonView = EmoticonView(selectedEmoticon: { emoticon in
         self.textView.insertEmoticon(emoticon)
+    }) {
+        self.textView.deleteBackward()
     }
     private lazy var userCollectionView: UserCollectionCellView = UserCollectionCellView { viewModel in
         self.textView.text.append(contentsOf: "@\(viewModel.user.uid)")
@@ -170,6 +172,7 @@ extension ComposeViewController {
         prepareTextView()
         preparePicturePicker()
     }
+    
     private func prepare() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("创建一个话题", comment: ""), style: .plain, target: self, action: #selector(self.createTrend))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("发布", comment: ""), style: .plain, target: self, action: #selector(self.sendStatus))

@@ -12,14 +12,8 @@ import UIKit
 // MARK: - 表情模型
 class Emoticon: NSObject {
     @objc var times = 0
-    /// 发送给服务器的表情字符串
     @objc var chs: String?
-    
-    /// 在本地显示的图片名称 + 表情包路径
     @objc var png: String?
-    
-    /// 完整的路径
-    @objc var isRemoved = false
     @objc var emoji: String?
     @objc var isEmpty = false
     init(isEmpty: Bool) {
@@ -30,10 +24,6 @@ class Emoticon: NSObject {
         didSet {
             emoji = code?.emoji
         }
-    }
-    init(isRemoved: Bool) {
-        self.isRemoved = isRemoved
-        super.init()
     }
     @objc var imagePath: String {
         
