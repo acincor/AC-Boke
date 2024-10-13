@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import SDWebImage
+import SVProgressHUD
 protocol PhotoBrowserCellDelegate: NSObjectProtocol {
     func photoBrowserCellDidTapImage()
 }

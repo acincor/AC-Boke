@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 /// 用户账户模型
 class UserAccount: NSObject,NSCoding,NSSecureCoding, @unchecked Sendable {

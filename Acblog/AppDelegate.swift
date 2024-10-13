@@ -7,6 +7,7 @@
 
 import UIKit
 import UserNotifications
+import SVProgressHUD
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -98,14 +99,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                   name: .init(rawValue: WBSwitchRootViewControllerNotification),           // 监听的通知
                                                   object: nil)
     }
-    let content = UNMutableNotificationContent()
     func applicationDidEnterBackground(_ application: UIApplication) {
         StatusDAL.clearDataCache(type: nil)
+        
         if UserAccountViewModel.sharedUserAccount.userLogon {
+            let content = UNMutableNotificationContent()
             content.title = "AC博客"
             content.sound = .default
-            
-            content.sound = UNNotificationSound.default
+            content.badge = true
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
             NetworkTools.shared.loadHotStatus { Result, Error in
                 if Result == nil {
                     Task { @MainActor in
@@ -115,23 +117,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 if((Result as! [String:Any])["user"] != nil || (Result as! [String:Any])["status"] != nil) {
                     DataSaver.set(data: Result)
-                    Task { @MainActor in
-                        StatusDAL.clearDataCache(type: nil)
-                        self.content.badge = true
-                        StatusDAL.clearDataCache(type: nil)
-                        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                        let request = UNNotificationRequest(identifier: "com.Ac-inc.ACBlog", content: self.content, trigger: trigger)
-                        guard let Result = DataSaver.get() as? [String:Any] else {
-                            return
-                        }
-                        let status = Status(dict: Result)
-                        self.content.body = status.status
-                        self.content.title = status.user!
-                        self.content.subtitle = status.create_at!
-                        UNUserNotificationCenter.current().add(request)
+                    guard let Result = DataSaver.get() as? [String:Any] else {
+                        return
                     }
+                    let status = Status(dict: Result)
+                    DataSaver.set(data: status)
                 }
             }
+            guard let status = DataSaver.get() as? Status else {
+                return
+            }
+            content.body = status.status
+            content.title = status.user!
+            content.subtitle = status.create_at!
+            let request = UNNotificationRequest(identifier: "com.ACInc.ACBlog", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request)
         }
     }
 }

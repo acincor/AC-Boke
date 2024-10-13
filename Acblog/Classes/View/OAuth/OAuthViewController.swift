@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import SVProgressHUD
 class OAuthViewController: UIViewController,WKNavigationDelegate {
     private lazy var webView = WKWebView()
     @objc private func close() {

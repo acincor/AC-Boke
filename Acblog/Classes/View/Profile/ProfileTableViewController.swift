@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import SVProgressHUD
 class ProfileTableViewController: VisitorTableViewController {
     var account: UserViewModel?
     private lazy var addButton = UIButton(title: NSLocalizedString("添加好友", comment: ""), fontSize: 14, color: UIColor(white: 0.6, alpha: 1.0), imageName: nil)

@@ -5,6 +5,7 @@
 //  Created by AC on 2022/12/2.
 
 import Foundation
+import FMDB
 private let dbName = "readme.db"
 class SQLiteManager {
     @MainActor static let shared = SQLiteManager()

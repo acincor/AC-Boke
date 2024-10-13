@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import SVProgressHUD
 
 let StatusCellMargin: CGFloat = 12
 let StatusCellIconWidth: CGFloat = 35

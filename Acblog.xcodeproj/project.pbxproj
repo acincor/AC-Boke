@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		5809BEB42CAB81FD00D8132B /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5809BEB32CAB81FD00D8132B /* HaishinKit */; };
 		5809BEB62CAB81FD00D8132B /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5809BEB52CAB81FD00D8132B /* SRTHaishinKit */; };
+		586075822CACFF5300D19AB1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 586075812CACFF5300D19AB1 /* SnapKit */; };
+		586075872CAD005E00D19AB1 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 586075862CAD005E00D19AB1 /* SDWebImage */; };
+		586075892CAD005E00D19AB1 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 586075882CAD005E00D19AB1 /* SDWebImageMapKit */; };
+		5860758C2CAD00A600D19AB1 /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5860758B2CAD00A600D19AB1 /* SVProgressHUD */; };
+		5860758F2CAD06C700D19AB1 /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = 5860758E2CAD06C700D19AB1 /* FMDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,9 +30,6 @@
 				Resource/nginx.conf,
 				Resource/old_version/nginx.conf,
 				Resource/php.ini,
-				SDWebImage/LICENSE,
-				SDWebImage/README.md,
-				SVProgressHUD/PrivacyInfo.xcprivacy,
 			);
 			target = 5879D10F2CA7CC3B000F54F0 /* Acblog */;
 		};
@@ -49,7 +51,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5860758C2CAD00A600D19AB1 /* SVProgressHUD in Frameworks */,
+				586075822CACFF5300D19AB1 /* SnapKit in Frameworks */,
+				586075892CAD005E00D19AB1 /* SDWebImageMapKit in Frameworks */,
 				5809BEB62CAB81FD00D8132B /* SRTHaishinKit in Frameworks */,
+				5860758F2CAD06C700D19AB1 /* FMDB in Frameworks */,
+				586075872CAD005E00D19AB1 /* SDWebImage in Frameworks */,
 				5809BEB42CAB81FD00D8132B /* HaishinKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,6 +102,11 @@
 			packageProductDependencies = (
 				5809BEB32CAB81FD00D8132B /* HaishinKit */,
 				5809BEB52CAB81FD00D8132B /* SRTHaishinKit */,
+				586075812CACFF5300D19AB1 /* SnapKit */,
+				586075862CAD005E00D19AB1 /* SDWebImage */,
+				586075882CAD005E00D19AB1 /* SDWebImageMapKit */,
+				5860758B2CAD00A600D19AB1 /* SVProgressHUD */,
+				5860758E2CAD06C700D19AB1 /* FMDB */,
 			);
 			productName = Acblog;
 			productReference = 5879D1102CA7CC3B000F54F0 /* Acblog.app */;
@@ -126,6 +138,10 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */,
+				586075802CACFF5300D19AB1 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				586075852CAD005E00D19AB1 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				5860758A2CAD00A600D19AB1 /* XCRemoteSwiftPackageReference "SVProgressHUD" */,
+				5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5879D1112CA7CC3B000F54F0 /* Products */;
@@ -168,10 +184,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Acblog/SDWebImage/WebImage\"",
-					"\"$(SRCROOT)/Acblog/SVProgressHUD\"",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Acblog/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "AC博客想使用您的摄像头";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
@@ -192,7 +205,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ACInc.ACBoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = $PROJECT_DIR/Acblog/bridge.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -209,10 +222,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Acblog/SDWebImage/WebImage\"",
-					"\"$(SRCROOT)/Acblog/SVProgressHUD\"",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Acblog/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "AC博客想使用您的摄像头";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
@@ -233,7 +243,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ACInc.ACBoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = $PROJECT_DIR/Acblog/bridge.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -299,6 +309,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -356,6 +367,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -393,6 +405,38 @@
 				minimumVersion = 1.9.5;
 			};
 		};
+		586075802CACFF5300D19AB1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		586075852CAD005E00D19AB1 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.19.7;
+			};
+		};
+		5860758A2CAD00A600D19AB1 /* XCRemoteSwiftPackageReference "SVProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVProgressHUD/SVProgressHUD";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.1;
+			};
+		};
+		5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ccgus/fmdb";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.12;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -405,6 +449,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */;
 			productName = SRTHaishinKit;
+		};
+		586075812CACFF5300D19AB1 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 586075802CACFF5300D19AB1 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		586075862CAD005E00D19AB1 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 586075852CAD005E00D19AB1 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		586075882CAD005E00D19AB1 /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 586075852CAD005E00D19AB1 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
+		};
+		5860758B2CAD00A600D19AB1 /* SVProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5860758A2CAD00A600D19AB1 /* XCRemoteSwiftPackageReference "SVProgressHUD" */;
+			productName = SVProgressHUD;
+		};
+		5860758E2CAD06C700D19AB1 /* FMDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */;
+			productName = FMDB;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

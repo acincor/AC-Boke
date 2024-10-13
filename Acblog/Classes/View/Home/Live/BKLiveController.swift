@@ -10,6 +10,7 @@ import UIKit
 import HaishinKit
 import SRTHaishinKit
 import DispatchIntrospection
+import SVProgressHUD
 class BKLiveController: UIViewController {
     let stopButton = UIButton(title: NSLocalizedString("结束直播", comment: ""), color: .white, backImageName: nil,backColor: .red)
     let startButton = UIButton(title: NSLocalizedString("开始直播", comment: ""), color: .white, backImageName: nil,backColor: .red)

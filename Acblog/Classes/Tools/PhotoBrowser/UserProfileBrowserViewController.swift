@@ -8,6 +8,8 @@
 import Foundation
 import Photos
 import UIKit
+import SDWebImage
+import SVProgressHUD
 class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
 #if os(visionOS)
     override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {

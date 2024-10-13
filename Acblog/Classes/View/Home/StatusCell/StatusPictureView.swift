@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 let StatusPictureViewItemMargin: CGFloat = 8
 let StatusPictureCellId = "StatusPictureCellId"

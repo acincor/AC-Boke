@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
     private lazy var picturesPickerController = PicturePickerController()

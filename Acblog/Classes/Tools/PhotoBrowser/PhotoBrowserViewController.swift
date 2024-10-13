@@ -8,6 +8,8 @@
 import Foundation
 import Photos
 import UIKit
+import SnapKit
+import SVProgressHUD
 private let PhotoBrowserCellId = "PhotoBrowserCellId"
 class PhotoBrowserViewController: UIViewController, UICollectionViewDataSource {
     override func viewDidLoad() {

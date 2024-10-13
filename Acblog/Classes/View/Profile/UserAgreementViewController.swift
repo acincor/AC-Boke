@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class UserAgreementViewController: UIViewController {
 #if os(visionOS)

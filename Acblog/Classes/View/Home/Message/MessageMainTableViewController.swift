@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 let UserNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{

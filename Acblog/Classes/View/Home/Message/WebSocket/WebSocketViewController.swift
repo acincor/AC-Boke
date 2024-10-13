@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SVProgressHUD
 let chatID = "CHATNORMALCELLID"
 class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDelegate, @preconcurrency StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {

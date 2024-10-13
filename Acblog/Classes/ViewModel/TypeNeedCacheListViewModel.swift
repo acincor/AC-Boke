@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SVProgressHUD
+import SDWebImage
 
 class TypeNeedCacheListViewModel: @unchecked Sendable {
     lazy var statusList = [StatusViewModel]()
