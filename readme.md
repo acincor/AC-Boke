@@ -105,6 +105,7 @@ Stories
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/22/d6/91/22d69102-082e-4532-cb55-4a54e533129f/134bd7ca-f204-40de-9c03-5871147bf270_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.45.05.png/400x800bb.png)
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/a2/11/ff/a211ffdf-4b60-6882-4159-431de468a6ba/8facbfd8-2fa2-4cb3-96c2-382f8bc87b83_Simulator_Screenshot_-_iPhone_13_Pro_Max_-_2024-07-21_at_23.47.45.png/400x800bb.png)
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/53/fd/55/53fd5597-0141-0b3e-f3f8-e42c66de417a/44b7a24a-aa81-41ff-a598-a31e2f8a1e09_Simulator_Screenshot_-_iPhone_13_Pro_Max_-_2024-07-21_at_23.53.25.png/400x800bb.png)
+
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
 Copyright © AC.
