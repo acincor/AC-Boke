@@ -29,7 +29,10 @@ class StatusViewModel: CustomStringConvertible {
         return StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId).rowHeight(self)
     }
     var cellId: String {
-        return StatusCellNormalId
+        if status.to_uid == 0 {
+            return StatusCellNormalId
+        }
+        return chatID
     }
     var attributedStatus: NSMutableAttributedString?
     /// 用户认证图标

@@ -44,39 +44,15 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = statusListViewModel.statusList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: chatID, for: indexPath) as! StatusCell
-        cell.bottomView.deleteButton.tag = vm.status.id
+        cell.bottomView.deleteButton.vm = vm
         cell.bottomView.isHidden = false
+        cell.bottomView.deleteButton.addTarget(self, action: #selector(WebSocketController.deleteA(_:)), for: .touchUpInside)
+        cell.bottomView.likeButton.addTarget(self, action: #selector(WebSocketController.likeA(_:)), for: .touchUpInside)
         if(vm.status.uid == self.to_uid) {
             vm.status.user = self.username
             cell.bottomView.likeButton.vm = vm
-            cell.bottomView.deleteButton.setTitle(NSLocalizedString("删除", comment: ""), for: .normal)
-            cell.bottomView.likeButton.setTitle(NSLocalizedString("赞", comment: ""), for: .normal)
-            cell.bottomView.likeButton.isHidden = false
-            cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteA(_:)), for: .touchUpInside)
-            cell.bottomView.likeButton.addTarget(self, action: #selector(self.likeA(_:)), for: .touchUpInside)
-            cell.bottomView.deleteButton.snp.remakeConstraints { (make) -> Void in
-                make.top.equalTo(cell.bottomView.snp.top)
-                make.left.equalTo(cell.bottomView.snp.left)
-                make.bottom.equalTo(cell.bottomView.snp.bottom)
-            }
-            cell.bottomView.likeButton.snp.remakeConstraints { (make) -> Void in
-                make.top.equalTo(cell.bottomView.deleteButton.snp.top)
-                make.left.equalTo(cell.bottomView.deleteButton.snp.right)
-                make.width.equalTo(cell.bottomView.deleteButton.snp.width)
-                make.height.equalTo(cell.bottomView.deleteButton.snp.height)
-                make.right.equalTo(cell.bottomView.snp.right)
-            }
         } else {
             vm.status.user = UserAccountViewModel.sharedUserAccount.account?.user
-            cell.bottomView.deleteButton.setTitle(NSLocalizedString("撤回", comment: ""), for: .normal)
-            cell.bottomView.deleteButton.addTarget(self, action: #selector(self.recallA(_:)), for: .touchUpInside)
-            cell.bottomView.likeButton.isHidden = true
-            cell.bottomView.deleteButton.snp.remakeConstraints { (make) -> Void in
-                make.left.equalTo(cell.bottomView.snp.left)
-                make.top.equalTo(cell.bottomView.snp.top)
-                make.right.equalTo(cell.bottomView.snp.right)
-                make.bottom.equalTo(cell.bottomView.snp.bottom)
-            }
         }
         if(vm.status.code == "recalled") {
             cell.bottomView.isHidden = true
@@ -90,7 +66,6 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
             cell.bottomView.isHidden = true
         }
         cell.viewModel = vm
-        cell.bottomView.commentButton.removeFromSuperview()
         cell.cellDelegate = self
         return cell
     }
@@ -233,24 +208,6 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         }
         self.present(UINavigationController(rootViewController: vc), animated: true)
     }
-    @objc func recallA(_ sender: UIButton) {
-        Task { @MainActor in
-            self.task.send(.string("{\"did\":\(sender.tag), \"code\":\"delete\"}")) {error in
-                Task { @MainActor in
-                    guard let e = error else{
-                        self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"撤回了一条消息\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\",\"code\":\"recalled\"}")) { error in
-                            Task { @MainActor in
-                                SVProgressHUD.dismiss()
-                            }
-                        }
-                        return
-                    }
-                    
-                    print(e)
-                }
-            }
-        }
-    }
     @objc func likeA(_ sender: UIButton) {
         SVProgressHUD.dismiss()
         Task { @MainActor in
@@ -259,9 +216,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
             }
         }
     }
-    @objc func deleteA(_ sender: UIButton) {
-        refresh(sender.tag)
-    }
+    
     func loadData() {
         Task { @MainActor in
             self.statusListViewModel.loadStatus(isPullup:self.refreshView.pullupView.isAnimating,to_uid: self.to_uid) { isSuccessed  in
@@ -291,8 +246,10 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
                 let data = str.data(using: String.Encoding.utf8)
                 var dict = try! JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as! [String : Any]
                 Task { @MainActor in
+                    print(dict)
                     if(dict["code"] as? String == "delete") {
                         Task { @MainActor in
+                            print("did调用")
                             self.refresh(dict["did"] as! Int)
                         }
                     }
@@ -329,10 +286,34 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         }) {
             self.statusListViewModel.statusList.remove(at: i)
         }
-        self.tableView.reloadData()
+        loadData()
+    }
+    @objc func deleteA(_ sender: UIButton) {
+        if(sender.vm?.status.uid == self.to_uid) {
+            print("delete调用")
+            refresh(sender.vm?.status.id ?? 0)
+        } else {
+            Task { @MainActor in
+                self.task.send(.string("{\"did\":\(sender.vm?.status.id ?? 0), \"code\":\"delete\"}")) {error in
+                    Task { @MainActor in
+                        guard let e = error else{
+                            self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"撤回了一条消息\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\",\"code\":\"recalled\"}")) { error in
+                                Task { @MainActor in
+                                    SVProgressHUD.dismiss()
+                                }
+                            }
+                            return
+                        }
+                        print(e)
+                    }
+                }
+            }
+        }
     }
     @objc func clearData() {
         StatusDAL.clearDataCache(type: .msg)
+        self.statusListViewModel.statusList.removeAll()
+        loadData()
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.statusListViewModel.statusList[indexPath.row].rowHeight

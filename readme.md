@@ -36,6 +36,8 @@ Installation
 
 **引入了Actor文件**
 
+**优化了用户体验，我们对此很开心，过去我们将delete和recall方法分离导致绑定到cell上会乱套，现在合并可以正常输出cellID，更改了部分资源暂待更新**
+
 ```
 actor DataSaver {
     static var data: Any?

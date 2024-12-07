@@ -29,6 +29,35 @@ class StatusCell: UITableViewCell {
                 make.height.equalTo(pictureView.bounds.height)
                 make.width.equalTo(pictureView.bounds.width)
             }
+            if viewModel?.cellId == chatID {
+                bottomView.commentButton.removeFromSuperview()
+                if viewModel!.status.to_uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!) {
+                    bottomView.deleteButton.setTitle(NSLocalizedString("删除", comment: ""), for: .normal)
+                    bottomView.likeButton.setTitle(NSLocalizedString("赞", comment: ""), for: .normal)
+                    bottomView.likeButton.isHidden = false
+                    bottomView.deleteButton.snp.remakeConstraints { (make) -> Void in
+                        make.top.equalTo(bottomView.snp.top)
+                        make.left.equalTo(bottomView.snp.left)
+                        make.bottom.equalTo(bottomView.snp.bottom)
+                    }
+                    bottomView.likeButton.snp.remakeConstraints { (make) -> Void in
+                        make.top.equalTo(bottomView.deleteButton.snp.top)
+                        make.left.equalTo(bottomView.deleteButton.snp.right)
+                        make.width.equalTo(bottomView.deleteButton.snp.width)
+                        make.height.equalTo(bottomView.deleteButton.snp.height)
+                        make.right.equalTo(bottomView.snp.right)
+                    }
+                }else{
+                    bottomView.likeButton.isHidden = true
+                    bottomView.deleteButton.snp.remakeConstraints { (make) -> Void in
+                        make.left.equalTo(bottomView.snp.left)
+                        make.top.equalTo(bottomView.snp.top)
+                        make.right.equalTo(bottomView.snp.right)
+                        make.bottom.equalTo(bottomView.snp.bottom)
+                    }
+                    bottomView.deleteButton.setTitle(NSLocalizedString("撤回", comment: ""), for: .normal)
+                }
+            }
         }
     }
     lazy var topView: StatusCellTopView = StatusCellTopView()
@@ -45,7 +74,6 @@ class StatusCell: UITableViewCell {
             make.height.equalTo(44)
         }
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
