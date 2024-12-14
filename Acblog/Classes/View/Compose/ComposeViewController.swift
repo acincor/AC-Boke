@@ -104,8 +104,8 @@ class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
                 return
             }
             Task { @MainActor in
-                self.trendView.collectionView.reloadData()
                 self.trendView.trendList = Result
+                self.trendView.collectionView.reloadData()
             }
         }
         self.trendView.setupUI()

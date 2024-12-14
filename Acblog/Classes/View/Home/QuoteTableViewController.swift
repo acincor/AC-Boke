@@ -10,7 +10,6 @@ import SVProgressHUD
 
 class QuoteTableViewController: VisitorTableViewController {
     var commentlistViewModel = TypeNeedCacheListViewModel()
-    var cell: StatusNormalCell?
     var vm: StatusViewModel
     init(vm: StatusViewModel) {
         self.vm = vm
@@ -97,32 +96,6 @@ class QuoteTableViewController: VisitorTableViewController {
                 self?.present(vc, animated: true,completion: nil)
             }
         }
-        NotificationCenter.default.addObserver(forName: Notification.Name("BKLikeLightIt"), object: nil, queue: nil) { n in
-            guard let object = n.object else {
-                return
-            }
-            DataSaver.set(data: object)
-            Task { @MainActor in
-                guard let object = DataSaver.get() as? [String:Any] else {
-                    return
-                }
-                let result = ["id":"\((object["viewModel"] as! StatusViewModel).status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-                let like_list = (object["viewModel"] as! StatusViewModel).status.like_list
-                self.cell = (object["cell"] as! StatusNormalCell)
-                for s in like_list {
-                    if s["like_uid"] as! String == result["like_uid"] as! String {
-                        
-                        self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
-                        break
-                    } else {
-                        self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                    }
-                }
-                if like_list.isEmpty {
-                    self.cell?.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                }
-            }
-        }
         loadData()
         prepareTableView()
         let cell = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId)
@@ -143,12 +116,24 @@ extension QuoteTableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = commentlistViewModel.statusList[indexPath.row]
-        var cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusNormalCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusNormalCell
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.vm2 = vm
-        NotificationCenter.default.post(name: Notification.Name("BKLikeLightIt"), object: ["cell":cell,"viewModel":vm] as [String : Any])
-        cell = self.cell!
+        let result = ["id":"\(vm.status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
+        let like_list = vm.status.like_list
+        for s in like_list {
+            if s["like_uid"] as! String == result["like_uid"] as! String {
+                
+                cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
+                break
+            } else {
+                cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+            }
+        }
+        if like_list.isEmpty {
+            cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
+        }
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.bottomView.likeButton.setTitle("\(commentlistViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
         cell.bottomView.likeButton.tag = indexPath.row

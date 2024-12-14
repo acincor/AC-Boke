@@ -57,7 +57,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         if(vm.status.code == "recalled") {
             cell.bottomView.isHidden = true
         } else if(vm.status.code == "like") {
-            let attributedString = NSMutableAttributedString(string: vm.status.status)
+            let attributedString = NSMutableAttributedString(string: vm.status.status ?? "")
             let attachment = NSTextAttachment()
             attachment.image = UIImage(systemName: "heart")
             let attachmentString = NSAttributedString(attachment: attachment)

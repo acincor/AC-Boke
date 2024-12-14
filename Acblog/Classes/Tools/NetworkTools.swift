@@ -50,7 +50,7 @@ extension NetworkTools {
         request.httpMethod = method.rawValue
         let completion = { @Sendable (data: Data?, res: URLResponse?, error: (any Error)?)->Void in
             if let any = try? JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments){
-                if let dict = any as? [[String: Any]] {
+                if let dict = any as? NSArray {
                     finished(dict,error)
                 }
                 if let dict = any as? [String: Any] {
@@ -84,11 +84,17 @@ extension NetworkTools {
         request(.POST, urlString, params, finished: finished)
     }
     @MainActor func trend(_ trend:String? = nil, finished: @escaping HMRequestCallBack) {
-        let params = ["trend":trend]
+        var params = [String:Any]()
         let urlString = rootHost+"/api/trend.php"
-        tokenRequest(.GET, urlString, params as [String : Any], finished: finished)
+        guard let trend = trend else {
+            print(params)
+            tokenRequest(.GET, urlString, params, finished: finished)
+            return
+        }
+        params["trend"] = trend
+        tokenRequest(.GET, urlString, params, finished: finished)
     }
-    @MainActor func deleteTrend(_ trend:String?, finished: @escaping HMRequestCallBack) {
+    @MainActor func deleteTrend(_ trend:String, finished: @escaping HMRequestCallBack) {
         let params = ["trend":trend]
         let urlString = rootHost+"/api/deleteTrend.php"
         tokenRequest(.GET, urlString, params as [String : Any], finished: finished)

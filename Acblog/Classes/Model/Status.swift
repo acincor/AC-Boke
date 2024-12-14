@@ -10,7 +10,7 @@ import UIKit
 class Status: NSObject {
     @objc var id: Int = 0
     @objc var image: String?
-    @objc var status: String = ""
+    @objc var status: String?
     @objc var to_uid: Int = 0
     @objc var code: String?
     @objc var create_at: String?

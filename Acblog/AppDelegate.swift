@@ -127,7 +127,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             guard let status = DataSaver.get() as? Status else {
                 return
             }
-            content.body = status.status
+            content.body = status.status ?? ""
             content.title = status.user!
             content.subtitle = status.create_at!
             let request = UNNotificationRequest(identifier: "com.ACInc.ACBlog", content: content, trigger: trigger)
