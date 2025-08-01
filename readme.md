@@ -1,4 +1,4 @@
-AC-Boke 2.8版本
+AC-Boke
 ---------------
 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/acincor/AC-Boke)
