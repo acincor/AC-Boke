@@ -68,15 +68,11 @@ class CommentTableViewController: VisitorTableViewController {
             guard let cell = n.object as? PhotoBrowserPresentDelegate else {
                 return
             }
-            DataSaver.set(data: cell)
             Task { @MainActor in
                 let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
                 vc.modalPresentationStyle = .custom
-                guard let cell = DataSaver.get() as? PhotoBrowserPresentDelegate else {
-                    return
-                }
-                self.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
                 vc.transitioningDelegate = self.photoBrowserAnimator
+                self.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
                 self.present(vc, animated: true,completion: nil)
             }
         }

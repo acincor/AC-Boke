@@ -166,11 +166,10 @@ extension ComposeViewController {
         view.backgroundColor = .systemBackground
         NotificationCenter.default.addObserver(forName: .init("TrendPresentViewControllerNotification"), object: nil, queue: nil) { n in
             if n.object != nil {
-                DataSaver.set(data: n.object)
-                Task { @MainActor in
-                    guard let o = DataSaver.get() as? UIAlertController else {
-                        return
-                    }
+                guard let o = n.object as? UIAlertController else {
+                    return
+                }
+                Task{@MainActor in
                     self.present(o, animated: true)
                 }
             }

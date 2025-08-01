@@ -12,7 +12,7 @@ import SDWebImage
 class TypeNeedCacheListViewModel: @unchecked Sendable {
     lazy var statusList = [StatusViewModel]()
     var pulldownCount: Int?
-    @MainActor func loadStatus(isPullup: Bool? = nil, id: Int? = nil, comment_id: Int? = nil,to_uid: Int? = nil,finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+    @MainActor func loadStatus(isPullup: Bool? = nil, id: Int? = nil, comment_id: Int? = nil,to_uid: Int? = nil,finished: @escaping @Sendable @MainActor (_ isSuccessed: Bool) -> ()) {
         if let isPullup = isPullup {
             let since_id = isPullup ? 0 : (statusList.first?.status.id ?? 0)
             let max_id = isPullup ? (statusList.last?.status.id ?? 0) : 0
@@ -26,19 +26,13 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                     for dict in array {
                         dataList.append(StatusViewModel(status: Status(dict: dict)))
                     }
-                    DataSaver.set(data: dataList)
                     self.pulldownCount = (since_id > 0) ? dataList.count : nil
                     if max_id > 0 {
                         self.statusList += dataList
                     } else {
                         self.statusList = dataList + self.statusList
                     }
-                    Task { @MainActor in
-                        guard let dataList = DataSaver.get() as? [StatusViewModel] else{
-                            return
-                        }
-                        self.cacheSingleImage(dataList: dataList, finished: finished)
-                    }
+                    self.cacheSingleImage(dataList: dataList, finished: finished)
                 }
             } else {
                 StatusDAL.loadStatus(since_id: since_id, max_id: max_id, type: .msg, to_uid: to_uid) { (array) -> () in
@@ -50,18 +44,12 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                     for dict in array {
                         dataList.append(StatusViewModel(status: Status(dict: dict)))
                     }
-                    DataSaver.set(data: dataList)
                     if max_id > 0 {
                         self.statusList += dataList
                     } else {
                         self.statusList = dataList + self.statusList
                     }
-                    Task { @MainActor in
-                        guard let dataList = DataSaver.get() as? [StatusViewModel] else{
-                            return
-                        }
-                        self.cacheSingleImage(dataList: dataList, finished: finished)
-                    }
+                    self.cacheSingleImage(dataList: dataList, finished: finished)
                 }
             }
         } else if let id = id {
@@ -85,15 +73,8 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                             for dictionary in dict["comment_list"] as! [[String:Any]] {
                                 dataList.append(StatusViewModel(status: Status(dict: dictionary)))
                             }
-                            DataSaver.set(data: dataList)
                             self.statusList = dataList
-                            Task { @MainActor in
-                                guard let dataList = DataSaver.get() as? [StatusViewModel] else{
-                                    return
-                                }
-                                self.cacheSingleImage(dataList: dataList, finished: finished)
-                            }
-                            break
+                            self.cacheSingleImage(dataList: dataList, finished: finished)
                         }
                     }
                 }
@@ -115,19 +96,13 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                     for dict in comment_list {
                         dataList.append(StatusViewModel(status: Status(dict: dict)))
                     }
-                    DataSaver.set(data: dataList)
                     self.statusList = dataList
-                    Task { @MainActor in
-                        guard let dataList = DataSaver.get() as? [StatusViewModel] else{
-                            return
-                        }
-                        self.cacheSingleImage(dataList: dataList, finished: finished)
-                    }
+                    self.cacheSingleImage(dataList: dataList, finished: finished)
                 }
             }
         }
     }
-    @MainActor private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+    @MainActor private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping @Sendable @MainActor (_ isSuccessed: Bool) -> ()) {
         let group = DispatchGroup()
         //var dataLength = 0
         for vm in dataList {
@@ -145,7 +120,7 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                     } catch {
                         SVProgressHUD.show(withStatus: "缓存第"+String(vm.status.id)+"图片失败")
                     }
-                    group.leave()
+                    
                 }
             } else {
                 let url = vm.thumbnailUrls![0]
@@ -154,9 +129,9 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                     if data != nil {
                         //dataLength = dataLength + data.count
                     }
-                    group.leave()
                 }
             }
+            group.leave()
         }
         group.notify(queue: DispatchQueue.main) {
             finished(true)

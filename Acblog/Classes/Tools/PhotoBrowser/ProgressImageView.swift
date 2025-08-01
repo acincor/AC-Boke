@@ -16,9 +16,10 @@ class ProgressImageView: UIImageView {
      // Drawing code
      }
      */
-    var progress: CGFloat = 0 {
-        didSet {
-            progressView.progress = progress
+    func update(progress: Double) {
+        progressView.progress = progress
+        DispatchQueue.main.async {
+            self.progressView.setNeedsDisplay()
         }
     }
     init() {
@@ -38,16 +39,12 @@ class ProgressImageView: UIImageView {
     private lazy var progressView: ProgressView = ProgressView()
 }
 private class ProgressView: UIView {
-    var progress: CGFloat = 0 {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
+    var progress: Double = 0
     override func draw(_ rect: CGRect) {
         let center = CGPoint(x: rect.width * 0.5, y: rect.height * 0.5)
         let r = min(rect.width, rect.height) * 0.5
         let start = Double.pi / 2
-        let end = start + progress * 2 * .pi
+        let end = start + progress * 2 * Double.pi
         let path = UIBezierPath(arcCenter: center, radius: r, startAngle: start, endAngle: end, clockwise: true)
         path.addLine(to: center)
         path.close()

@@ -11,7 +11,7 @@ protocol PhotoBrowserDismissDelegate: NSObjectProtocol {
     func imageViewForDimiss() -> UIImageView
     func indexPathForDimiss() -> IndexPath
 }
-@objc protocol PhotoBrowserPresentDelegate: NSObjectProtocol {
+@objc protocol PhotoBrowserPresentDelegate: Sendable,NSObjectProtocol {
     
     /// 指定 indexPath 对应的 imageView，用来做动画效果
     @objc optional func imageViewForPresent(indexPath: IndexPath) -> UIImageView

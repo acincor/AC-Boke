@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 class WelcomeViewController: UIViewController {
 #if os(visionOS)
     override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {

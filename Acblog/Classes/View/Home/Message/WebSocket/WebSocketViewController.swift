@@ -96,7 +96,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
             guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
                 return
             }
-            guard let imagePath = n.userInfo?[WBStatusSelectedPhotoURLsKey] as? String else {
+            guard let imagePath = n.userInfo?["optional"] as? String else {
                 return
             }
             guard let image = UIImage(contentsOfFile: imagePath) else {
@@ -105,11 +105,8 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
             guard let cell = n.object as? PhotoBrowserPresentDelegate else {
                 return
             }
-            DataSaver.set(data: cell)
+            
             Task { @MainActor in
-                guard let cell = DataSaver.get() as? PhotoBrowserPresentDelegate else {
-                    return
-                }
                 let vc = PhotoBrowserViewController(urls:[],image: image, indexPath: indexPath)
                 vc.modalPresentationStyle = .custom
                 vc.transitioningDelegate = self?.photoBrowserAnimator

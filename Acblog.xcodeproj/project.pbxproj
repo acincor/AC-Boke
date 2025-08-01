@@ -7,17 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5809BEB42CAB81FD00D8132B /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5809BEB32CAB81FD00D8132B /* HaishinKit */; };
-		5809BEB62CAB81FD00D8132B /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5809BEB52CAB81FD00D8132B /* SRTHaishinKit */; };
-		586075822CACFF5300D19AB1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 586075812CACFF5300D19AB1 /* SnapKit */; };
-		586075872CAD005E00D19AB1 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 586075862CAD005E00D19AB1 /* SDWebImage */; };
-		586075892CAD005E00D19AB1 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 586075882CAD005E00D19AB1 /* SDWebImageMapKit */; };
-		5860758C2CAD00A600D19AB1 /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5860758B2CAD00A600D19AB1 /* SVProgressHUD */; };
-		5860758F2CAD06C700D19AB1 /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = 5860758E2CAD06C700D19AB1 /* FMDB */; };
+		04C1F1CF2E14231A005A12EA /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5809BEB32CAB81FD00D8132B /* HaishinKit */; };
+		04C1F1D02E14231A005A12EA /* SRTHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5809BEB52CAB81FD00D8132B /* SRTHaishinKit */; };
+		04C1F1D12E14231A005A12EA /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 586075862CAD005E00D19AB1 /* SDWebImage */; };
+		04C1F1D32E14231A005A12EA /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = 5860758E2CAD06C700D19AB1 /* FMDB */; };
+		04C1F4022E144C14005A12EA /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 04C1F4012E144C14005A12EA /* SVProgressHUD */; };
+		04C1F4052E145271005A12EA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04C1F4042E145271005A12EA /* SnapKit */; };
+		9E5668DC2E3C72A1003FEDD4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 9E5668DB2E3C72A1003FEDD4 /* Kingfisher */; };
+		9ECBD2242E3C528100395C20 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 586075882CAD005E00D19AB1 /* SDWebImageMapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5879D1102CA7CC3B000F54F0 /* Acblog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Acblog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EA46F512E3B92C40012E206 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -51,23 +53,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5860758C2CAD00A600D19AB1 /* SVProgressHUD in Frameworks */,
-				586075822CACFF5300D19AB1 /* SnapKit in Frameworks */,
-				586075892CAD005E00D19AB1 /* SDWebImageMapKit in Frameworks */,
-				5809BEB62CAB81FD00D8132B /* SRTHaishinKit in Frameworks */,
-				5860758F2CAD06C700D19AB1 /* FMDB in Frameworks */,
-				586075872CAD005E00D19AB1 /* SDWebImage in Frameworks */,
-				5809BEB42CAB81FD00D8132B /* HaishinKit in Frameworks */,
+				9ECBD2242E3C528100395C20 /* SDWebImageMapKit in Frameworks */,
+				04C1F4022E144C14005A12EA /* SVProgressHUD in Frameworks */,
+				04C1F1D32E14231A005A12EA /* FMDB in Frameworks */,
+				04C1F4052E145271005A12EA /* SnapKit in Frameworks */,
+				9E5668DC2E3C72A1003FEDD4 /* Kingfisher in Frameworks */,
+				04C1F1D12E14231A005A12EA /* SDWebImage in Frameworks */,
+				04C1F1D02E14231A005A12EA /* SRTHaishinKit in Frameworks */,
+				04C1F1CF2E14231A005A12EA /* HaishinKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04C1F4032E145271005A12EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9EA46F512E3B92C40012E206 /* UserNotifications.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5879D1072CA7CC3B000F54F0 = {
 			isa = PBXGroup;
 			children = (
 				5879D1122CA7CC3B000F54F0 /* Acblog */,
+				04C1F4032E145271005A12EA /* Frameworks */,
 				5879D1112CA7CC3B000F54F0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -102,11 +114,12 @@
 			packageProductDependencies = (
 				5809BEB32CAB81FD00D8132B /* HaishinKit */,
 				5809BEB52CAB81FD00D8132B /* SRTHaishinKit */,
-				586075812CACFF5300D19AB1 /* SnapKit */,
 				586075862CAD005E00D19AB1 /* SDWebImage */,
 				586075882CAD005E00D19AB1 /* SDWebImageMapKit */,
-				5860758B2CAD00A600D19AB1 /* SVProgressHUD */,
 				5860758E2CAD06C700D19AB1 /* FMDB */,
+				04C1F4012E144C14005A12EA /* SVProgressHUD */,
+				04C1F4042E145271005A12EA /* SnapKit */,
+				9E5668DB2E3C72A1003FEDD4 /* Kingfisher */,
 			);
 			productName = Acblog;
 			productReference = 5879D1102CA7CC3B000F54F0 /* Acblog.app */;
@@ -120,7 +133,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					5879D10F2CA7CC3B000F54F0 = {
 						CreatedOnToolsVersion = 16.0;
@@ -138,10 +151,11 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */,
-				586075802CACFF5300D19AB1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				586075852CAD005E00D19AB1 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				5860758A2CAD00A600D19AB1 /* XCRemoteSwiftPackageReference "SVProgressHUD" */,
 				5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */,
+				04C1F28D2E144751005A12EA /* XCRemoteSwiftPackageReference "SnapKit" */,
+				04C1F4002E144C14005A12EA /* XCRemoteSwiftPackageReference "svprogresshud" */,
+				9E5668DA2E3C72A1003FEDD4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5879D1112CA7CC3B000F54F0 /* Products */;
@@ -182,7 +196,12 @@
 				CODE_SIGN_ENTITLEMENTS = "Acblog/AC-Boke.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P2AJHF4ZX2;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
+				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Acblog/Info.plist;
@@ -207,7 +226,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -220,7 +239,12 @@
 				CODE_SIGN_ENTITLEMENTS = "Acblog/AC-Boke.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P2AJHF4ZX2;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
+				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Acblog/Info.plist;
@@ -245,7 +269,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -285,6 +309,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = P2AJHF4ZX2;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -308,10 +333,11 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -350,6 +376,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = P2AJHF4ZX2;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -366,9 +393,10 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -397,20 +425,28 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		04C1F28D2E144751005A12EA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		04C1F4002E144C14005A12EA /* XCRemoteSwiftPackageReference "svprogresshud" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/svprogresshud/svprogresshud";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.1;
+			};
+		};
 		5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/shogo4405/HaishinKit.swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.9.5;
-			};
-		};
-		586075802CACFF5300D19AB1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.1;
+				minimumVersion = 2.0.8;
 			};
 		};
 		586075852CAD005E00D19AB1 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
@@ -418,15 +454,7 @@
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.19.7;
-			};
-		};
-		5860758A2CAD00A600D19AB1 /* XCRemoteSwiftPackageReference "SVProgressHUD" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SVProgressHUD/SVProgressHUD";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.3.1;
+				minimumVersion = 5.21.1;
 			};
 		};
 		5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */ = {
@@ -437,9 +465,27 @@
 				minimumVersion = 2.7.12;
 			};
 		};
+		9E5668DA2E3C72A1003FEDD4 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		04C1F4012E144C14005A12EA /* SVProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C1F4002E144C14005A12EA /* XCRemoteSwiftPackageReference "svprogresshud" */;
+			productName = SVProgressHUD;
+		};
+		04C1F4042E145271005A12EA /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C1F28D2E144751005A12EA /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
 		5809BEB32CAB81FD00D8132B /* HaishinKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */;
@@ -449,11 +495,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */;
 			productName = SRTHaishinKit;
-		};
-		586075812CACFF5300D19AB1 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 586075802CACFF5300D19AB1 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
 		};
 		586075862CAD005E00D19AB1 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -465,15 +506,15 @@
 			package = 586075852CAD005E00D19AB1 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImageMapKit;
 		};
-		5860758B2CAD00A600D19AB1 /* SVProgressHUD */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5860758A2CAD00A600D19AB1 /* XCRemoteSwiftPackageReference "SVProgressHUD" */;
-			productName = SVProgressHUD;
-		};
 		5860758E2CAD06C700D19AB1 /* FMDB */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */;
 			productName = FMDB;
+		};
+		9E5668DB2E3C72A1003FEDD4 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9E5668DA2E3C72A1003FEDD4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -42,7 +42,7 @@ class PhotoBrowserViewController: UIViewController, UICollectionViewDataSource {
         if urls.count == 0 {
             cell.image = self.image
         } else {
-            cell.imageURL = urls[indexPath.item]
+            cell.imageURL = self.urls[indexPath.item]
         }
         cell.photoDelegate = self
         return cell

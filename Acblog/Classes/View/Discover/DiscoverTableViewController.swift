@@ -26,19 +26,15 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     @objc func refresh() {
         NetworkTools.shared.search(status: "") { Result, Error in
-            DataSaver.set(data: Result)
-            Task { @MainActor in
-                self.refreshControl?.endRefreshing()
-                var dataList = [StatusViewModel]()
-                guard let Result = DataSaver.get() as? [[String:Any]] else{
-                    return
-                }
-                for i in Result{
-                    dataList.append(StatusViewModel(status: Status(dict: i)))
-                }
-                self.listFilterTeams = dataList
-                //SVProgressHUD.showInfo(withStatus: "没有博客")
+            self.refreshControl?.endRefreshing()
+            var dataList = [StatusViewModel]()
+            guard let Result = Result as? [[String:Any]] else{
+                return
             }
+            for i in Result{
+                dataList.append(StatusViewModel(status: Status(dict: i)))
+            }
+            self.listFilterTeams = dataList
         }
         self.tableView.reloadData()
     }
@@ -63,13 +59,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                 for i in Result as! [[String:Any]]{
                     dataList.append(StatusViewModel(status: Status(dict: i)))
                 }
-                DataSaver.set(data: dataList)
-                Task { @MainActor in
-                    guard let dataList = DataSaver.get() as? [StatusViewModel] else{
-                        return
-                    }
-                    self.listFilterTeams = dataList
-                }
+                self.listFilterTeams = dataList
             }
             //SVProgressHUD.showInfo(withStatus: "没有博客")
         }
@@ -199,14 +189,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             guard let like_list = list["like_list"] as? [[String:Any]] else {
                 return
             }
-            DataSaver.set(data: [list,like_list])
             Task { @MainActor in
-                guard let union = DataSaver.get() as? [Any] else {
-                    return
-                }
-                guard let list = union[0] as? [String:Any], let like_list = union[1] as? [[String:Any]] else {
-                    return
-                }
                 cell.bottomView.commentButton.setTitle(list["comment_count"] as? String, for: .normal)
                 cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
                 for s in like_list {

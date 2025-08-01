@@ -134,9 +134,8 @@ extension StatusCell: @preconcurrency FFLabelDelegate {
                     }
                     return
                 }
-                DataSaver.set(data: res)
                 Task { @MainActor in
-                    guard let res = DataSaver.get() as? [String:Any], let uid = res["uid"] as? String else {
+                    guard let uid = res["uid"] as? String else {
                         Task { @MainActor in
                             SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
                         }

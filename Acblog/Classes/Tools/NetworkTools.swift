@@ -23,10 +23,10 @@ class NetworkTools{
         case GET = "GET"
         case POST = "POST"
     }
-    typealias HMRequestCallBack = @Sendable (_ Result: Any?, _ Error: Error?) -> ()
+    typealias HMRequestCallBack = @Sendable @MainActor (_ Result: Any?, _ Error: Error?) -> ()
 }
 extension NetworkTools {
-    func request(_ method: HMRequestMethod, _ URLString: String, _ parameters: [String: Any]?, finished: @escaping HMRequestCallBack) {
+    @MainActor func request(_ method: HMRequestMethod, _ URLString: String, _ parameters: [String: Any]?, finished: @escaping HMRequestCallBack) {
         guard let parameters = parameters else {
             finished(nil, NSError(domain: "com.ACInc", code: 1, userInfo: ["error": "your parameters were nil"]))
             return
@@ -48,7 +48,7 @@ extension NetworkTools {
             request.httpBody = jsonData  // 设置HTTPBody
         }
         request.httpMethod = method.rawValue
-        let completion = { @Sendable (data: Data?, res: URLResponse?, error: (any Error)?)->Void in
+        let completion = { @Sendable @MainActor (data: Data?, res: URLResponse?, error: (any Error)?)->Void in
             if let any = try? JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments){
                 if let dict = any as? NSArray {
                     finished(dict,error)
@@ -60,10 +60,14 @@ extension NetworkTools {
             }
             finished(data,error)
         }
-        let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
+        let task = URLSession.shared.dataTask(with: request) { data, request, error in
+            Task{@MainActor in
+                completion(data,request,error)
+            }
+        }
         task.resume()
     }
-    func loadAccessToken(code: String, finished: @escaping HMRequestCallBack) {
+    @MainActor func loadAccessToken(code: String, finished: @escaping HMRequestCallBack) {
         let urlString = rootHost+"/api/accessToken.php"
         let params = ["code":code]
         request(.POST, urlString, params, finished: finished)
@@ -78,7 +82,7 @@ extension NetworkTools {
         let urlString = rootHost+"/api/getUser.php"
         request(.POST, urlString, params, finished: finished)
     }
-    func loadUserInfo(uid:Int, finished: @escaping HMRequestCallBack) {
+    @MainActor func loadUserInfo(uid:Int, finished: @escaping HMRequestCallBack) {
         let params = ["uid":uid]
         let urlString = rootHost+"/api/getUserUid.php"
         request(.POST, urlString, params, finished: finished)
@@ -99,7 +103,7 @@ extension NetworkTools {
         let urlString = rootHost+"/api/deleteTrend.php"
         tokenRequest(.GET, urlString, params as [String : Any], finished: finished)
     }
-    func search(status:String, finished: @escaping HMRequestCallBack) {
+    @MainActor func search(status:String, finished: @escaping HMRequestCallBack) {
         let params = ["status":status]
         let urlString = rootHost+"/api/search.php"
         request(.POST, urlString, params, finished: finished)
@@ -116,7 +120,7 @@ extension NetworkTools {
         }
         tokenRequest(.GET, urlString, params, finished: finished)
     }
-    func profile(uid: String,finished: @escaping HMRequestCallBack) {
+    @MainActor func profile(uid: String,finished: @escaping HMRequestCallBack) {
         let urlString = rootHost+"/api/profileBlog.php"
         let params = ["uid":uid]
         request(.GET, urlString, params, finished: finished)
@@ -130,13 +134,13 @@ extension NetworkTools {
         let urlString = rootHost+"/api/loadHotBlog.php"
         tokenRequest(.POST, urlString,nil, finished: finished)
     }
-    func loadLikeStatus(_ uid: String,finished: @escaping HMRequestCallBack) {
+    @MainActor func loadLikeStatus(_ uid: String,finished: @escaping HMRequestCallBack) {
         let urlString = rootHost+"/api/loadLikeBlog.php"
         var params = [String:Any]()
         params["uid"] = uid
         request(.POST, urlString, params, finished: finished)
     }
-    func loadCommentStatus(_ uid: String,finished: @escaping HMRequestCallBack) {
+    @MainActor func loadCommentStatus(_ uid: String,finished: @escaping HMRequestCallBack) {
         let urlString = rootHost+"/api/loadCommentBlog.php"
         var params = [String:Any]()
         params["uid"] = uid
@@ -296,7 +300,9 @@ extension NetworkTools {
         }
         let completion =
         { @Sendable (data: Data?, res: URLResponse?, error: (any Error)?)->Void in
-            finished(data,error)
+            Task { @MainActor in
+                finished(data,error)
+            }
         }
         var request = URLRequest(url: url)
         var multipartData = Data()
@@ -343,7 +349,9 @@ extension NetworkTools {
         }
         let completion =
         { @Sendable (data: Data?, res: URLResponse?, error: (any Error)?)->Void in
-            finished(data,error)
+            Task { @MainActor in
+                finished(data,error)
+            }
         }
         var request = URLRequest(url: url)
         var multipartData = Data()

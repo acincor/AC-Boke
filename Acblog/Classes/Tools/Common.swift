@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Kingfisher
 let WBSwitchRootViewControllerNotification = "WBSwitchRootViewControllerNotification"
 let WBStatusSelectedPhotoNotification = "WBStatusSelectedPhotoNotification"
 let WBStatusSelectedPhotoIndexPathKey = "WBStatusSelectedPhotoIndexPathKey"
@@ -14,3 +15,5 @@ var rootHost:String {
     return "https://mhcincapi.top"
 }
 @MainActor var listViewModel = TypeNeedCacheListViewModel()
+let queue = DispatchQueue(label: "top.mhcinc.notificationQueue", attributes: .concurrent)
+let imageCache = ImageCache(name: "com.ACInc.imageCache")

@@ -119,14 +119,10 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
             guard let cell = n.object as? PhotoBrowserPresentDelegate else {
                 return
             }
-            DataSaver.set(data: cell)
             Task { @MainActor in
                 let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
                 vc.modalPresentationStyle = .custom
                 vc.transitioningDelegate = self?.photoBrowserAnimator
-                guard let cell = DataSaver.get() as? PhotoBrowserPresentDelegate else {
-                    return
-                }
                 self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
                 self?.present(vc, animated: true,completion: nil)
             }
@@ -171,11 +167,7 @@ extension TypeStatusTableViewController {
             guard let list = res as? [String:Any] else {
                 return
             }
-            DataSaver.set(data: list)
             Task { @MainActor in
-                guard let list = DataSaver.get() as? [String:Any] else {
-                    return
-                }
                 cell.bottomView.commentButton.setTitle(list["comment_count"] as? String, for: .normal)
                 cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
                 guard let like_list = list["like_list"] as? [[String:Any]] else {

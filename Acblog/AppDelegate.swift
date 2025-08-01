@@ -8,34 +8,35 @@
 import UIKit
 import UserNotifications
 import SVProgressHUD
+import SDWebImage
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = .systemBackground
         SVProgressHUD.setDefaultMaskType(.clear)
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if (!granted) {
-            }
-        }
-        UIApplication.shared.registerForRemoteNotifications()
         MySearchTextField?.searchBar.resignFirstResponder()
-        
         window?.rootViewController = defaultRootViewController
-        window?.makeKeyAndVisible()
         NotificationCenter.default.addObserver(
-            forName: .init(rawValue: WBSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
-            object: nil,                           // 发送通知的对象，如果为nil，监听任何对象
-            queue: nil)                           // nil，主线程
-        { [weak self] (notification) -> Void in // weak self，
-            DataSaver.set(data: notification.object)
-            Task { @MainActor in
-                let vc = DataSaver.get() != nil ? WelcomeViewController() : MainViewController()
-                self?.window?.rootViewController = vc
-            }
+                    forName: .init(rawValue: WBSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
+                    object: nil,                           // 发送通知的对象，如果为nil，监听任何对象
+                    queue: nil)                           // nil，主线程
+                { [weak self] (notification) -> Void in // weak self，
+                    queue.async {
+                        Task {@MainActor in
+                            let vc = notification.object != nil ? WelcomeViewController() : MainViewController()
+                            self?.window?.rootViewController = vc
+                        }
+                    }
+                }
+        window?.makeKeyAndVisible()
+        NSLog("true")
+        let shared = NotificationRegister()
+        Task {
+            await shared.register(application)
         }
         NotificationCenter.default.addObserver(forName: .init("WBSwitchRootViewControllerLogOutNotification"), object: nil, queue: nil) { (notification) in
             let object = notification.object as? String
@@ -86,10 +87,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Parsing userinfo:
         if let info = userInfo["aps"] as? Dictionary<String, Any>
         {
-            print(info["alert"] as! String)
+            NSLog(info["alert"] as! String)
         }
     }
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        NSLog(error.localizedDescription)
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     }
@@ -101,7 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func applicationDidEnterBackground(_ application: UIApplication) {
         StatusDAL.clearDataCache(type: nil)
-        
+        //SDImageCache.shared.clearMemory()
         if UserAccountViewModel.sharedUserAccount.userLogon {
             let content = UNMutableNotificationContent()
             content.title = "AC博客"
@@ -116,22 +118,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     return
                 }
                 if((Result as! [String:Any])["user"] != nil || (Result as! [String:Any])["status"] != nil) {
-                    DataSaver.set(data: Result)
-                    guard let Result = DataSaver.get() as? [String:Any] else {
+                    guard let Result = Result as? [String:Any] else {
                         return
                     }
                     let status = Status(dict: Result)
-                    DataSaver.set(data: status)
+                    content.body = status.status ?? ""
+                    content.title = status.user!
+                    content.subtitle = status.create_at!
+                    let request = UNNotificationRequest(identifier: "com.ACInc.ACBoke", content: content, trigger: trigger)
+                    UNUserNotificationCenter.current().add(request)
                 }
             }
-            guard let status = DataSaver.get() as? Status else {
-                return
-            }
-            content.body = status.status ?? ""
-            content.title = status.user!
-            content.subtitle = status.create_at!
-            let request = UNNotificationRequest(identifier: "com.ACInc.ACBlog", content: content, trigger: trigger)
-            UNUserNotificationCenter.current().add(request)
         }
     }
 }

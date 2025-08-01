@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SDWebImage
+import Kingfisher
 
 let StatusPictureViewItemMargin: CGFloat = 8
 let StatusPictureCellId = "StatusPictureCellId"
@@ -51,8 +51,10 @@ extension StatusPictureView {
             if let i = viewModel?.status.image {
                 size = UIImage(contentsOfFile: i)?.size ?? CGSizeZero
             } else if let key = viewModel?.thumbnailUrls?.first?.absoluteString{
-                let image = SDImageCache.shared.imageFromDiskCache(forKey: key)
-                size = image?.size ?? CGSizeZero
+                Task {
+                    let image = try? await imageCache.retrieveImageInDiskCache(forKey: key)
+                    size = image?.size ?? CGSizeZero
+                }
             }
             size.width = size.width < 40 ? 40 : size.width
             if size.width > 300 {
@@ -91,7 +93,7 @@ extension StatusPictureView: UICollectionViewDataSource {
 class StatusPictureViewCell: UICollectionViewCell {
     var imageURL: URL? {
         didSet {
-            iconView.sd_setImage(with: imageURL, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+            iconView.kf.setImage(with: imageURL, placeholder: nil, options: [.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))), .fromMemoryCacheOrRefresh, .targetCache(imageCache)])
             iconView.clipsToBounds = true
             iconView.layer.cornerRadius = 20
             let ext = ((imageURL?.absoluteString ?? "") as NSString).pathExtension.lowercased()
@@ -130,7 +132,7 @@ class StatusPictureViewCell: UICollectionViewCell {
 }
 extension StatusPictureView:UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let userInfo = [WBStatusSelectedPhotoIndexPathKey: indexPath, WBStatusSelectedPhotoURLsKey: viewModel!.thumbnailUrls! == [] ? viewModel!.status.image! : viewModel!.thumbnailUrls!] as [String : Any]
+        let userInfo: [String: Any] = [WBStatusSelectedPhotoIndexPathKey: indexPath, WBStatusSelectedPhotoURLsKey: viewModel!.thumbnailUrls!, "optional": viewModel!.status.image ?? ""]
         NotificationCenter.default.post(name: Notification.Name(WBStatusSelectedPhotoNotification), object: self, userInfo: userInfo)
         //photoBrowserPresentFromRect(indexPath: indexPath)
         _ = photoBrowserPresentToRect(indexPath: indexPath)
@@ -174,7 +176,9 @@ extension StatusPictureView: @preconcurrency PhotoBrowserPresentDelegate{
             guard let key = viewModel?.thumbnailUrls?[indexPath.item].absoluteString else {
                 return CGRectZero
             }
-            temp = SDImageCache.shared.imageFromDiskCache(forKey: key)
+            Task {
+                temp = try? await imageCache.retrieveImageInDiskCache(forKey: key)
+            }
         }
         guard let image = temp else {
             return CGRectZero

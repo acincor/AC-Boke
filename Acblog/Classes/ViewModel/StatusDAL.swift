@@ -29,7 +29,7 @@ class StatusDAL {
         }
     }     
     // 检查随机生成的ID是否唯一
-    @MainActor class func loadStatus(since_id: Int, max_id: Int, type: type, to_uid: Int?, finished: @escaping @Sendable (_ array: [[String:Any]]?) -> ()) {
+    @MainActor class func loadStatus(since_id: Int, max_id: Int, type: type, to_uid: Int?, finished: @escaping @Sendable @MainActor (_ array: [[String:Any]]?) -> ()) {
         let array = StatusDAL.checkCacheData(since_id: since_id, max_id: max_id,to_uid: to_uid, type: type)
         if type == .msg {
             finished(array!)
@@ -48,14 +48,7 @@ class StatusDAL {
                 finished(nil)
                 return
             }
-            
-            DataSaver.set(data: array)
-            DispatchQueue.main.async {
-                guard let array = DataSaver.get() as? [[String:Any]] else {
-                    return
-                }
-                StatusDAL.saveCache(array: array, type: type)
-            }
+            StatusDAL.saveCache(array: array, type: type)
             finished(array)
         }
     }

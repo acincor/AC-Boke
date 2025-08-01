@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import SDWebImage
+import Kingfisher
 import SVProgressHUD
 protocol PhotoBrowserCellDelegate: NSObjectProtocol {
     func photoBrowserCellDidTapImage()
@@ -72,30 +72,26 @@ class PhotoBrowserCell: UICollectionViewCell {
     lazy var imageView: UIImageView = UIImageView()
     var imageURL: URL? {
         didSet {
-            guard let url = imageURL else {
-                return
-            }
-            reset()
-            let placeholderImage = SDImageCache.shared.imageFromDiskCache(forKey: url.absoluteString)
-            set(placeholderImage)
-            let urlString = url.absoluteString.replacingOccurrences(of: "/thumbnail", with: "")
-            if let updatedURL = URL(string: urlString) {
-                imageView.sd_setImage(with: updatedURL,placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.continueInBackground]) { receivedSize, expectedSize, url in
-                    DispatchQueue.main.async(execute: { () -> Void in
-                        self.placeHolder.progress = CGFloat(receivedSize) / CGFloat(expectedSize)
-                        
-                    })
-                } completed: { image, e, _, _ in
-                    // 判断图像下载是否成功
-                    if image == nil {
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
-                        return
+            Task {
+                guard let url = self.imageURL else {
+                    return
+                }
+                self.reset()
+                if let placeholderImage = try? await imageCache.retrieveImageInDiskCache(forKey: url.absoluteString){
+                    self.set(placeholderImage)
+                }
+                let urlString = url.absoluteString.replacingOccurrences(of: "/thumbnail", with: "")
+                if let updatedURL = URL(string: urlString) {
+                    self.imageView.kf.setImage(with: updatedURL, placeholder: nil, options: [.backgroundDecode, .retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))), .fromMemoryCacheOrRefresh,.targetCache(imageCache),.diskCacheExpiration(.days(7))]) { receivedSize, totalSize in
+                        self.placeHolder.update(progress: CGFloat(receivedSize) / CGFloat(totalSize))
+                    } completionHandler: { result in
+                        guard let r = try? result.get() else {
+                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
+                            return
+                        }
+                        self.placeHolder.isHidden = true
+                        self.setPosition(r.image)
                     }
-                    // 隐藏占位图像
-                    self.placeHolder.isHidden = true
-                    
-                    // 设置图像视图位置
-                    self.setPosition(image!)
                 }
             }
         }

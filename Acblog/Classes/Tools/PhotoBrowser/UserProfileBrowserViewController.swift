@@ -8,7 +8,7 @@
 import Foundation
 import Photos
 import UIKit
-import SDWebImage
+import Kingfisher
 import SVProgressHUD
 class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
 #if os(visionOS)
@@ -20,38 +20,28 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         // 1. 恢复 scrollView
-        resetScrollView()
-        
-        // 2. url 缩略图的地址
-        // 从磁盘加载缩略图的图像
-        let placeholderImage = SDImageCache.shared.imageFromDiskCache(forKey: url.absoluteString)
-        
-        setPlaceHolder(image: placeholderImage)
-        
-        // 3. 异步加载大图
-        imageView.sd_setImage(with: url,
-                              placeholderImage: nil,
-                              options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached],
-                              progress: { (current, total, _) -> Void in
+        Task {
+            resetScrollView()
             
-            // 更新进度
-            DispatchQueue.main.async {
-                self.placeHolder.progress = CGFloat(current) / CGFloat(total)
+            // 2. url 缩略图的地址
+            // 从磁盘加载缩略图的图像
+            if let placeholderImage = try? await imageCache.retrieveImageInDiskCache(forKey: url.absoluteString) {
+                setPlaceHolder(image: placeholderImage)
             }
-            
-        }) { (image, _, _, _) -> Void in
-            
-            // 判断图像下载是否成功
-            if image == nil {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
-                return
+            // 3. 异步加载大图
+            imageView.kf.setImage(with: url,
+                                  placeholder: nil,
+                                  options: [.backgroundDecode, .retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))), .fromMemoryCacheOrRefresh, .targetCache(imageCache),.diskCacheExpiration(.days(7))],
+                                  progressBlock: { (current, total) -> Void in
+                self.placeHolder.update(progress: CGFloat(current) / CGFloat(total))
+            }) { result in
+                guard let r = try? result.get() else {
+                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
+                    return
+                }
+                self.placeHolder.isHidden = true
+                self.setPositon(image: r.image)
             }
-            
-            // 隐藏占位图像
-            self.placeHolder.isHidden = true
-            
-            // 设置图像视图位置
-            self.setPositon(image: image!)
         }
     }
     @objc func send() {
@@ -65,7 +55,7 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
                 }
             }
         }
-        SDImageCache.shared.removeImageFromDisk(forKey: imageView.sd_imageURL?.absoluteString)
+        imageCache.removeImage(forKey: self.url.absoluteString)
         portraitButton.removeFromSuperview()
         portraitButton = UIButton(title: NSLocalizedString("更换头像", comment: ""), fontSize: 14, color: UIColor.white, imageName: nil, backColor: .systemFill)
         portraitButton.addTarget(self, action: #selector(self.sendPortrait), for: .touchUpInside)
@@ -194,9 +184,9 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
     private func setupUI() {
         view.backgroundColor = .black
         view.addSubview(saveButton)
-        imageView.sd_setImage(with: url,
-                              placeholderImage: nil,
-                              options: [SDWebImageOptions.retryFailed, SDWebImageOptions.refreshCached])
+        imageView.kf.setImage(with: url,
+                              placeholder: nil,
+                              options: [.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))), .fromMemoryCacheOrRefresh, .targetCache(imageCache)])
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         scrollView.addSubview(placeHolder)
