@@ -39,18 +39,22 @@ Installation
 **优化了用户体验，我们对此很开心，过去我们将delete和recall方法分离导致绑定到cell上会乱套，现在合并可以正常输出cellID，更改了部分资源暂待更新**
 
 ```
-actor DataSaver {
-    static var data: Any?
-    static func get() -> Any? {
-        return data
-    }
-    static func set(data: Any?) {
-        self.data = data
+actor NotificationRegister {
+    func register(_ application: UIApplication) {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
+            guard self != nil else { return }  // 避免循环引用
+            if granted {
+                DispatchQueue.main.async {
+                    application.registerForRemoteNotifications()
+                }
+            }
+        }
     }
 }
 ```
 
-**在闭包内调用Task时之前便将闭包外需要得到的数据拷贝到DataSaver中，在Task内再用get方法获得数据**
+**修复了通知权限警示结束后就crash的问题，改成了Kingfisher作为依赖库来修复SDWebImage内在的进度更新问题**
 
 #*OLD VERSION*
 
