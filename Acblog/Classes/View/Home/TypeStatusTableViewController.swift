@@ -64,10 +64,10 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         //StatusDAL.clearDataCache()//删除缓存
-        typeStatus.loadStatus(uid) { isSuccessed in
+        typeStatus.loadStatus(uid) { isSuccessful in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
-                if !isSuccessed {
+                if !isSuccessful {
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
                     return
                 }

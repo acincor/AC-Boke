@@ -33,7 +33,7 @@ class UserAccountViewModel: @unchecked Sendable {
     }
 }
 extension UserAccountViewModel {
-    @MainActor func loadAccessToken(code: String, finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+    @MainActor func loadAccessToken(code: String, finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         NetworkTools.shared.loadAccessToken(code: code) { (Result, Error) -> () in
             if Error != nil {
                 finished(false)
@@ -45,7 +45,7 @@ extension UserAccountViewModel {
             }
         }
     }
-    @MainActor func loadUserInfo(account: UserAccount, finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+    @MainActor func loadUserInfo(account: UserAccount, finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         NetworkTools.shared.loadUserInfo { (Result, Error) -> () in
             if Error != nil {
                 finished(false)

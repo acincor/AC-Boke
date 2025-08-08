@@ -268,10 +268,10 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
             self.refreshControl?.beginRefreshing()
         }
         //StatusDAL.clearDataCache()//删除缓存
-        listViewModel.loadStatus(isPullup: self.refreshView.pullupView.isAnimating) { (isSuccessed) in
+        listViewModel.loadStatus(isPullup: self.refreshView.pullupView.isAnimating) { (isSuccessful) in
             Task { @MainActor in
                 self.refreshView.pullupView.isAnimating ? self.refreshView.pullupView.stopAnimating() : self.refreshControl?.endRefreshing()
-                if !isSuccessed {
+                if !isSuccessful {
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试",comment: ""))
                     return
                 }

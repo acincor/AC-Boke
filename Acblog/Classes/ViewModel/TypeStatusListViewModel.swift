@@ -21,7 +21,7 @@ class TypeStatusListViewModel: @unchecked Sendable {
     init(clas: Clas) {
         self.clas = clas
     }
-    @MainActor func loadStatus(_ uid: String,finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+    @MainActor func loadStatus(_ uid: String,finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         let completion: NetworkTools.HMRequestCallBack = {(Result: Any, error: Error?) in
             guard let array = Result as? [[String:Any]] else {
                 finished(false)

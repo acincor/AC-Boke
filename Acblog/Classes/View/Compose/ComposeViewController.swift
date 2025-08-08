@@ -114,7 +114,7 @@ class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
         textView.becomeFirstResponder()
     }
     @objc private func selectUser() {
-        userCollectionView.friendListViewModel.load { isSuccessed in
+        userCollectionView.friendListViewModel.load { isSuccessful in
             Task { @MainActor in
                 self.userCollectionView.collectionView.reloadData()
             }

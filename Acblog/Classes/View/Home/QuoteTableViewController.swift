@@ -52,10 +52,10 @@ class QuoteTableViewController: VisitorTableViewController {
     }
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        commentlistViewModel.loadStatus(id: vm.status.id, comment_id: vm.status.comment_id) { (isSuccessed) in
+        commentlistViewModel.loadStatus(id: vm.status.id, comment_id: vm.status.comment_id) { (isSuccessful) in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
-                if !isSuccessed {
+                if !isSuccessful {
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
                     return
                 }

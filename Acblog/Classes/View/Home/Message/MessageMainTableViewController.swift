@@ -13,10 +13,10 @@ class MessageTableViewController: VisitorTableViewController{
     var friendListViewModel = ElseListViewModel(clas: .friend)
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        friendListViewModel.load { (isSuccessed) in
+        friendListViewModel.load { (isSuccessful) in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
-                if !isSuccessed {
+                if !isSuccessful {
                     
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
                     return

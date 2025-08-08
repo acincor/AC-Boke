@@ -14,7 +14,7 @@ class ElseListViewModel: @unchecked Sendable {
     init(clas: Clas) {
         self.clas = clas
     }
-    @MainActor func load(finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+    @MainActor func load(finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         let completion: NetworkTools.HMRequestCallBack = { (array: Any?,error: Error?) -> () in
             guard let array = array else {
                 finished(false)

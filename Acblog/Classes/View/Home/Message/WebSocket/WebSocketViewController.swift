@@ -216,10 +216,10 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
     
     func loadData() {
         Task { @MainActor in
-            self.statusListViewModel.loadStatus(isPullup:self.refreshView.pullupView.isAnimating,to_uid: self.to_uid) { isSuccessed  in
+            self.statusListViewModel.loadStatus(isPullup:self.refreshView.pullupView.isAnimating,to_uid: self.to_uid) { isSuccessful  in
                 Task { @MainActor in
                     self.refreshView.pullupView.stopAnimating()
-                    if !isSuccessed {
+                    if !isSuccessful {
                         return
                     }
                     self.tableView.reloadData()

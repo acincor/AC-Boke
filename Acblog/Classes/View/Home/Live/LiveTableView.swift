@@ -25,10 +25,10 @@ class LiveTableView: UICollectionView{
 #endif
     @objc func loadData() {
         refreshControl?.beginRefreshing()
-        liveListViewModel.load { (isSuccessed) in
+        liveListViewModel.load { (isSuccessful) in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
-                if !isSuccessed {
+                if !isSuccessful {
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
                     return
                 }

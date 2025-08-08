@@ -12,7 +12,7 @@ import Kingfisher
 class TypeNeedCacheListViewModel: @unchecked Sendable {
     lazy var statusList = [StatusViewModel]()
     var pulldownCount: Int?
-    @MainActor func loadStatus(isPullup: Bool? = nil, id: Int? = nil, comment_id: Int? = nil,to_uid: Int? = nil,finished: @escaping @Sendable @MainActor (_ isSuccessed: Bool) -> ()) {
+    @MainActor func loadStatus(isPullup: Bool? = nil, id: Int? = nil, comment_id: Int? = nil,to_uid: Int? = nil,finished: @escaping @Sendable @MainActor (_ isSuccessful: Bool) -> ()) {
         if let isPullup = isPullup {
             let since_id = isPullup ? 0 : (statusList.first?.status.id ?? 0)
             let max_id = isPullup ? (statusList.last?.status.id ?? 0) : 0
@@ -73,7 +73,7 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
             }
         }
     }
-    @MainActor private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping @Sendable @MainActor (_ isSuccessed: Bool) -> ()) {
+    @MainActor private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping @Sendable @MainActor (_ isSuccessful: Bool) -> ()) {
         let group = DispatchGroup()
         //var dataLength = 0
         for vm in dataList {

@@ -86,8 +86,8 @@ extension OAuthViewController {
             return .allow
         }
         let code = String(query["code=".endIndex...])
-        UserAccountViewModel.sharedUserAccount.loadAccessToken(code: code) { (isSuccessed) -> () in
-            if !isSuccessed {
+        UserAccountViewModel.sharedUserAccount.loadAccessToken(code: code) { (isSuccessful) -> () in
+            if !isSuccessful {
                 return
             }
             Task { @MainActor in

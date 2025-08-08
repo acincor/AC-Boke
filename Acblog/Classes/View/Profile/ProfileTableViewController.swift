@@ -291,9 +291,9 @@ class ProfileTableViewController: VisitorTableViewController {
                     return
                 }
                 Task { @MainActor in
-                    UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) { [self]isSuccessed in
+                    UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) { [self]isSuccessful in
                         Task { @MainActor in
-                            if isSuccessed {
+                            if isSuccessful {
                                 SVProgressHUD.showInfo(withStatus: NSLocalizedString("改名成功", comment: ""))
                                 renameButton.removeFromSuperview()
                                 renameButton = UIButton(title: NSLocalizedString("编辑", comment: ""), color: .orange, backImageName: nil)
