@@ -38,4 +38,16 @@ extension UIImage {
     func gifData() -> Data? {
         return self.gifData(duration: 0.0, repeat: 0)
     }
+    func data() -> Data? {
+        if let data = self.gifData() {
+            return data
+        }
+        if let data = self.pngData() {
+            return data
+        }
+        if let data = self.jpegData(compressionQuality: 1.0) {
+            return data
+        }
+        return nil
+    }
 }

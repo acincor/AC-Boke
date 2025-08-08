@@ -15,39 +15,26 @@ class ElseListViewModel: @unchecked Sendable {
         self.clas = clas
     }
     @MainActor func load(finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+        let completion: NetworkTools.HMRequestCallBack = { (array: Any?,error: Error?) -> () in
+            guard let array = array else {
+                finished(false)
+                return
+            }
+            guard let arr = array as? [[String:Any]] else {
+                return
+            }
+            var dataList = [UserViewModel]()
+            for n in 0..<arr.count {
+                dataList.append(UserViewModel(user: Account(dict: arr[n])))
+            }
+            
+            self.list = dataList
+            finished(true)
+        }
         if clas == .friend {
-            NetworkTools.shared.loadFriend { (array,error) -> () in
-                guard let array = array else {
-                    finished(false)
-                    return
-                }
-                guard let arr = array as? [[String:Any]] else {
-                    return
-                }
-                var dataList = [UserViewModel]()
-                for n in 0..<arr.count {
-                    dataList.append(UserViewModel(user: Account(dict: arr[n])))
-                }
-                self.list = dataList
-                finished(true)
-            }
+            NetworkTools.shared.loadFriend(finished: completion)
         } else if clas == Clas.live{
-            NetworkTools.shared.loadLive { (array,error) -> () in
-                guard let array = array else {
-                    finished(false)
-                    return
-                }
-                guard let arr = array as? [[String:Any]] else {
-                    return
-                }
-                var dataList = [UserViewModel]()
-                for n in 0..<arr.count {
-                    dataList.append(UserViewModel(user: Account(dict: arr[n])))
-                }
-                
-                self.list = dataList
-                finished(true)
-            }
+            NetworkTools.shared.loadLive(finished: completion)
         }
     }
 }

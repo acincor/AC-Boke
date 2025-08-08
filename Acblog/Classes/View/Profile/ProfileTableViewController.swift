@@ -87,9 +87,9 @@ class ProfileTableViewController: VisitorTableViewController {
         }
         view.addSubview(iconView)
         if account != nil {
-            iconView.sd_setImage(with: account?.userProfileUrl)
+            iconView.kf.setImage(with: account?.userProfileUrl)
         }
-        iconView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl)
+        iconView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action2))
         iconView.addGestureRecognizer(g)
         iconView.snp.makeConstraints { make in
@@ -136,9 +136,9 @@ class ProfileTableViewController: VisitorTableViewController {
         refreshControl?.beginRefreshing()
         iconView.removeFromSuperview()
         if account != nil {
-            iconView.sd_setImage(with: account?.userProfileUrl)
+            iconView.kf.setImage(with: account?.userProfileUrl)
         }
-        iconView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl)
+        iconView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl)
         iconView.layer.cornerRadius = 5
         iconView.clipsToBounds = true
         let g = UITapGestureRecognizer(target: self, action: #selector(self.action2))

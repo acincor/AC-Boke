@@ -7,7 +7,7 @@
 
 import UIKit
 import SVProgressHUD
-import SDWebImage
+import Kingfisher
 
 class TypeNeedCacheListViewModel: @unchecked Sendable {
     lazy var statusList = [StatusViewModel]()
@@ -16,89 +16,60 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
         if let isPullup = isPullup {
             let since_id = isPullup ? 0 : (statusList.first?.status.id ?? 0)
             let max_id = isPullup ? (statusList.last?.status.id ?? 0) : 0
+            let completion = { @MainActor @Sendable (array: [[String:Any]]?) in
+                guard let array = array else {
+                    finished(false)
+                    return
+                }
+                var dataList = [StatusViewModel]()
+                for dict in array {
+                    dataList.append(StatusViewModel(status: Status(dict: dict)))
+                }
+                self.pulldownCount = (since_id > 0) ? dataList.count : nil
+                if max_id > 0 {
+                    self.statusList += dataList
+                } else {
+                    self.statusList = dataList + self.statusList
+                }
+                self.cacheSingleImage(dataList: dataList, finished: finished)
+            }
             if to_uid == nil {
-                StatusDAL.loadStatus(since_id: since_id, max_id: max_id, type: .status, to_uid: nil) { (array) -> () in
-                    guard let array = array else {
-                        finished(false)
-                        return
-                    }
-                    var dataList = [StatusViewModel]()
-                    for dict in array {
-                        dataList.append(StatusViewModel(status: Status(dict: dict)))
-                    }
-                    self.pulldownCount = (since_id > 0) ? dataList.count : nil
-                    if max_id > 0 {
-                        self.statusList += dataList
-                    } else {
-                        self.statusList = dataList + self.statusList
-                    }
-                    self.cacheSingleImage(dataList: dataList, finished: finished)
-                }
+                StatusDAL.loadStatus(since_id: since_id, max_id: max_id, type: .status, to_uid: nil, finished: completion)
             } else {
-                StatusDAL.loadStatus(since_id: since_id, max_id: max_id, type: .msg, to_uid: to_uid) { (array) -> () in
-                    guard let array = array else {
-                        finished(false)
-                        return
-                    }
-                    var dataList = [StatusViewModel]()
-                    for dict in array {
-                        dataList.append(StatusViewModel(status: Status(dict: dict)))
-                    }
-                    if max_id > 0 {
-                        self.statusList += dataList
-                    } else {
-                        self.statusList = dataList + self.statusList
-                    }
-                    self.cacheSingleImage(dataList: dataList, finished: finished)
-                }
+                StatusDAL.loadStatus(since_id: since_id, max_id: max_id, type: .msg, to_uid: to_uid, finished: completion)
             }
         } else if let id = id {
-            if let comment_id = comment_id {
-                NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
-                    guard let status = Result as? [String:Any] else {
-                        Task { @MainActor in
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("博客加载错误", comment: ""))
-                        }
-                        return
+            NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
+                guard let status = Result as? [String:Any] else {
+                    Task { @MainActor in
+                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("博客加载错误", comment: ""))
                     }
-                    guard let comment_list = status["comment_list"] as? [[String:Any]] else {
-                        Task { @MainActor in
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("评论加载错误", comment: ""))
-                        }
-                        return
+                    return
+                }
+                guard let comment_list = status["comment_list"] as? [[String:Any]] else {
+                    Task { @MainActor in
+                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("评论加载错误", comment: ""))
                     }
-                    var dataList = [StatusViewModel]()
+                    return
+                }
+                var dataList = [StatusViewModel]()
+                if let comment_id = comment_id {
                     for dict in comment_list {
                         if dict["comment_id"] as! String == String(comment_id) {
-                            for dictionary in dict["comment_list"] as! [[String:Any]] {
+                            for dictionary in dict["comment_list"] as? [[String:Any]] ?? [] {
                                 dataList.append(StatusViewModel(status: Status(dict: dictionary)))
                             }
                             self.statusList = dataList
                             self.cacheSingleImage(dataList: dataList, finished: finished)
+                            return
                         }
                     }
                 }
-            } else {
-                NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
-                    guard let status = Result as? [String:Any] else {
-                        Task { @MainActor in
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("博客加载错误", comment: ""))
-                        }
-                        return
-                    }
-                    guard let comment_list = status["comment_list"] as? [[String:Any]] else {
-                        Task { @MainActor in
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("评论加载错误", comment: ""))
-                        }
-                        return
-                    }
-                    var dataList = [StatusViewModel]()
-                    for dict in comment_list {
-                        dataList.append(StatusViewModel(status: Status(dict: dict)))
-                    }
-                    self.statusList = dataList
-                    self.cacheSingleImage(dataList: dataList, finished: finished)
+                for dict in comment_list {
+                    dataList.append(StatusViewModel(status: Status(dict: dict)))
                 }
+                self.statusList = dataList
+                self.cacheSingleImage(dataList: dataList, finished: finished)
             }
         }
     }
@@ -124,11 +95,12 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                 }
             } else {
                 let url = vm.thumbnailUrls![0]
-                SDWebImageManager.shared.loadImage(with: url, options:[SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached],progress: nil) {
-                    (image, data, error, type, bool, url) in
-                    if data != nil {
-                        //dataLength = dataLength + data.count
+                ImageDownloader.default.downloadImage(with: url, options:[.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))),.fromMemoryCacheOrRefresh],progressBlock: nil) {
+                    result in
+                    guard (try? result.get()) != nil else {
+                        return
                     }
+                     //dataLength = dataLength + data.count
                 }
             }
             group.leave()

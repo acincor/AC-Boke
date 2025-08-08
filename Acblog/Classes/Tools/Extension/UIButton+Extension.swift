@@ -40,3 +40,28 @@ extension UIButton {
         sizeToFit()
     }
 }
+extension UIButton {
+    struct AssociatedKey {
+        @MainActor static var vm: StatusViewModel?
+    }
+    func setAssociated<T>(value: T, associatedKey: UnsafeRawPointer, policy: objc_AssociationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC) -> Void {
+        objc_setAssociatedObject(self, associatedKey, value, policy)
+    }
+    
+    func getAssociated<T>(associatedKey: UnsafeRawPointer) -> T? {
+        let value = objc_getAssociatedObject(self, associatedKey) as? T
+        return value;
+    }
+    var vm: StatusViewModel? {
+        get {
+            withUnsafePointer(to: &AssociatedKey.vm) { pointer in
+                getAssociated(associatedKey: pointer)
+            }
+        }
+        set {
+            withUnsafePointer(to: &AssociatedKey.vm) { pointer in
+                setAssociated(value: newValue, associatedKey: pointer)
+            }
+        }
+    }
+}

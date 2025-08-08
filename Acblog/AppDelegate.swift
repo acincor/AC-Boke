@@ -8,7 +8,7 @@
 import UIKit
 import UserNotifications
 import SVProgressHUD
-import SDWebImage
+import Kingfisher
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -25,15 +25,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     object: nil,                           // 发送通知的对象，如果为nil，监听任何对象
                     queue: nil)                           // nil，主线程
                 { [weak self] (notification) -> Void in // weak self，
-                    queue.async {
-                        Task {@MainActor in
-                            let vc = notification.object != nil ? WelcomeViewController() : MainViewController()
-                            self?.window?.rootViewController = vc
-                        }
+                    DispatchQueue.main.async {
+                        self?.window?.rootViewController = MainViewController()
+                    }
+                }
+        NotificationCenter.default.addObserver(
+                    forName: .init(rawValue: WBSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
+                    object: "welcome",                           // 发送通知的对象，如果为nil，监听任何对象
+                    queue: nil)                           // nil，主线程
+                { [weak self] (notification) -> Void in // weak self，
+                    DispatchQueue.main.async {
+                        self?.window?.rootViewController = WelcomeViewController()
                     }
                 }
         window?.makeKeyAndVisible()
-        NSLog("true")
         let shared = NotificationRegister()
         Task {
             await shared.register(application)

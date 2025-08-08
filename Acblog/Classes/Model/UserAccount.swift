@@ -9,7 +9,7 @@ import UIKit
 import SVProgressHUD
 
 /// 用户账户模型
-class UserAccount: NSObject,NSCoding,NSSecureCoding, @unchecked Sendable {
+class UserAccount: NSObject,NSCoding,NSSecureCoding,@unchecked Sendable {
     
     static var supportsSecureCoding: Bool {
         return true
@@ -52,7 +52,7 @@ class UserAccount: NSObject,NSCoding,NSSecureCoding, @unchecked Sendable {
     ///
     /// - returns: 当前对象
     required init?(coder: NSCoder) {
-        access_token = coder.decodeObject(forKey: "access_token") as?String
+        access_token = coder.decodeObject(forKey: "access_token") as? String
         uid = coder.decodeObject(forKey: "uid") as? String
         user = coder.decodeObject(forKey: "user") as? String
         portrait = coder.decodeObject(forKey: "portrait") as? String

@@ -22,49 +22,25 @@ class TypeStatusListViewModel: @unchecked Sendable {
         self.clas = clas
     }
     @MainActor func loadStatus(_ uid: String,finished: @escaping @Sendable (_ isSuccessed: Bool) -> ()) {
+        let completion: NetworkTools.HMRequestCallBack = {(Result: Any, error: Error?) in
+            guard let array = Result as? [[String:Any]] else {
+                finished(false)
+                return
+            }
+            var dataList = [StatusViewModel]()
+            for n in 0..<array.count {
+                dataList.append(StatusViewModel(status: Status(dict: array[n])))
+            }
+            self.pulldownCount = self.statusList.count == 0 ? dataList.count : (dataList.count > self.statusList.count ? dataList.count - self.statusList.count: nil)
+            self.statusList = dataList
+            finished(true)
+        }
         if clas == Clas.blog {
-            NetworkTools.shared.profile(uid: uid) { (Result,Error) in
-                guard let array = Result as? [[String:Any]] else {
-                    finished(false)
-                    return
-                }
-                var dataList = [StatusViewModel]()
-                for n in 0..<array.count {
-                    dataList.append(StatusViewModel(status: Status(dict: array[n])))
-                }
-                self.pulldownCount = self.statusList.count == 0 ? dataList.count : (dataList.count > self.statusList.count ? dataList.count - self.statusList.count: nil)
-                self.statusList = dataList
-                finished(true)
-            }
+            NetworkTools.shared.profile(uid: uid, finished: completion)
         } else if clas == Clas.like {
-            NetworkTools.shared.loadLikeStatus(uid) { Result, Error in
-                guard let array = Result as? [[String:Any]] else {
-                    finished(false)
-                    return
-                }
-                var dataList = [StatusViewModel]()
-                for n in 0..<array.count {
-                    dataList.append(StatusViewModel(status: Status(dict: array[n])))
-                }
-                self.pulldownCount = self.statusList.count == 0 ? dataList.count : (dataList.count > self.statusList.count ? dataList.count - self.statusList.count: nil)
-                self.statusList = dataList
-                finished(true)
-            }
+            NetworkTools.shared.loadLikeStatus(uid, finished: completion)
         } else if clas == Clas.comment{
-            NetworkTools.shared.loadCommentStatus(uid) { Result, Error in
-                guard let array = Result as? [[String:Any]] else {
-                    finished(false)
-                    return
-                }
-                var dataList = [StatusViewModel]()
-                for n in 0..<array.count {
-                    dataList.append(StatusViewModel(status: Status(dict: array[n])))
-                }
-                self.pulldownCount = self.statusList.count == 0 ? dataList.count : (dataList.count > self.statusList.count ? dataList.count - self.statusList.count: nil)
-                self.statusList = dataList
-                finished(true)
-            }
-            
+            NetworkTools.shared.loadCommentStatus(uid, finished: completion)
         }
     }
 }

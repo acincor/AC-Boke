@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 import SVProgressHUD
-import SDWebImage
+import Kingfisher
 
 let StatusCellNormalId = "StatusCellNormalId"
 //let StatusCellNormalId2 = "StatusCellNormalId2"
@@ -133,11 +133,11 @@ struct ImageDetailView: UIViewRepresentable {
         var label: UILabel
         var MIDLabel: UILabel
         if let account = account {
-            imageView.sd_setImage(with: account.userProfileUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+            imageView.kf.setImage(with: account.userProfileUrl, placeholder: nil, options: [.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))),.fromMemoryCacheOrRefresh])
             label = UILabel(title: "\(account.user.user ?? "")")
             MIDLabel = UILabel(title:"MID: "+"\(account.user.uid)")
         } else {
-            imageView.sd_setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholderImage: nil, options: [SDWebImageOptions.retryFailed,SDWebImageOptions.refreshCached])
+            imageView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholder: nil, options: [.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))),.fromMemoryCacheOrRefresh])
             label = UILabel(title: UserAccountViewModel.sharedUserAccount.account?.user ?? "")
             MIDLabel = UILabel(title:"MID: "+(UserAccountViewModel.sharedUserAccount.account?.uid ?? ""))
         }
@@ -481,95 +481,5 @@ extension HomeTableViewController: @preconcurrency StatusCellDelegate {
     }
     func present(_ controller: UIViewController) {
         self.present(controller, animated: true)
-    }
-}
-extension UIButton {
-    struct AssociatedKey {
-        @MainActor static var nav: ComposeViewController?
-        @MainActor static var vm: StatusViewModel?
-        @MainActor static var vm2: StatusViewModel?
-    }
-    func setAssociated<T>(value: T, associatedKey: UnsafeRawPointer, policy: objc_AssociationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC) -> Void {
-        objc_setAssociatedObject(self, associatedKey, value, policy)
-    }
-    
-    func getAssociated<T>(associatedKey: UnsafeRawPointer) -> T? {
-        let value = objc_getAssociatedObject(self, associatedKey) as? T
-        return value;
-    }
-    var vm: StatusViewModel? {
-        get {
-            withUnsafePointer(to: &AssociatedKey.vm) { pointer in
-                getAssociated(associatedKey: pointer)
-            }
-        }
-        set {
-            withUnsafePointer(to: &AssociatedKey.vm) { pointer in
-                setAssociated(value: newValue, associatedKey: pointer)
-            }
-        }
-    }
-    var vm2: StatusViewModel? {
-        get {
-            withUnsafePointer(to: &AssociatedKey.vm2) { pointer in
-                getAssociated(associatedKey: pointer)
-            }
-        }
-        set {
-            withUnsafePointer(to: &AssociatedKey.vm2) { pointer in
-                setAssociated(value: newValue, associatedKey: pointer)
-            }
-        }
-    }
-    var nav: ComposeViewController? {
-        get {
-            withUnsafePointer(to: &AssociatedKey.nav) { pointer in
-                getAssociated(associatedKey: pointer)
-            }
-        }
-        set {
-            withUnsafePointer(to: &AssociatedKey.nav) { pointer in
-                setAssociated(value: newValue, associatedKey: pointer)
-            }
-        }
-    }
-}
-extension UIBarButtonItem {
-    
-    private struct AssociatedKey {
-        @MainActor static var nav: ComposeViewController?
-        @MainActor static var vm: StatusViewModel?
-    }
-    var nav: ComposeViewController? {
-        get {
-            withUnsafePointer(to: &AssociatedKey.nav) { pointer in
-                getAssociated(associatedKey: pointer)
-            }
-        }
-        set {
-            withUnsafePointer(to: &AssociatedKey.nav) { pointer in
-                setAssociated(value: newValue, associatedKey: pointer)
-            }
-        }
-    }
-    var vm: StatusViewModel? {
-        get {
-            withUnsafePointer(to: &AssociatedKey.vm) { pointer in
-                getAssociated(associatedKey: pointer)
-            }
-        }
-        set {
-            withUnsafePointer(to: &AssociatedKey.vm) { pointer in
-                setAssociated(value: newValue, associatedKey: pointer)
-            }
-        }
-    }
-    func setAssociated<T>(value: T, associatedKey: UnsafeRawPointer, policy: objc_AssociationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC) -> Void {
-        objc_setAssociatedObject(self, associatedKey, value, policy)
-    }
-    
-    func getAssociated<T>(associatedKey: UnsafeRawPointer) -> T? {
-        let value = objc_getAssociatedObject(self, associatedKey) as? T
-        return value;
     }
 }

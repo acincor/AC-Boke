@@ -14,13 +14,13 @@ protocol PhotoBrowserDismissDelegate: NSObjectProtocol {
 @objc protocol PhotoBrowserPresentDelegate: Sendable,NSObjectProtocol {
     
     /// 指定 indexPath 对应的 imageView，用来做动画效果
-    @objc optional func imageViewForPresent(indexPath: IndexPath) -> UIImageView
+    @MainActor @objc optional func imageViewForPresent(indexPath: IndexPath) -> UIImageView
     
     /// 动画转场的起始位置
-    @objc optional func photoBrowserPresentFromRect(indexPath: IndexPath) -> CGRect
+    @MainActor @objc optional func photoBrowserPresentFromRect(indexPath: IndexPath) -> CGRect
     
     /// 动画转场的目标位置
-    @objc optional func photoBrowserPresentToRect(indexPath: IndexPath) -> CGRect
+    @MainActor @objc optional func photoBrowserPresentToRect(indexPath: IndexPath) -> CGRect
 }
 
 class PhotoBrowserAnimator: NSObject, UIViewControllerTransitioningDelegate {

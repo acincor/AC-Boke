@@ -115,7 +115,7 @@ extension QuoteTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusNormalCell
         // Configure the cell...
         cell.viewModel = vm
-        cell.bottomView.deleteButton.vm2 = vm
+        cell.bottomView.deleteButton.vm = vm
         let result = ["id":"\(vm.status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         let like_list = vm.status.like_list
         for s in like_list {
@@ -166,7 +166,7 @@ extension QuoteTableViewController {
      }
      */
     @objc func action4(_ sender: UIButton) {
-        NetworkTools.shared.deleteStatus(vm.status.comment_id,sender.vm2!.status.comment_id,sender.vm2!.status.id) { Result, Error in
+        NetworkTools.shared.deleteStatus(vm.status.comment_id,sender.vm!.status.comment_id,sender.vm!.status.id) { Result, Error in
             if Error != nil {
                 Task { @MainActor in
                     SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))

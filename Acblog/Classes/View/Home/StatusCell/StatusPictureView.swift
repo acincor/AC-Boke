@@ -105,7 +105,7 @@ class StatusPictureViewCell: UICollectionViewCell {
             iconView.image = image
             iconView.clipsToBounds = true
             iconView.layer.cornerRadius = 20
-            let ext = image?.sd_imageData()?.detectImageType().0
+            let ext = image?.data()?.detectImageType().0
             gifIconView.isHidden = (ext != .gif)
         }
     }
@@ -138,7 +138,7 @@ extension StatusPictureView:UICollectionViewDelegate {
         _ = photoBrowserPresentToRect(indexPath: indexPath)
     }
 }
-extension StatusPictureView: @preconcurrency PhotoBrowserPresentDelegate{
+extension StatusPictureView: PhotoBrowserPresentDelegate{
     func photoBrowserPresentFromRect(indexPath: IndexPath) -> CGRect {
         let cell = self.cellForItem(at: indexPath)!
         let rect = self.convert(cell.frame, to: UIApplication.shared.connectedScenes.map({ $0 as? UIWindowScene}).compactMap({ $0 }).first?.windows.first)
@@ -154,7 +154,7 @@ extension StatusPictureView: @preconcurrency PhotoBrowserPresentDelegate{
         iv.clipsToBounds = true
         if viewModel?.thumbnailUrls != [] {
             if let url = viewModel?.thumbnailUrls?[indexPath.item] {
-                iv.sd_setImage(with: url)
+                iv.kf.setImage(with: url)
             }
         } else {
             if let imaP = viewModel?.status.image {

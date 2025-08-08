@@ -32,7 +32,7 @@ class StatusCellTopView: UIView {
                 sourceLabel.text = "未知"
             }
             // 头像
-            iconView.sd_setImage(with: viewModel?.userProfileUrl, placeholderImage: viewModel?.userDefaultIconView)
+            iconView.kf.setImage(with: viewModel?.userProfileUrl, placeholder: viewModel?.userDefaultIconView)
             iconView.layer.cornerRadius = 5
             iconView.clipsToBounds = true
             iconView.isUserInteractionEnabled = true

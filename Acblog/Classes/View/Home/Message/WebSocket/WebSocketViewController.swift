@@ -191,7 +191,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
                 for i in image {
                     // 将JSON数据转换为String以便打印或查看
                     DispatchQueue.main.asyncAfter(deadline: .now()+1){
-                        self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"image\": \"\(i.sd_imageData()?.base64EncodedString() ?? "")\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\"}")) { error in
+                        self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"image\": \"\(i.data()?.base64EncodedString() ?? "")\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\"}")) { error in
                             //print(error)
                         }
                     }
