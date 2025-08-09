@@ -93,12 +93,12 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
         pulldownTipLabel.text = (count == 0) ? NSLocalizedString("没有博客", comment: "") : String.localizedStringWithFormat(NSLocalizedString("刷新到%@条博客", comment: ""),"\(count)")
         let height: CGFloat = 44
         let rect = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
-        pulldownTipLabel.frame = CGRectOffset(rect, 0, -2 * height)
+        pulldownTipLabel.frame = CGRectOffset(rect, 0, -3 * height)
         UIView.animate(withDuration: 1.0,animations: {
             self.pulldownTipLabel.frame = CGRectOffset(rect, 0, height)
         }) { _ in
             UIView.animate(withDuration: 1.0) {
-                self.pulldownTipLabel.frame = CGRectOffset(rect, 0, -2 * height)
+                self.pulldownTipLabel.frame = CGRectOffset(rect, 0, -3 * height)
             }
         }
     }
@@ -157,34 +157,13 @@ extension TypeStatusTableViewController {
         cell.topView.iconView.addGestureRecognizer(g)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
-        let result = ["id":"\(typeStatus.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-        cell.bottomView.likeButton.setTitle("\(typeStatus.statusList[indexPath.row].status.like_count)", for: .normal)
-        let uid = result["like_uid"] as? String
-        NetworkTools.shared.loadOneStatus(id: typeStatus.statusList[indexPath.row].status.id) { res, error in
-            if error != nil {
-                return
-            }
-            guard let list = res as? [String:Any] else {
-                return
-            }
-            Task { @MainActor in
-                cell.bottomView.commentButton.setTitle(list["comment_count"] as? String, for: .normal)
-                cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
-                guard let like_list = list["like_list"] as? [[String:Any]] else {
-                    return
-                }
-                
-                for s in like_list {
-                    if uid == s["like_uid"] as? String {
-                        cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
-                        break
-                    } else {
-                        cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                    }
-                }
-                if like_list.isEmpty {
-                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                }
+        cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
+        cell.bottomView.likeButton.setTitle("\(vm.status.like_count)", for: .normal)
+        cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
+        for like in vm.status.like_list {
+            if UserAccountViewModel.sharedUserAccount.account?.uid == like["like_uid"] as? String {
+                cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
+                break
             }
         }
         //cell = self.cell!
@@ -239,7 +218,11 @@ extension TypeStatusTableViewController {
                     }
                 }
                 Task { @MainActor in
-                    self.tableView.reloadData()
+                    self.typeStatus.loadSingleStatus(self.typeStatus.statusList[sender.tag].status.id) { isSuccessful in
+                        if(isSuccessful) {
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now()+1){
                     SVProgressHUD.dismiss()

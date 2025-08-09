@@ -366,34 +366,13 @@ extension HomeTableViewController {
         cell.topView.iconView.addGestureRecognizer(g)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
-        let result = ["id":"\(listViewModel.statusList[indexPath.row].status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
-        cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        let uid = result["like_uid"] as? String
-        NetworkTools.shared.loadOneStatus(id: listViewModel.statusList[indexPath.row].status.id) { res, error in
-            Task { @MainActor in
-                if error != nil {
-                    return
-                }
-                guard let list = res as? [String:Any] else {
-                    return
-                }
-                cell.bottomView.commentButton.setTitle(list["comment_count"] as? String, for: .normal)
-                cell.bottomView.likeButton.setTitle(list["like_count"] as? String, for: .normal)
-                guard let like_list = list["like_list"] as? [[String:Any]] else {
-                    return
-                }
-                for s in like_list {
-                    if uid == s["like_uid"] as? String {
-                        
-                        cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
-                        break
-                    } else {
-                        cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                    }
-                }
-                if like_list.isEmpty {
-                    cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
-                }
+        cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
+        cell.bottomView.likeButton.setTitle("\(vm.status.like_count)", for: .normal)
+        cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
+        for like in vm.status.like_list {
+            if UserAccountViewModel.sharedUserAccount.account?.uid == like["like_uid"] as? String {
+                cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
+                break
             }
         }
         //cell = self.cell!
@@ -450,7 +429,11 @@ extension HomeTableViewController {
                     }
                 }
                 Task { @MainActor in
-                    self.tableView.reloadData()
+                    listViewModel.loadSingleStatus(listViewModel.statusList[sender.tag].status.id) { isSuccessful in
+                        if isSuccessful {
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now()+1){
                     SVProgressHUD.dismiss()

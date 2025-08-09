@@ -87,7 +87,7 @@ extension NetworkTools {
         var params = [String:Any]()
         let urlString = rootHost+"/api/trend.php"
         guard let trend = trend else {
-            print(params)
+            //print(params)
             tokenRequest(.GET, urlString, params, finished: finished)
             return
         }

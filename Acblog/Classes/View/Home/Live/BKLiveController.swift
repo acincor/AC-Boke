@@ -76,7 +76,8 @@ class BKLiveController: UIViewController {
             try self.session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
             try self.session.setActive(true)
         } catch {
-            print(error)
+            //print(error)
+            SVProgressHUD.showError(withStatus: error.localizedDescription)
         }
         
         try await self.mixer.attachAudio(AVCaptureDevice.default(for: .audio), track: 0) { audioDeviceUnit in }

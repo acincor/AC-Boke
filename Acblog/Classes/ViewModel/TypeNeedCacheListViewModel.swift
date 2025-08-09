@@ -12,6 +12,20 @@ import Kingfisher
 class TypeNeedCacheListViewModel: @unchecked Sendable {
     lazy var statusList = [StatusViewModel]()
     var pulldownCount: Int?
+    @MainActor func loadSingleStatus(_ id: Int,finished: @escaping @Sendable @MainActor (_ isSuccessful: Bool) -> ()) {
+        StatusDAL.loadSingleStatus(id) { array in
+            if let array = array {
+                for i in 0..<self.statusList.count {
+                    if self.statusList[i].status.id == id {
+                        self.statusList[i].status = Status(dict: array)
+                        finished(true)
+                        return
+                    }
+                }
+            }
+            finished(false)
+        }
+    }
     @MainActor func loadStatus(isPullup: Bool? = nil, id: Int? = nil, comment_id: Int? = nil,to_uid: Int? = nil,finished: @escaping @Sendable @MainActor (_ isSuccessful: Bool) -> ()) {
         if let isPullup = isPullup {
             let since_id = isPullup ? 0 : (statusList.first?.status.id ?? 0)

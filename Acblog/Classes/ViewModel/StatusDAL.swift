@@ -52,6 +52,38 @@ class StatusDAL {
             finished(array)
         }
     }
+    @MainActor class func loadSingleStatus(_ id: Int, finished: @escaping @Sendable @MainActor (_ array: [String:Any]?) -> ()) {
+        
+        NetworkTools.shared.loadOneStatus(id: id) { (Result, Error) -> () in
+            if Error != nil {
+                finished(nil)
+                return
+            }
+            guard let arr = Result as? [String: Any] else {
+                finished(nil)
+                return
+            }
+            var sql = "SELECT * FROM T_Status \n"
+            sql += "WHERE statusId = \(id) \n    AND type = '"+type.status.rawValue+"' \n"
+            let array = SQLiteManager.shared.execRecordSet(sql: sql)
+            if array.count == 1 {
+                sql = "UPDATE T_Status \nSET status = ?\nWHERE statusId = \(id)"
+                SQLiteManager.shared.queue.inTransaction { (db, rollback) -> Void in
+                    do {
+                        try db.executeUpdate(sql, values: [try JSONSerialization.data(withJSONObject: arr,options: [])])
+                        finished(arr)
+                        guard db.changes > 0 else {
+                            return
+                        }
+                    } catch {
+                        finished(nil)
+                    }
+                }
+            }
+            finished(nil)
+        }
+        finished(nil)
+    }
     enum type: String{
         case status = "status"
         case msg = "msg"
@@ -133,7 +165,6 @@ class StatusDAL {
                 guard db.changes > 0 else {
                     return
                 }
-                print(db.changes)
             } catch {
             }
         }
