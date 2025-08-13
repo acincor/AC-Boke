@@ -34,23 +34,6 @@
         }
       }
     },
-    "Err-1202.w" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Err-1202"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "错误1202"
-          }
-        }
-      }
-    },
     "hi，一起直播鸭！" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -58,23 +41,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hi, let's live stream together!"
-          }
-        }
-      }
-    },
-    "Loading" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "加载中..."
           }
         }
       }
@@ -102,7 +68,6 @@
       }
     },
     "主页" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -809,7 +774,6 @@
       }
     },
     "点赞过的" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -999,7 +963,6 @@
       }
     },
     "评论过的" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1011,17 +974,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "评论过的"
-          }
-        }
-      }
-    },
-    "说些话吧，哪怕是一个标点符号也行..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Say something, even if it's just a punctuation mark..."
           }
         }
       }

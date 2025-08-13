@@ -46,11 +46,11 @@ struct UserNavigationLinkView: View {
         Group {
             ImageDetailView(account: account)
             
-            navigationLink("用户协议", destination: MyDetailView(controller: UserAgreementViewController()))
-            navigationLink("主页", destination: MyDetailView(controller: ProfileTableViewController(account: account)))
+            navigationLink(NSLocalizedString("用户协议", comment: ""), destination: MyDetailView(controller: UserAgreementViewController()))
+            navigationLink(NSLocalizedString("主页", comment: ""), destination: MyDetailView(controller: ProfileTableViewController(account: account)))
             navigationLink(name, destination: MyDetailView(controller: makeController(for: .blog)))
-            navigationLink("点赞过的", image: "timeline_icon_like", destination: MyDetailView(controller: makeController(for: .like)))
-            navigationLink("评论过的", image: "timeline_icon_comment", destination: MyDetailView(controller: makeController(for: .comment)))
+            navigationLink(NSLocalizedString("点赞过的", comment: ""), image: "timeline_icon_like", destination: MyDetailView(controller: makeController(for: .like)))
+            navigationLink(NSLocalizedString("评论过的", comment: ""), image: "timeline_icon_comment", destination: MyDetailView(controller: makeController(for: .comment)))
             
             if account == nil {
                 navigationLink("开始直播", image: "live_small_icon", destination: MyDetailView(controller: BKLiveController()))
@@ -131,15 +131,15 @@ struct ImageDetailView: UIViewRepresentable {
         let view = UIView()
         let imageView = UIImageView()
         var label: UILabel
-        var MIDLabel: UILabel
+        var AIDLabel: UILabel
         if let account = account {
             imageView.kf.setImage(with: account.userProfileUrl, placeholder: nil, options: [.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))),.fromMemoryCacheOrRefresh])
             label = UILabel(title: "\(account.user.user ?? "")")
-            MIDLabel = UILabel(title:"MID: "+"\(account.user.uid)")
+            AIDLabel = UILabel(title:"AID: "+"\(account.user.uid)")
         } else {
             imageView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholder: nil, options: [.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))),.fromMemoryCacheOrRefresh])
             label = UILabel(title: UserAccountViewModel.sharedUserAccount.account?.user ?? "")
-            MIDLabel = UILabel(title:"MID: "+(UserAccountViewModel.sharedUserAccount.account?.uid ?? ""))
+            AIDLabel = UILabel(title:"AID: "+(UserAccountViewModel.sharedUserAccount.account?.uid ?? ""))
         }
         imageView.layer.cornerRadius = 5
         imageView.clipsToBounds = true
@@ -154,8 +154,8 @@ struct ImageDetailView: UIViewRepresentable {
             make.top.equalTo(view.snp.top)
             make.left.equalTo(imageView.snp.right).offset(10)
         }
-        view.addSubview(MIDLabel)
-        MIDLabel.snp.makeConstraints { make in
+        view.addSubview(AIDLabel)
+        AIDLabel.snp.makeConstraints { make in
             make.bottom.equalTo(view.snp.bottom)
             make.left.equalTo(imageView.snp.right).offset(10)
         }

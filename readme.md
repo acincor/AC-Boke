@@ -9,54 +9,43 @@ AC-Boke
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/acincor/AC-Boke.svg)
 
-Installation
+下载注意事项
 ---------------
 
-**将@后更改为用户的MID**
 
-**同时在一段时间后会添加查看话题的借口（api）（敬请期待）**
+# 开发者们：
 
-**将评论（comments）除控制器（controller）统一删除与博客（status）合并**
+- 用户的AID唯一且不能改变，Actor文件夹下有处理允许通知的actor文件
 
-**注意！一定记得新建名为"ac_inc"的数据库，并将所有的内容都测试，否则可能注销会因为数据库没有统一创建导致出现用户没有成功注销的问题，本人在考虑要不要统一建数据库在一个文件**
+- 预警：服务器将在2025年9月28日过期，且后续不再续费以供支持。**注意：我将在过段时间将网页上的API在本地尝试配置以达到让开发者与使用者可以运行成功，配置信息若符合系统则可以无视**
+
+- 依赖库(SPM)为：Kingfisher、FMDB、HaishinKit、SVProgressHUD、SnapKit以及（非SPM，已为支持Swift6修改成为项目内部文件）FFLabel
+
+- 支持中英文、Swift 6
+
+#使用者们：
+
+**功能：**
+
+- **注意：登录、注册后才可以使用一切功能。**
+
+- 可以发布博客，博客中可以带有表情包、图片、@信息。
+
+- 对于别人的博客，您可以点赞、评论，并且在“我”界面中找到自己点赞（或评论）的博客。或者您可以点击头像查看别人的资料卡，获取他人相应的信息以及打开他的主页添加好友。
+
+- 添加好友之后，可以与好友畅聊并分享许多相册里的新鲜事与回忆！
+
+- 如果有突然找不到的博客，可以使用记下的信息在发现界面查找🤩
+
+- 如果点赞破1000，在他人退出应用一瞬间将有可能被推送！
+
+#本地运行API需配置（推荐）
+
+由于**服务器并不是很稳定**，有很大概率无法持续维护，所以推荐本地运行API。
 
 **如何新建"ac_inc"数据库**
 
-**聊天系统升级！添加点赞、撤回功能，并且界面与博客卡一样**
-
 **create database ac_inc**
-
-**暗色模式下，漏洞已修复，如登录、注册界面无法看到控制器标题（这个原因是因为网页视图（webView）没有完全贴合登录、注册授权视图控制器（OAuthViewController）留有空白，苹果称之为（Safe Area），导航栏是透明的，所以透出了底下的空白，导致下滑才会出现导航栏标题和深色，对此我们深表歉意），启动页面图标背景为白色**
-
-**去除了对老库AFNetworking的支持，更换Alamofire**
-
-**支持中英文**
-
-**表情包键盘取消工具栏机制，约束问题解决**
-
-**引入了Actor文件**
-
-**优化了用户体验，我们对此很开心，过去我们将delete和recall方法分离导致绑定到cell上会乱套，现在合并可以正常输出cellID，更改了部分资源暂待更新**
-
-```
-actor NotificationRegister {
-    func register(_ application: UIApplication) {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
-            guard self != nil else { return }  // 避免循环引用
-            if granted {
-                DispatchQueue.main.async {
-                    application.registerForRemoteNotifications()
-                }
-            }
-        }
-    }
-}
-```
-
-**修复了通知权限警示结束后就crash的问题，改成了Kingfisher作为依赖库来修复SDWebImage内在的进度更新问题**
-
-#*OLD VERSION*
 
 **将nginx、php配置放在了资源文件夹下（Resource），统一为localhost，可以通过以下配置**
 
@@ -94,23 +83,14 @@ actor NotificationRegister {
 
 **已经上传云端，域名为“mhcincapi.top”**
 
-Stories
+故事
 ---------------
 
-# What is AC-Boke?
+**一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
-**一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！例如可以分享出去游玩的照片、快乐的瞬间，点赞高的还有可能在退出app时被被精选哦**
-
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/98/81/5c/98815cfa-bc38-29ce-1341-556e94873206/884ae8e7-5a75-4ff5-bf03-1c61ed33064f_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-03-31_at_11.03.23.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/3b/eb/22/3beb2214-23be-61cf-6bf1-a3bd5c794604/2cb5f101-fa30-47ca-a434-0f03bf51af87_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.32.38.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/46/85/df/4685df96-837e-56b7-c13d-a626686db7cf/3211467e-5a3c-4758-ae07-bfed1b444713_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.33.36.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/3d/d7/47/3dd74745-9238-3081-aa15-785b05c356a7/c11e5786-563b-4745-addf-b017f1c07c40_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.18.png/400x800bb.png)
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/7b/6f/03/7b6f03ed-3bd0-5c61-81e6-336b68c823fd/dec3fb5e-cba1-4e67-80d2-6f26ca1ec103_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.33.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/bd/99/58/bd9958c0-053b-cc77-e400-8366f5bedb8b/9315682d-2d29-4096-8563-632bfea45d9c_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.42.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/e7/17/cd/e717cdc0-9552-1620-8fb2-faaf6590face/05138305-30d4-444a-b485-45cbf891ef0c_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.52.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/22/d6/91/22d69102-082e-4532-cb55-4a54e533129f/134bd7ca-f204-40de-9c03-5871147bf270_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.45.05.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/a2/11/ff/a211ffdf-4b60-6882-4159-431de468a6ba/8facbfd8-2fa2-4cb3-96c2-382f8bc87b83_Simulator_Screenshot_-_iPhone_13_Pro_Max_-_2024-07-21_at_23.47.45.png/400x800bb.png)
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/53/fd/55/53fd5597-0141-0b3e-f3f8-e42c66de417a/44b7a24a-aa81-41ff-a598-a31e2f8a1e09_Simulator_Screenshot_-_iPhone_13_Pro_Max_-_2024-07-21_at_23.53.25.png/400x800bb.png)
+![avatar](https://img.z4a.net/images/2025/08/13/Simulator-Screenshot---iPhone-16-Pro-Max---2025-08-13-at-21.15.34.png)
+
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 

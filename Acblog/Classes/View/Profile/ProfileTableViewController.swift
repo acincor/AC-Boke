@@ -67,12 +67,12 @@ class ProfileTableViewController: VisitorTableViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private lazy var MIDLabel: UILabel = UILabel(title: label)
+    private lazy var AIDLabel: UILabel = UILabel(title: label)
     private var uidLabel: String {
         if account == nil {
-            return "MID:" + (UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+            return "AID:" + (UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
         }
-        let lb = "MID:\(account?.user.uid ?? 0)"
+        let lb = "AID:\(account?.user.uid ?? 0)"
         return lb
     }
     private var renameButton: UIButton = UIButton(title: NSLocalizedString("编辑", comment: ""), color: .orange, backImageName: nil)
@@ -107,7 +107,7 @@ class ProfileTableViewController: VisitorTableViewController {
             view.addSubview(renameButton)
         }
         //view.addSubview(liveButton)
-        view.addSubview(MIDLabel)
+        view.addSubview(AIDLabel)
         loadData()
         refreshControl = WBRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
@@ -159,15 +159,15 @@ class ProfileTableViewController: VisitorTableViewController {
                 make.top.equalTo(iconView.snp.bottom)
             }
         }
-        MIDLabel.removeFromSuperview()
-        MIDLabel = UILabel(title: uidLabel)
-        view.addSubview(MIDLabel)
+        AIDLabel.removeFromSuperview()
+        AIDLabel = UILabel(title: uidLabel)
+        view.addSubview(AIDLabel)
         if isMe {
-            MIDLabel.snp.makeConstraints { make in
+            AIDLabel.snp.makeConstraints { make in
                 make.top.equalTo(iconView.snp.bottom)
             }
         } else {
-            MIDLabel.snp.makeConstraints { make in
+            AIDLabel.snp.makeConstraints { make in
                 make.top.equalTo(addButton.snp.bottom)
             }
         }
@@ -175,7 +175,7 @@ class ProfileTableViewController: VisitorTableViewController {
         Label = UILabel(title: label)
         view.addSubview(Label)
         Label.snp.makeConstraints { make in
-            make.top.equalTo(MIDLabel.snp.bottom)
+            make.top.equalTo(AIDLabel.snp.bottom)
         }
         Label.sizeToFit()
         name.removeFromSuperview()
@@ -184,7 +184,7 @@ class ProfileTableViewController: VisitorTableViewController {
         view.addSubview(name)
         name.snp.makeConstraints { make in
             make.left.equalTo(Label.snp.right)
-            make.top.equalTo(MIDLabel.snp.bottom).offset(-3)
+            make.top.equalTo(AIDLabel.snp.bottom).offset(-3)
         }
         name.isEnabled = false
         if isMe {
