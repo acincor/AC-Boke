@@ -17,7 +17,7 @@ AC-Boke
 
 - 用户的AID唯一且不能改变，Actor文件夹下有处理允许通知的actor文件
 
-- 预警：服务器将在2025年9月28日过期，且后续不再续费以供支持。**注意：我将在过段时间将网页上的API在本地尝试配置以达到让开发者与使用者可以运行成功，配置信息若符合系统则可以无视**
+- 预警：（域名为mhcincapi.top）服务器将在2025年9月28日过期，且后续不再续费以供支持。**注意：我将在过段时间将网页上的API在本地尝试配置以达到让开发者与使用者可以运行成功，配置信息若符合系统则可以无视**
 
 - 依赖库(SPM)为：Kingfisher、FMDB、HaishinKit、SVProgressHUD、SnapKit以及（非SPM，已为支持Swift6修改成为项目内部文件）FFLabel
 
@@ -81,16 +81,12 @@ AC-Boke
 
 ```nginx -s reload```
 
-#*NEW VERSION*
-
-**已经上传云端，域名为“mhcincapi.top”**
-
 故事
 ---------------
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/7b/6f/03/7b6f03ed-3bd0-5c61-81e6-336b68c823fd/dec3fb5e-cba1-4e67-80d2-6f26ca1ec103_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.33.png/400x800bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/e7/17/cd/e717cdc0-9552-1620-8fb2-faaf6590face/05138305-30d4-444a-b485-45cbf891ef0c_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.52.png/800x1600bb.png)
 ![avatar](https://img.z4a.net/images/2025/08/13/Simulator-Screenshot---iPhone-16-Pro-Max---2025-08-13-at-21.15.34.md.png)
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
