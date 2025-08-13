@@ -34,7 +34,7 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
         //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
-        refreshControl = WBRefreshControl()
+        refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         liveView.delegate = self
         liveView.dataSource = self
@@ -59,7 +59,7 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
             SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试", comment: ""))
             return
         }
-        present(HomeWebViewController(url: urlEncoded),animated: true)
+        present(ACWebViewController(url: urlEncoded),animated: true)
     }
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
@@ -109,11 +109,11 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
             return
         }
         prepareTableView()
-        NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
+        NotificationCenter.default.addObserver(forName: Notification.Name(ACStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
+            guard let indexPath = n.userInfo?[ACStatusSelectedPhotoIndexPathKey] as? IndexPath else {
                 return
             }
-            guard let urls = n.userInfo?[WBStatusSelectedPhotoURLsKey] as? [URL] else {
+            guard let urls = n.userInfo?[ACStatusSelectedPhotoURLsKey] as? [URL] else {
                 return
             }
             guard let cell = n.object as? PhotoBrowserPresentDelegate else {
@@ -247,7 +247,7 @@ extension TypeStatusTableViewController {
 }
 extension TypeStatusTableViewController: @preconcurrency StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
-        let vc = HomeWebViewController(url: url)
+        let vc = ACWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }

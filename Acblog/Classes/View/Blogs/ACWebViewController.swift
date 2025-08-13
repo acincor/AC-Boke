@@ -1,5 +1,5 @@
 //
-//  HomeWebViewController.swift
+//  ACWebViewController.swift
 //  AC博客
 //
 //  Created by AC on 2022/12/3.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import WebKit
-class HomeWebViewController: UIViewController,WKNavigationDelegate {
+class ACWebViewController: UIViewController,WKNavigationDelegate {
     private var url: URL
     init(url:URL) {
         self.url = url

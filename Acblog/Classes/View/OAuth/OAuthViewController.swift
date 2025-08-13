@@ -92,7 +92,7 @@ extension OAuthViewController {
             }
             Task { @MainActor in
                 self.dismiss(animated: false) {
-                    NotificationCenter.default.post(name: .init(rawValue: WBSwitchRootViewControllerNotification), object: "welcome")
+                    NotificationCenter.default.post(name: .init(rawValue: ACSwitchRootViewControllerNotification), object: "welcome")
                 }
             }
         }

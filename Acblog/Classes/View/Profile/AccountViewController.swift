@@ -41,7 +41,7 @@ class logOffController: UIViewController {
         let controller = UIAlertController(title: NSLocalizedString("注销账号", comment: ""), message: NSLocalizedString("确定注销账号，不陪我一起玩了吗？",comment: ""), preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: NSLocalizedString("注销账号",comment:""), style: .default) {
             _ in
-            NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: nil)
+            NotificationCenter.default.post(name: .init(rawValue: .init("ACSwitchRootViewControllerLogOutNotification")), object: nil)
         })
         controller.addAction(UIAlertAction(title: NSLocalizedString("取消",comment:""), style: .cancel) {
             _ in
@@ -67,7 +67,7 @@ class logOutController: UIViewController {
         super.viewDidAppear(animate)
         let controller = UIAlertController(title: NSLocalizedString("退出登录", comment: ""), message: NSLocalizedString("确定要退出登录吗",comment: ""), preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: NSLocalizedString("退出登录", comment: ""), style: .default, handler: { n in
-            NotificationCenter.default.post(name: .init(rawValue: .init("WBSwitchRootViewControllerLogOutNotification")), object: "logOut")
+            NotificationCenter.default.post(name: .init(rawValue: .init("ACSwitchRootViewControllerLogOutNotification")), object: "logOut")
         }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel) {
             _ in

@@ -9,9 +9,9 @@ import UIKit
 
 
 /// 可重用 CellId
-private let WBNewFeatureViewCellId = "WBNewFeatureViewCellId"
+private let ACNewFeatureViewCellId = "ACNewFeatureViewCellId"
 /// 新特性图像的数量
-private let WBNewFeatureImageCount = 4
+private let ACNewFeatureImageCount = 4
 
 class NewFeatureViewController: UICollectionViewController {
 #if os(visionOS)
@@ -52,18 +52,18 @@ class NewFeatureViewController: UICollectionViewController {
         super.viewDidLoad()
         
         // 注册可重用Cell
-        self.collectionView!.register(NewFeatureCell.self, forCellWithReuseIdentifier: WBNewFeatureViewCellId)
+        self.collectionView!.register(NewFeatureCell.self, forCellWithReuseIdentifier: ACNewFeatureViewCellId)
     }
     
     // MARK: UICollectionViewDataSource
     // 返回每个分组中，单元格的数量
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return WBNewFeatureImageCount
+        return ACNewFeatureImageCount
     }
     
     // 返回每个单元格
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBNewFeatureViewCellId, for: indexPath) as! NewFeatureCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ACNewFeatureViewCellId, for: indexPath) as! NewFeatureCell
         cell.imageIndex = indexPath.item
         
         return cell
@@ -77,7 +77,7 @@ class NewFeatureViewController: UICollectionViewController {
         let page = Int(scrollView.contentOffset.x / scrollView.bounds.width)
         
         // 判断是否是最后一页
-        if page != WBNewFeatureImageCount - 1 {
+        if page != ACNewFeatureImageCount - 1 {
             return
         }
         
@@ -104,7 +104,7 @@ private class NewFeatureCell: UICollectionViewCell {
     
     /// 点击开始体验按钮
     @objc private func clickStartButton() {
-        NotificationCenter.default.post(name: .init(WBSwitchRootViewControllerNotification), object: nil)
+        NotificationCenter.default.post(name: .init(ACSwitchRootViewControllerNotification), object: nil)
     }
     
     /// 显示按钮动画

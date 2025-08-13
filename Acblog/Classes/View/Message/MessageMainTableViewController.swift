@@ -32,7 +32,7 @@ class MessageTableViewController: VisitorTableViewController{
             return
         }
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCellNormalId)
-        refreshControl = WBRefreshControl()
+        refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         loadData()
     }

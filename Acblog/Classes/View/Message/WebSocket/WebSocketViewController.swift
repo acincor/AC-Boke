@@ -11,7 +11,7 @@ import SVProgressHUD
 let chatID = "CHATNORMALCELLID"
 class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDelegate, @preconcurrency StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
-        let vc = HomeWebViewController(url: url)
+        let vc = ACWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -92,8 +92,8 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
                 self.loadData()
             }
         }
-        NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
+        NotificationCenter.default.addObserver(forName: Notification.Name(ACStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
+            guard let indexPath = n.userInfo?[ACStatusSelectedPhotoIndexPathKey] as? IndexPath else {
                 return
             }
             guard let imagePath = n.userInfo?["optional"] as? String else {

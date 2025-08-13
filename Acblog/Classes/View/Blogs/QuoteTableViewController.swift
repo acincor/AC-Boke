@@ -72,13 +72,13 @@ class QuoteTableViewController: VisitorTableViewController {
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.close))
         navigationItem.rightBarButtonItem?.tintColor = .red
-        refreshControl = WBRefreshControl()
+        refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
-        NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
+        NotificationCenter.default.addObserver(forName: Notification.Name(ACStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
+            guard let indexPath = n.userInfo?[ACStatusSelectedPhotoIndexPathKey] as? IndexPath else {
                 return
             }
-            guard let urls = n.userInfo?[WBStatusSelectedPhotoURLsKey] as? [URL] else {
+            guard let urls = n.userInfo?[ACStatusSelectedPhotoURLsKey] as? [URL] else {
                 return
             }
             guard let cell = n.object as? PhotoBrowserPresentDelegate else {
@@ -194,7 +194,7 @@ extension QuoteTableViewController {
 }
 extension QuoteTableViewController: @preconcurrency StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
-        let vc = HomeWebViewController(url: url)
+        let vc = ACWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }

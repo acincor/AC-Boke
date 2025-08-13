@@ -7,10 +7,10 @@
 
 import Foundation
 import Kingfisher
-let WBSwitchRootViewControllerNotification = "WBSwitchRootViewControllerNotification"
-let WBStatusSelectedPhotoNotification = "WBStatusSelectedPhotoNotification"
-let WBStatusSelectedPhotoIndexPathKey = "WBStatusSelectedPhotoIndexPathKey"
-let WBStatusSelectedPhotoURLsKey = "WBStatusSelectedPhotoURLsKey"
+let ACSwitchRootViewControllerNotification = "ACSwitchRootViewControllerNotification"
+let ACStatusSelectedPhotoNotification = "ACStatusSelectedPhotoNotification"
+let ACStatusSelectedPhotoIndexPathKey = "ACStatusSelectedPhotoIndexPathKey"
+let ACStatusSelectedPhotoURLsKey = "ACStatusSelectedPhotoURLsKey"
 var rootHost:String {
     return "https://mhcincapi.top"
 }

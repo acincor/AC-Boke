@@ -50,7 +50,7 @@ class CommentTableViewController: VisitorTableViewController {
         cell.bottomView.removeFromSuperview()
         tableView.tableHeaderView = cell
         tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, viewModel.rowHeight-40)
-        refreshControl = WBRefreshControl()
+        refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
         if !UserAccountViewModel.sharedUserAccount.userLogon {
             visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
@@ -58,11 +58,11 @@ class CommentTableViewController: VisitorTableViewController {
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.close))
         navigationItem.rightBarButtonItem?.tintColor = .red
-        NotificationCenter.default.addObserver(forName: Notification.Name(WBStatusSelectedPhotoNotification), object: nil, queue: nil) { n in
-            guard let indexPath = n.userInfo?[WBStatusSelectedPhotoIndexPathKey] as? IndexPath else {
+        NotificationCenter.default.addObserver(forName: Notification.Name(ACStatusSelectedPhotoNotification), object: nil, queue: nil) { n in
+            guard let indexPath = n.userInfo?[ACStatusSelectedPhotoIndexPathKey] as? IndexPath else {
                 return
             }
-            guard let urls = n.userInfo?[WBStatusSelectedPhotoURLsKey] as? [URL] else {
+            guard let urls = n.userInfo?[ACStatusSelectedPhotoURLsKey] as? [URL] else {
                 return
             }
             guard let cell = n.object as? PhotoBrowserPresentDelegate else {
@@ -191,7 +191,7 @@ extension CommentTableViewController {
 }
 extension CommentTableViewController: @preconcurrency StatusCellDelegate {
     func statusCellDidClickUrl(url: URL) {
-        let vc = HomeWebViewController(url: url)
+        let vc = ACWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }

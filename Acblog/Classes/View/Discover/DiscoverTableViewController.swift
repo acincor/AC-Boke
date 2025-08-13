@@ -16,7 +16,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     }
     
     func statusCellDidClickUrl(url: URL) {
-        let vc = HomeWebViewController(url: url)
+        let vc = ACWebViewController(url: url)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -138,7 +138,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             return
         }
         filterContentForSearchText("")
-        refreshControl = WBRefreshControl()
+        refreshControl = ACRefreshControl()
         //tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .plain)
         refreshControl?.addTarget(self, action: #selector(self.refresh), for: .valueChanged)
         //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: "DiscoverTableViewController")

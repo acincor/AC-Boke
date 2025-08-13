@@ -8,7 +8,6 @@
 import UIKit
 import UserNotifications
 import SVProgressHUD
-import Kingfisher
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -21,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         MySearchTextField?.searchBar.resignFirstResponder()
         window?.rootViewController = defaultRootViewController
         NotificationCenter.default.addObserver(
-                    forName: .init(rawValue: WBSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
+                    forName: .init(rawValue: ACSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
                     object: nil,                           // 发送通知的对象，如果为nil，监听任何对象
                     queue: nil)                           // nil，主线程
                 { [weak self] (notification) -> Void in // weak self，
@@ -30,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     }
                 }
         NotificationCenter.default.addObserver(
-                    forName: .init(rawValue: WBSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
+                    forName: .init(rawValue: ACSwitchRootViewControllerNotification), // 通知名称，通知中心用来识别通知的
                     object: "welcome",                           // 发送通知的对象，如果为nil，监听任何对象
                     queue: nil)                           // nil，主线程
                 { [weak self] (notification) -> Void in // weak self，
@@ -43,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Task {
             await shared.register(application)
         }
-        NotificationCenter.default.addObserver(forName: .init("WBSwitchRootViewControllerLogOutNotification"), object: nil, queue: nil) { (notification) in
+        NotificationCenter.default.addObserver(forName: .init("ACSwitchRootViewControllerLogOutNotification"), object: nil, queue: nil) { (notification) in
             let object = notification.object as? String
             Task { @MainActor in
                 if UserAccountViewModel.sharedUserAccount.userLogon {
@@ -85,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if FileManager.default.fileExists(atPath: path) {
             try! FileManager.default.removeItem(atPath: path)
             UserAccountViewModel.sharedUserAccount.account = nil
-            NotificationCenter.default.post(name: .init(rawValue: .init(WBSwitchRootViewControllerNotification)), object: nil)
+            NotificationCenter.default.post(name: .init(rawValue: .init(ACSwitchRootViewControllerNotification)), object: nil)
         }
     }
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
@@ -103,7 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     deinit {
         // 注销通知 - 注销指定的通知
         NotificationCenter.default.removeObserver(self,   // 监听者
-                                                  name: .init(rawValue: WBSwitchRootViewControllerNotification),           // 监听的通知
+                                                  name: .init(rawValue: ACSwitchRootViewControllerNotification),           // 监听的通知
                                                   object: nil)
     }
     func applicationDidEnterBackground(_ application: UIApplication) {
