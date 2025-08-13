@@ -40,7 +40,8 @@ AC-Boke
 
 - 如果点赞破1000，在他人退出应用一瞬间将有可能被推送！
 
-#本地运行API需配置（推荐）
+本地运行API需配置（推荐）
+---------------
 
 由于**服务器并不是很稳定**，有很大概率无法持续维护，所以推荐本地运行API。
 
@@ -90,8 +91,7 @@ AC-Boke
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
 ![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/7b/6f/03/7b6f03ed-3bd0-5c61-81e6-336b68c823fd/dec3fb5e-cba1-4e67-80d2-6f26ca1ec103_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.33.png/400x800bb.png)
-![avatar](https://img.z4a.net/images/2025/08/13/Simulator-Screenshot---iPhone-16-Pro-Max---2025-08-13-at-21.15.34.png)
-
+![avatar](https://img.z4a.net/images/2025/08/13/Simulator-Screenshot---iPhone-16-Pro-Max---2025-08-13-at-21.15.34.md.png)
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
