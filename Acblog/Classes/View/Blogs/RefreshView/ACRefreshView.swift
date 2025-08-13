@@ -1,14 +1,14 @@
 //
-//  WBRefreshControl.swift
+//  ACRefreshControl.swift
 //  AC博客
 //
 //  Created by AC on 2022/11/8.
 //
 
 import UIKit
-private let WBRefreshControlOffset: CGFloat = -60
-class WBRefreshControl: UIRefreshControl {
-    private lazy var refreshView = WBRefreshView.refreshView()
+private let ACRefreshControlOffset: CGFloat = -60
+class ACRefreshControl: UIRefreshControl {
+    private lazy var refreshView = ACRefreshView.refreshView()
     private func setupUI() {
         backgroundColor = .systemBackground
         tintColor = UIColor.clear
@@ -37,9 +37,9 @@ class WBRefreshControl: UIRefreshControl {
             if isRefreshing {
                 refreshView.startAnimation()
             }
-            if frame.origin.y < WBRefreshControlOffset && !refreshView.rotateFlag {
+            if frame.origin.y < ACRefreshControlOffset && !refreshView.rotateFlag {
                 refreshView.rotateFlag = true
-            } else if frame.origin.y >= WBRefreshControlOffset && refreshView.rotateFlag {
+            } else if frame.origin.y >= ACRefreshControlOffset && refreshView.rotateFlag {
                 refreshView.rotateFlag = false
             }
         }
@@ -57,7 +57,7 @@ class WBRefreshControl: UIRefreshControl {
         setupUI()
     }
 }
-class WBRefreshView: UIView {
+class ACRefreshView: UIView {
     @IBOutlet weak var loadingView: UIImageView!
     @IBOutlet weak var tipView: UIView!
     @IBOutlet weak var tipIconView: UIImageView!
@@ -97,8 +97,8 @@ class WBRefreshView: UIView {
      // Drawing code
      }
      */
-    class func refreshView() -> WBRefreshView{
-        let nib = UINib(nibName: "WBRefreshView", bundle: nil)
-        return nib.instantiate(withOwner: nil,options: nil)[0] as! WBRefreshView
+    class func refreshView() -> ACRefreshView{
+        let nib = UINib(nibName: "ACRefreshView", bundle: nil)
+        return nib.instantiate(withOwner: nil,options: nil)[0] as! ACRefreshView
     }
 }
