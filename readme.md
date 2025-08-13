@@ -86,7 +86,7 @@ AC-Boke
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
 
-![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/e7/17/cd/e717cdc0-9552-1620-8fb2-faaf6590face/05138305-30d4-444a-b485-45cbf891ef0c_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.52.png/500x1086bb.png)
+![avatar](https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/7b/6f/03/7b6f03ed-3bd0-5c61-81e6-336b68c823fd/dec3fb5e-cba1-4e67-80d2-6f26ca1ec103_Simulator_Screenshot_-_iPhone_14_Plus_-_2024-07-21_at_23.44.33.png/500x1086bb.png)
 ![avatar](https://img.z4a.net/images/2025/08/13/Simulator-Screenshot---iPhone-16-Pro-Max---2025-08-13-at-21.15.34.md.png)
 
 **一个轻量的博客，我们可以在世界各地向手机分享不同的瞬间！**
