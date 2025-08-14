@@ -93,12 +93,12 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
         pulldownTipLabel.text = (count == 0) ? NSLocalizedString("没有博客", comment: "") : String.localizedStringWithFormat(NSLocalizedString("刷新到%@条博客", comment: ""),"\(count)")
         let height: CGFloat = 44
         let rect = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
-        pulldownTipLabel.frame = CGRectOffset(rect, 0, -3 * height)
+        pulldownTipLabel.frame = CGRectOffset(rect, 0, -2 * height)
         UIView.animate(withDuration: 1.0,animations: {
             self.pulldownTipLabel.frame = CGRectOffset(rect, 0, height)
         }) { _ in
             UIView.animate(withDuration: 1.0) {
-                self.pulldownTipLabel.frame = CGRectOffset(rect, 0, -3 * height)
+                self.pulldownTipLabel.frame = CGRectOffset(rect, 0, -2 * height)
             }
         }
     }
@@ -132,7 +132,7 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
     @objc func action(sender: UITapGestureRecognizer) {
         let dict = ["portrait": sender.sender3, "user": sender.sender2, "uid": sender.sender]
         let uvm = UserViewModel(user: Account(dict: dict as [String : Any]))
-        present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm, uid: sender.sender ?? ""))), animated: true)
+        present(UINavigationController(rootViewController: ProfileTableViewController(account: uvm)), animated: true)
     }
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }

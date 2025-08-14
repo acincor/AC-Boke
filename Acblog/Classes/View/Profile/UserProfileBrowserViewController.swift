@@ -67,10 +67,6 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
         }
     }
     var url: URL
-    enum User: String {
-        case SomeBody = "SomeBody"
-        case Me = "Me"
-    }
     var style: User
     init(url: URL,style: User) {
         self.url = url
@@ -157,13 +153,19 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
         // 判断图片高度
         if size.height < scrollView.bounds.height {
             // 上下居中显示 - 调整 frame 的 x/y，一旦缩放，影响滚动范围
-            imageView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            imageView.snp.makeConstraints { make in
+                make.center.equalTo(self.view.snp.center)
+                make.size.equalTo(size)
+            }
             
             // 内容边距 － 会调整控件位置，但是不会影响控件的滚动
             let y = (scrollView.bounds.height - size.height) * 0.5
             scrollView.contentInset = UIEdgeInsets(top: y, left: 0, bottom: 0, right: 0)
         } else {
-            imageView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            imageView.snp.makeConstraints { make in
+                make.center.equalTo(self.view.snp.center)
+                make.size.equalTo(size)
+            }
             scrollView.contentSize = size
         }
     }
@@ -188,6 +190,7 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
                               placeholder: nil,
                               options: [.retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))), .fromMemoryCacheOrRefresh, .targetCache(imageCache)])
         view.addSubview(scrollView)
+        
         scrollView.addSubview(imageView)
         scrollView.addSubview(placeHolder)
         // 2. 设置位置
@@ -199,15 +202,9 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
         scrollView.delegate = self
         scrollView.minimumZoomScale = 0.5
         scrollView.maximumZoomScale = 2.0
-        
         // 4. 添加手势识别
-        let tap = UITapGestureRecognizer(target: self, action: #selector(close))
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(tap)
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 5
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.close)))
         if style == .Me {
             view.addSubview(portraitButton)
             portraitButton.snp.makeConstraints { make in

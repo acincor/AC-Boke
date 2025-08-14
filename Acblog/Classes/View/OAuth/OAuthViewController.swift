@@ -13,27 +13,10 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
     @objc private func close() {
         dismiss(animated: true,completion: nil)
     }
-    @objc private func closeUserAgreement() {
-        controller.dismiss(animated: true,completion: nil)
-    }
-    let controller = UIViewController()
-    @objc private func userAgreement() {
-        let textView = UITextView(frame: UIScreen.main.bounds)
-        guard let userAgreement = Bundle.main.path(forResource: "用户协议", ofType: "txt") else {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎找不到目录", comment: ""))
-            return
-        }
-        do{
-            let readStr:NSString=try NSString(contentsOfFile: userAgreement, encoding: String.Encoding.utf8.rawValue)
-            textView.text = readStr as String
-            textView.isEditable = false
-            controller.view = textView
-            controller.title = NSLocalizedString("用户协议",comment: "")
-            controller.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭",comment: ""), style: .plain, target: self, action: #selector(OAuthViewController.closeUserAgreement))
-            controller.navigationItem.leftBarButtonItem?.tintColor = .red
-            present(UINavigationController(rootViewController: controller), animated: true)
-        } catch _ {
-        }
+    @objc private func showUserAgreement() {
+        let agreementVC = UserAgreementViewController()
+        agreementVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(agreementVC, animated: true)
     }
     override func viewDidLoad() {
         view.addSubview(webView)
@@ -54,7 +37,7 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
         webView.load(URLRequest(url: oauthURL!))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭",comment: ""), style: .plain, target: self, action: #selector(OAuthViewController.close))
         navigationItem.leftBarButtonItem?.tintColor = .red
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("用户协议",comment: ""), style: .plain, target: self, action: #selector(OAuthViewController.userAgreement))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("用户协议",comment: ""), style: .plain, target: self, action: #selector(OAuthViewController.showUserAgreement))
         navigationItem.rightBarButtonItem?.tintColor = .red
     }
     enum 登录方式: String {

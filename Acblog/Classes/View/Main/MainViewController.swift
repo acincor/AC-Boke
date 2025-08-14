@@ -46,12 +46,7 @@ extension MainViewController {
         addChild(HomeTableViewController(), NSLocalizedString("首页", comment: ""), "tabbar_home")
         addChild(MessageTableViewController(), NSLocalizedString("消息", comment: ""), "tabbar_message_center")
         addChild(DiscoverTableViewController(), NSLocalizedString("发现", comment: ""), "tabbar_discover")
-        if UserAccountViewModel.sharedUserAccount.userLogon {
-            addChild(UIHostingController(rootView: UserNavigationLinkView(account: nil, uid: UserAccountViewModel.sharedUserAccount.account!.uid!)), NSLocalizedString("我", comment: ""), "tabbar_profile")
-            //个人喜欢四个登陆界面相同，若想改成NavigationView的ViewController也可以，只是不美观，因为不同，但是我们是处理好的
-        } else {
-            addChild(ProfileTableViewController(account: nil), NSLocalizedString("我", comment: ""), "tabbar_profile")
-        }
+        addChild(ProfileTableViewController(account: nil), NSLocalizedString("我", comment: ""), "tabbar_profile")
     }
     private func addChild(_ vc: UIViewController,_ title: String, _ imageName: String) {
         vc.title = title

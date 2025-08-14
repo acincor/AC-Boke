@@ -27,14 +27,9 @@ class UserAgreementViewController: UIViewController {
             textView.isEditable = false
             title = NSLocalizedString("用户协议", comment: "")
             view = textView
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.closeUserAgreement))
-            navigationItem.leftBarButtonItem?.tintColor = .red
         }catch _ {
         }
         // Do any additional setup after loading the view.
-    }
-    @objc func closeUserAgreement() {
-        self.dismiss(animated: true)
     }
     
     /*

@@ -68,17 +68,12 @@
       }
     },
     "主页" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accounts"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "主页"
+            "value" : "Information"
           }
         }
       }
@@ -181,6 +176,17 @@
         }
       }
     },
+    "修改昵称" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rename"
+          }
+        }
+      }
+    },
     "关闭" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -204,7 +210,14 @@
       }
     },
     "写" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write"
+          }
+        }
+      }
     },
     "写博客" : {
       "localizations" : {
@@ -438,6 +451,17 @@
         }
       }
     },
+    "名字：%@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name: %@"
+          }
+        }
+      }
+    },
     "善言感动人心，恶语伤人心..." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -605,7 +629,14 @@
       }
     },
     "撤回" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recall"
+          }
+        }
+      }
     },
     "改名失败" : {
       "localizations" : {
@@ -672,6 +703,26 @@
         }
       }
     },
+    "更改" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "更改用户名" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rename"
+          }
+        }
+      }
+    },
     "欢迎%@归来" : {
       "localizations" : {
         "en" : {
@@ -705,15 +756,11 @@
       }
     },
     "注册Ac博客" : {
-
-    },
-    "注册Mhc博客" : {
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Register as an user at Mhc Boke"
+            "value" : "Register as an user at Ac Boke"
           }
         }
       }
@@ -762,6 +809,16 @@
         }
       }
     },
+    "添加/删除" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "add/delete"
+          }
+        }
+      }
+    },
     "添加好友" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -774,17 +831,12 @@
       }
     },
     "点赞过的" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liked"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "点赞过的"
           }
         }
       }
@@ -822,7 +874,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Username:"
+            "value" : "Username: "
           }
         }
       }
@@ -850,15 +902,11 @@
       }
     },
     "登录Ac博客" : {
-
-    },
-    "登录Mhc博客" : {
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Log in Mhc Boke"
+            "value" : "Log in Ac Boke"
           }
         }
       }
@@ -903,6 +951,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "After logging in, you can use the search box to search for the brand new world you want"
+          }
+        }
+      }
+    },
+    "确定" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sure"
+          }
+        }
+      }
+    },
+    "确定吗" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure?"
           }
         }
       }
@@ -963,23 +1031,35 @@
       }
     },
     "评论过的" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Commented"
           }
-        },
-        "zh-Hans" : {
+        }
+      }
+    },
+    "请在输入框内输入您的用户名：" : {
+      "localizations" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "评论过的"
+            "value" : "Please input your name"
           }
         }
       }
     },
     "赞" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Like"
+          }
+        }
+      }
     },
     "输入你的话题：" : {
       "localizations" : {
@@ -987,6 +1067,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Input the trend you want:"
+          }
+        }
+      }
+    },
+    "输入您的用户名" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please input your name"
           }
         }
       }

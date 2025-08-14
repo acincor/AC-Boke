@@ -8,17 +8,15 @@ import SwiftUI
 import Kingfisher
 import SVProgressHUD
 // MARK: - UserProfileViewController
-class ProfileViewController: VisitorTableViewController {
+class ProfileTableViewController: VisitorTableViewController {
     
     // MARK: - 模型数据
     var account: UserViewModel?
-    var uid: String = ""
     var style: User = .Me
     
     // MARK: - 生命周期
-    init(account: UserViewModel?, uid: String) {
+    init(account: UserViewModel?) {
         self.account = account
-        self.uid = uid
         super.init(nibName: nil, bundle: nil)
         setupStyle()
     }
@@ -38,10 +36,10 @@ class ProfileViewController: VisitorTableViewController {
         setupNavigationBar()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView.reloadData()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        tableView.reloadData()
+//    }
     
     // MARK: - 设置方法
     private func setupStyle() {
@@ -61,7 +59,6 @@ class ProfileViewController: VisitorTableViewController {
     }
     
     private func setupTableView() {
-        tableView = UITableView(frame: view.bounds, style: .grouped)
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tableView.backgroundColor = .systemGroupedBackground
         tableView.register(SettingCell.self, forCellReuseIdentifier: "SettingCell")
@@ -69,7 +66,6 @@ class ProfileViewController: VisitorTableViewController {
         tableView.register(ActionButtonCell.self, forCellReuseIdentifier: "ActionButtonCell")
         tableView.dataSource = self
         tableView.delegate = self
-        view.addSubview(tableView)
         
         // 添加下拉刷新
         self.refreshControl = UIRefreshControl()
@@ -92,7 +88,7 @@ class ProfileViewController: VisitorTableViewController {
     // MARK: - 辅助属性
     private var navTitle: String {
         let userName = account?.user.user ?? UserAccountViewModel.sharedUserAccount.account?.user ?? ""
-        return "Name: \(userName)"
+        return NSLocalizedString("用户名：",comment: "")+userName
     }
     
     private var currentUserID: String {
@@ -122,45 +118,50 @@ class ProfileViewController: VisitorTableViewController {
     // MARK: - 跳转方法
     private func showUserAgreement() {
         let agreementVC = UserAgreementViewController()
+        agreementVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(agreementVC, animated: true)
     }
     
     private func showBlog() {
         let blogVC = makeController(for: .blog)
+        blogVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(blogVC, animated: true)
     }
     
     private func showLikedContent() {
         let likedVC = makeController(for: .like)
+        likedVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(likedVC, animated: true)
     }
     
     private func showCommentedContent() {
         let commentsVC = makeController(for: .comment)
+        commentsVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(commentsVC, animated: true)
     }
     
     private func showLiveStream() {
         let liveVC = BKLiveController()
+        liveVC.hidesBottomBarWhenPushed = true
         present(liveVC, animated: true)
     }
     
     private func showLogoutConfirmation() {
+        let controller = UIAlertController(title: NSLocalizedString("退出登录", comment: ""), message: NSLocalizedString("确定要退出登录吗",comment: ""), preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: NSLocalizedString("退出登录", comment: ""), style: .default, handler: { n in
+            NotificationCenter.default.post(name: .init(rawValue: .init("ACSwitchRootViewControllerLogOutNotification")), object: "logOut")
+        }))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel))
+        self.present(controller, animated: true)
+    }
+    
+    private func showLogoffConfirmation() {
         let controller = UIAlertController(title: NSLocalizedString("注销账号", comment: ""), message: NSLocalizedString("确定注销账号，不陪我一起玩了吗？",comment: ""), preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: NSLocalizedString("注销账号",comment:""), style: .default) {
             _ in
             NotificationCenter.default.post(name: .init(rawValue: .init("ACSwitchRootViewControllerLogOutNotification")), object: nil)
         })
         controller.addAction(UIAlertAction(title: NSLocalizedString("取消",comment:""), style: .cancel))
-        self.present(controller, animated: true)
-    }
-    
-    private func showLogoffConfirmation() {
-        let controller = UIAlertController(title: NSLocalizedString("退出登录", comment: ""), message: NSLocalizedString("确定要退出登录吗",comment: ""), preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: NSLocalizedString("退出登录", comment: ""), style: .default, handler: { n in
-            NotificationCenter.default.post(name: .init(rawValue: .init("ACSwitchRootViewControllerLogOutNotification")), object: "logOut")
-        }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel))
         self.present(controller, animated: true)
     }
     
@@ -219,7 +220,7 @@ class ProfileViewController: VisitorTableViewController {
     private func showAddFriend() {
         let controller = UIAlertController(title: NSLocalizedString("添加/删除", comment: ""), message: NSLocalizedString("确定吗",comment: ""), preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: ""), style: .default, handler: { n in
-            NetworkTools.shared.addFriend("\(self.uid)") { Result, Error in
+            NetworkTools.shared.addFriend("\(self.account?.user.uid ?? 0)") { Result, Error in
                 if Error != nil {
                     Task { @MainActor in
                         SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
@@ -265,20 +266,19 @@ class ProfileViewController: VisitorTableViewController {
 }
 
 // MARK: - UITableView 数据源和代理
-extension ProfileViewController {
+extension ProfileTableViewController {
     
     // MARK: - 分组设置
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3 // 头像/用户信息, 主要功能, 操作按钮
+        return !userLogon ? 0 : 3 // 头像/用户信息, 主要功能, 操作按钮
     }
-    
     // MARK: - 行数设置
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: // 头像和用户名
             return 1
         case 1: // 主要功能
-            return account == nil ? 5 : 4 // 未登录时多一个"开始直播"
+            return account == nil ? 6 : 4 // 查看资料卡少"开始直播"、"修改昵称"
         case 2: // 操作按钮
             if account == nil {
                 return 2 // 注销账号, 退出登录
@@ -304,15 +304,18 @@ extension ProfileViewController {
             
             switch indexPath.row {
             case 0:
-                cell.configure(title: "用户协议", showArrow: true)
+                cell.configure(title: "用户协议", image: UIImage(systemName: "person.circle")!, showArrow: true)
             case 1:
-                cell.configure(title: name, showArrow: true)
+                cell.configure(title: name, image: .composeToolbarPictureHighlighted, showArrow: true)
             case 2:
-                cell.configure(title: "点赞过的", showArrow: true)
+                cell.configure(title: "点赞过的", image: .timelineIconLike, showArrow: true)
             case 3:
-                cell.configure(title: "评论过的", showArrow: true)
-            case 4: // 仅未登录时显示
-                cell.configure(title: "开始直播", showArrow: true)
+                cell.configure(title: "评论过的", image: .timelineIconComment, showArrow: true)
+            case 5:
+                cell.configure(title: "修改昵称", image: .tabbarProfile, showArrow: true)
+            case 4: // 查看资料卡
+                cell.configure(title: "开始直播", image: .liveSmallIcon, showArrow: true)
+           
             default:
                 break
             }
@@ -365,6 +368,7 @@ extension ProfileViewController {
             
         case 1: // 功能项点击
             switch indexPath.row {
+            
             case 0: // 用户协议
                 showUserAgreement()
             case 1: // 博客
@@ -373,8 +377,11 @@ extension ProfileViewController {
                 showLikedContent()
             case 3: // 评论过的
                 showCommentedContent()
-            case 4: // 开始直播
+            case 4: // 仅未登录时显示
                 showLiveStream()
+            case 5: // 开始直播
+                showRenameAlert()
+            
             default:
                 break
             }
@@ -399,6 +406,7 @@ extension ProfileViewController {
     private func showUserProfileBrowser() {
         let url = account?.userProfileUrl ?? UserAccountViewModel.sharedUserAccount.portraitUrl
         let browserVC = UserProfileBrowserViewController(url: url, style: style)
+        browserVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(browserVC, animated: true)
     }
 }
@@ -483,7 +491,7 @@ class ImageDetailCell: UITableViewCell {
 class SettingCell: UITableViewCell {
     private let titleLabel = UILabel()
     private let arrowImageView = UIImageView()
-    
+    private let systemImageView = UIImageView()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -494,6 +502,10 @@ class SettingCell: UITableViewCell {
     }
     
     private func setupUI() {
+        arrowImageView.image = UIImage(systemName: "earth")
+        arrowImageView.tintColor = .systemGray
+        arrowImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(systemImageView)
         // 标题标签
         titleLabel.textColor = .orange
         titleLabel.font = UIFont.systemFont(ofSize: 17)
@@ -505,21 +517,28 @@ class SettingCell: UITableViewCell {
         arrowImageView.tintColor = .systemGray
         arrowImageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(arrowImageView)
-        
-        // 布局约束
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            
-            arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            arrowImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            arrowImageView.widthAnchor.constraint(equalToConstant: 14),
-            arrowImageView.heightAnchor.constraint(equalToConstant: 14)
-        ])
+        systemImageView.snp.makeConstraints { make in
+            make.left.equalTo(contentView.snp.left).offset(14)
+            make.width.equalTo(20)
+            make.centerY.equalTo(contentView.snp.centerY)
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalTo(systemImageView.snp.right).offset(14)
+            make.centerY.equalTo(contentView.snp.centerY)
+        }
+        arrowImageView.snp.makeConstraints { make in
+            make.right.equalTo(contentView.snp.right).inset(14)
+            make.centerY.equalTo(contentView.snp.centerY)
+        }
     }
     
-    func configure(title: String, showArrow: Bool = true) {
-        titleLabel.text = title
+    func configure(title: String, image: UIImage, showArrow: Bool = true) {
+        systemImageView.image = image
+        systemImageView.snp.makeConstraints {make in
+            make.height.equalTo(image.size.height * 20 / image.size.width)
+        }
+        systemImageView.sizeToFit()
+        titleLabel.text = NSLocalizedString(title, comment: "")
         arrowImageView.isHidden = !showArrow
         accessoryType = .none
     }
@@ -552,7 +571,7 @@ class ActionButtonCell: UITableViewCell {
     }
     
     func configure(title: String, color: UIColor) {
-        actionButton.setTitle(title, for: .normal)
+        actionButton.setTitle(NSLocalizedString(title, comment: ""), for: .normal)
         actionButton.setTitleColor(color, for: .normal)
     }
 }

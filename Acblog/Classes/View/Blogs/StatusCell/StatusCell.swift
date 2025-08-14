@@ -135,13 +135,13 @@ extension StatusCell: @preconcurrency FFLabelDelegate {
                     return
                 }
                 Task { @MainActor in
-                    guard let uid = res["uid"] as? String else {
+                    guard res["uid"] is String else {
                         Task { @MainActor in
                             SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
                         }
                         return
                     }
-                    self.cellDelegate?.present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: UserViewModel(user: Account(dict: res)),uid: uid))))
+                    self.cellDelegate?.present(UINavigationController(rootViewController: ProfileTableViewController(account: UserViewModel(user: Account(dict: res)))))
                 }
             }
             

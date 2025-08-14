@@ -16,3 +16,7 @@ var rootHost:String {
 }
 @MainActor var listViewModel = TypeNeedCacheListViewModel()
 let imageCache = ImageCache(name: "com.ACInc.imageCache")
+enum User: String {
+    case SomeBody = "SomeBody"
+    case Me = "Me"
+}

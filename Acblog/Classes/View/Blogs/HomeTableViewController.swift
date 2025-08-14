@@ -187,7 +187,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     @objc func action(sender: UITapGestureRecognizer) {
         let dict = ["portrait": sender.sender3, "user": sender.sender2, "uid": sender.sender]
         let uvm = UserViewModel(user: Account(dict: dict as [String : Any]))
-        present(UINavigationController(rootViewController: UIHostingController(rootView: UserNavigationLinkView(account: uvm, uid: sender.sender ?? "用户UID未登录"))), animated: true)
+        present(UINavigationController(rootViewController: ProfileTableViewController(account: uvm)), animated: true)
     }
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }
