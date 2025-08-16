@@ -84,7 +84,7 @@ AC-Boke
 ## Classes
 是全项目文件
 ### Actor
-actor集中地
+`actor`集中地
 #### NotificationRegister.swift
 处理允许通知的actor文件
 ### Model
@@ -105,7 +105,7 @@ actor集中地
 #### PicturePicker
 在发送有图片博客以及发送图片消息时的图片选择器
 #### Common.swift
-记录一些通知名常量、listViewModel首页加载博客全局变量、以及加载图片位于的缓存器`imageCache`
+记录一些通知名常量、`listViewModel`首页加载博客全局变量、以及加载图片位于的缓存器`imageCache`
 #### NetworkTools.swift
 网络类，请求API
 #### SQLiteManager.swift
@@ -177,7 +177,7 @@ actor集中地
 #### TypeStatusListViewModel.swift
 加载点赞过的（评论过的）博客、特定ID的博客
 #### UserAccountViewModel.swift
-根据*access_token*加载用户信息并保存到本地沙盒文件`account.plist`
+根据`access_token`加载用户信息并保存到本地沙盒文件`account.plist`
 #### UserViewModel.swift
 内含将好友、直播或者资料卡模型的模型部分信息转换成对象以及好友、直播或者资料卡本身的模型对象
 
@@ -202,7 +202,7 @@ brew install nginx-full --with-rtmp-module
 ```
 
 ### 安装mysql
-为了在本地创建mysql数据库*ac_inc*而安装。
+为了在本地创建mysql数据库`ac_inc`而安装。
 ```
 brew install mysql
 brew services start mysql
@@ -234,15 +234,15 @@ YOUR_PASSWORD
 
 nginx.conf需要进行修改。
 
-nginx.conf:83: 将alias video中的video替换成您存储直播切片的文件夹。
+nginx.conf:83: 将`alias video`中的`video`替换成您存储直播切片的文件夹。
 
-nginx.conf:84: 如果您的rtmp-nginx-module文件夹安装位置与我不同（或版本不同）请将根文件夹一并修改。
+nginx.conf:84: 如果您的`rtmp-nginx-module`文件夹安装位置与我不同（或版本不同）请将根文件夹一并修改。
 
 建议使用phpStorm启动项目，比较容易维护。
 
 ### 运行websocket项目
 
-target存储了能够链接websocket的聊天后端，可以安装java编译器之后用jar命令运行
+target存储了能够链接websocket的聊天后端，可以安装java编译器之后用`jar`命令运行
 
 ```java -jar -Xmx1024M -Xms256M xxx/AC-Boke/Acblog/Resource/target/wss-0.0.1-SNAPSHOT.jar --server.port=8081```
 
