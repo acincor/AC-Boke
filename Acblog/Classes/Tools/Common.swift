@@ -11,8 +11,9 @@ let ACSwitchRootViewControllerNotification = "ACSwitchRootViewControllerNotifica
 let ACStatusSelectedPhotoNotification = "ACStatusSelectedPhotoNotification"
 let ACStatusSelectedPhotoIndexPathKey = "ACStatusSelectedPhotoIndexPathKey"
 let ACStatusSelectedPhotoURLsKey = "ACStatusSelectedPhotoURLsKey"
+let localTest = true
 var rootHost:String {
-    return "http://localhost:8080"
+    return localTest ? "http://localhost:8080" : "https://mhcincapi.top"
 }
 @MainActor var listViewModel = TypeNeedCacheListViewModel()
 let imageCache = ImageCache(name: "com.ACInc.imageCache")
