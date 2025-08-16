@@ -11,9 +11,12 @@ AC-Boke
 
 开发者们：
 ---------------
-- 预警：（域名为mhcincapi.top）服务器将在2025年9月28日过期，且后续不再续费以供支持。
+- 预警：云端服务器将在2025年9月28日过期，且后续不再续费以供支持，访客们将无法访问`mhcincapi.top`。
 
-- 依赖库(SPM)为：Kingfisher、FMDB、HaishinKit、SVProgressHUD、SnapKit以及（非SPM，已为支持Swift6修改成为项目内部文件）FFLabel
+- 依赖库:`{
+                "SPM": ["Kingfisher", "FMDB", "HaishinKit", "SVProgressHUD", "SnapKit"], 
+                "已改成内部文件": ["FFLabel"]
+        }`
 
 - 支持中英文、Swift 6
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -102,11 +105,11 @@ actor集中地
 #### PicturePicker
 在发送有图片博客以及发送图片消息时的图片选择器
 #### Common.swift
-记录一些通知名常量、listViewModel首页加载博客全局变量、以及加载图片位于的缓存器imageCache
+记录一些通知名常量、listViewModel首页加载博客全局变量、以及加载图片位于的缓存器`imageCache`
 #### NetworkTools.swift
 网络类，请求API
 #### SQLiteManager.swift
-在这里创建db.sql内含有的数据库createTable()方法以及execRecordSet()封装方法用于获取数据库内的信息
+在这里创建`db.sql`内含有的数据库`createTable()`方法以及`execRecordSet()`封装方法用于获取数据库内的信息
 #### OAuth
 2.0版本的登录、注册
 ##### OAuthViewController.swift
@@ -174,7 +177,7 @@ actor集中地
 #### TypeStatusListViewModel.swift
 加载点赞过的（评论过的）博客、特定ID的博客
 #### UserAccountViewModel.swift
-根据*access_token*加载用户信息并保存到本地沙盒文件account.plist
+根据*access_token*加载用户信息并保存到本地沙盒文件`account.plist`
 #### UserViewModel.swift
 内含将好友、直播或者资料卡模型的模型部分信息转换成对象以及好友、直播或者资料卡本身的模型对象
 
@@ -227,7 +230,7 @@ YOUR_PASSWORD
 
 ### 那些需要修改的
 
-默认*YOUR_PASSWORD*=`123456`，需修改localhost/api文件夹下将所有链接数据库语句中密码实参值替换成您的密码
+默认`YOUR_PASSWORD=123456`，需修改`localhost/api`文件夹下将所有链接数据库语句中密码实参值替换成您的密码
 
 nginx.conf需要进行修改。
 
