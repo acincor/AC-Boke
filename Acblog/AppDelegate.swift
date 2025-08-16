@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Task {
             await shared.register(application)
         }
+        
         NotificationCenter.default.addObserver(forName: .init("ACSwitchRootViewControllerLogOutNotification"), object: nil, queue: nil) { (notification) in
             let object = notification.object as? String
             Task { @MainActor in

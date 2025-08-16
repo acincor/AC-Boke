@@ -11,7 +11,7 @@ AC-Boke
 
 开发者们：
 ---------------
-- 预警：（域名为mhcincapi.top）服务器将在2025年9月28日过期，且后续不再续费以供支持。**注意：我将在过段时间将网页上的API在本地尝试配置以达到让开发者与使用者可以运行成功，配置信息若符合系统则可以无视**
+- 预警：（域名为mhcincapi.top）服务器将在2025年9月28日过期，且后续不再续费以供支持。
 
 - 依赖库(SPM)为：Kingfisher、FMDB、HaishinKit、SVProgressHUD、SnapKit以及（非SPM，已为支持Swift6修改成为项目内部文件）FFLabel
 
@@ -68,6 +68,7 @@ AC-Boke
     - [UserAccountViewModel.swift](#useraccountviewmodelswift)
     - [UserViewModel.swift](#userviewmodelswift)
 - [Localized](#localized)
+- [api配置](#api配置)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -175,46 +176,36 @@ actor集中地
 
 本博客部分提示文本的翻译
 
-本地运行API需配置（推荐）
----------------
+## api配置
 
-由于**服务器并不是很稳定**，有很大概率无法持续维护，所以推荐本地运行API。
+服务器于2025年9月28日过期，请各位开发者于本地进行简单配置
 
-**如何新建"ac_inc"数据库**
+**前往Resource文件夹**
 
-**create database ac_inc**
+1. 下载homebrew
+2. 按如下语句进行配置即可
 
-**将nginx、php配置放在了资源文件夹下（Resource），统一为localhost，可以通过以下配置**
+```
+brew tap denji/nginx
+brew install nginx-full --with-rtmp-module
+brew install php
+brew install mysql
+brew services start php
+brew services start mysql
+mysql -u root -p
+123456
+mysql> create database ac_inc;
+```
+密码可以替换，但是若替换需要在localhost/api文件夹下将所有链接数据库的api内将语句中密码实参值替换成您的密码。
 
-```brew install nginx-full```
+nginx.conf需要进行修改。
+nginx.conf:83: 将alias video中的video替换成您存储直播切片的文件夹。
+nginx.conf:84: 如果您的rtmp-nginx-module文件夹安装位置与我不同（或版本不同）请将根文件夹一并修改。
 
-```brew install php```
+建议使用phpStorm启动项目，比较容易维护。
 
-```brew install mysql```
-
-```brew services start php```
-
-```brew services start mysql```
-
-**资源文件夹下（resource）内的nginx配置文件（nginx.conf）替换到brew下的配置文件（/opt/homebrew/etc/nginx.conf），旧版本（old_version）为苹果电脑操作系统15.0（macOS 15.0）以下**
-
-```nginx -s /opt/homebrew/etc/nginx.conf```
-
-**资源文件夹下（resource）内的php配置文件（php.ini）替换到brew下的php 配置文件（/opt/homebrew/etc/php/（版本号，我的是8.3）/php.ini）**
-
-```brew services start php.ini```
-
-**项目文件夹下（project）内的后端项目文件夹（localhost）内的所有文件添加到brew下的后端文件夹根目录（/opt/homebrew/var/www）**
-
-**项目文件夹下（project）内的网页聊天后端maven项目（wss项目），请用可以运行springboot项目的java编译器进行运行，用于客户端连接网页聊天后端（websocket）**
-
-**如何启动**
-
-```nginx```
-
-**如何重载**
-
-```nginx -s reload```
+target存储了能够链接websocket的聊天后端，可以安装java编译器之后用jar命令运行
+```java -jar -Xmx1024M -Xms256M xxx/AC-Boke/Acblog/Resource/target/wss-0.0.1-SNAPSHOT.jar --server.port=8081```
 
 使用者们：
 ---------------

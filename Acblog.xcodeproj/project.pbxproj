@@ -25,11 +25,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Resource/my.cnf,
-				Resource/my.cnf.default,
 				Resource/nginx.conf,
-				Resource/old_version/nginx.conf,
-				Resource/php.ini,
 			);
 			target = 5879D10F2CA7CC3B000F54F0 /* Acblog */;
 		};

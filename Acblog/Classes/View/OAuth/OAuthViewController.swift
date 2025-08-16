@@ -62,7 +62,8 @@ class OAuthViewController: UIViewController,WKNavigationDelegate {
 }
 extension OAuthViewController {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        guard let url = webView.url, url.host(percentEncoded: false) == "mhcincapi.top" else {
+        
+        guard let url = webView.url, url.host(percentEncoded: false) == "localhost" else {
             return .allow
         }
         guard let query = url.query,query.contains("code=") else {
