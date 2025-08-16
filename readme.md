@@ -199,12 +199,15 @@ mysql> create database ac_inc;
 密码可以替换，但是若替换需要在localhost/api文件夹下将所有链接数据库的api内将语句中密码实参值替换成您的密码。
 
 nginx.conf需要进行修改。
+
 nginx.conf:83: 将alias video中的video替换成您存储直播切片的文件夹。
+
 nginx.conf:84: 如果您的rtmp-nginx-module文件夹安装位置与我不同（或版本不同）请将根文件夹一并修改。
 
 建议使用phpStorm启动项目，比较容易维护。
 
 target存储了能够链接websocket的聊天后端，可以安装java编译器之后用jar命令运行
+
 ```java -jar -Xmx1024M -Xms256M xxx/AC-Boke/Acblog/Resource/target/wss-0.0.1-SNAPSHOT.jar --server.port=8081```
 
 使用者们：
