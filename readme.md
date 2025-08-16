@@ -69,7 +69,13 @@ AC-Boke
     - [UserViewModel.swift](#userviewmodelswift)
 - [Localized](#localized)
 - [api配置](#api配置)
-
+    - [安装nginx](#安装nginx)
+    - [安装mysql](#安装mysql)
+    - [安装php](#安装php)
+    - [配置mysql](#配置mysql)
+        - [下次登录](#下次登录)
+    - [那些需要修改的](#那些需要修改的)
+    - [运行websocket项目](#运行websocket项目)
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Classes
@@ -185,18 +191,43 @@ actor集中地
 1. 下载homebrew
 2. 按如下语句进行配置即可
 
+### 安装nginx
+为了直播推流而安装的nginx。
 ```
 brew tap denji/nginx
 brew install nginx-full --with-rtmp-module
-brew install php
-brew install mysql
-brew services start php
-brew services start mysql
-mysql -u root -p
-123456
-mysql> create database ac_inc;
 ```
-密码可以替换，但是若替换需要在localhost/api文件夹下将所有链接数据库的api内将语句中密码实参值替换成您的密码。
+
+### 安装mysql
+为了在本地创建mysql数据库*ac_inc*而安装。
+```
+brew install mysql
+brew services start mysql
+```
+
+### 安装php
+为了给phpStorm可执行的php编译器，于是安装brew的php。
+```
+brew install php
+brew services start php
+```
+
+### 配置mysql
+```
+mysql -u root
+mysql> create database ac_inc;
+mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('YOUR_PASSWORD');
+```
+
+#### 下次登录
+```
+mysql -u root -p
+YOUR_PASSWORD
+```
+
+### 那些需要修改的
+
+默认*YOUR_PASSWORD*=`123456`，需修改localhost/api文件夹下将所有链接数据库语句中密码实参值替换成您的密码
 
 nginx.conf需要进行修改。
 
@@ -205,6 +236,8 @@ nginx.conf:83: 将alias video中的video替换成您存储直播切片的文件�
 nginx.conf:84: 如果您的rtmp-nginx-module文件夹安装位置与我不同（或版本不同）请将根文件夹一并修改。
 
 建议使用phpStorm启动项目，比较容易维护。
+
+### 运行websocket项目
 
 target存储了能够链接websocket的聊天后端，可以安装java编译器之后用jar命令运行
 
