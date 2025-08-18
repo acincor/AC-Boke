@@ -230,6 +230,7 @@
       }
     },
     "出错了" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -359,6 +360,7 @@
       }
     },
     "加载数据错误，请稍后再试" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

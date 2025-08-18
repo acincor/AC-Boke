@@ -10,7 +10,6 @@ import UIKit
 import HaishinKit
 import SRTHaishinKit
 import DispatchIntrospection
-import SVProgressHUD
 import VideoToolbox
 class BKLiveController: UIViewController {
     let stopButton = UIButton(title: NSLocalizedString("结束直播", comment: ""), color: .white, backImageName: nil,backColor: .red)
@@ -32,7 +31,7 @@ class BKLiveController: UIViewController {
         view.backgroundColor = .red
         for i in liveListViewModel.list {
             if i.user.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("你的直播已在其他设备上进行...", comment: ""))
+                showError("你的直播已在其他设备上进行...")
                 return
             }
         }
@@ -77,7 +76,7 @@ class BKLiveController: UIViewController {
             try self.session.setActive(true)
         } catch {
             //print(error)
-            SVProgressHUD.showError(withStatus: error.localizedDescription)
+            showError(error.localizedDescription)
         }
         
         try await self.mixer.attachAudio(AVCaptureDevice.default(for: .audio), track: 0) { audioDeviceUnit in }

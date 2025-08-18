@@ -114,7 +114,6 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
                 self?.present(vc, animated: true,completion: nil)
             }
         }
-        SVProgressHUD.dismiss()
         tableView.backgroundColor = .systemBackground
         view.addSubview(tableView)
         view.addSubview(sendButton)
@@ -173,12 +172,9 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         isConnect = 1
         //urlRequestToUid = URLRequest(url: URL(string:"http://localhost:8080/\(uid)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
         task.sendPing { error in
-            Task { @MainActor in
-                SVProgressHUD.dismiss()
-                guard error == nil else {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                    return
-                }
+            guard error == nil else {
+                showError("出错了")
+                return
             }
         }
     }
@@ -193,9 +189,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
                     DispatchQueue.main.asyncAfter(deadline: .now()+1){
                         self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"image\": \"\(i.data()?.base64EncodedString() ?? "")\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\"}")) { error in
                             if let error = error {
-                                Task{ @MainActor in
-                                    SVProgressHUD.showError(withStatus: error.localizedDescription)
-                                }
+                                showError(error.localizedDescription)
                             }
                         }
                     }

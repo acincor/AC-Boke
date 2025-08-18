@@ -25,7 +25,7 @@ class UserViewModel: CustomStringConvertible {
     }()
     /// 用户默认头像
     var userDefaultIconView: UIImage {
-        return UIImage(named: "avatar_default_big")!
+        return .avatarDefaultBig
     }
     
     /// 构造函数

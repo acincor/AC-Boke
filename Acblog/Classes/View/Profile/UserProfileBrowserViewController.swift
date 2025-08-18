@@ -9,7 +9,6 @@ import Foundation
 import Photos
 import UIKit
 import Kingfisher
-import SVProgressHUD
 class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
 #if os(visionOS)
     override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {
@@ -36,7 +35,7 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
                 self.placeHolder.update(progress: CGFloat(current) / CGFloat(total))
             }) { result in
                 guard let r = try? result.get() else {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
+                    showError("图片下载失败")
                     return
                 }
                 self.placeHolder.isHidden = true
@@ -50,9 +49,7 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
         }
         NetworkTools.shared.sendPortrait(image: imageView.image!) { Result, Error in
             if Result != nil {
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("成功啦", comment: ""))
-                }
+                showInfo("成功啦")
             }
         }
         imageCache.removeImage(forKey: self.url.absoluteString)
@@ -246,8 +243,8 @@ class UserProfileBrowserViewController: UIViewController, UIScrollViewDelegate{
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(image:didFinishSavingWithError:contextInfo:)), nil)
     }
     @objc private func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: Any?) {
-        let message = (error == nil) ? NSLocalizedString("保存成功", comment: "") : NSLocalizedString("保存失败", comment: "")
-        SVProgressHUD.showInfo(withStatus: message)
+        let message = (error == nil) ? "保存成功" : "保存失败"
+        showInfo(message)
     }
     var picture : UIImage?
     func reloadData() {

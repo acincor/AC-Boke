@@ -7,7 +7,6 @@
 
 import UIKit
 import SwiftUI
-import SVProgressHUD
 
 let StatusCellMargin: CGFloat = 12
 let StatusCellIconWidth: CGFloat = 35
@@ -129,20 +128,14 @@ extension StatusCell: @preconcurrency FFLabelDelegate {
         if text.hasPrefix("@") {
             NetworkTools.shared.loadUserInfo(uid: Int(text.split(separator: "@")[0]) ?? 0) { Result, Error in
                 guard let res = Result as? [String:Any] else {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
-                    }
+                    showError("加载数据错误，请稍后重试")
                     return
                 }
-                Task { @MainActor in
-                    guard res["uid"] is String else {
-                        Task { @MainActor in
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
-                        }
-                        return
-                    }
-                    self.cellDelegate?.present(UINavigationController(rootViewController: ProfileTableViewController(account: UserViewModel(user: Account(dict: res)))))
+                guard res["uid"] is String else {
+                    showError("加载数据错误，请稍后重试")
+                    return
                 }
+                self.cellDelegate?.present(UINavigationController(rootViewController: ProfileTableViewController(account: UserViewModel(user: Account(dict: res)))))
             }
             
         }

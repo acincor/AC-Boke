@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import Kingfisher
-import SVProgressHUD
 protocol PhotoBrowserCellDelegate: NSObjectProtocol {
     func photoBrowserCellDidTapImage()
 }
@@ -86,7 +85,7 @@ class PhotoBrowserCell: UICollectionViewCell {
                         self.placeHolder.update(progress: CGFloat(receivedSize) / CGFloat(totalSize))
                     } completionHandler: { result in
                         guard let r = try? result.get() else {
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("图片下载失败", comment: ""))
+                            showError("图片下载失败")
                             return
                         }
                         self.placeHolder.isHidden = true

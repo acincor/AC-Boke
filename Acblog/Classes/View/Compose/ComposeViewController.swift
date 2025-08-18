@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
     private lazy var picturesPickerController = PicturePickerController()
@@ -205,22 +204,19 @@ extension ComposeViewController {
     @objc private func sendStatus(){
         let text = textView.emoticonText
         let image = picturesPickerController.pictures
-        SVProgressHUD.show(withStatus: NSLocalizedString("加载中", comment: ""))
+        showInfo("加载中")
         if chat ?? false {
             finished?(text,image)
             self.dismiss(animated: true)
             return
         }
         NetworkTools.shared.sendStatus(status: text, comment_id: comment_id, id: id, image: image) { (Result, Error) -> () in
-            Task { @MainActor in
-                SVProgressHUD.dismiss()
-                if Error != nil {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("您的网络不给力", comment: ""))
-                    return
-                }
-                self.textView.resignFirstResponder()
-                self.dismiss(animated: true,completion: nil)
+            if Error != nil {
+                showError("您的网络不给力")
+                return
             }
+            self.textView.resignFirstResponder()
+            self.dismiss(animated: true,completion: nil)
         }
     }
     private func prepareTextView() {

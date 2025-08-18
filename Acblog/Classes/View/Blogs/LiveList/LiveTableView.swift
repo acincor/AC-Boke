@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 //var live_to_user: String?
 @MainActor var liveListViewModel = ElseListViewModel(clas: .live)
@@ -29,7 +28,7 @@ class LiveTableView: UICollectionView{
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
+                    showError("加载数据错误，请稍后再试")
                     return
                 }
                 self.reloadData()

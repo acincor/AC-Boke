@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 @MainActor var MySearchTextField: UISearchController?
 
@@ -69,33 +68,27 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     @objc func action1(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus(nil, nil, listFilterTeams.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                }
+                showError("出错了")
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("不能删除别人的博客哦", comment: ""))
-                }
+                showError("不能删除别人的博客哦")
                 return
             }
-            Task { @MainActor in
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
-                StatusDAL.removeCache(self.listFilterTeams.statusList[sender.tag].status.id, .status)
-                if let i = listViewModel.statusList.firstIndex(where: { vm in
-                    vm.status.id == self.listFilterTeams.statusList[sender.tag].status.id
-                }){
-                    listViewModel.statusList.remove(at: i)
-                }
-                NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
-                self.filterContentForSearchText("")
+            showInfo("删除成功")
+            StatusDAL.removeCache(self.listFilterTeams.statusList[sender.tag].status.id, .status)
+            if let i = listViewModel.statusList.firstIndex(where: { vm in
+                vm.status.id == self.listFilterTeams.statusList[sender.tag].status.id
+            }){
+                listViewModel.statusList.remove(at: i)
             }
+            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
+            self.filterContentForSearchText("")
         }
     }
     @objc func action3(_ sender: UIButton) {
         guard (listFilterTeams.statusList[sender.tag].status.id > 0) else {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
+            showError("出错了")
             return
         }
         let nav = ComposeViewController(nil,listFilterTeams.statusList[sender.tag].status.id)
@@ -104,15 +97,6 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
     @objc func action4(_ sender: UIButton) {
         NetworkTools.shared.like(listFilterTeams.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
-                if (Result as! [String:Any])["code"] as! String == "add" {
-                    Task { @MainActor in
-                        SVProgressHUD.show(.timelineIconLike, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
-                    }
-                } else {
-                    Task { @MainActor in
-                        SVProgressHUD.show(.timelineIconUnlike, status: NSLocalizedString("你的取消TA收到了", comment: ""))
-                    }
-                }
                 Task { @MainActor in
                     self.listFilterTeams.loadSingleStatus(self.listFilterTeams.statusList[sender.tag].status.id) { isSuccessful in
                         if(isSuccessful) {
@@ -120,14 +104,14 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                         }
                     }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now()+1){
-                    SVProgressHUD.dismiss()
+                if (Result as! [String:Any])["code"] as! String == "add" {
+                    showAlert(.timelineIconLike, "你的点赞TA收到了")
+                    return
                 }
+                showAlert(.timelineIconUnlike, "你的取消TA收到了")
                 return
             }
-            Task { @MainActor in
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-            }
+            showError("出错了")
             return
         }
     }

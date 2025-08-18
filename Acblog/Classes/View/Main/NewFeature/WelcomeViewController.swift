@@ -36,12 +36,12 @@ class WelcomeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        iconView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholder: UIImage(named: "avatar_default_big"))
+        iconView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholder: UIImage.avatarDefaultBig)
         // Do any additional setup after loading the view.
     }
-    private lazy var backImageView: UIImageView = UIImageView(imageName:"ad_background")
+    private lazy var backImageView: UIImageView = UIImageView(image: .adBackground)
     private lazy var iconView: UIImageView = {
-        let iv = UIImageView(imageName: "avatar_default_big")
+        let iv = UIImageView(image: .avatarDefaultBig)
         iv.layer.cornerRadius = 45
         iv.layer.masksToBounds = true
         return iv

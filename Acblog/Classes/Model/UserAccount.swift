@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 /// 用户账户模型
 class UserAccount: NSObject,NSCoding,NSSecureCoding,@unchecked Sendable {
@@ -68,7 +67,7 @@ class UserAccount: NSObject,NSCoding,NSSecureCoding,@unchecked Sendable {
             let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true)
             try data.write(to: NSURL(fileURLWithPath: path) as URL)
         } catch {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
+            showError("出错了")
         }
     }
 }

@@ -117,9 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
             NetworkTools.shared.loadHotStatus { Result, Error in
                 if Result == nil {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试",comment: ""))
-                    }
+                    showError("加载数据错误，请稍后再试")
                     return
                 }
                 if((Result as! [String:Any])["user"] != nil || (Result as! [String:Any])["status"] != nil) {

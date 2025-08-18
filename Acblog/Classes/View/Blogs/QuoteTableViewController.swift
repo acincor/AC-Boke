@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 class QuoteTableViewController: VisitorTableViewController {
     var commentlistViewModel = TypeNeedCacheListViewModel()
@@ -27,26 +26,17 @@ class QuoteTableViewController: VisitorTableViewController {
     @objc func action5(_ sender: UIButton) {
         NetworkTools.shared.like(vm.status.id,comment_id: commentlistViewModel.statusList[sender.tag].status.comment_id,vm.status.comment_id) { Result, Error in
             if Error == nil {
-                if (Result as! [String:Any])["code"] as! String == "add" {
-                    Task { @MainActor in
-                        SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
-                    }
-                } else {
-                    Task { @MainActor in
-                        SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: NSLocalizedString("你的取消TA收到了", comment: ""))
-                    }
-                }
                 Task { @MainActor in
                     self.loadData()
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now()+1){
-                    SVProgressHUD.dismiss()
+                if (Result as! [String:Any])["code"] as! String == "add" {
+                    showAlert(.timelineIconLike, "你的点赞TA收到了")
+                    return
                 }
+                showAlert(.timelineIconUnlike, "你的取消TA收到了")
                 return
             }
-            Task { @MainActor in
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-            }
+            showError("出错了")
             return
         }
     }
@@ -56,7 +46,7 @@ class QuoteTableViewController: VisitorTableViewController {
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
+                    showError("加载数据错误，请稍后再试")
                     return
                 }
                 self.tableView.reloadData()
@@ -118,17 +108,12 @@ extension QuoteTableViewController {
         cell.bottomView.deleteButton.vm = vm
         let result = ["id":"\(vm.status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         let like_list = vm.status.like_list
+        cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
         for s in like_list {
             if s["like_uid"] as! String == result["like_uid"] as! String {
-                
-                cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_like"), for: .normal)
+                cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
                 break
-            } else {
-                cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
             }
-        }
-        if like_list.isEmpty {
-            cell.bottomView.likeButton.setImage(UIImage(named:"timeline_icon_unlike"), for: .normal)
         }
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
         cell.bottomView.likeButton.setTitle("\(commentlistViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
@@ -168,20 +153,14 @@ extension QuoteTableViewController {
     @objc func action4(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus(vm.status.comment_id,sender.vm!.status.comment_id,sender.vm!.status.id) { Result, Error in
             if Error != nil {
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                }
+                showError("出错了")
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                }
+                showError("出错了")
                 return
             }
-            Task { @MainActor in
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
-            }
+            showInfo("删除成功")
             Task { @MainActor in
                 self.loadData()
             }

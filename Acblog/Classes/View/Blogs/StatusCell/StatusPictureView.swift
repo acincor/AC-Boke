@@ -128,7 +128,7 @@ class StatusPictureViewCell: UICollectionViewCell {
         }
     }
     private lazy var iconView: UIImageView = UIImageView()
-    private lazy var gifIconView: UIImageView = UIImageView(imageName: "timeline_image_gif")
+    private lazy var gifIconView: UIImageView = UIImageView(image: .timelineImageGif)
 }
 extension StatusPictureView:UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

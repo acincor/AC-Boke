@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 let UserNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{
@@ -18,7 +17,7 @@ class MessageTableViewController: VisitorTableViewController{
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
                     
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后再试", comment: ""))
+                    showError("加载数据错误，请稍后再试")
                     return
                 }
                 self.tableView.reloadData()

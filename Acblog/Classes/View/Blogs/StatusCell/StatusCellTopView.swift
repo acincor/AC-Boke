@@ -10,7 +10,7 @@ import UIKit
 class StatusCellTopView: UIView {
     // MARK: - 懒加载控件
     /// 头像
-    lazy var iconView: UIImageView = UIImageView(imageName: "avatar_default_big")
+    lazy var iconView: UIImageView = UIImageView(image: .avatarDefaultBig)
     
     /// 姓名
     lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)

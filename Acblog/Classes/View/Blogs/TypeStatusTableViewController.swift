@@ -7,7 +7,6 @@
 
 import UIKit
 import SwiftUI
-import SVProgressHUD
 
 
 //let StatusCellNormalId2 = "StatusCellNormalId2"
@@ -52,11 +51,11 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vm = liveListViewModel.list[indexPath.row]
         guard let url = (rootHost+"/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试", comment: ""))
+            showError("似乎出了点问题，请刷新重试")
             return
         }
         guard let urlEncoded = URL(string:url) else {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎出了点问题，请刷新重试", comment: ""))
+            showError("似乎出了点问题，请刷新重试")
             return
         }
         present(ACWebViewController(url: urlEncoded),animated: true)
@@ -68,7 +67,7 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("加载数据错误，请稍后重试", comment: ""))
+                    showError("加载数据错误，请稍后重试")
                     return
                 }
                 self.showPulldownTip()
@@ -175,29 +174,23 @@ extension TypeStatusTableViewController {
     @objc func action1(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus(nil, nil, typeStatus.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                }
+                showError("出错了")
                 return
             }
             if (Result as! [String:Any])["error"] != nil {
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("不能删除别人的博客哦", comment: ""))
-                }
+                showError("不能删除别人的博客哦")
                 return
             }
-            Task { @MainActor in
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("删除成功", comment: ""))
-                StatusDAL.removeCache(self.typeStatus.statusList[sender.tag].status.id, .status)
-                if let i = listViewModel.statusList.firstIndex(where: { vm in
-                    vm.status.id == self.typeStatus.statusList[sender.tag].status.id
-                }) {
-                    listViewModel.statusList.remove(at: i)
-                }
-                NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
-                self.typeStatus.statusList.remove(at: sender.tag)
-                self.tableView.reloadData()
+            showInfo("删除成功")
+            StatusDAL.removeCache(self.typeStatus.statusList[sender.tag].status.id, .status)
+            if let i = listViewModel.statusList.firstIndex(where: { vm in
+                vm.status.id == self.typeStatus.statusList[sender.tag].status.id
+            }) {
+                listViewModel.statusList.remove(at: i)
             }
+            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
+            self.typeStatus.statusList.remove(at: sender.tag)
+            self.tableView.reloadData()
         }
         
     }
@@ -208,15 +201,6 @@ extension TypeStatusTableViewController {
     @objc func action4(_ sender: UIButton) {
         NetworkTools.shared.like(typeStatus.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
-                if (Result as! [String:Any])["code"] as! String == "add" {
-                    Task { @MainActor in
-                        SVProgressHUD.show(UIImage(named: "timeline_icon_like")!, status: NSLocalizedString("你的点赞TA收到了", comment: ""))
-                    }
-                } else {
-                    Task { @MainActor in
-                        SVProgressHUD.show(UIImage(named: "timeline_icon_unlike")!, status: NSLocalizedString("你的取消TA收到了", comment: ""))
-                    }
-                }
                 Task { @MainActor in
                     self.typeStatus.loadSingleStatus(self.typeStatus.statusList[sender.tag].status.id) { isSuccessful in
                         if(isSuccessful) {
@@ -224,14 +208,14 @@ extension TypeStatusTableViewController {
                         }
                     }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now()+1){
-                    SVProgressHUD.dismiss()
+                if (Result as! [String:Any])["code"] as! String == "add" {
+                    showAlert(.timelineIconLike, "你的点赞TA收到了")
+                    return
                 }
+                showAlert(.timelineIconUnlike, "你的取消TA收到了")
                 return
             }
-            Task { @MainActor in
-                SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-            }
+            showError("出错了")
             return
         }
     }

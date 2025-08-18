@@ -9,7 +9,6 @@ import Foundation
 import Photos
 import UIKit
 import SnapKit
-import SVProgressHUD
 private let PhotoBrowserCellId = "PhotoBrowserCellId"
 class PhotoBrowserViewController: UIViewController, UICollectionViewDataSource {
     override func viewDidLoad() {
@@ -112,8 +111,8 @@ class PhotoBrowserViewController: UIViewController, UICollectionViewDataSource {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(image:didFinishSavingWithError:contextInfo:)), nil)
     }
     @objc private func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: Any?) {
-        let message = (error == nil) ? NSLocalizedString("保存成功", comment: "") : NSLocalizedString("保存失败", comment: "")
-        SVProgressHUD.showInfo(withStatus: message)
+        let message = (error == nil) ? "保存成功" : "保存失败"
+        showInfo(message)
     }
 }
 extension PhotoBrowserViewController: @preconcurrency PhotoBrowserCellDelegate {

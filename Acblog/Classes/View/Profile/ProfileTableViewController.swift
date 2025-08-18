@@ -6,7 +6,6 @@
 //
 import SwiftUI
 import Kingfisher
-import SVProgressHUD
 // MARK: - UserProfileViewController
 class ProfileTableViewController: VisitorTableViewController {
     
@@ -178,11 +177,9 @@ class ProfileTableViewController: VisitorTableViewController {
             }
             if fields[0].hasText {
                 NetworkTools.shared.rename(rename: fields[0].text!) { Result, Error in
-                    Task { @MainActor in
-                        if Error != nil {
-                            SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                            return
-                        }
+                    if Error != nil {
+                        showError("出错了")
+                        return
                     }
                     
                     guard let res = Result as? [String:Any] else {
@@ -204,10 +201,8 @@ class ProfileTableViewController: VisitorTableViewController {
                     }
                     Task { @MainActor in
                         UserAccountViewModel.sharedUserAccount.loadUserInfo(account: UserAccountViewModel.sharedUserAccount.account!) { isSuccessful in
-                            Task { @MainActor in
-                                if isSuccessful {
-                                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("改名成功", comment: ""))
-                                }
+                            if isSuccessful {
+                                showInfo("改名成功")
                             }
                         }
                     }
@@ -222,42 +217,29 @@ class ProfileTableViewController: VisitorTableViewController {
         controller.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: ""), style: .default, handler: { n in
             NetworkTools.shared.addFriend("\(self.account?.user.uid ?? 0)") { Result, Error in
                 if Error != nil {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                    }
+                    showError("出错了")
                     return
                 }
                 guard let result = Result as? [String:Any] else {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                    }
+                    showError("出错了")
                     
                     return
                 }
                 if (result["error"] != nil) {
-                    let err = result["error"] as? String
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: err)
-                    }
-                    
+                    let err = result["error"] as? String ?? ""
+                    showError(err)
                     return
                 }
                 guard let code = result["code"] as? String else {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("出错了", comment: ""))
-                    }
+                    showError("出错了")
                     
                     return
                 }
                 if (code != "delete") {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("成功添加好友", comment: ""))
-                    }
+                    showInfo("成功添加好友")
                     return
                 }
-                Task { @MainActor in
-                    SVProgressHUD.showInfo(withStatus: NSLocalizedString("成功删除/拉黑好友", comment: ""))
-                }
+                showInfo("成功删除/拉黑好友")
             }
         }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel))

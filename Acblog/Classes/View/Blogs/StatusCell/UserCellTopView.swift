@@ -11,7 +11,7 @@ import UIKit
 class UserCellTopView: UIView {
     // MARK: - 懒加载控件
     /// 头像
-    private lazy var iconView: UIImageView = UIImageView(imageName: "avatar_default_big")
+    private lazy var iconView: UIImageView = UIImageView(image: .avatarDefaultBig)
     
     /// 姓名
     private lazy var nameLabel: UILabel = UILabel(title: "王老五", fontSize: 14)

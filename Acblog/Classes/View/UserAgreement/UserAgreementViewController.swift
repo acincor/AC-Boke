@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 class UserAgreementViewController: UIViewController {
 #if os(visionOS)
@@ -18,7 +17,7 @@ class UserAgreementViewController: UIViewController {
         super.viewDidLoad()
         let textView = UITextView(frame: UIScreen.main.bounds)
         guard let userAgreement = Bundle.main.path(forResource: "用户协议", ofType: "txt") else {
-            SVProgressHUD.showInfo(withStatus: NSLocalizedString("似乎找不到目录", comment: ""))
+            showError("似乎找不到目录")
             return
         }
         do{

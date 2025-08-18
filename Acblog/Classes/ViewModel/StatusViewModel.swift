@@ -20,7 +20,7 @@ class StatusViewModel: CustomStringConvertible {
     }
     /// 用户默认头像
     var userDefaultIconView: UIImage {
-        return UIImage(named: "avatar_default_big")!
+        return .avatarDefaultBig
     }
     @MainActor var rowHeight: CGFloat {
         if self.status.image != nil {

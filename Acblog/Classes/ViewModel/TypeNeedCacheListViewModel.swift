@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 import Kingfisher
 
 class TypeNeedCacheListViewModel: @unchecked Sendable {
@@ -55,15 +54,11 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
         } else if let id = id {
             NetworkTools.shared.loadOneStatus(id:id) { Result,Error in
                 guard let status = Result as? [String:Any] else {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("博客加载错误", comment: ""))
-                    }
+                    showError("博客加载错误")
                     return
                 }
                 guard let comment_list = status["comment_list"] as? [[String:Any]] else {
-                    Task { @MainActor in
-                        SVProgressHUD.showInfo(withStatus: NSLocalizedString("评论加载错误", comment: ""))
-                    }
+                    showError("评论加载错误")
                     return
                 }
                 var dataList = [StatusViewModel]()
@@ -103,7 +98,7 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                     do {
                         try d.write(to: URL(fileURLWithPath: path))
                     } catch {
-                        SVProgressHUD.show(withStatus: "缓存第"+String(vm.status.id)+"图片失败")
+                        showError("缓存第"+String(vm.status.id)+"图片失败")
                     }
                     
                 }
