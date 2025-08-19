@@ -186,23 +186,6 @@ extension NetworkTools {
         let urlString = rootHost+"/api/deleteBlog.php"
         tokenRequest(.POST, urlString, params, finished: finished)
     }
-    /*
-     func addLike(_ id: Int,_ comment_id: Int? = nil,comment_id comment_comment_id: Int? = nil,finished: @escaping HMRequestCallBack) {
-     guard var params = tokenDict else {
-     finished(nil, NSError(domain: "cn.itcast.error", code: -1001, userInfo: ["message": "token 为空"]))
-     return
-     }
-     if comment_id != nil {
-     params["comment_id"] = comment_id
-     }
-     if comment_comment_id != nil {
-     params["to_comment_id"] = comment_comment_id
-     }
-     params["id"] = id
-     let urlString = rootHost+"/api/addLike.php"
-     request(.POST, urlString, params, finished: finished)
-     }
-     */
     @MainActor func like(_ id: Int,comment_id comment_comment_id: Int? = nil,_ comment_id: Int? = nil,_ finished: @escaping HMRequestCallBack) {
         var params: [String: Any] = ["id": id]
         params["like_uid"] = UserAccountViewModel.sharedUserAccount.account!.uid!

@@ -12,16 +12,12 @@ class EmoticonPackage: NSObject {
     
     /// 表情包所在路径
     @objc var id: String?
-    /// 表情包的名称，显示在 toolbar 中
-    /*@objc var group_name: String?*/
     /// 表情数组 - 能够保证在使用的时候，数组已经存在，可以直接追加数据
     @objc lazy var emoticons = [Emoticon]()
     
     init(dict: [String: Any]) {
         super.init()
-        
         id = dict["id"] as? String
-        /*group_name = dict["group_name_"+Locale.current.language.minimalIdentifier.split(separator: "-")[0]] as? String*/
         // 1. 获得字典的数组
         if let array = dict["emoticons"] as? [[String: Any]] {
             // 2. 遍历数组

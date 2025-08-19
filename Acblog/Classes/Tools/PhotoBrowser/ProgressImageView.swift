@@ -8,14 +8,6 @@
 import UIKit
 
 class ProgressImageView: UIImageView {
-    
-    /*
-     // Only override draw() if you perform custom drawing.
-     // An empty implementation adversely affects performance during animation.
-     override func draw(_ rect: CGRect) {
-     // Drawing code
-     }
-     */
     func update(progress: Double) {
         progressView.progress = progress
         DispatchQueue.main.async {

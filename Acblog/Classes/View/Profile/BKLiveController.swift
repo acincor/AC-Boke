@@ -57,15 +57,6 @@ class BKLiveController: UIViewController {
     @objc func close() {
         self.dismiss(animated: true)
     }
-    /*
-     var sessionQueue: DispatchQueue {
-     if #available(iOS 17.0, *){
-     return DispatchSerialQueue(label: "com.Ac-inc.serialQueue")
-     } else {
-     return dispatch_queue_t(label: "com.Ac-inc.serialQueue")
-     }
-     }
-     */
     let connection = RTMPConnection()
     lazy var stream = RTMPStream(connection: connection)
     let mixer = MediaMixer()

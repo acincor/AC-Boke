@@ -8,7 +8,7 @@
 import UIKit
 
 class EmoticonAttachment: NSTextAttachment {
-    //表情对象
+    /// 表情对象
     var emoticon: Emoticon
     
     init(emoticon: Emoticon) {

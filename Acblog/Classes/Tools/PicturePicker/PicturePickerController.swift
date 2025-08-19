@@ -14,13 +14,7 @@ class PicturePickerController: UICollectionViewController {
     lazy var pictures = [UIImage]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Register cell classes
         self.collectionView!.register(PicturePickerCell.self, forCellWithReuseIdentifier: PicturePickerCellID)
-        // Do any additional setup after loading the view.
     }
 #if os(visionOS)
     override var preferredContainerBackgroundStyle: UIContainerBackgroundStyle {

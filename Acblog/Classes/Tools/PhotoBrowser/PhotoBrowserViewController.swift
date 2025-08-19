@@ -129,7 +129,6 @@ extension PhotoBrowserViewController: @preconcurrency PhotoBrowserDismissDelegat
         let cell = collectionView.visibleCells[0] as! PhotoBrowserCell
         iv.image = cell.imageView.image
         iv.frame = cell.scrollView.convert(cell.imageView.frame, to: UIApplication.shared.connectedScenes.map({ $0 as? UIWindowScene}).compactMap({ $0 }).first?.windows.first)
-        //UIApplication.shared.keyWindow!.addSubview(iv)
         return iv
     }
     func indexPathForDimiss() -> IndexPath {

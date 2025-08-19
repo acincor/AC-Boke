@@ -17,13 +17,6 @@ class VisitorView: UIView{
     lazy var loginButton: UIButton = UIButton(title: NSLocalizedString("登录",comment: ""), color: UIColor.darkText, backImageName: "common_button_white_disable")
     private lazy var iconView: UIImageView = UIImageView(image: .visitordiscoverFeedImageSmallicon)
     private lazy var homeIconView: UIImageView = UIImageView(image: .visitordiscoverFeedImageHouse)
-    /*
-     // Only override draw() if you perform custom drawing.
-     // An empty implementation adversely affects performance during animation.
-     override func draw(_ rect: CGRect) {
-     // Drawing code
-     }
-     */
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

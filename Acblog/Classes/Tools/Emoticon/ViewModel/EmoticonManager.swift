@@ -6,12 +6,13 @@
 //
 
 import UIKit
-
+/// 管理表情的类
 class EmoticonManager {
+    /// 表情包包管理对象
     lazy var packages = [EmoticonPackage]()
     @MainActor static let sharedManager = EmoticonManager()
+    /// 表情包转富文本
     func emoticonText(string: String, font: UIFont) -> NSAttributedString {
-        
         let strM = NSMutableAttributedString(string: string)
         
         // 1. 正则表达式: [] 是正则表达式的关键字，需要转义
@@ -41,9 +42,9 @@ class EmoticonManager {
                 strM.replaceCharacters(in: range, with: attrText)
             }
         }
-        
         return strM
     }
+    /// 添加喜欢的表情包
     func addFavorite(_ em: Emoticon) {
         em.times += 1
         if !packages[0].emoticons.contains(em) {
@@ -52,7 +53,9 @@ class EmoticonManager {
         }
         packages[0].emoticons.sort { $0.times > $1.times }
     }
+    /// 初始化
     init() {
+        //添加首页
         packages.append(EmoticonPackage(dict: [:]))
         guard let path = Bundle.main.path(forResource: "emoticons", ofType: "plist", inDirectory: "Emoticons.bundle") else {
             return

@@ -33,7 +33,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
     init(to_uid: Int, username: String) {
         self.to_uid = to_uid
         self.username = username
-        self.urlRequest = URLRequest(url: URL(string:"wss://wss.mhcincapi.top/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
+        self.urlRequest = URLRequest(url: URL(string: (localTest ? "ws://localhost:8081/" : "wss://wss.mhcincapi.top/") + "\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
         super.init(nibName: nil, bundle: nil)
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: chatID)
     }
@@ -73,7 +73,6 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         return 1
     }
     var statusListViewModel = TypeNeedCacheListViewModel()
-    //let urlRequest = URLRequest(url: URL(string:"http://localhost:8080/\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(UserAccountViewModel.sharedUserAccount.account!.uid!)")!)//本地测试
     lazy var urlSession = URLSession(configuration: .default)
     var urlRequest: URLRequest
     lazy var task = urlSession.webSocketTask(with: urlRequest)
@@ -314,32 +313,3 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         return self.statusListViewModel.statusList[indexPath.row].rowHeight
     }
 }
-/*extension StatusViewModel {
- static func == (lhs: StatusViewModel, rhs: StatusViewModel) -> Bool {
- if lhs.status == rhs.status && lhs.thumbnailUrls == rhs.thumbnailUrls && rhs.attributedStatus == lhs.attributedStatus && rhs.cellId == lhs.cellId {
- return true
- } else {
- return false
- }
- }
- }
- extension Array<StatusViewModel> {
- static func == (lhs: [StatusViewModel], rhs: [StatusViewModel]) -> Bool {
- if(lhs.count != rhs.count) {
- return false
- }
- if(lhs.count == rhs.count) {
- var c = 0
- for i in 0..<rhs.count {
- if(lhs[i] == rhs[i]) {
- c += 1
- }
- }
- if(c == lhs.count) {
- return true
- }
- }
- return false
- }
- }
- */

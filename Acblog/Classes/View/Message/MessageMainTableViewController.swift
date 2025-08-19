@@ -16,7 +16,6 @@ class MessageTableViewController: VisitorTableViewController{
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
-                    
                     showError("加载数据错误，请稍后再试")
                     return
                 }
