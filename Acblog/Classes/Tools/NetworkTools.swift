@@ -233,11 +233,9 @@ extension NetworkTools {
         upload(urlString, data, params,finished: finished)
     }
     @MainActor func sendPortrait(image: UIImage?, finished: @escaping HMRequestCallBack) {
-        // 1. 创建参数字典
-        let params = [String: Any]()
         // 2. 设置参数
         let urlString = rootHost+"/api/portrait.php"
-        uploadImage(urlString, ["pic": image!.jpegData(compressionQuality: 0.8)!], params, finished: finished)
+        uploadImage(urlString, ["pic": image!.jpegData(compressionQuality: 0.8)!], nil, finished: finished)
     }
     @MainActor private func upload(_ URLString: String, _ data: [Data], _ parameters: [String:Any]?, finished: @escaping HMRequestCallBack) {
         var datas = [String: Data]()

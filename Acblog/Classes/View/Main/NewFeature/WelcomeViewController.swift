@@ -36,7 +36,7 @@ class WelcomeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        iconView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholder: UIImage.avatarDefaultBig)
+        iconView.kf.setImage(with: UserAccountViewModel.sharedUserAccount.portraitUrl, placeholder: UIImage.avatarDefaultBig, options: [.forceRefresh])
         // Do any additional setup after loading the view.
     }
     private lazy var backImageView: UIImageView = UIImageView(image: .adBackground)

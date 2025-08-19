@@ -286,15 +286,16 @@ extension ProfileTableViewController {
             
             switch indexPath.row {
             case 0:
-                cell.configure(title: "用户协议", image: UIImage(systemName: "person.circle")!, showArrow: true)
+                cell.configure(title: "用户协议", image: UIImage(systemName: "text.page")!, showArrow: true)
             case 1:
-                cell.configure(title: name, image: .composeToolbarPictureHighlighted, showArrow: true)
+                cell.configure(title: name, image: UIImage(systemName: "folder.circle")!, showArrow: true)
+                
             case 2:
                 cell.configure(title: "点赞过的", image: .timelineIconLike, showArrow: true)
             case 3:
                 cell.configure(title: "评论过的", image: .timelineIconComment, showArrow: true)
             case 5:
-                cell.configure(title: "修改昵称", image: .tabbarProfile, showArrow: true)
+                cell.configure(title: "修改昵称", image: UIImage(systemName: "person.circle")!, showArrow: true)
             case 4: // 查看资料卡
                 cell.configure(title: "开始直播", image: .liveSmallIcon, showArrow: true)
            
@@ -450,7 +451,7 @@ class ImageDetailCell: UITableViewCell {
                 with: account.userProfileUrl,
                 options: [
                     .retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))),
-                    .fromMemoryCacheOrRefresh
+                    .forceRefresh
                 ]
             )
             nameLabel.text = account.user.user
@@ -460,7 +461,7 @@ class ImageDetailCell: UITableViewCell {
                 with: UserAccountViewModel.sharedUserAccount.portraitUrl,
                 options: [
                     .retryStrategy(DelayRetryStrategy(maxRetryCount: 12, retryInterval: .seconds(1))),
-                    .fromMemoryCacheOrRefresh
+                    .forceRefresh
                 ]
             )
             nameLabel.text = UserAccountViewModel.sharedUserAccount.account?.user
@@ -473,7 +474,7 @@ class ImageDetailCell: UITableViewCell {
 class SettingCell: UITableViewCell {
     private let titleLabel = UILabel()
     private let arrowImageView = UIImageView()
-    private let systemImageView = UIImageView()
+    private let systemImageView = UIImageView(image: UIImage(systemName: "medal"))
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -484,9 +485,8 @@ class SettingCell: UITableViewCell {
     }
     
     private func setupUI() {
-        arrowImageView.image = UIImage(systemName: "earth")
-        arrowImageView.tintColor = .systemGray
-        arrowImageView.translatesAutoresizingMaskIntoConstraints = false
+        systemImageView.tintColor = .systemGray
+        systemImageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(systemImageView)
         // 标题标签
         titleLabel.textColor = .orange
@@ -501,7 +501,6 @@ class SettingCell: UITableViewCell {
         contentView.addSubview(arrowImageView)
         systemImageView.snp.makeConstraints { make in
             make.left.equalTo(contentView.snp.left).offset(14)
-            make.width.equalTo(20)
             make.centerY.equalTo(contentView.snp.centerY)
         }
         titleLabel.snp.makeConstraints { make in
@@ -516,10 +515,7 @@ class SettingCell: UITableViewCell {
     
     func configure(title: String, image: UIImage, showArrow: Bool = true) {
         systemImageView.image = image
-        systemImageView.snp.makeConstraints {make in
-            make.height.equalTo(image.size.height * 20 / image.size.width)
-        }
-        systemImageView.sizeToFit()
+        //systemImageView.sizeToFit()
         titleLabel.text = NSLocalizedString(title, comment: "")
         arrowImageView.isHidden = !showArrow
         accessoryType = .none

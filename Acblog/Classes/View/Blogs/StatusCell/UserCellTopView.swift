@@ -27,7 +27,7 @@ class UserCellTopView: UIView {
             nameLabel.text = viewModel?.user.user
             nameLabel.textColor = .red
             // 头像
-            iconView.kf.setImage(with: viewModel?.userProfileUrl, placeholder: viewModel?.userDefaultIconView)
+            iconView.kf.setImage(with: viewModel?.userProfileUrl, placeholder: viewModel?.userDefaultIconView, options: [.forceRefresh])
             iconView.isUserInteractionEnabled = true
             iconView.layer.cornerRadius = 15
             iconView.layer.masksToBounds = true
