@@ -8,11 +8,14 @@
 import UIKit
 
 class EmoticonAttachment: NSTextAttachment {
+    //表情对象
     var emoticon: Emoticon
+    
     init(emoticon: Emoticon) {
         self.emoticon = emoticon
         super.init(data: nil, ofType: nil)
     }
+    /// 处理富文本
     func imageText(font: UIFont) -> NSAttributedString {
         image = UIImage(contentsOfFile: emoticon.imagePath)
         let lineHeight = font.lineHeight

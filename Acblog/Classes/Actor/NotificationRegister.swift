@@ -6,7 +6,9 @@
 //
 import Foundation
 import UIKit
+/// 此actor内置注册通知方法
 actor NotificationRegister {
+    /// 注册通知
     func register(_ application: UIApplication) {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in

@@ -11,7 +11,9 @@ import UIKit
 class Account: NSObject, NSCoding {
     /// 当前授权用户的UID
     @objc var uid: Int = 0
+    /// 当前授权用户的名字
     @objc var user: String?
+    /// 用户头像的urlString
     @objc var portrait: String?
     init(dict: [String: Any]) {
         super.init()

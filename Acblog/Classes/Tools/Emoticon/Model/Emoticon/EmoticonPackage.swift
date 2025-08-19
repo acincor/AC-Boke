@@ -32,23 +32,16 @@ class EmoticonPackage: NSObject {
                 }
                 emoticons.append(Emoticon(dict: d))
             }
-        }
-        appendEmptyEmoticon()
-    }
-    
-    override var description: String {
-        let keys = ["id", "emoticons"]
-        
-        return dictionaryWithValues(forKeys: keys).description
-    }
-    private func appendEmptyEmoticon() {
-        let count = emoticons.count % 20
-        if emoticons.count > 0 && count == 0 {
             return
         }
-        for _ in count..<20 {
+        //喜欢
+        for _ in 0..<20 {
             emoticons.append(Emoticon(isEmpty: true))
         }
+    }
+    override var description: String {
+        let keys = ["id", "emoticons"]
+        return dictionaryWithValues(forKeys: keys).description
     }
 }
 

@@ -11,10 +11,15 @@ import UIKit
 
 // MARK: - 表情模型
 class Emoticon: NSObject {
+    ///次数
     @objc var times = 0
+    ///代表的表情包文字
     @objc var chs: String?
+    ///表情包图片所在位置
     @objc var png: String?
+    ///将code转成emoji
     @objc var emoji: String?
+    ///是否为空
     @objc var isEmpty = false
     init(isEmpty: Bool) {
         self.isEmpty = isEmpty

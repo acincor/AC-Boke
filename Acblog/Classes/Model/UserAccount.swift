@@ -16,6 +16,7 @@ class UserAccount: NSObject,NSCoding,NSSecureCoding,@unchecked Sendable {
     
     /// 用于调用access_token，接口获取授权后的access token
     @objc var access_token: String?
+    /// 过期时间
     @objc var expires_in: Int = 0
     /// 当前授权用户的UID
     @objc var uid: String?
