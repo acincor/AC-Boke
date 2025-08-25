@@ -52,6 +52,7 @@ AC-Boke
     - [Blogs](#blogs)
       - [LiveList](#livelist)
       - [CommentTableViewController.swift](#commenttableviewcontrollerswift)
+      - [BlogTableViewController.swift](#blogtableviewcontrollerswift)
       - [QuoteTableViewController.swift](#quotetableviewcontrollerswift)
       - [HomeTableViewController.swift](#hometableviewcontrollerswift)
       - [TypeStatusTableViewController.swift](#typestatustableviewcontrollerswift)
@@ -142,6 +143,8 @@ AC-Boke
 加载正在直播的信息列表
 ##### CommentTableViewController.swift
 加载评论
+##### BlogTableViewController.swift
+集成了加载博客信息的视图控制器，后续其余加载需要缓存的类继承这个类
 ##### QuoteTableViewController.swift
 加载评论回复
 ##### HomeTableViewController.swift
