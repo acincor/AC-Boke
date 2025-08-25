@@ -16,7 +16,7 @@ let localTest = true
 var rootHost:String {
     return localTest ? "http://localhost:8080" : "https://mhcincapi.top"
 }
-@MainActor var listViewModel = TypeNeedCacheListViewModel()
+//@MainActor var listViewModel = TypeNeedCacheListViewModel()
 let imageCache = ImageCache(name: "com.ACInc.imageCache")
 func dismissAlert() {
     DispatchQueue.main.asyncAfter(deadline: .now()+1){

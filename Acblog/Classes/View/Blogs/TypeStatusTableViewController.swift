@@ -175,13 +175,8 @@ extension TypeStatusTableViewController {
                 return
             }
             showInfo("删除成功")
-            StatusDAL.removeCache(self.typeStatus.statusList[sender.tag].status.id, .status)
-            if let i = listViewModel.statusList.firstIndex(where: { vm in
-                vm.status.id == self.typeStatus.statusList[sender.tag].status.id
-            }) {
-                listViewModel.statusList.remove(at: i)
-            }
-            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
+            
+            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: self.typeStatus.statusList[sender.tag].status.id)
             self.typeStatus.statusList.remove(at: sender.tag)
             self.tableView.reloadData()
         }
@@ -216,7 +211,7 @@ extension TypeStatusTableViewController {
         return typeStatus.statusList[indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CommentTableViewController(viewModel: typeStatus.statusList[indexPath.row])
+        let vc = CommentTableViewController(typeStatus.statusList[indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)

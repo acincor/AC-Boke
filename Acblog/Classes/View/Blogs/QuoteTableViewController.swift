@@ -7,169 +7,28 @@
 
 import UIKit
 
-class QuoteTableViewController: VisitorTableViewController {
-    var commentlistViewModel = TypeNeedCacheListViewModel()
-    var vm: StatusViewModel
-    init(vm: StatusViewModel) {
-        self.vm = vm
-        super.init(nibName: nil, bundle: nil)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    private func prepareTableView() {
-        tableView.separatorStyle = .none
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
-        tableView.estimatedRowHeight = 400
-        tableView.rowHeight = 400
-    }
-    @objc func like(_ sender: UIButton) {
-        NetworkTools.shared.like(vm.status.id,comment_id: commentlistViewModel.statusList[sender.tag].status.comment_id,vm.status.comment_id) { Result, Error in
-            if Error == nil {
-                Task { @MainActor in
-                    self.loadData()
-                }
-                if (Result as! [String:Any])["code"] as! String == "add" {
-                    showAlert(.timelineIconLike, "你的点赞TA收到了")
-                    return
-                }
-                showAlert(.timelineIconUnlike, "你的取消TA收到了")
-                return
-            }
-            showError("出错了")
-            return
-        }
-    }
-    @objc func loadData() {
-        self.refreshControl?.beginRefreshing()
-        commentlistViewModel.loadStatus(id: vm.status.id, comment_id: vm.status.comment_id) { (isSuccessful) in
-            Task { @MainActor in
-                self.refreshControl?.endRefreshing()
-                if !isSuccessful {
-                    showError("加载数据错误，请稍后再试")
-                    return
-                }
-                self.tableView.reloadData()
-            }
-        }
-    }
-    private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
+class QuoteTableViewController: BlogTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
-            return
-        }
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.close))
-        navigationItem.rightBarButtonItem?.tintColor = .red
-        refreshControl = ACRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(loadData), for: .valueChanged)
-        NotificationCenter.default.addObserver(forName: Notification.Name(ACStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[ACStatusSelectedPhotoIndexPathKey] as? IndexPath else {
-                return
-            }
-            guard let urls = n.userInfo?[ACStatusSelectedPhotoURLsKey] as? [URL] else {
-                return
-            }
-            guard let cell = n.object as? PhotoBrowserPresentDelegate else {
-                return
-            }
-            Task { @MainActor in
-                let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
-                vc.modalPresentationStyle = .custom
-                vc.transitioningDelegate = self?.photoBrowserAnimator
-                self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
-                self?.present(vc, animated: true,completion: nil)
-            }
-        }
-        loadData()
-        prepareTableView()
         let cell = StatusNormalCell(style: .default, reuseIdentifier: StatusCellNormalId)
         cell.viewModel = vm
         cell.bottomView.removeFromSuperview()
         tableView.tableHeaderView = cell
+        guard let vm = vm else {
+            return
+        }
         tableView.tableHeaderView?.frame = CGRectMake(cell.frame.maxX, cell.frame.maxY, cell.frame.width, vm.rowHeight-40)
         
     }
-    
-    @objc func close() {
-        self.dismiss(animated: true)
-    }
-    @objc func whenIconViewIsTouched(sender: UITapGestureRecognizer) {
-        present(UINavigationController(rootViewController: ProfileTableViewController(account: sender.userViewModel)), animated: true)
-    }
-}
-extension QuoteTableViewController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return commentlistViewModel.statusList.count
-    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = commentlistViewModel.statusList[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusNormalCell
-        // Configure the cell...
-        cell.viewModel = vm
-        cell.bottomView.deleteButton.vm = vm
-        let like_list = vm.status.like_list
-        cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
-        let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
-        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.comment_uid)", "portrait":vm.userProfileUrl.absoluteString]))
-        cell.topView.iconView.addGestureRecognizer(g)
-        for s in like_list {
-            if s["like_uid"] as! String == UserAccountViewModel.sharedUserAccount.account!.uid! {
-                cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
-                break
-            }
-        }
-        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteQuote(_:)), for: .touchUpInside)
-        cell.bottomView.likeButton.setTitle("\(commentlistViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        cell.bottomView.likeButton.tag = indexPath.row
-        //like(cell.commentBottomView.likeButton)
-        cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
-        cell.cellDelegate = self
-        /*
-         cell.bottomView.commentButton.tag = indexPath.row
-         cell.bottomView.commentButton.vm2 = vm
-         cell.bottomView.commentButton.cell2 = cell
-         cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
-         */
+        let cell = super.tableView(tableView, cellForRowAt: indexPath) as! StatusCell
         cell.bottomView.likeButton.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(cell.bottomView.deleteButton.snp.top)
             make.left.equalTo(cell.bottomView.deleteButton.snp.right)
             make.width.equalTo(cell.bottomView.deleteButton.snp.width)
-            make.height.equalTo(cell.bottomView.deleteButton.snp.height)
             make.right.equalTo(cell.bottomView.snp.right)
+            make.height.equalTo(cell.bottomView.deleteButton.snp.height)
         }
         cell.bottomView.commentButton.removeFromSuperview()
         return cell
-    }
-    @objc func deleteQuote(_ sender: UIButton) {
-        NetworkTools.shared.deleteStatus(vm.status.comment_id,sender.vm!.status.comment_id,sender.vm!.status.id) { Result, Error in
-            if Error != nil {
-                showError("出错了")
-                return
-            }
-            if (Result as! [String:Any])["error"] != nil {
-                showError("出错了")
-                return
-            }
-            showInfo("删除成功")
-            Task { @MainActor in
-                self.loadData()
-            }
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return commentlistViewModel.statusList[indexPath.row].rowHeight
-    }
-}
-extension QuoteTableViewController: @preconcurrency StatusCellDelegate {
-    func statusCellDidClickUrl(url: URL) {
-        let vc = ACWebViewController(url: url)
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    func present(_ controller: UIViewController) {
-        self.present(controller, animated: true)
     }
 }

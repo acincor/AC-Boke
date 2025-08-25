@@ -24,9 +24,10 @@ class BlogTableViewController: VisitorTableViewController {
         tableView.rowHeight = 400
     }
     @objc func like(_ sender: UIButton) {
-        let comment_id = vm != nil ? (vm?.status.comment_id == 0 ? (sender.vm?.status.comment_id == 0 ? nil : sender.vm?.status.comment_id) : (vm?.status.comment_id == 0 ? nil : vm?.status.comment_id)) : nil
-        let quote_id = comment_id != vm?.status.comment_id ? nil : sender.vm?.status.comment_id
-        print(comment_id, quote_id)
+        let svscmd=(sender.vm?.status.comment_id == 0 ? nil : sender.vm?.status.comment_id)
+        let vscmd=(vm?.status.comment_id == 0 ? nil : vm?.status.comment_id)
+        let comment_id = vm != nil ? (vm?.status.comment_id == 0 ? svscmd : vscmd) : nil
+        let quote_id = comment_id != vm?.status.comment_id ? nil : svscmd
         NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id,comment_id: quote_id == 0 ? nil : quote_id,comment_id == 0 ? nil : comment_id) { Result, Error in
             if Error == nil {
                 Task { @MainActor in
@@ -126,7 +127,7 @@ extension BlogTableViewController {
         }
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteStatus(_:)), for: .touchUpInside)
         cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
-        cell.bottomView.likeButton.tag = indexPath.row
+        cell.bottomView.likeButton.vm = vm
         //like(cell.commentBottomView.likeButton)
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
         
@@ -134,8 +135,10 @@ extension BlogTableViewController {
         return cell
     }
     @objc func deleteStatus(_ sender: UIButton) {
-        let comment_id = vm != nil ? (vm?.status.comment_id == 0 ? sender.vm?.status.comment_id : vm?.status.comment_id) : nil
-        let quote_id = comment_id != vm?.status.comment_id ? nil : sender.vm?.status.comment_id
+        let svscmd=(sender.vm?.status.comment_id == 0 ? nil : sender.vm?.status.comment_id)
+        let vscmd=(vm?.status.comment_id == 0 ? nil : vm?.status.comment_id)
+        let comment_id = vm != nil ? (vm?.status.comment_id == 0 ? svscmd : vscmd) : nil
+        let quote_id = comment_id != vm?.status.comment_id ? nil : svscmd
         NetworkTools.shared.deleteStatus(comment_id, quote_id, sender.vm!.status.id) { Result, Error in
             if Error != nil {
                 showError("出错了")

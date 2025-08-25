@@ -61,13 +61,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
                 return
             }
             showInfo("删除成功")
-            StatusDAL.removeCache(self.listFilterTeams.statusList[sender.tag].status.id, .status)
-            if let i = listViewModel.statusList.firstIndex(where: { vm in
-                vm.status.id == self.listFilterTeams.statusList[sender.tag].status.id
-            }){
-                listViewModel.statusList.remove(at: i)
-            }
-            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: nil)
+            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: self.listFilterTeams.statusList[sender.tag].status.id)
             self.filterContentForSearchText("")
         }
     }
@@ -158,7 +152,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         return self.listFilterTeams.statusList[indexPath.row].rowHeight
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CommentTableViewController(viewModel: listFilterTeams.statusList[indexPath.row])
+        let vc = CommentTableViewController(listFilterTeams.statusList[indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)

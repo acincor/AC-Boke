@@ -42,13 +42,23 @@ class CustomRefreshView: UIView {
         }
     }
 }
-class HomeTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
+class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
     lazy var refreshView = CustomRefreshView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 30))
     @objc func refresh(pullup: UIActivityIndicatorView) {
         if pullup.isAnimating {
             // 开始动画
             loadData()
         }
+    }
+    override func refreshSingleStatus(_ id: Int) {
+        self.listViewModel.loadSingleStatus(id) { isSuccessful in
+            if(isSuccessful) {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    override func deleteStatusInList(_ id: Int) {
+        NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: id)
     }
     private lazy var composedButton: UIBarButtonItem = UIBarButtonItem(title: NSLocalizedString("写", comment: ""), image: UIImage(systemName: "pencil"), target: self, action: #selector(self.clickComposedButton))
     private func setupComposedButton() {
@@ -108,7 +118,7 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
         }
         present(ACWebViewController(url: urlEncoded),animated: true)
     }
-    @objc func loadData() {
+    @objc override func loadData() {
         if(!self.refreshView.pullupView.isAnimating) {
             self.refreshControl?.beginRefreshing()
         }
@@ -153,91 +163,32 @@ class HomeTableViewController: VisitorTableViewController,UICollectionViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         setupComposedButton()
-        if !UserAccountViewModel.sharedUserAccount.userLogon {
-            visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
-            return
-        }
-        prepareTableView()
-        NotificationCenter.default.addObserver(forName: Notification.Name(ACStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[ACStatusSelectedPhotoIndexPathKey] as? IndexPath else {
-                return
-            }
-            guard let urls = n.userInfo?[ACStatusSelectedPhotoURLsKey] as? [URL] else {
-                return
-            }
-            guard let cell = n.object as? PhotoBrowserPresentDelegate else {
-                return
-            }
-            Task { @MainActor in
-                let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
-                vc.modalPresentationStyle = .custom
-                vc.transitioningDelegate = self?.photoBrowserAnimator
-                self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
-                self?.present(vc, animated: true,completion: nil)
-            }
-        }
         NotificationCenter.default.addObserver(forName: Notification.Name("BKReloadHomePageDataNotification"), object: nil, queue: nil) { n in
+            let object = n.object as? Int
             Task { @MainActor in
+                if let id = object {
+                    StatusDAL.removeCache(id, .status)
+                    if let i = self.listViewModel.statusList.firstIndex(where: { vm in
+                        vm.status.id == id
+                    }) {
+                        self.listViewModel.statusList.remove(at: i)
+                    }
+                }
                 self.tableView.reloadData()
             }
         }
-        self.loadData()
-    }
-    @objc func whenIconViewIsTouched(sender: UITapGestureRecognizer) {
-        present(UINavigationController(rootViewController: ProfileTableViewController(account: sender.userViewModel)), animated: true)
     }
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }
 extension HomeTableViewController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listViewModel.statusList.count
-    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let vm = listViewModel.statusList[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
-        // Configure the cell...
-        cell.viewModel = vm
-        cell.bottomView.deleteButton.tag = indexPath.row
-        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.DeleteBlog(_:)), for: .touchUpInside)
-        let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
-        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.uid)", "portrait":vm.userProfileUrl.absoluteString]))
-        cell.topView.iconView.addGestureRecognizer(g)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath) as! StatusCell
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.compose(_:)), for: .touchUpInside)
         cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
-        cell.bottomView.likeButton.setTitle("\(vm.status.like_count)", for: .normal)
-        cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
-        for like in vm.status.like_list {
-            if UserAccountViewModel.sharedUserAccount.account?.uid == like["like_uid"] as? String {
-                cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
-                break
-            }
-        }
-        //cell = self.cell!
-        cell.bottomView.likeButton.tag = indexPath.row
-        cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
-        cell.cellDelegate = self
         return cell
-    }
-    @objc func DeleteBlog(_ sender: UIButton) {
-        let id = listViewModel.statusList[sender.tag].status.id
-        StatusDAL.removeCache(id, .status)
-        NetworkTools.shared.deleteStatus(nil, nil, id) { Result, Error in
-            
-            if Error != nil {
-                showError("出错了")
-                return
-            }
-            if (Result as! [String:Any])["error"] != nil {
-                showError("不能删除别人的博客哦")
-                return
-            }
-            showInfo("删除成功")
-            Task { @MainActor in
-                listViewModel.statusList.remove(at: sender.tag)
-                self.tableView.reloadData()
-            }
-        }
     }
     @objc func compose(_ sender: UIButton) {
         guard (listViewModel.statusList[sender.tag].status.id > 0) else {
@@ -247,44 +198,10 @@ extension HomeTableViewController {
         let nav = ComposeViewController(nil,listViewModel.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
-    @objc func like(_ sender: UIButton) {
-        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id) { Result, Error in
-            
-            if Error == nil {
-                Task { @MainActor in
-                    listViewModel.loadSingleStatus(listViewModel.statusList[sender.tag].status.id) { isSuccessful in
-                        if isSuccessful {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
-                if (Result as! [String:Any])["code"] as! String == "add" {
-                    showAlert(.timelineIconLike, "你的点赞TA收到了")
-                    return
-                }
-                showAlert(.timelineIconUnlike, "你的取消TA收到了")
-                return
-            }
-            showError("出错了")
-        }
-    }
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return listViewModel.statusList[indexPath.row].rowHeight
-    }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CommentTableViewController(viewModel: listViewModel.statusList[indexPath.row])
+        let vc = CommentTableViewController(listViewModel.statusList[indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)
-    }
-}
-extension HomeTableViewController: @preconcurrency StatusCellDelegate {
-    func statusCellDidClickUrl(url: URL) {
-        let vc = ACWebViewController(url: url)
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    func present(_ controller: UIViewController) {
-        self.present(controller, animated: true)
     }
 }
