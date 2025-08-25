@@ -57,7 +57,7 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
             }
         }
     }
-    override func deleteStatusInList(_ id: Int) {
+    override func deleteStatusInList(_ id: Int, _ row: Int) {
         NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: id)
     }
     private lazy var composedButton: UIBarButtonItem = UIBarButtonItem(title: NSLocalizedString("写", comment: ""), image: UIImage(systemName: "pencil"), target: self, action: #selector(self.clickComposedButton))

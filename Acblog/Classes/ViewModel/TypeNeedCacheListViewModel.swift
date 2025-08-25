@@ -16,7 +16,7 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
             if let array = array {
                 for i in 0..<self.statusList.count {
                     if self.statusList[i].status.id == id {
-                        self.statusList[i].status = Status(dict: array)
+                        self.statusList[i] = StatusViewModel(status: Status(dict: array))
                         finished(true)
                         return
                     }

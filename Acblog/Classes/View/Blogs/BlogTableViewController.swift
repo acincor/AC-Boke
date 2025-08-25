@@ -47,7 +47,7 @@ class BlogTableViewController: VisitorTableViewController {
     func refreshSingleStatus(_ id: Int) {
         self.loadData()
     }
-    func deleteStatusInList(_ id: Int) {
+    func deleteStatusInList(_ id: Int, _ row: Int) {
         self.loadData()
     }
     @objc func loadData() {
@@ -128,6 +128,7 @@ extension BlogTableViewController {
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteStatus(_:)), for: .touchUpInside)
         cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
         cell.bottomView.likeButton.vm = vm
+        cell.bottomView.likeButton.tag = indexPath.row
         //like(cell.commentBottomView.likeButton)
         cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
         
@@ -150,7 +151,7 @@ extension BlogTableViewController {
             }
             showInfo("删除成功")
             Task { @MainActor in
-                self.deleteStatusInList(sender.vm!.status.id)
+                self.deleteStatusInList(sender.vm!.status.id, sender.tag)
             }
         }
     }

@@ -11,7 +11,7 @@ import SwiftUI
 
 //let StatusCellNormalId2 = "StatusCellNormalId2"
 
-class TypeStatusTableViewController: VisitorTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
+class TypeStatusTableViewController: VisitorTableViewController {
     var typeStatus: TypeStatusListViewModel
     var uid: String
     init(uid: String, clas: Clas) {
@@ -26,7 +26,6 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    let liveView = LiveTableView()
     private func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
@@ -35,30 +34,6 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
         tableView.rowHeight = 400
         refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
-        liveView.delegate = self
-        liveView.dataSource = self
-        tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : liveView
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return liveListViewModel.list.count
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let vm = liveListViewModel.list[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! UserCollectionCell
-        cell.viewModel = vm
-        return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vm = liveListViewModel.list[indexPath.row]
-        guard let url = (rootHost+"/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            showError("似乎出了点问题，请刷新重试")
-            return
-        }
-        guard let urlEncoded = URL(string:url) else {
-            showError("似乎出了点问题，请刷新重试")
-            return
-        }
-        present(ACWebViewController(url: urlEncoded),animated: true)
     }
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
@@ -74,10 +49,6 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
                 self.tableView.reloadData()
             }
         }
-        
-        self.liveView.loadData()
-        self.liveView.reloadData()
-        self.tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : self.liveView
     }
     private lazy var pulldownTipLabel: UILabel = {
         let label = UILabel(title: "", fontSize: 18,color: .white)
