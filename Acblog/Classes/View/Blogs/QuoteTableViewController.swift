@@ -23,7 +23,7 @@ class QuoteTableViewController: VisitorTableViewController {
         tableView.estimatedRowHeight = 400
         tableView.rowHeight = 400
     }
-    @objc func action5(_ sender: UIButton) {
+    @objc func like(_ sender: UIButton) {
         NetworkTools.shared.like(vm.status.id,comment_id: commentlistViewModel.statusList[sender.tag].status.comment_id,vm.status.comment_id) { Result, Error in
             if Error == nil {
                 Task { @MainActor in
@@ -95,6 +95,9 @@ class QuoteTableViewController: VisitorTableViewController {
     @objc func close() {
         self.dismiss(animated: true)
     }
+    @objc func whenIconViewIsTouched(sender: UITapGestureRecognizer) {
+        present(UINavigationController(rootViewController: ProfileTableViewController(account: sender.userViewModel)), animated: true)
+    }
 }
 extension QuoteTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -106,20 +109,22 @@ extension QuoteTableViewController {
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.vm = vm
-        let result = ["id":"\(vm.status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         let like_list = vm.status.like_list
         cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
+        let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
+        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.comment_uid)", "portrait":vm.userProfileUrl.absoluteString]))
+        cell.topView.iconView.addGestureRecognizer(g)
         for s in like_list {
-            if s["like_uid"] as! String == result["like_uid"] as! String {
+            if s["like_uid"] as! String == UserAccountViewModel.sharedUserAccount.account!.uid! {
                 cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
                 break
             }
         }
-        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
+        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteQuote(_:)), for: .touchUpInside)
         cell.bottomView.likeButton.setTitle("\(commentlistViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
         cell.bottomView.likeButton.tag = indexPath.row
-        //action5(cell.commentBottomView.likeButton)
-        cell.bottomView.likeButton.addTarget(self, action: #selector(self.action5(_:)), for: .touchUpInside)
+        //like(cell.commentBottomView.likeButton)
+        cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
         cell.cellDelegate = self
         /*
          cell.bottomView.commentButton.tag = indexPath.row
@@ -137,20 +142,7 @@ extension QuoteTableViewController {
         cell.bottomView.commentButton.removeFromSuperview()
         return cell
     }
-    /*
-     @objc func action3(_ sender: UIButton) {
-     let nav = CommentViewController()
-     let button = UIButton(title: "发布", color: .red,backImageName: nil)
-     button.tag = sender.tag
-     button.nav = nav
-     button.vm2 = sender.vm2
-     button.addTarget(self, action: #selector(self.action2(_:)), for: .touchUpInside)
-     sender.cell2.cellDelegate = self
-     nav.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
-     self.present(UINavigationController(rootViewController: nav), animated: true)
-     }
-     */
-    @objc func action4(_ sender: UIButton) {
+    @objc func deleteQuote(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus(vm.status.comment_id,sender.vm!.status.comment_id,sender.vm!.status.id) { Result, Error in
             if Error != nil {
                 showError("出错了")

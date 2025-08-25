@@ -50,7 +50,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         self.tableView.reloadData()
     }
     var listFilterTeams = TypeNeedCacheListViewModel()
-    @objc func action1(_ sender: UIButton) {
+    @objc func deleteBlog(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus(nil, nil, listFilterTeams.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
                 showError("出错了")
@@ -71,7 +71,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             self.filterContentForSearchText("")
         }
     }
-    @objc func action3(_ sender: UIButton) {
+    @objc func compose(_ sender: UIButton) {
         guard (listFilterTeams.statusList[sender.tag].status.id > 0) else {
             showError("出错了")
             return
@@ -79,7 +79,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         let nav = ComposeViewController(nil,listFilterTeams.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
-    @objc func action4(_ sender: UIButton) {
+    @objc func like(_ sender: UIButton) {
         NetworkTools.shared.like(listFilterTeams.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
                 Task { @MainActor in
@@ -122,10 +122,10 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
         let vm = self.listFilterTeams.statusList[indexPath.row]
         cell.viewModel = vm
         cell.bottomView.deleteButton.tag = indexPath.row
-        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
+        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteBlog(_:)), for: .touchUpInside)
         cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
-        cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        cell.bottomView.commentButton.addTarget(self, action: #selector(self.compose(_:)), for: .touchUpInside)
         cell.bottomView.likeButton.setTitle("\(vm.status.like_count)", for: .normal)
         cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
         for like in vm.status.like_list {
@@ -135,7 +135,7 @@ class DiscoverTableViewController: VisitorTableViewController, UISearchResultsUp
             }
         }
         cell.bottomView.likeButton.tag = indexPath.row
-        cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
+        cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
         cell.cellDelegate = self
         return cell
     }

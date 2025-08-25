@@ -79,13 +79,16 @@ class CommentTableViewController: VisitorTableViewController {
     @objc func close() {
         self.dismiss(animated: true)
     }
+    @objc func whenIconViewIsTouched(sender: UITapGestureRecognizer) {
+        present(UINavigationController(rootViewController: ProfileTableViewController(account: sender.userViewModel)), animated: true)
+    }
     //var int = 0
 }
 extension CommentTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return commentListViewModel.statusList.count
     }
-    @objc func action(_ sender: UIButton) {
+    @objc func deleteComment(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus((sender.vm?.status.comment_id)!,nil,(sender.vm?.status.id)!) { Result, Error in
             
             if Error != nil {
@@ -101,6 +104,7 @@ extension CommentTableViewController {
                 self.loadData()
             }
         }
+        
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = commentListViewModel.statusList[indexPath.row]
@@ -108,23 +112,25 @@ extension CommentTableViewController {
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.vm = vm
-        let result = ["id":"\(vm.status.id)","like_uid":UserAccountViewModel.sharedUserAccount.account!.uid!] as [String:Any]
         let like_list = vm.status.like_list
         cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
+        let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
+        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.comment_uid)", "portrait":vm.userProfileUrl.absoluteString]))
+        cell.topView.iconView.addGestureRecognizer(g)
         for s in like_list {
-            if result["like_uid"] as? String == s["like_uid"] as? String {
+            if UserAccountViewModel.sharedUserAccount.account!.uid! == s["like_uid"] as? String {
                 cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
                 break
             }
         }
-        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action(_:)), for: .touchUpInside)
+        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteComment(_:)), for: .touchUpInside)
         cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.vm = vm
         cell.bottomView.likeButton.setTitle("\(commentListViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
         cell.bottomView.likeButton.tag = indexPath.row
-        cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
-        cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
+        cell.bottomView.commentButton.addTarget(self, action: #selector(self.compose(_:)), for: .touchUpInside)
         cell.cellDelegate = self
         return cell
     }
@@ -135,11 +141,11 @@ extension CommentTableViewController {
         nav.modalPresentationStyle = .custom
         present(nav, animated: true)
     }
-    @objc func action3(_ sender: UIButton) {
+    @objc func compose(_ sender: UIButton) {
         let nav = ComposeViewController(sender.vm!.status.comment_id, sender.vm!.status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
-    @objc func action4(_ sender: UIButton) {
+    @objc func like(_ sender: UIButton) {
         NetworkTools.shared.like(viewModel.status.id,commentListViewModel.statusList[sender.tag].status.comment_id) { Result, Error in
             if Error == nil {
                 //sender.int = 0

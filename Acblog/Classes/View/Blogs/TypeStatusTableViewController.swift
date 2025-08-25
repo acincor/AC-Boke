@@ -128,10 +128,8 @@ class TypeStatusTableViewController: VisitorTableViewController,UICollectionView
         }
         self.loadData()
     }
-    @objc func action(sender: UITapGestureRecognizer) {
-        let dict = ["portrait": sender.sender3, "user": sender.sender2, "uid": sender.sender]
-        let uvm = UserViewModel(user: Account(dict: dict as [String : Any]))
-        present(UINavigationController(rootViewController: ProfileTableViewController(account: uvm)), animated: true)
+    @objc func whenIconViewIsTouched(sender: UITapGestureRecognizer) {
+        present(UINavigationController(rootViewController: ProfileTableViewController(account: sender.userViewModel)), animated: true)
     }
     private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }
@@ -145,17 +143,12 @@ extension TypeStatusTableViewController {
         // Configure the cell...
         cell.viewModel = vm
         cell.bottomView.deleteButton.tag = indexPath.row
-        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.action1(_:)), for: .touchUpInside)
-        let g = UITapGestureRecognizer(target: self, action: #selector(self.action(sender:)))
-        guard let viewModel = cell.topView.viewModel else {
-            return cell
-        }
-        g.sender = "\(viewModel.status.uid)"
-        g.sender2 = "\(viewModel.status.user ?? "")"
-        g.sender3 = "\(viewModel.status.portrait ?? "")"
+        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteBlog(_:)), for: .touchUpInside)
+        let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
+        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.uid)", "portrait":vm.userProfileUrl.absoluteString]))
         cell.topView.iconView.addGestureRecognizer(g)
         cell.bottomView.commentButton.tag = indexPath.row
-        cell.bottomView.commentButton.addTarget(self, action: #selector(self.action3(_:)), for: .touchUpInside)
+        cell.bottomView.commentButton.addTarget(self, action: #selector(self.compose(_:)), for: .touchUpInside)
         cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
         cell.bottomView.likeButton.setTitle("\(vm.status.like_count)", for: .normal)
         cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
@@ -167,11 +160,11 @@ extension TypeStatusTableViewController {
         }
         //cell = self.cell!
         cell.bottomView.likeButton.tag = indexPath.row
-        cell.bottomView.likeButton.addTarget(self, action: #selector(self.action4(_:)), for: .touchUpInside)
+        cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
         cell.cellDelegate = self
         return cell
     }
-    @objc func action1(_ sender: UIButton) {
+    @objc func deleteBlog(_ sender: UIButton) {
         NetworkTools.shared.deleteStatus(nil, nil, typeStatus.statusList[sender.tag].status.id) { Result, Error in
             if Error != nil {
                 showError("出错了")
@@ -194,11 +187,11 @@ extension TypeStatusTableViewController {
         }
         
     }
-    @objc func action3(_ sender: UIButton) {
+    @objc func compose(_ sender: UIButton) {
         let nav = ComposeViewController(nil,typeStatus.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
-    @objc func action4(_ sender: UIButton) {
+    @objc func like(_ sender: UIButton) {
         NetworkTools.shared.like(typeStatus.statusList[sender.tag].status.id) { Result, Error in
             if Error == nil {
                 Task { @MainActor in
