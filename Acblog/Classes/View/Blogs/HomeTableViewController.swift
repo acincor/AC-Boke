@@ -60,7 +60,15 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
     override func deleteStatusInList(_ id: Int, _ row: Int) {
         NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: id)
     }
-    private lazy var composedButton: UIBarButtonItem = UIBarButtonItem(title: NSLocalizedString("写", comment: ""), image: UIImage(systemName: "pencil"), target: self, action: #selector(self.clickComposedButton))
+    private lazy var composedButton: UIBarButtonItem = {
+        if #available(iOS 16.0, *) {
+            return UIBarButtonItem(title: NSLocalizedString("写", comment: ""), image: UIImage(systemName: "pencil"), target: self, action: #selector(self.clickComposedButton))
+        }
+        let but = UIBarButtonItem(image: UIImage(systemName: "pencil"), style: .plain, target: self, action: #selector(self.clickComposedButton))
+        but.title = NSLocalizedString("写", comment: "")
+        return but
+    }()
+    
     private func setupComposedButton() {
         composedButton.tintColor = .red
         navigationItem.rightBarButtonItem = composedButton
@@ -80,11 +88,8 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
         NotificationCenter.default.removeObserver(self)
     }
     let liveView = LiveTableView()
-    private func prepareTableView() {
-        tableView.separatorStyle = .none
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
-        tableView.estimatedRowHeight = 400
-        tableView.rowHeight = 400
+    override func prepareTableView() {
+        super.prepareTableView()
         refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         refreshView.refreshAction = { pullup in

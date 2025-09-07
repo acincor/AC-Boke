@@ -29,10 +29,13 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         return .glass
     }
 #endif
+    let dateFormater: DateFormatter
     /// tcp握手
     init(to_uid: Int, username: String) {
         self.to_uid = to_uid
         self.username = username
+        self.dateFormater = DateFormatter()
+        dateFormater.dateFormat = "YYYY/MM/dd HH:mm:ss"
         self.urlRequest = URLRequest(url: URL(string: (localTest ? "ws://localhost:8081/" : "wss://wss.mhcincapi.top/") + "\(UserAccountViewModel.sharedUserAccount.account!.uid!)/\(to_uid)")!)
         super.init(nibName: nil, bundle: nil)
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: chatID)
@@ -186,14 +189,14 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
                 for i in image {
                     // 将JSON数据转换为String以便打印或查看
                     DispatchQueue.main.asyncAfter(deadline: .now()+1){
-                        self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"image\": \"\(i.data()?.base64EncodedString() ?? "")\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\"}")) { error in
+                        self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"image\": \"\(i.data()?.base64EncodedString() ?? "")\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(self.dateFormater.string(from: Date()))\"}")) { error in
                             if let error = error {
                                 showError(error.localizedDescription)
                             }
                         }
                     }
                 }
-                self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"\(text)\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\"}")) { error in
+                self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"\(text)\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(self.dateFormater.string(from: Date()))\"}")) { error in
                     Task { @MainActor in
                         SVProgressHUD.dismiss()
                     }
@@ -206,7 +209,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
         SVProgressHUD.dismiss()
         Task { @MainActor in
             let text = sender.vm?.status.image != nil ? "[图片]" : (sender.vm?.status.status ?? "")
-            self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"\(text)\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\",\"code\":\"like\"}")) { error in
+            self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"\(text)\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(self.dateFormater.string(from: Date()))\",\"code\":\"like\"}")) { error in
             }
         }
     }
@@ -291,7 +294,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
                 self.task.send(.string("{\"did\":\(sender.vm?.status.id ?? 0), \"code\":\"delete\"}")) {error in
                     Task { @MainActor in
                         guard let e = error else{
-                            self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"撤回了一条消息\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(Date().description(with: Locale(components: .init(identifier: "YYYY/MM/dd HH:mm:ss"))))\",\"code\":\"recalled\"}")) { error in
+                            self.task.send(.string("{\"uid\":\(UserAccountViewModel.sharedUserAccount.account!.uid!),\"portrait\":\"\(UserAccountViewModel.sharedUserAccount.account!.portrait!)\",\"status\":\"撤回了一条消息\",\"to_uid\":\(self.to_uid),\"create_at\":\"\(self.dateFormater.string(from: Date()))\",\"code\":\"recalled\"}")) { error in
                                 Task { @MainActor in
                                     SVProgressHUD.dismiss()
                                 }

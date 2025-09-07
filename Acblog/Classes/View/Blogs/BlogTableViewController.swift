@@ -17,7 +17,7 @@ class BlogTableViewController: VisitorTableViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private func prepareTableView() {
+    func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
         tableView.estimatedRowHeight = 400
