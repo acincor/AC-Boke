@@ -77,6 +77,7 @@ extension VisitorView {
         iconView.layer.add(anim, forKey: nil)
     }
     func setupInfo(imageName: String?, title: String) {
+        iconView.layer.removeAllAnimations()
         messageLabel.text = title
         guard let imgName = imageName else {
             startAnim()

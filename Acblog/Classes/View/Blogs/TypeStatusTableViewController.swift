@@ -74,7 +74,7 @@ class TypeStatusTableViewController: VisitorTableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !UserAccountViewModel.sharedUserAccount.userLogon {
+        if !userLogon {
             visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
             return
         }

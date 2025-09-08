@@ -61,8 +61,8 @@ class DiscoverTableViewController: BlogTableViewController, UISearchResultsUpdat
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = nil
-        if !UserAccountViewModel.sharedUserAccount.userLogon {
+        //navigationItem.rightBarButtonItem = nil
+        if !userLogon {
             visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: NSLocalizedString("登陆后，能用搜索框搜索出自己想要的全新世界", comment: ""))
             return
         }
