@@ -102,8 +102,8 @@ class ProfileTableViewController: VisitorTableViewController {
     }
     
     // MARK: - 数据加载
-    private func makeController(for type: Clas) -> TypeStatusTableViewController {
-        return TypeStatusTableViewController(uid: currentUserID, clas: type)
+    private func makeController(for type: SpecialClass) -> TypeStatusTableViewController {
+        return TypeStatusTableViewController(uid: currentUserID, specialClass: type)
     }
     
     @objc private func handleRefresh() {

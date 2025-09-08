@@ -75,7 +75,7 @@ class WebSocketController: UIViewController,UITableViewDataSource,UITableViewDel
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    var statusListViewModel = TypeNeedCacheListViewModel()
+    var statusListViewModel = StatusListViewModel()
     lazy var urlSession = URLSession(configuration: .default)
     var urlRequest: URLRequest
     lazy var task = urlSession.webSocketTask(with: urlRequest)

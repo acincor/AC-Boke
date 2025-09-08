@@ -9,7 +9,7 @@ import UIKit
 
 let UserNormalCellMargin = 1.5
 class MessageTableViewController: VisitorTableViewController{
-    var friendListViewModel = ElseListViewModel(clas: .friend)
+    var friendListViewModel = ElseListViewModel(specialClass: .friend)
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
         friendListViewModel.load { (isSuccessful) in

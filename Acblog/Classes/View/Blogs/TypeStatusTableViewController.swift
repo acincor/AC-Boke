@@ -11,13 +11,13 @@ import SwiftUI
 
 //let StatusCellNormalId2 = "StatusCellNormalId2"
 
-class TypeStatusTableViewController: VisitorTableViewController {
-    var typeStatus: TypeStatusListViewModel
+class TypeStatusTableViewController: BlogTableViewController {
     var uid: String
-    init(uid: String, clas: Clas) {
+    var specialClass: SpecialClass
+    init(uid: String, specialClass: SpecialClass) {
         self.uid = uid
-        self.typeStatus = TypeStatusListViewModel(clas: clas)
-        super.init(nibName: nil, bundle: nil)
+        self.specialClass = specialClass
+        super.init(nil)
     }
     
     required init?(coder: NSCoder) {
@@ -26,19 +26,15 @@ class TypeStatusTableViewController: VisitorTableViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    private func prepareTableView() {
-        tableView.separatorStyle = .none
-        tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
-        //tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId2)
-        tableView.estimatedRowHeight = 400
-        tableView.rowHeight = 400
+    override func prepareTableView() {
+        super.prepareTableView()
         refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
     }
-    @objc func loadData() {
+    @objc override func loadData() {
         self.refreshControl?.beginRefreshing()
         //StatusDAL.clearDataCache()//删除缓存
-        typeStatus.loadStatus(uid) { isSuccessful in
+        statusListViewModel.loadStatus(uid, specialClass: specialClass) { isSuccessful in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
@@ -50,6 +46,13 @@ class TypeStatusTableViewController: VisitorTableViewController {
             }
         }
     }
+    override func refreshSingleStatus(_ id: Int) {
+        self.statusListViewModel.loadSingleStatus(id) { isSuccessful in
+            if(isSuccessful) {
+                self.tableView.reloadData()
+            }
+        }
+    }
     private lazy var pulldownTipLabel: UILabel = {
         let label = UILabel(title: "", fontSize: 18,color: .white)
         label.backgroundColor = .red
@@ -57,7 +60,7 @@ class TypeStatusTableViewController: VisitorTableViewController {
         return label
     }()
     private func showPulldownTip() {
-        guard let count = typeStatus.pulldownCount else {
+        guard let count = statusListViewModel.pulldownCount else {
             return
         }
         pulldownTipLabel.text = (count == 0) ? NSLocalizedString("没有博客", comment: "") : String.localizedStringWithFormat(NSLocalizedString("刷新到%@条博客", comment: ""),"\(count)")
@@ -74,127 +77,35 @@ class TypeStatusTableViewController: VisitorTableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.rightBarButtonItem = nil
         if !userLogon {
             visitorView?.setupInfo(imageName: nil, title: NSLocalizedString("登陆一下，随时随地发现新鲜事", comment: ""))
             return
         }
-        prepareTableView()
-        NotificationCenter.default.addObserver(forName: Notification.Name(ACStatusSelectedPhotoNotification), object: nil, queue: nil) {[weak self] n in
-            guard let indexPath = n.userInfo?[ACStatusSelectedPhotoIndexPathKey] as? IndexPath else {
-                return
-            }
-            guard let urls = n.userInfo?[ACStatusSelectedPhotoURLsKey] as? [URL] else {
-                return
-            }
-            guard let cell = n.object as? PhotoBrowserPresentDelegate else {
-                return
-            }
-            Task { @MainActor in
-                let vc = PhotoBrowserViewController(urls: urls, indexPath: indexPath)
-                vc.modalPresentationStyle = .custom
-                vc.transitioningDelegate = self?.photoBrowserAnimator
-                self?.photoBrowserAnimator.setDelegateParams(present: cell, using: indexPath, dimissDelegate: vc)
-                self?.present(vc, animated: true,completion: nil)
-            }
-        }
-        self.loadData()
     }
-    @objc func whenIconViewIsTouched(sender: UITapGestureRecognizer) {
-        present(UINavigationController(rootViewController: ProfileTableViewController(account: sender.userViewModel)), animated: true)
+    override func deleteStatusInList(_ id: Int, _ row: Int) {
+        NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: id)
+        self.statusListViewModel.statusList.remove(at: row)
+        self.tableView.reloadData()
     }
-    private lazy var photoBrowserAnimator: PhotoBrowserAnimator = PhotoBrowserAnimator()
 }
 extension TypeStatusTableViewController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return typeStatus.statusList.count
-    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = typeStatus.statusList[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
-        // Configure the cell...
-        cell.viewModel = vm
-        cell.bottomView.deleteButton.tag = indexPath.row
-        cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteBlog(_:)), for: .touchUpInside)
-        let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
-        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.uid)", "portrait":vm.userProfileUrl.absoluteString]))
-        cell.topView.iconView.addGestureRecognizer(g)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath) as! StatusCell
+        let vm = self.statusListViewModel.statusList[indexPath.row]
+        cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.compose(_:)), for: .touchUpInside)
-        cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
-        cell.bottomView.likeButton.setTitle("\(vm.status.like_count)", for: .normal)
-        cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
-        for like in vm.status.like_list {
-            if UserAccountViewModel.sharedUserAccount.account?.uid == like["like_uid"] as? String {
-                cell.bottomView.likeButton.setImage(.timelineIconLike, for: .normal)
-                break
-            }
-        }
-        //cell = self.cell!
-        cell.bottomView.likeButton.tag = indexPath.row
-        cell.bottomView.likeButton.addTarget(self, action: #selector(self.like(_:)), for: .touchUpInside)
-        cell.cellDelegate = self
         return cell
     }
-    @objc func deleteBlog(_ sender: UIButton) {
-        NetworkTools.shared.deleteStatus(nil, nil, typeStatus.statusList[sender.tag].status.id) { Result, Error in
-            if Error != nil {
-                showError("出错了")
-                return
-            }
-            if (Result as! [String:Any])["error"] != nil {
-                showError("不能删除别人的博客哦")
-                return
-            }
-            showInfo("删除成功")
-            
-            NotificationCenter.default.post(name: Notification.Name("BKReloadHomePageDataNotification"), object: self.typeStatus.statusList[sender.tag].status.id)
-            self.typeStatus.statusList.remove(at: sender.tag)
-            self.tableView.reloadData()
-        }
-        
-    }
     @objc func compose(_ sender: UIButton) {
-        let nav = ComposeViewController(nil,typeStatus.statusList[sender.tag].status.id)
+        let nav = ComposeViewController(nil,statusListViewModel.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
-    @objc func like(_ sender: UIButton) {
-        NetworkTools.shared.like(typeStatus.statusList[sender.tag].status.id) { Result, Error in
-            if Error == nil {
-                Task { @MainActor in
-                    self.typeStatus.loadSingleStatus(self.typeStatus.statusList[sender.tag].status.id) { isSuccessful in
-                        if(isSuccessful) {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
-                if (Result as! [String:Any])["code"] as! String == "add" {
-                    showAlert(.timelineIconLike, "你的点赞TA收到了")
-                    return
-                }
-                showAlert(.timelineIconUnlike, "你的取消TA收到了")
-                return
-            }
-            showError("出错了")
-            return
-        }
-    }
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return typeStatus.statusList[indexPath.row].rowHeight
-    }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CommentTableViewController(typeStatus.statusList[indexPath.row])
+        let vc = CommentTableViewController(statusListViewModel.statusList[indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)
-    }
-}
-extension TypeStatusTableViewController: @preconcurrency StatusCellDelegate {
-    func statusCellDidClickUrl(url: URL) {
-        let vc = ACWebViewController(url: url)
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    func present(_ controller: UIViewController) {
-        self.present(controller, animated: true)
     }
 }

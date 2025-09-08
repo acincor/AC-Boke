@@ -90,7 +90,7 @@ class StatusListViewModel: @unchecked Sendable {
         }
     }
     
-    @MainActor func loadStatus(_ uid: String,finished: @escaping @Sendable (_ isSuccessful: Bool) -> (), specialClass: SpecialClass) {
+    @MainActor func loadStatus(_ uid: String, specialClass: SpecialClass,finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         let completion: NetworkTools.HMRequestCallBack = {(Result: Any, error: Error?) in
             guard let array = Result as? [[String:Any]] else {
                 finished(false)

@@ -67,8 +67,7 @@ AC-Boke
     - [ElseListViewModel.swift](#elselistviewmodelswift)
     - [StatusDAL.swift](#statusdalswift)
     - [StatusViewModel.swift](#statusviewmodelswift)
-    - [TypeNeedCacheListViewModel.swift](#typeneedcachelistviewmodelswift)
-    - [TypeStatusListViewModel.swift](#typestatuslistviewmodelswift)
+    - [StatusListViewModel.swift](#statuslistviewmodelswift)
     - [UserAccountViewModel.swift](#useraccountviewmodelswift)
     - [UserViewModel.swift](#userviewmodelswift)
 - [Localized](#localized)
@@ -175,10 +174,8 @@ AC-Boke
 缓存、查询、删除博客或消息缓存
 #### StatusViewModel.swift
 内含将博客或者消息的模型部分信息转换成对象以及博客或消息本身的模型对象
-#### TypeNeedCacheListViewModel.swift
-加载博客、评论、评论回复、特定ID的博客并缓存
-#### TypeStatusListViewModel.swift
-加载点赞过的（评论过的）博客、特定ID的博客
+#### StatusListViewModel.swift
+加载博客信息，若是点赞的、评论的不做缓存，其余缓存
 #### UserAccountViewModel.swift
 根据`access_token`加载用户信息并保存到本地沙盒文件`account.plist`
 #### UserViewModel.swift

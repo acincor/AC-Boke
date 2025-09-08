@@ -6,17 +6,22 @@
 //
 
 import UIKit
-
 class BlogTableViewController: VisitorTableViewController {
-    var listViewModel = TypeNeedCacheListViewModel()
-    var vm: StatusViewModel?
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     init(_ vm: StatusViewModel? = nil) {
         self.vm = vm
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func refreshSingleStatus(_ id: Int) {
+        loadData()
     }
+    func deleteStatusInList(_ id: Int, _ row: Int) {
+        loadData()
+    }
+    lazy var statusListViewModel = StatusListViewModel()
+    var vm: StatusViewModel?
     func prepareTableView() {
         tableView.separatorStyle = .none
         tableView.register(StatusNormalCell.self, forCellReuseIdentifier: StatusCellNormalId)
@@ -28,10 +33,10 @@ class BlogTableViewController: VisitorTableViewController {
         let vscmd=(vm?.status.comment_id == 0 ? nil : vm?.status.comment_id)
         let comment_id = vm != nil ? (vm?.status.comment_id == 0 ? svscmd : vscmd) : nil
         let quote_id = comment_id != vm?.status.comment_id ? nil : svscmd
-        NetworkTools.shared.like(listViewModel.statusList[sender.tag].status.id,comment_id: quote_id == 0 ? nil : quote_id,comment_id == 0 ? nil : comment_id) { Result, Error in
+        NetworkTools.shared.like(statusListViewModel.statusList[sender.tag].status.id,comment_id: quote_id == 0 ? nil : quote_id,comment_id == 0 ? nil : comment_id) { Result, Error in
             if Error == nil {
                 Task { @MainActor in
-                    self.refreshSingleStatus(self.listViewModel.statusList[sender.tag].status.id)
+                    self.refreshSingleStatus(self.statusListViewModel.statusList[sender.tag].status.id)
                 }
                 if (Result as! [String:Any])["code"] as! String == "add" {
                     showAlert(.timelineIconLike, "你的点赞TA收到了")
@@ -44,15 +49,9 @@ class BlogTableViewController: VisitorTableViewController {
             return
         }
     }
-    func refreshSingleStatus(_ id: Int) {
-        self.loadData()
-    }
-    func deleteStatusInList(_ id: Int, _ row: Int) {
-        self.loadData()
-    }
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        listViewModel.loadStatus(id: vm != nil ? (vm?.status.id == 0 ? nil : vm?.status.id) : nil, comment_id: vm != nil ? (vm?.status.comment_id == 0 ? nil : vm?.status.comment_id): nil) { (isSuccessful) in
+        statusListViewModel.loadStatus(id: vm != nil ? (vm?.status.id == 0 ? nil : vm?.status.id) : nil, comment_id: vm != nil ? (vm?.status.comment_id == 0 ? nil : vm?.status.comment_id): nil) { (isSuccessful) in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
@@ -105,10 +104,10 @@ class BlogTableViewController: VisitorTableViewController {
 }
 extension BlogTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listViewModel.statusList.count
+        return statusListViewModel.statusList.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = listViewModel.statusList[indexPath.row]
+        let vm = statusListViewModel.statusList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: vm.cellId, for: indexPath) as! StatusCell
         // Configure the cell...
         cell.viewModel = vm
@@ -126,7 +125,7 @@ extension BlogTableViewController {
             }
         }
         cell.bottomView.deleteButton.addTarget(self, action: #selector(self.deleteStatus(_:)), for: .touchUpInside)
-        cell.bottomView.likeButton.setTitle("\(listViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
+        cell.bottomView.likeButton.setTitle("\(statusListViewModel.statusList[indexPath.row].status.like_count)", for: .normal)
         cell.bottomView.likeButton.vm = vm
         cell.bottomView.likeButton.tag = indexPath.row
         //like(cell.commentBottomView.likeButton)
@@ -157,7 +156,7 @@ extension BlogTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return listViewModel.statusList[indexPath.row].rowHeight
+        return statusListViewModel.statusList[indexPath.row].rowHeight
     }
 }
 extension BlogTableViewController: @preconcurrency StatusCellDelegate {

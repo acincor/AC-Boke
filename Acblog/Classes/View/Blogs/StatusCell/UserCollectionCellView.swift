@@ -8,7 +8,7 @@
 import UIKit
 private let UserCollectionViewCellId = "UserCollectionViewCellId"
 class UserCollectionCellView: UIView {
-    let friendListViewModel = ElseListViewModel(clas: .friend)
+    let friendListViewModel = ElseListViewModel(specialClass: .friend)
     private var selectedViewModelCallBack: (_ viewModel: UserViewModel)->()
     init(selectedViewModel: @escaping(_ viewModel: UserViewModel)->()) {
         selectedViewModelCallBack = selectedViewModel

@@ -51,7 +51,7 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
         }
     }
     override func refreshSingleStatus(_ id: Int) {
-        self.listViewModel.loadSingleStatus(id) { isSuccessful in
+        self.statusListViewModel.loadSingleStatus(id) { isSuccessful in
             if(isSuccessful) {
                 self.tableView.reloadData()
             }
@@ -128,7 +128,7 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
             self.refreshControl?.beginRefreshing()
         }
         //StatusDAL.clearDataCache()//删除缓存
-        listViewModel.loadStatus(isPullup: self.refreshView.pullupView.isAnimating) { (isSuccessful) in
+        statusListViewModel.loadStatus(isPullup: self.refreshView.pullupView.isAnimating) { (isSuccessful) in
             Task { @MainActor in
                 self.refreshView.pullupView.isAnimating ? self.refreshView.pullupView.stopAnimating() : self.refreshControl?.endRefreshing()
                 if !isSuccessful {
@@ -150,7 +150,7 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
         return label
     }()
     private func showPulldownTip() {
-        guard let count = listViewModel.pulldownCount else {
+        guard let count = statusListViewModel.pulldownCount else {
             return
         }
         pulldownTipLabel.text = (count == 0) ? NSLocalizedString("没有博客", comment: "") : String.localizedStringWithFormat(NSLocalizedString("刷新到%@条博客", comment: ""),"\(count)")
@@ -173,10 +173,10 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
             Task { @MainActor in
                 if let id = object {
                     StatusDAL.removeCache(id, .status)
-                    if let i = self.listViewModel.statusList.firstIndex(where: { vm in
+                    if let i = self.statusListViewModel.statusList.firstIndex(where: { vm in
                         vm.status.id == id
                     }) {
-                        self.listViewModel.statusList.remove(at: i)
+                        self.statusListViewModel.statusList.remove(at: i)
                     }
                 }
                 self.tableView.reloadData()
@@ -188,7 +188,7 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
 extension HomeTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let vm = listViewModel.statusList[indexPath.row]
+        let vm = statusListViewModel.statusList[indexPath.row]
         let cell = super.tableView(tableView, cellForRowAt: indexPath) as! StatusCell
         cell.bottomView.commentButton.tag = indexPath.row
         cell.bottomView.commentButton.addTarget(self, action: #selector(self.compose(_:)), for: .touchUpInside)
@@ -196,15 +196,15 @@ extension HomeTableViewController {
         return cell
     }
     @objc func compose(_ sender: UIButton) {
-        guard (listViewModel.statusList[sender.tag].status.id > 0) else {
+        guard (statusListViewModel.statusList[sender.tag].status.id > 0) else {
             showError("出错了")
             return
         }
-        let nav = ComposeViewController(nil,listViewModel.statusList[sender.tag].status.id)
+        let nav = ComposeViewController(nil,statusListViewModel.statusList[sender.tag].status.id)
         self.present(UINavigationController(rootViewController: nav), animated: true)
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CommentTableViewController(listViewModel.statusList[indexPath.row])
+        let vc = CommentTableViewController(statusListViewModel.statusList[indexPath.row])
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom
         self.present(nav, animated: false)

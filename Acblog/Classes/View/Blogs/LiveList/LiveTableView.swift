@@ -8,7 +8,7 @@
 import UIKit
 
 //var live_to_user: String?
-@MainActor var liveListViewModel = ElseListViewModel(clas: .live)
+@MainActor var liveListViewModel = ElseListViewModel(specialClass: .live)
 class LiveTableView: UICollectionView{
     /*
      private lazy var pullupView: UIActivityIndicatorView = {

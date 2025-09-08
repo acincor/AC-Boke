@@ -23,7 +23,7 @@ class CommentTableViewController: BlogTableViewController {
 }
 extension CommentTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = listViewModel.statusList[indexPath.row]
+        let vm = statusListViewModel.statusList[indexPath.row]
         let cell = super.tableView(tableView, cellForRowAt: indexPath) as! StatusCell
         cell.bottomView.commentButton.setTitle("\(vm.status.comment_count)", for: .normal)
         cell.bottomView.commentButton.vm = vm
@@ -31,7 +31,7 @@ extension CommentTableViewController {
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vm = listViewModel.statusList[indexPath.row]
+        let vm = statusListViewModel.statusList[indexPath.row]
         let vc = QuoteTableViewController(vm)
         let nav = UINavigationController(rootViewController:vc)
         nav.modalPresentationStyle = .custom

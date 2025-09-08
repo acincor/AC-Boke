@@ -10,9 +10,9 @@ import UIKit
 
 class ElseListViewModel: @unchecked Sendable {
     lazy var list = [UserViewModel]()
-    var clas: Clas
-    init(clas: Clas) {
-        self.clas = clas
+    var specialClass: SpecialClass
+    init(specialClass: SpecialClass) {
+        self.specialClass = specialClass
     }
     @MainActor func load(finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         let completion: NetworkTools.HMRequestCallBack = { (array: Any?,error: Error?) -> () in
@@ -31,9 +31,9 @@ class ElseListViewModel: @unchecked Sendable {
             self.list = dataList
             finished(true)
         }
-        if clas == .friend {
+        if specialClass == .friend {
             NetworkTools.shared.loadFriend(finished: completion)
-        } else if clas == Clas.live{
+        } else if specialClass == SpecialClass.live{
             NetworkTools.shared.loadLive(finished: completion)
         }
     }
