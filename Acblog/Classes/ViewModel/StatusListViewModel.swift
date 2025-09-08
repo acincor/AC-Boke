@@ -7,8 +7,15 @@
 
 import UIKit
 import Kingfisher
-
-class TypeNeedCacheListViewModel: @unchecked Sendable {
+enum SpecialClass: String {
+    case comment = "comment"
+    case quote = "quote"
+    case like = "like"
+    case blog = "blog"
+    case friend = "friend"
+    case live = "live"
+}
+class StatusListViewModel: @unchecked Sendable {
     lazy var statusList = [StatusViewModel]()
     var pulldownCount: Int?
     @MainActor func loadSingleStatus(_ id: Int,finished: @escaping @Sendable @MainActor (_ isSuccessful: Bool) -> ()) {
@@ -80,6 +87,29 @@ class TypeNeedCacheListViewModel: @unchecked Sendable {
                 self.statusList = dataList
                 self.cacheSingleImage(dataList: dataList, finished: finished)
             }
+        }
+    }
+    
+    @MainActor func loadStatus(_ uid: String,finished: @escaping @Sendable (_ isSuccessful: Bool) -> (), specialClass: SpecialClass) {
+        let completion: NetworkTools.HMRequestCallBack = {(Result: Any, error: Error?) in
+            guard let array = Result as? [[String:Any]] else {
+                finished(false)
+                return
+            }
+            var dataList = [StatusViewModel]()
+            for n in 0..<array.count {
+                dataList.append(StatusViewModel(status: Status(dict: array[n])))
+            }
+            self.pulldownCount = self.statusList.count == 0 ? dataList.count : (dataList.count > self.statusList.count ? dataList.count - self.statusList.count: nil)
+            self.statusList = dataList
+            finished(true)
+        }
+        if specialClass == SpecialClass.blog {
+            NetworkTools.shared.profile(uid: uid, finished: completion)
+        } else if specialClass == SpecialClass.like {
+            NetworkTools.shared.loadLikeStatus(uid, finished: completion)
+        } else if specialClass == SpecialClass.comment{
+            NetworkTools.shared.loadCommentStatus(uid, finished: completion)
         }
     }
     @MainActor private func cacheSingleImage(dataList: [StatusViewModel],finished: @escaping @Sendable @MainActor (_ isSuccessful: Bool) -> ()) {
