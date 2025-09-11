@@ -103,11 +103,11 @@ class BKLiveController: UIViewController {
         await stream.addOutput(hkView)
         
         self.view.insertSubview(self.hkView, belowSubview: self.stopButton)
-        try await self.connection.connect(localTest ? "rtmp://localhost:1935/live" : "rtmp://mhcincapi.top:1935/live")
-        try await self.stream.publish(UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
+        _ = try await self.connection.connect(localTest ? "rtmp://localhost:1935/live" : "rtmp://mhcincapi.top:1935/live")
+        _ = try await self.stream.publish(UserAccountViewModel.sharedUserAccount.account?.uid ?? "")
     }
     @objc func stopLive(_ sender: Any) async throws {
-        try await self.stream.close()
+        _ = try await self.stream.close()
         hkView.removeFromSuperview()
     }
 }
