@@ -15,6 +15,8 @@ class Account: NSObject, NSCoding {
     @objc var user: String?
     /// 用户头像的urlString
     @objc var portrait: String?
+    /// 是否关注
+    @objc var isfollowed: Int = 0
     init(dict: [String: Any]) {
         super.init()
         setValuesForKeys(dict)
@@ -23,7 +25,7 @@ class Account: NSObject, NSCoding {
     override func setValue(_ value: Any?, forUndefinedKey key: String) {}
     
     override var description: String {
-        let keys = ["uid","user","portrait"]
+        let keys = ["uid","user","portrait","isfollowed"]
         return dictionaryWithValues(forKeys: keys).description
     }
     
@@ -35,6 +37,7 @@ class Account: NSObject, NSCoding {
         coder.encode(uid, forKey: "uid")
         coder.encode(user, forKey: "user")
         coder.encode(portrait, forKey: "portrait")
+        coder.encode(isfollowed, forKey: "isfollowed")
     }
     
     ///解档 - 从磁盘加载二进制文件，转换成对象时调用
@@ -45,5 +48,6 @@ class Account: NSObject, NSCoding {
         uid = coder.decodeObject(forKey: "uid") as! Int
         user = coder.decodeObject(forKey: "user") as? String
         portrait = coder.decodeObject(forKey: "portrait") as? String
+        isfollowed = coder.decodeObject(forKey: "isfollowed") as! Int
     }
 }

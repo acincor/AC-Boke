@@ -229,17 +229,6 @@
         }
       }
     },
-    "出错了" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading Error"
-          }
-        }
-      }
-    },
     "分享新鲜事..." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -316,6 +305,17 @@
         }
       }
     },
+    "删除好友" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete From Contacts"
+          }
+        }
+      }
+    },
     "删除成功" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -359,17 +359,6 @@
         }
       }
     },
-    "加载数据错误，请稍后再试" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Load datas failed, please wait for a few moments, then you can try again."
-          }
-        }
-      }
-    },
     "加载数据错误，请稍后重试" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -388,6 +377,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Blog Error"
+          }
+        }
+      }
+    },
+    "即将执行此操作" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About to perform this operation"
           }
         }
       }
@@ -552,7 +551,7 @@
         }
       }
     },
-    "成功删除/拉黑好友" : {
+    "成功删除好友" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -807,16 +806,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "消息"
-          }
-        }
-      }
-    },
-    "添加/删除" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "add/delete"
           }
         }
       }

@@ -8,12 +8,13 @@ $mysql = mysqli_connect("localhost", "root", "123456","ac_inc");
                 $q = mysqli_query($mysql,"select * from blogs where id = ".$arr['id']);
                 if(!is_bool($q)) {
                     $blog = mysqli_fetch_assoc($q);
-                    $q1 = mysqli_query($mysql,"select user,portrait from users where uid = ".$blog["uid"]);
+                    $q1 = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$blog["uid"]);
                     if(!is_bool($q1)) {
                         $array = mysqli_fetch_assoc($q1);
                     if($blog != NULL && $array != NULL) {
                         $blog['user'] = $array['user'];
                         $blog['portrait'] = $array['portrait'];
+                        $blog['isfollowed'] = array_search(["uid"=>$_POST["uid"]],json_decode($array['fans'],true)) !== false;
                         $blog['have_pic'] = intval($blog['have_pic']);
                         $blog['pic_urls'] = json_decode($blog['pic_urls'],true);
                         $blog['uid'] = intval($blog['uid']);
@@ -37,12 +38,13 @@ $mysql = mysqli_connect("localhost", "root", "123456","ac_inc");
                                 $clike['like_uid'] = intval($clike['like_uid']);
                                 array_push($comment["like_list"],$clike);
                             }
-                            $cuq = mysqli_query($mysql,"select user,portrait from users where uid = ".$comment['comment_uid']);
+                            $cuq = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$comment['comment_uid']);
                             if(!is_bool($cuq)) {
                                 $array = mysqli_fetch_assoc($cuq);
                                 if($array != NULL) {
                                     $comment['user'] = $array['user'];
                                     $comment['portrait'] = $array['portrait'];
+                                    $comment['isfollowed'] = array_search(["uid"=>$_POST["uid"]],json_decode($array['fans'],true)) !== false;
                                     $qq = mysqli_query($mysql,"select * from quote where comment_id = ".$comment['comment_id']);
                                     $comment["comment_list"] = [];
                                     while($quote = mysqli_fetch_assoc($qq)) {
@@ -55,12 +57,13 @@ $mysql = mysqli_connect("localhost", "root", "123456","ac_inc");
                                         }
                                         $quote['id'] = intval($quote['id']);
                                         $quote['comment_id'] = $quote['quote_id'];
-                                        $quq = mysqli_query($mysql,"select user,portrait from users where uid = ".$comment['comment_uid']);
+                                        $quq = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$comment['comment_uid']);
                                         if(!is_bool($quq)) {
                                             $array = mysqli_fetch_assoc($quq);
                                             if($array != NULL) {
                                                 $quote['user'] = $array['user'];
                                                 $quote['portrait'] = $array['portrait'];
+                                                $quote['isfollowed'] = array_search(["uid"=>$_POST["uid"]],json_decode($array['fans'],true)) !== false;
                                             }
                                         }
                                         array_push($comment["comment_list"],$quote);

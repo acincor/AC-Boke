@@ -6,7 +6,8 @@ header('Content-Type:application/json; charset=utf-8');
     "portrait TEXT,".
     "user TEXT NOT NULL,".
     "password VARCHAR(1000) NOT NULL,".
-    "friend_list VARCHAR(1000),".
+    "followings VARCHAR(1000),".
+    "fans VARCHAR(1000),".
     "primary key(uid)".
     ");";
     mysqli_query($mysql, $sql);
@@ -57,7 +58,7 @@ header('Content-Type:application/json; charset=utf-8');
         }
         file_put_contents('./'.$uid."/portrait/portrait.png",$png);
         chmod('./'.$uid."/portrait/portrait.png",0777);
-        $sql = "insert into users(uid, friend_list, portrait, user, password) values (".$uid.", '[]', '".'http://localhost:8080/api/'.$uid."/portrait/portrait.png"."', '".$_POST['user']."', '".password_hash($_POST['password'], PASSWORD_DEFAULT)."');";
+        $sql = "insert into users(uid, followings, fans, portrait, user, password) values (".$uid.", '[]', '[]', '".'http://localhost:8080/api/'.$uid."/portrait/portrait.png"."', '".$_POST['user']."', '".password_hash($_POST['password'], PASSWORD_DEFAULT)."');";
         mysqli_query($mysql, $sql);
         //生成code
         $code = "";

@@ -48,6 +48,8 @@ class Status: NSObject {
     @objc var comment_uid: Int = 0
     /// 评论文本
     @objc var comment: String?
+    /// 是否关注
+    @objc var isfollowed: Int = 0
     /// 根据字典转模型
     init(dict: [String: Any]) {
         super.init()
@@ -57,7 +59,7 @@ class Status: NSObject {
     override func setValue(_ value: Any?, forUndefinedKey key: String) {}
     /// 转成字典形式
     override var description: String {
-        let keys = ["code","user","uid","id","status","create_at", "pic_urls","pic_count","have_pic","portrait","source","comment_list","like_list","comment_count","like_count","comment_id","comment","comment_uid"]
+        let keys = ["code","user","uid","id","status","create_at", "pic_urls","pic_count","have_pic","portrait","source","comment_list","like_list","comment_count","like_count","comment_id","comment","comment_uid","isfollowed"]
         return dictionaryWithValues(forKeys: keys).description
     }
 }

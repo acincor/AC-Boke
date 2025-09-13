@@ -10,17 +10,19 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                 mysqli_query($mysql,"DELETE FROM access_tokens WHERE access_token = '".$_POST['access_token']."'");
                 exit(json_encode(["msg"=>"access_token expired!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
             }
+            $USERUID = $array["uid"];
             $arr = [];
             $query = mysqli_query($mysql,"select * from blogs where id = ".$_POST['id']);
             if(!is_bool($query)) {
             $blog = mysqli_fetch_assoc($query);
                 if($blog != NULL) {
-                $q = mysqli_query($mysql,"select user,portrait from users where uid = ".$blog['uid']);
+                $q = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$blog['uid']);
                 if(!is_bool($q)) {
                     $array = mysqli_fetch_assoc($q);
                     if($array != NULL) {
                         $blog['user'] = $array['user'];
                         $blog['portrait'] = $array['portrait'];
+                        $blog['isfollowed'] = array_search(["uid"=>$USERUID],json_decode($array['fans'],true)) !== false;
                         $blog['have_pic'] = intval($blog['have_pic']);
                         $blog['pic_urls'] = json_decode($blog['pic_urls'],true);
                         $blog['pic_count'] = intval($blog['pic_count']);
@@ -73,12 +75,13 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                                     mysqli_query($mysql,"update comments set like_count = ".$s." where comment_id = ".$comment['comment_id']);
                                 }
                             }
-                            $cuq = mysqli_query($mysql,"select user,portrait from users where uid = ".$comment['comment_uid']);
+                            $cuq = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$comment['comment_uid']);
                             if(!is_bool($cuq)) {
                                 $array = mysqli_fetch_assoc($cuq);
                                 if($array != NULL) {
                                     $comment['user'] = $array['user'];
                                     $comment['portrait'] = $array['portrait'];
+                                    $comment['isfollowed'] = array_search(["uid"=>$USERUID],json_decode($array['fans'],true)) !== false;
                                     $qq = mysqli_query($mysql,"select * from quote where comment_id = ".$comment['comment_id']." ORDER BY createTime DESC");
                                     $comment["comment_list"] = [];
                                     while($quote = mysqli_fetch_assoc($qq)) {
@@ -107,12 +110,13 @@ if(isset($_POST['access_token']) && isset($_POST['id'])) {
                                         $quote['have_pic'] = intval($quote['have_pic']);
                                         $quote['pic_urls'] = json_decode($quote['pic_urls'],true);
                                         $quote['pic_count'] = intval($quote['pic_count']);
-                                        $quq = mysqli_query($mysql,"select user,portrait from users where uid = ".$quote['comment_uid']);
+                                        $quq = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$quote['comment_uid']);
                                         if(!is_bool($quq)) {
                                             $array = mysqli_fetch_assoc($quq);
                                             if($array != NULL) {
                                                 $quote['user'] = $array['user'];
                                                 $quote['portrait'] = $array['portrait'];
+                                                $quote['isfollowed'] = array_search(["uid"=>$USERUID],json_decode($array['fans'],true)) !== false;
                                                 array_push($comment["comment_list"],$quote);
                                             } else {
                                                 mysqli_query($mysql,"delete from quote where quote_id = ".$quote['quote_id']);

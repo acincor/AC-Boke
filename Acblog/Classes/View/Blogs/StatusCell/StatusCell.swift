@@ -137,7 +137,6 @@ extension StatusCell: @preconcurrency FFLabelDelegate {
                 }
                 self.cellDelegate?.present(UINavigationController(rootViewController: ProfileTableViewController(account: UserViewModel(user: Account(dict: res)))))
             }
-            
         }
     }
 }

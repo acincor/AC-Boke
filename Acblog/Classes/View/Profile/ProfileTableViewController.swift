@@ -213,7 +213,7 @@ class ProfileTableViewController: VisitorTableViewController {
     }
     
     private func showAddFriend() {
-        let controller = UIAlertController(title: NSLocalizedString("添加/删除", comment: ""), message: NSLocalizedString("确定吗",comment: ""), preferredStyle: .alert)
+        let controller = UIAlertController(title: NSLocalizedString("即将执行此操作", comment: ""), message: NSLocalizedString("确定吗",comment: ""), preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: ""), style: .default, handler: { n in
             NetworkTools.shared.addFriend("\(self.account?.user.uid ?? 0)") { Result, Error in
                 if Error != nil {
@@ -239,7 +239,7 @@ class ProfileTableViewController: VisitorTableViewController {
                     showInfo("成功添加好友")
                     return
                 }
-                showInfo("成功删除/拉黑好友")
+                showInfo("成功删除好友")
             }
         }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel))
@@ -311,7 +311,8 @@ extension ProfileTableViewController {
             if account == nil {
                 cell.configure(title: indexPath.row == 0 ? "注销账号" : "退出登录", color: .orange)
             } else if style == .SomeBody {
-                cell.configure(title: "添加好友", color: .orange)
+                
+                cell.configure(title: (account?.user.isfollowed ?? 0 == 0) ? "添加好友" : "删除好友", color: .orange)
             }
             
             return cell

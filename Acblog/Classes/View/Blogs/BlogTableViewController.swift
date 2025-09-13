@@ -116,7 +116,7 @@ extension BlogTableViewController {
         print(like_list)
         cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
-        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.comment_uid == 0 ? vm.status.uid : vm.status.comment_uid)", "portrait":vm.userProfileUrl.absoluteString]))
+        g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.comment_uid == 0 ? vm.status.uid : vm.status.comment_uid)", "portrait":vm.userProfileUrl.absoluteString, "isfollowed": vm.status.isfollowed]))
         cell.topView.iconView.addGestureRecognizer(g)
         for s in like_list {
             if s["like_uid"] as! String == UserAccountViewModel.sharedUserAccount.account!.uid! {

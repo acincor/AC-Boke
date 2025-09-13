@@ -10,25 +10,25 @@ if(isset($_POST['access_token'])) {
                 mysqli_query($mysql,"DELETE FROM access_tokens WHERE access_token = '".$_POST['access_token']."'");
                 exit(json_encode(["msg"=>"access_token expired!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
             }
-            $query = mysqli_query($mysql,"select friend_list from users where uid = ".$array['uid']);
+            $query = mysqli_query($mysql,"select fans from users where uid = ".$array['uid']);
             $arr0 = [];
             if(!is_bool($query)) {
                 $arr1 = mysqli_fetch_assoc($query);
                 if($arr1 != NULL) {
-                    $arr1['friend_list'] = json_decode($arr1['friend_list'],true);
-                    for($i = 0; $i < count($arr1['friend_list']); $i ++) {
-                        $query = mysqli_query($mysql,"select user,portrait,uid from users where uid = ".$arr1['friend_list'][$i]['uid']);
+                    $arr1['fans'] = json_decode($arr1['fans'],true);
+                    for($i = 0; $i < count($arr1['fans']); $i ++) {
+                        $query = mysqli_query($mysql,"select user,portrait from users where uid = ".$arr1['fans'][$i]['uid']);
                         if(!is_bool($query)) {
                             $arr = mysqli_fetch_assoc($query);
                             if($arr != NULL) {
                                 array_push($arr0,$arr);
                             } else {
-                                unset($arr1['friend_list'][$i]);
-                                mysqli_query($mysql,"update users set friend_list = '".json_encode($arr1['friend_list'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$array["uid"]);
+                                unset($arr1['fans'][$i]);
+                                mysqli_query($mysql,"update users set fans = '".json_encode($arr1['fans'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['fans'][$i]['uid']);
                             }
                         } else {
-                            unset($arr1['friend_list'][$i]);
-                            mysqli_query($mysql,"update users set friend_list = '".json_encode($arr1['friend_list'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$array["uid"]);
+                            unset($arr1['fans'][$i]);
+                            mysqli_query($mysql,"update users set fans = '".json_encode($arr1['fans'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['fans'][$i]['uid']);
                         }
                     }
                     exit(json_encode($arr0,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));

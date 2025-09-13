@@ -102,7 +102,7 @@ extension NetworkTools {
     @MainActor func search(status:String, finished: @escaping HMRequestCallBack) {
         let params = ["status":status]
         let urlString = rootHost+"/api/search.php"
-        request(.POST, urlString, params, finished: finished)
+        tokenRequest(.POST, urlString, params, finished: finished)
     }
 }
 extension NetworkTools {
@@ -147,7 +147,7 @@ extension NetworkTools {
         tokenRequest(.GET, urlString, nil, finished: finished)
     }
     @MainActor func loadFriend(finished: @escaping HMRequestCallBack) {
-        let urlString = rootHost+"/api/friend.php"
+        let urlString = rootHost+"/api/friends.php"
         tokenRequest(.POST, urlString, nil, finished: finished)
     }
     @MainActor func rename(rename: String,finished: @escaping HMRequestCallBack) {

@@ -32,38 +32,6 @@
 				Resource/localhost/.idea/workspace.xml,
 				Resource/localhost/50x.html,
 				Resource/localhost/404.html,
-				Resource/localhost/api/404.html,
-				Resource/localhost/api/accessToken.php,
-				Resource/localhost/api/accessTokenIsExpires.php,
-				Resource/localhost/api/addFriend.php,
-				Resource/localhost/api/deleteBlog.php,
-				Resource/localhost/api/deleteTrend.php,
-				Resource/localhost/api/endLive.php,
-				Resource/localhost/api/expiresToken.php,
-				Resource/localhost/api/friend.php,
-				Resource/localhost/api/getUser.php,
-				Resource/localhost/api/getUserUid.php,
-				Resource/localhost/api/index.html,
-				Resource/localhost/api/like.php,
-				Resource/localhost/api/live.php,
-				Resource/localhost/api/loadBlog.php,
-				Resource/localhost/api/loadBlogOfId.php,
-				Resource/localhost/api/loadCommentBlog.php,
-				Resource/localhost/api/loadHotBlog.php,
-				Resource/localhost/api/loadLikeBlog.php,
-				Resource/localhost/api/loadLive.php,
-				Resource/localhost/api/login.html,
-				Resource/localhost/api/login.php,
-				Resource/localhost/api/logOff.php,
-				Resource/localhost/api/mhc.png,
-				Resource/localhost/api/portrait.php,
-				Resource/localhost/api/profileBlog.php,
-				Resource/localhost/api/register.html,
-				Resource/localhost/api/register.php,
-				Resource/localhost/api/rename.php,
-				Resource/localhost/api/search.php,
-				Resource/localhost/api/trend.php,
-				Resource/localhost/api/upload.php,
 				Resource/localhost/favicon.ico,
 				Resource/localhost/index.html,
 				Resource/nginx.conf,
@@ -400,7 +368,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -472,7 +440,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
