@@ -8,11 +8,11 @@
 import UIKit
 
 let UserNormalCellMargin = 1.5
-class MessageTableViewController: VisitorTableViewController{
-    var friendListViewModel = ElseListViewModel(specialClass: .friend)
+class UserTableViewController: VisitorTableViewController{
+    var userListViewModel = UserListViewModel()
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        friendListViewModel.load { (isSuccessful) in
+        userListViewModel.loadFLFL(specialClass: specialClass) { (isSuccessful) in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
@@ -22,6 +22,14 @@ class MessageTableViewController: VisitorTableViewController{
                 self.tableView.reloadData()
             }
         }
+    }
+    init(specialClass: SpecialClass) {
+        self.specialClass = specialClass
+        super.init(nibName: nil, bundle: nil)
+    }
+    var specialClass: SpecialClass
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,22 +43,16 @@ class MessageTableViewController: VisitorTableViewController{
         loadData()
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.friendListViewModel.list.count
-    }
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let socketController = WebSocketController(to_uid: friendListViewModel.list[indexPath.row].user.uid, username: friendListViewModel.list[indexPath.row].user.user ?? "")
-        let nav = UINavigationController(rootViewController: socketController)
-        nav.modalPresentationStyle = .custom
-        present(nav, animated: false)
+        return self.userListViewModel.list.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = friendListViewModel.list[indexPath.row]
+        let vm = userListViewModel.list[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: UserCellNormalId, for: indexPath) as! UserCell
         cell.viewModel = vm
         return cell
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.friendListViewModel.list[indexPath.row].rowHeight * UserNormalCellMargin
+        return self.userListViewModel.list[indexPath.row].rowHeight * UserNormalCellMargin
     }
 }
 

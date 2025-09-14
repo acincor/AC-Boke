@@ -8,7 +8,7 @@
 import UIKit
 
 
-class ElseListViewModel: @unchecked Sendable {
+class UserListViewModel: @unchecked Sendable {
     lazy var list = [UserViewModel]()
     var specialClass: SpecialClass
     init(specialClass: SpecialClass) {
@@ -31,7 +31,7 @@ class ElseListViewModel: @unchecked Sendable {
             self.list = dataList
             finished(true)
         }
-        if specialClass == .friend {
+        if specialClass == .flf {
             NetworkTools.shared.loadFriend(finished: completion)
         } else if specialClass == SpecialClass.live{
             NetworkTools.shared.loadLive(finished: completion)
