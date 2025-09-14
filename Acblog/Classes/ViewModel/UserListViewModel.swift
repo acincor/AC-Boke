@@ -10,11 +10,7 @@ import UIKit
 
 class UserListViewModel: @unchecked Sendable {
     lazy var list = [UserViewModel]()
-    var specialClass: SpecialClass
-    init(specialClass: SpecialClass) {
-        self.specialClass = specialClass
-    }
-    @MainActor func load(finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
+    @MainActor func loadFLFL(specialClass: SpecialClass, finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         let completion: NetworkTools.HMRequestCallBack = { (array: Any?,error: Error?) -> () in
             guard let array = array else {
                 finished(false)
@@ -27,14 +23,9 @@ class UserListViewModel: @unchecked Sendable {
             for n in 0..<arr.count {
                 dataList.append(UserViewModel(user: Account(dict: arr[n])))
             }
-            
             self.list = dataList
             finished(true)
         }
-        if specialClass == .flf {
-            NetworkTools.shared.loadFriend(finished: completion)
-        } else if specialClass == SpecialClass.live{
-            NetworkTools.shared.loadLive(finished: completion)
-        }
+        NetworkTools.shared.loadFLFL(finished: completion, specialClass: specialClass)
     }
 }

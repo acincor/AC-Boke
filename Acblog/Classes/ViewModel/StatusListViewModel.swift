@@ -13,6 +13,8 @@ enum SpecialClass: String {
     case like = "like"
     case blog = "blog"
     case friend = "friend"
+    case follow = "follow"
+    case fans = "fans"
     case live = "live"
 }
 class StatusListViewModel: @unchecked Sendable {

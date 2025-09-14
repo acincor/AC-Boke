@@ -8,11 +8,14 @@
 import UIKit
 
 let UserNormalCellMargin = 1.5
+protocol LoadFLFDelegate {
+    func specialClass() -> SpecialClass
+}
 class UserTableViewController: VisitorTableViewController{
     var userListViewModel = UserListViewModel()
     @objc func loadData() {
         self.refreshControl?.beginRefreshing()
-        userListViewModel.loadFLFL(specialClass: specialClass) { (isSuccessful) in
+        userListViewModel.loadFLFL(specialClass: specialClass()) { (isSuccessful) in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
@@ -22,14 +25,10 @@ class UserTableViewController: VisitorTableViewController{
                 self.tableView.reloadData()
             }
         }
+        print(userListViewModel.list)
     }
-    init(specialClass: SpecialClass) {
-        self.specialClass = specialClass
-        super.init(nibName: nil, bundle: nil)
-    }
-    var specialClass: SpecialClass
-    @MainActor required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func specialClass() -> SpecialClass {
+        return .follow
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +36,7 @@ class UserTableViewController: VisitorTableViewController{
             visitorView?.setupInfo(imageName: "visitordiscover_image_message", title: NSLocalizedString("登陆后，别人发给你的消息，你能在这里回复", comment: ""))
             return
         }
-        tableView.register(UserCell.self, forCellReuseIdentifier: UserCellNormalId)
+        tableView.register(StatusCell.self, forCellReuseIdentifier: StatusCellNormalId)
         refreshControl = ACRefreshControl()
         refreshControl?.addTarget(self, action: #selector(self.loadData), for: .valueChanged)
         loadData()
@@ -47,8 +46,8 @@ class UserTableViewController: VisitorTableViewController{
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let vm = userListViewModel.list[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: UserCellNormalId, for: indexPath) as! UserCell
-        cell.viewModel = vm
+        let cell = tableView.dequeueReusableCell(withIdentifier: StatusCellNormalId, for: indexPath) as! StatusCell
+        cell.uvm = vm
         return cell
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

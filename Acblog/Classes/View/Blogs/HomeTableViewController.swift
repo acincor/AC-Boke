@@ -107,7 +107,7 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let vm = liveListViewModel.list[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! UserCollectionCell
-        cell.viewModel = vm
+        cell.uvm = vm
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

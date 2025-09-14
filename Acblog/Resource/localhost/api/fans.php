@@ -17,18 +17,21 @@ if(isset($_POST['access_token'])) {
                 if($arr1 != NULL) {
                     $arr1['fans'] = json_decode($arr1['fans'],true);
                     for($i = 0; $i < count($arr1['fans']); $i ++) {
-                        $query = mysqli_query($mysql,"select user,portrait from users where uid = ".$arr1['fans'][$i]['uid']);
+                        $query = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$arr1['fans'][$i]['uid']);
                         if(!is_bool($query)) {
                             $arr = mysqli_fetch_assoc($query);
+                            $arr['uid'] = $arr1['fans'][$i]['uid'];
+                            $arr['isfollowed'] = array_search($arr1['fans'][$i],$arr['fans']);
+                            unset($arr['fans']);
                             if($arr != NULL) {
                                 array_push($arr0,$arr);
                             } else {
-                                unset($arr1['fans'][$i]);
                                 mysqli_query($mysql,"update users set fans = '".json_encode($arr1['fans'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['fans'][$i]['uid']);
+                                unset($arr1['fans'][$i]);
                             }
                         } else {
-                            unset($arr1['fans'][$i]);
                             mysqli_query($mysql,"update users set fans = '".json_encode($arr1['fans'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['fans'][$i]['uid']);
+                            unset($arr1['fans'][$i]);
                         }
                     }
                     exit(json_encode($arr0,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));

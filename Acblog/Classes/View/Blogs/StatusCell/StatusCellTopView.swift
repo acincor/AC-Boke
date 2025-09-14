@@ -39,7 +39,24 @@ class StatusCellTopView: UIView {
             
         }
     }
-    
+    var uvm: UserViewModel? {
+        didSet {
+            guard var model = uvm?.user.user else {
+                return
+            }
+            if model.count > 4 {
+                model = String(model.prefix(1))+"..."
+            }
+            self.nameLabel.text = model
+            self.nameLabel.textColor = .red
+            self.sourceLabel.text = uvm?.user.isfollowed == 1 ? "关注" : "粉丝"
+            self.iconView.kf.setImage(with: uvm?.userProfileUrl, placeholder: uvm?.userDefaultIconView, options: [.forceRefresh])
+            iconView.layer.cornerRadius = 5
+            iconView.clipsToBounds = true
+            iconView.isUserInteractionEnabled = true
+            print(uvm)
+        }
+    }
     /*
      // Only override draw() if you perform custom drawing.
      // An empty implementation adversely affects performance during animation.

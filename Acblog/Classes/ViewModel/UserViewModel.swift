@@ -7,7 +7,6 @@
 
 import UIKit
 let LiveCellNormalId = "LiveCellNormalId"
-let UserCellNormalId = "UserCellNormalId"
 /// 微博视图模型 - 处理单条微博的业务逻辑
 class UserViewModel: CustomStringConvertible {
     
@@ -19,8 +18,7 @@ class UserViewModel: CustomStringConvertible {
         return URL(string: user.portrait ?? "")!
     }
     @MainActor lazy var rowHeight: CGFloat = {
-        var cell: UserCell
-        cell = UserCell(style: .default, reuseIdentifier: UserCellNormalId)
+        var cell: StatusCell = StatusCell(style: .default, reuseIdentifier: StatusCellNormalId)
         return cell.rowHeight(self)
     }()
     /// 用户默认头像

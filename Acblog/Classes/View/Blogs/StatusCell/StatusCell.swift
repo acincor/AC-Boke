@@ -59,6 +59,13 @@ class StatusCell: UITableViewCell {
             }
         }
     }
+    var uvm: UserViewModel? {
+        didSet {
+            self.topView.uvm = uvm
+            bottomView.removeFromSuperview()
+            contentLabel.removeFromSuperview()
+        }
+    }
     lazy var topView: StatusCellTopView = StatusCellTopView()
     lazy var contentLabel: FFLabel = FFLabel(title: NSLocalizedString("微博正文", comment: ""), fontSize: 15, color: .label, screenInset: StatusCellMargin)
     lazy var bottomView: StatusCellBottomView = StatusCellBottomView()
@@ -75,6 +82,11 @@ class StatusCell: UITableViewCell {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    func rowHeight(_ vm: UserViewModel) -> CGFloat {
+        uvm = vm
+        contentView.layoutIfNeeded()
+        return topView.frame.height
     }
     func rowHeight(_ vm: StatusViewModel) -> CGFloat {
         viewModel = vm

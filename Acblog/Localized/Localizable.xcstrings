@@ -101,6 +101,7 @@
       }
     },
     "你的伙伴" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

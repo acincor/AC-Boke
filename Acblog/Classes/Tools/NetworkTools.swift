@@ -142,12 +142,18 @@ extension NetworkTools {
         params["uid"] = uid
         request(.POST, urlString, params, finished: finished)
     }
-    @MainActor func loadLive(finished: @escaping HMRequestCallBack) {
-        let urlString = rootHost+"/api/loadLive.php"
-        tokenRequest(.GET, urlString, nil, finished: finished)
-    }
-    @MainActor func loadFriend(finished: @escaping HMRequestCallBack) {
-        let urlString = rootHost+"/api/friends.php"
+    @MainActor func loadFLFL(finished: @escaping HMRequestCallBack, specialClass: SpecialClass) {
+        var urlString = rootHost+"/api/"
+        if specialClass == .friend {
+            urlString += "friends"
+        } else if specialClass == .fans {
+            urlString += "fans"
+        } else if specialClass == .follow {
+            urlString += "follow"
+        } else if specialClass == .live {
+            urlString += "loadLive"
+        }
+        urlString += ".php"
         tokenRequest(.POST, urlString, nil, finished: finished)
     }
     @MainActor func rename(rename: String,finished: @escaping HMRequestCallBack) {

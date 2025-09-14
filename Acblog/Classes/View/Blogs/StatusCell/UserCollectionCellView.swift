@@ -6,9 +6,9 @@
 //
 
 import UIKit
-private let UserCollectionViewCellId = "UserCollectionViewCellId"
+let UserCollectionCellNormalId = "UserCollectionCellNormalId"
 class UserCollectionCellView: UIView {
-    let friendListViewModel = ElseListViewModel(specialClass: .friend)
+    let friendListViewModel = UserListViewModel()
     private var selectedViewModelCallBack: (_ viewModel: UserViewModel)->()
     init(selectedViewModel: @escaping(_ viewModel: UserViewModel)->()) {
         selectedViewModelCallBack = selectedViewModel
@@ -33,31 +33,37 @@ extension UserCollectionCellView {
             make.left.equalTo(self.snp.left)
             make.right.equalTo(self.snp.right)
         }
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
         prepareCollectionView()
     }
     func prepareCollectionView() {
         collectionView.backgroundColor = UIColor.systemBackground
-        collectionView.register(UserCollectionCell.self, forCellWithReuseIdentifier: UserCollectionViewCellId)
+        collectionView.register(UserCollectionCell.self, forCellWithReuseIdentifier: UserCollectionCellNormalId)
         collectionView.dataSource = self
         collectionView.delegate = self
     }
 }
-extension UserCollectionCellView: UICollectionViewDataSource, UICollectionViewDelegate {
+extension UserCollectionCellView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return friendListViewModel.list.count
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return friendListViewModel.list.count
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserCollectionViewCellId, for: indexPath) as! UserCollectionCell
-        cell.viewModel = friendListViewModel.list[indexPath.row]
-        cell.topView.nameLabel.text = friendListViewModel.list[indexPath.row].user.user
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserCollectionCellNormalId, for: indexPath) as! UserCollectionCell
+        cell.uvm = friendListViewModel.list[indexPath.row]
+        //cell.frame = cell.topView.frame
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let user = friendListViewModel.list[indexPath.row]
         selectedViewModelCallBack(user)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 125, height: friendListViewModel.list[indexPath.row].rowHeight+StatusCellMargin)
     }
 }

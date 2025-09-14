@@ -8,7 +8,7 @@
 import UIKit
 
 //var live_to_user: String?
-@MainActor var liveListViewModel = ElseListViewModel(specialClass: .live)
+@MainActor var liveListViewModel = UserListViewModel()
 class LiveTableView: UICollectionView{
     /*
      private lazy var pullupView: UIActivityIndicatorView = {
@@ -24,7 +24,7 @@ class LiveTableView: UICollectionView{
 #endif
     @objc func loadData() {
         refreshControl?.beginRefreshing()
-        liveListViewModel.load { (isSuccessful) in
+        liveListViewModel.loadFLFL(specialClass: .live) { (isSuccessful) in
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {

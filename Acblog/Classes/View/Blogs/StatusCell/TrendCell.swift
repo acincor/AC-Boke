@@ -17,10 +17,10 @@ class TrendCell: UICollectionViewCell {
             if model.count > 4 {
                 model = String(model.prefix(1))+"..."
             }
-            self.subTitlLabel.text = model
+            self.subTitleLabel.text = model
         }
     }
-    private var subTitlLabel: UILabel = UILabel()
+    private var subTitleLabel: UILabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,14 +45,14 @@ class TrendCell: UICollectionViewCell {
         self.backgroundColor = .systemFill
         self.layer.cornerRadius = 5
         self.clipsToBounds = true
-        self.contentView.addSubview(self.subTitlLabel)
-        self.subTitlLabel.snp.makeConstraints{ make in
+        self.contentView.addSubview(self.subTitleLabel)
+        self.subTitleLabel.snp.makeConstraints{ make in
             make.left.equalToSuperview().offset(15)
             make.centerY.equalToSuperview()
             make.width.equalTo(50)
         }
-        self.subTitlLabel.textColor = .systemOrange
-        self.subTitlLabel.font = .systemFont(ofSize: 17, weight: .medium)
-        self.subTitlLabel.numberOfLines = 1
+        self.subTitleLabel.textColor = .systemOrange
+        self.subTitleLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        self.subTitleLabel.numberOfLines = 1
     }
 }

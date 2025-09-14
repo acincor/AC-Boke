@@ -17,29 +17,27 @@ if(isset($_POST['access_token'])) {
                 if($arr1 != NULL) {
                     $arr1['followings'] = json_decode($arr1['followings'],true);
                     for($i = 0; $i < count($arr1['followings']); $i ++) {
-                        $query = mysqli_query($mysql,"select user,portrait from users where uid = ".$arr1['followings'][$i]['uid']);
+                        $query = mysqli_query($mysql,"select portrait,user,followings from users where uid = ".$arr1['followings'][$i]['uid']);
                         if(!is_bool($query)) {
                             $arr = mysqli_fetch_assoc($query);
                             if($arr != NULL) {
-                                $followings = mysqli_query($mysql,"select followings from users where uid = ".$arr1['followings'][$i]['uid']);
-                                if(!is_bool($followings)) {
-                                    $followingsarr = mysqli_fetch_assoc($followings);
-                                    if($followingsarr != NULL) {
-                                        $followingsarr = json_decode($followingsarr['followings'],true);
-                                        for($i = 0; $i < count($followingsarr); $i ++) {
-                                            if ($followingsarr[$i]['uid'] == $array['uid']) {
-                                                array_push($arr0, $arr);
-                                            }
-                                        }
+                                $arr['followings'] = json_decode($arr['followings'],true);
+                                for($j = 0; $j < count($arr['followings']); $j ++) {
+                                    if ($arr['followings'][$j]['uid'] == $array['uid']) {
+                                        $arr['uid'] = $arr1['followings'][$i]['uid'];
+                                        $arr['isfollowed'] = 1;
+                                        unset($arr['followings']);
+                                        array_push($arr0, $arr);
+                                        break;
                                     }
                                 }
                             } else {
-                                unset($arr1['followings'][$i]);
                                 mysqli_query($mysql,"update users set followings = '".json_encode($arr1['followings'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['followings'][$i]['uid']);
+                                unset($arr1['followings'][$i]);
                             }
                         } else {
-                            unset($arr1['followings'][$i]);
                             mysqli_query($mysql,"update users set followings = '".json_encode($arr1['followings'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['followings'][$i]['uid']);
+                            unset($arr1['followings'][$i]);
                         }
                     }
                     exit(json_encode($arr0,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));

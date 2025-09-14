@@ -21,14 +21,16 @@ if(isset($_POST['access_token'])) {
                         if(!is_bool($query)) {
                             $arr = mysqli_fetch_assoc($query);
                             if($arr != NULL) {
+                                $arr['uid'] = $arr1['followings'][$i]['uid'];
+                                $arr['isfollowed'] = 1;
                                 array_push($arr0,$arr);
                             } else {
-                                unset($arr1['followings'][$i]);
                                 mysqli_query($mysql,"update users set followings = '".json_encode($arr1['followings'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['followings'][$i]['uid']);
+                                unset($arr1['followings'][$i]);
                             }
                         } else {
-                            unset($arr1['followings'][$i]);
                             mysqli_query($mysql,"update users set followings = '".json_encode($arr1['followings'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['followings'][$i]['uid']);
+                            unset($arr1['followings'][$i]);
                         }
                     }
                     exit(json_encode($arr0,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
