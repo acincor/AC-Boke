@@ -64,10 +64,10 @@ AC-Boke
       - [BKLiveController.swift](#bklivecontrollerswift)
       - [ProfileTableViewController.swift](#profiletableviewcontrollerswift)
       - [UserProfileBrowserViewController.swift](#userprofilebrowserviewcontrollerswift)
-    - [User][#user]
-      - [UserCollectionCell][#usercollectioncell]
-      - [UserTableViewController.swift][#usertableviewcontroller.swift]
-      - [FansTableViewController.swift][#fanstableviewcontroller.swift]
+    - [User](#user)
+      - [UserCollectionCell](#usercollectioncell)
+      - [UserTableViewController.swift](#usertableviewcontroller.swift)
+      - [FansTableViewController.swift](#fanstableviewcontroller.swift)
   - [ViewModel](#viewmodel)
     - [ElseListViewModel.swift](#elselistviewmodelswift)
     - [StatusDAL.swift](#statusdalswift)
