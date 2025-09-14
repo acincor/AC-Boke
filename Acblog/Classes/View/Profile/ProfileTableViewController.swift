@@ -163,7 +163,12 @@ class ProfileTableViewController: VisitorTableViewController {
         controller.addAction(UIAlertAction(title: NSLocalizedString("取消",comment:""), style: .cancel))
         self.present(controller, animated: true)
     }
-    
+    private func showFollowings() {
+        self.present(UserTableViewController(currentUserID), animated: true)
+    }
+    private func showFans() {
+        self.present(FansTableViewController(currentUserID), animated: true)
+    }
     private func showRenameAlert() {
         let controller = UIAlertController(title: NSLocalizedString("更改用户名", comment: ""), message: NSLocalizedString("请在输入框内输入您的用户名：", comment: ""), preferredStyle: .alert)
         controller.addTextField { textField in
@@ -260,7 +265,7 @@ extension ProfileTableViewController {
         case 0: // 头像和用户名
             return 1
         case 1: // 主要功能
-            return account == nil ? 6 : 4 // 查看资料卡少"开始直播"、"修改昵称"
+            return account == nil ? 8 : 6 // 查看资料卡少"开始直播"、"修改昵称"
         case 2: // 操作按钮
             if account == nil {
                 return 2 // 注销账号, 退出登录
@@ -294,9 +299,13 @@ extension ProfileTableViewController {
                 cell.configure(title: "点赞过的", image: .timelineIconLike, showArrow: true)
             case 3:
                 cell.configure(title: "评论过的", image: .timelineIconComment, showArrow: true)
+            case 4:
+                cell.configure(title: "粉丝", image: UIImage(systemName: "person")!, showArrow: true)
             case 5:
+                cell.configure(title: "关注", image: .add, showArrow: true)
+            case 6:
                 cell.configure(title: "修改昵称", image: UIImage(systemName: "person.circle")!, showArrow: true)
-            case 4: // 查看资料卡
+            case 7: // 查看资料卡
                 cell.configure(title: "开始直播", image: .liveSmallIcon, showArrow: true)
            
             default:
@@ -361,10 +370,14 @@ extension ProfileTableViewController {
                 showLikedContent()
             case 3: // 评论过的
                 showCommentedContent()
-            case 4: // 仅未登录时显示
-                showLiveStream()
-            case 5: // 开始直播
+            case 4: // 粉丝
+                showFans()
+            case 5: // 关注
+                showFollowings()
+            case 6: // 开始直播
                 showRenameAlert()
+            case 7: // 仅未登录时显示
+                showLiveStream()
             
             default:
                 break

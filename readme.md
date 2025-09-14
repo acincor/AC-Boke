@@ -58,11 +58,16 @@ AC-Boke
       - [TypeStatusTableViewController.swift](#typestatustableviewcontrollerswift)
       - [ACWebViewController.swift](#acwebviewcontrollerswift)
       - [StatusCell](#statuscell)
+      - [TrendCell](#trendcell)
       - [RefreshView](#refreshview)
     - [Profile](#profile)
       - [BKLiveController.swift](#bklivecontrollerswift)
       - [ProfileTableViewController.swift](#profiletableviewcontrollerswift)
       - [UserProfileBrowserViewController.swift](#userprofilebrowserviewcontrollerswift)
+    - [User][#user]
+      - [UserCollectionCell][#usercollectioncell]
+      - [UserTableViewController.swift][#usertableviewcontroller.swift]
+      - [FansTableViewController.swift][#fanstableviewcontroller.swift]
   - [ViewModel](#viewmodel)
     - [ElseListViewModel.swift](#elselistviewmodelswift)
     - [StatusDAL.swift](#statusdalswift)
@@ -153,7 +158,9 @@ AC-Boke
 ##### ACWebViewController.swift
 跳转网页
 ##### StatusCell
-加载博客的单个单元格、加载话题的单个单元格、加载用户信息（用于直播、好友、资料卡界面）的单个单元格
+加载博客的单个单元格的单个单元格
+##### TrendCell
+加载话题的单个单元格
 ##### RefreshView
 处理刷新动画
 
@@ -165,6 +172,15 @@ AC-Boke
 用于显示自己以及别人的资料卡
 ##### UserProfileBrowserViewController.swift
 查看用户头像，如果是我的头像则有更换头像的选项
+
+#### User
+处理加载用户信息的任务
+##### UserCollectionCell
+加载用户信息（用于直播、好友、资料卡界面）的单个单元格
+##### UserTableViewController.swift
+加载用户关注（父类默认加载关注）的控制器试图
+##### FansTableViewController.swift
+加载用户粉丝（继承于父类加载粉丝）的控制器试图
 
 ### ViewModel
 加载博客内需要的信息

@@ -10,6 +10,9 @@ if(isset($_POST['access_token'])) {
                 mysqli_query($mysql,"DELETE FROM access_tokens WHERE access_token = '".$_POST['access_token']."'");
                 exit(json_encode(["msg"=>"access_token expired!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
             }
+            if(isset($_POST["uid"])) {
+                $array['uid'] = $_POST["uid"];
+            }
             $query = mysqli_query($mysql,"select fans from users where uid = ".$array['uid']);
             $arr0 = [];
             if(!is_bool($query)) {
@@ -20,10 +23,11 @@ if(isset($_POST['access_token'])) {
                         $query = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$arr1['fans'][$i]['uid']);
                         if(!is_bool($query)) {
                             $arr = mysqli_fetch_assoc($query);
-                            $arr['uid'] = $arr1['fans'][$i]['uid'];
-                            $arr['isfollowed'] = array_search($arr1['fans'][$i],$arr['fans']);
-                            unset($arr['fans']);
                             if($arr != NULL) {
+                                $arr['fans'] = json_decode($arr['fans'],true);
+                                $arr['uid'] = $arr1['fans'][$i]['uid'];
+                                $arr['isfollowed'] = array_search(["uid"=>$array["uid"]],$arr['fans']) !== false;
+                                unset($arr['fans']);
                                 array_push($arr0,$arr);
                             } else {
                                 mysqli_query($mysql,"update users set fans = '".json_encode($arr1['fans'],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."' where uid = ".$arr1['fans'][$i]['uid']);

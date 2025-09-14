@@ -100,17 +100,6 @@
         }
       }
     },
-    "你的伙伴" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your Friend"
-          }
-        }
-      }
-    },
     "你的取消TA收到了" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -184,6 +173,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rename"
+          }
+        }
+      }
+    },
+    "关注" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Followings"
           }
         }
       }
@@ -985,6 +985,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Are you sure you want to log out?"
+          }
+        }
+      }
+    },
+    "粉丝" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fans"
           }
         }
       }

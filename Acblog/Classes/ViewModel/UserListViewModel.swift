@@ -10,7 +10,7 @@ import UIKit
 
 class UserListViewModel: @unchecked Sendable {
     lazy var list = [UserViewModel]()
-    @MainActor func loadFLFL(specialClass: SpecialClass, finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
+    @MainActor func loadFLFL(specialClass: SpecialClass, _ uid: String? = nil, finished: @escaping @Sendable (_ isSuccessful: Bool) -> ()) {
         let completion: NetworkTools.HMRequestCallBack = { (array: Any?,error: Error?) -> () in
             guard let array = array else {
                 finished(false)

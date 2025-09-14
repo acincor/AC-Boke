@@ -29,12 +29,20 @@ class BKLiveController: UIViewController {
         live.frame = UIScreen.main.bounds
         view.addSubview(live)
         view.backgroundColor = .red
-        for i in liveListViewModel.list {
-            if i.user.uid == Int(UserAccountViewModel.sharedUserAccount.account!.uid!)! {
+        NetworkTools.shared.isLived(finished: { Result, Error in
+            guard let res = Result as? [String: Any] else {
+                showInfo("加载数据错误，请稍后再试")
+                return
+            }
+            if(res["error"] != nil) {
+                showInfo("加载数据错误，请稍后再试")
+                return
+            }
+            if(res["msg"] as! Int == 1) {
                 showError("你的直播已在其他设备上进行...")
                 return
             }
-        }
+        })
         title = NSLocalizedString("hi，一起直播鸭！",comment: "")
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("关闭", comment: ""), style: .plain, target: self, action: #selector(self.close))
         navigationItem.leftBarButtonItem?.tintColor = .white

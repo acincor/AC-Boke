@@ -7,8 +7,27 @@
 
 import UIKit
 let UserCollectionCellNormalId = "UserCollectionCellNormalId"
+class UserCollectionView: UICollectionView {
+    init() {
+        let flt = UICollectionViewFlowLayout()
+        flt.minimumLineSpacing = 0
+        flt.minimumInteritemSpacing = 0
+        flt.scrollDirection = .horizontal
+        super.init(frame: CGRectZero, collectionViewLayout: flt)
+        bounces = false
+        isPagingEnabled = true
+        showsHorizontalScrollIndicator = false
+        register(UserCollectionCell.self, forCellWithReuseIdentifier: LiveCellNormalId)
+        backgroundColor = UIColor.systemBackground
+        register(UserCollectionCell.self, forCellWithReuseIdentifier: UserCollectionCellNormalId)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 class UserCollectionCellView: UIView {
-    let friendListViewModel = UserListViewModel()
+    let userListViewModel = UserListViewModel()
     private var selectedViewModelCallBack: (_ viewModel: UserViewModel)->()
     init(selectedViewModel: @escaping(_ viewModel: UserViewModel)->()) {
         selectedViewModelCallBack = selectedViewModel
@@ -18,7 +37,7 @@ class UserCollectionCellView: UIView {
         backgroundColor = .systemBackground
         setupUI()
     }
-    lazy var collectionView = UICollectionView(frame: CGRectZero,collectionViewLayout: UICollectionViewFlowLayout())
+    lazy var collectionView = UserCollectionView()
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -33,21 +52,18 @@ extension UserCollectionCellView {
             make.left.equalTo(self.snp.left)
             make.right.equalTo(self.snp.right)
         }
-        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        }
         prepareCollectionView()
     }
     func prepareCollectionView() {
-        collectionView.backgroundColor = UIColor.systemBackground
-        collectionView.register(UserCollectionCell.self, forCellWithReuseIdentifier: UserCollectionCellNormalId)
+        
+        
         collectionView.dataSource = self
         collectionView.delegate = self
     }
 }
 extension UserCollectionCellView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return friendListViewModel.list.count
+        return userListViewModel.list.count
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -55,15 +71,15 @@ extension UserCollectionCellView: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserCollectionCellNormalId, for: indexPath) as! UserCollectionCell
-        cell.uvm = friendListViewModel.list[indexPath.row]
+        cell.uvm = userListViewModel.list[indexPath.row]
         //cell.frame = cell.topView.frame
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = friendListViewModel.list[indexPath.row]
+        let user = userListViewModel.list[indexPath.row]
         selectedViewModelCallBack(user)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 125, height: friendListViewModel.list[indexPath.row].rowHeight+StatusCellMargin)
+        CGSize(width: 125, height: userListViewModel.list[indexPath.row].rowHeight+StatusCellMargin)
     }
 }

@@ -113,7 +113,7 @@ class ComposeViewController: UIViewController /*,UIWebViewDelegate*/ {
         textView.becomeFirstResponder()
     }
     @objc private func selectUser() {
-        userCollectionView.friendListViewModel.loadFLFL(specialClass: .follow) { isSuccessful in
+        userCollectionView.userListViewModel.loadFLFL(specialClass: .follow) { isSuccessful in
             Task { @MainActor in
                 self.userCollectionView.collectionView.reloadData()
             }

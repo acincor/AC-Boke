@@ -7,6 +7,8 @@
 
 import UIKit
 
-class FollowingTableViewController: UserTableViewController {
-    
+class FansTableViewController: UserTableViewController {
+    override func specialClass() -> SpecialClass {
+        return .fans
+    }
 }

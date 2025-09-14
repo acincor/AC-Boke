@@ -42,7 +42,7 @@ class CustomRefreshView: UIView {
         }
     }
 }
-class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate, UICollectionViewDataSource {
+class HomeTableViewController: BlogTableViewController {
     lazy var refreshView = CustomRefreshView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 30))
     @objc func refresh(pullup: UIActivityIndicatorView) {
         if pullup.isAnimating {
@@ -87,7 +87,17 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    let liveView = LiveTableView()
+    lazy var liveView = UserCollectionCellView{ viewModel in
+        guard let url = (rootHost+"/hls/\(viewModel.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            showError("似乎出了点问题，请刷新重试")
+            return
+        }
+        guard let urlEncoded = URL(string:url) else {
+            showError("似乎出了点问题，请刷新重试")
+            return
+        }
+        self.present(ACWebViewController(url: urlEncoded),animated: true)
+    }
     override func prepareTableView() {
         super.prepareTableView()
         refreshControl = ACRefreshControl()
@@ -97,31 +107,7 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
             self.refresh(pullup: pullup)
         }
         tableView.tableFooterView = refreshView
-        liveView.delegate = self
-        liveView.dataSource = self
-        tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : liveView
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return liveListViewModel.list.count
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let vm = liveListViewModel.list[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveCellNormalId, for: indexPath) as! UserCollectionCell
-        cell.uvm = vm
-        return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vm = liveListViewModel.list[indexPath.row]
-        guard let url = (rootHost+"/hls/\(vm.user.uid).m3u8").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            showError("似乎出了点问题，请刷新重试")
-            return
-        }
-        print(url)
-        guard let urlEncoded = URL(string:url) else {
-            showError("似乎出了点问题，请刷新重试")
-            return
-        }
-        present(ACWebViewController(url: urlEncoded),animated: true)
+        tableView.tableHeaderView = liveView.userListViewModel.list.isEmpty ? nil : liveView
     }
     @objc override func loadData() {
         if(!self.refreshView.pullupView.isAnimating) {
@@ -139,9 +125,18 @@ class HomeTableViewController: BlogTableViewController,UICollectionViewDelegate,
                 self.tableView.reloadData()
             }
         }
-        self.liveView.loadData()
-        self.liveView.reloadData()
-        self.tableView.tableHeaderView = liveListViewModel.list.isEmpty ? nil : self.liveView
+        refreshControl?.beginRefreshing()
+        liveView.userListViewModel.loadFLFL(specialClass: .live) { (isSuccessful) in
+            Task { @MainActor in
+                self.refreshControl?.endRefreshing()
+                if !isSuccessful {
+                    showError("加载数据错误，请稍后再试")
+                    return
+                }
+                self.liveView.collectionView.reloadData()
+            }
+        }
+        self.tableView.tableHeaderView = liveView.userListViewModel.list.isEmpty ? nil : self.liveView
     }
     private lazy var pulldownTipLabel: UILabel = {
         let label = UILabel(title: "", fontSize: 18,color: .white)
