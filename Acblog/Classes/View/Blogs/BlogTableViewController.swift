@@ -113,7 +113,6 @@ extension BlogTableViewController {
         cell.viewModel = vm
         cell.bottomView.deleteButton.vm = vm
         let like_list = vm.status.like_list
-        print(like_list)
         cell.bottomView.likeButton.setImage(.timelineIconUnlike, for: .normal)
         let g = UITapGestureRecognizer(target: self, action: #selector(self.whenIconViewIsTouched(sender:)))
         g.userViewModel = UserViewModel(user: Account(dict: ["user":vm.status.user ?? "","uid": "\(vm.status.comment_uid == 0 ? vm.status.uid : vm.status.comment_uid)", "portrait":vm.userProfileUrl.absoluteString, "isfollowed": vm.status.isfollowed]))

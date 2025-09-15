@@ -47,7 +47,7 @@ class TrendCell: UICollectionViewCell {
         self.clipsToBounds = true
         self.contentView.addSubview(self.subTitleLabel)
         self.subTitleLabel.snp.makeConstraints{ make in
-            make.left.equalToSuperview().offset(15)
+            make.centerX.equalTo(25)
             make.centerY.equalToSuperview()
             make.width.equalTo(50)
         }

@@ -49,7 +49,7 @@ extension NetworkTools {
         }
         request.httpMethod = method.rawValue
         let completion = { @Sendable @MainActor (data: Data?, res: URLResponse?, error: (any Error)?)->Void in
-            if let any = try? JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments){
+            if let any = try? JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) {
                 if let dict = any as? NSArray {
                     finished(dict,error)
                 }

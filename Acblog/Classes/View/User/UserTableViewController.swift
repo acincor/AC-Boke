@@ -25,7 +25,6 @@ class UserTableViewController: VisitorTableViewController{
                 self.tableView.reloadData()
             }
         }
-        print(userListViewModel.list)
     }
     func specialClass() -> SpecialClass {
         return .follow

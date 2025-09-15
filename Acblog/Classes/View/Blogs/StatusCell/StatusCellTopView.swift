@@ -54,7 +54,6 @@ class StatusCellTopView: UIView {
             iconView.layer.cornerRadius = 5
             iconView.clipsToBounds = true
             iconView.isUserInteractionEnabled = true
-            print(uvm)
         }
     }
     /*
