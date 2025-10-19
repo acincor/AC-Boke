@@ -18,7 +18,7 @@ AC-Boke
                 "已改成内部文件": ["FFLabel"]
         }`
 
-- 支持中英文、Swift 6
+- 支持中英文、`Swift 6`
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -112,16 +112,16 @@ AC-Boke
 #### Common.swift
 记录一些通知名常量、`listViewModel`首页加载博客全局变量、以及加载图片位于的缓存器`imageCache`
 #### NetworkTools.swift
-网络类，请求API
+网络类，请求`API`
 #### SQLiteManager.swift
 在这里创建`db.sql`内含有的数据库`createTable()`方法以及`execRecordSet()`封装方法用于获取数据库内的信息
 #### OAuth
-2.0版本的登录、注册
+`2.0`版本的登录、注册
 ##### OAuthViewController.swift
 链接登录、注册用户网页的界面
 
 ### View
-记录了UI视图控制器
+记录了`UI`视图控制器
 #### Compose
 发送一切
 ##### ComposeViewController.swift
@@ -133,7 +133,7 @@ AC-Boke
 #### Message
 好友界面
 ##### WebSocket
-链接WebSocket发送消息
+链接`WebSocket`发送消息
 ##### MessageMainTableViewController.swift
 加载好友列表
 #### UserAgreement
@@ -142,7 +142,7 @@ AC-Boke
 用户协议界面
 
 #### Blogs
-处理博客UI的任务
+处理博客`UI`的任务
 ##### LiveList
 加载正在直播的信息列表
 ##### CommentTableViewController.swift
@@ -207,25 +207,25 @@ AC-Boke
 
 **前往Resource文件夹**
 
-1. 下载homebrew
+1. 下载`homebrew`
 2. 按如下语句进行配置即可
 
 ### 安装nginx
-为了直播推流而安装的nginx。
+为了直播推流而安装的`nginx`。
 ```
 brew tap denji/nginx
 brew install nginx-full --with-rtmp-module
 ```
 
 ### 安装mysql
-为了在本地创建mysql数据库`ac_inc`而安装。
+为了在本地创建`mysql`数据库`ac_inc`而安装。
 ```
 brew install mysql
 brew services start mysql
 ```
 
 ### 安装php
-只使用phpStorm需要配置Xdebug+PhpStorm+nginx才能支持直播功能（自行上网搜索使用），否则使用php-fpm+nginx，后者需要将`localhost`文件夹内内容搬运到`/opt/homebrew/var/www`。
+只使用`PhpStorm`需要配置`Xdebug+PhpStorm+nginx`才能支持直播功能（自行上网搜索使用），否则使用`php-fpm+nginx`，后者需要将`localhost`文件夹内内容搬运到`/opt/homebrew/var/www`。
 ```
 brew install php
 brew services start php
@@ -248,13 +248,13 @@ YOUR_PASSWORD
 
 默认`YOUR_PASSWORD=123456`，需修改`localhost/api`文件夹下将所有链接数据库语句中密码实参值替换成您的密码
 
-nginx.conf需要进行修改。
+`nginx.conf`需要进行修改。
 
-nginx.conf:80: 将`alias video`中的`video`替换成您存储直播切片的文件夹。
+`nginx.conf:80`: 将`alias video`中的`video`替换成您存储直播切片的文件夹。
 
-nginx.conf:84: `rtmp-nginx-module`替换为`rtmp-nginx-module`文件夹安装位置。
+`nginx.conf:84`: `rtmp-nginx-module`替换为`rtmp-nginx-module`文件夹安装位置。
 
-直播功能由于mac不可用，新版本使用`0.0.0.0:8080`为服务器的ip，建议将api内与直播设置rtmp内的重定向链接、存储到数据库的图片链接中`localhost`以及项目内的`localhost`替换为`mac`在网络中的`ip`，并使用真机运行。
+直播功能由于`mac`不可用，新版本使用`0.0.0.0:8080`为服务器的`ip`，建议将`api`内与直播设置`rtmp`内的重定向链接、存储到数据库的图片链接中`localhost`以及项目内的`localhost`替换为`mac`在网络中的`ip`，并使用真机运行。
 
 ### 运行websocket项目
 
