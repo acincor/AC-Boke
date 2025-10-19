@@ -17,7 +17,7 @@ if(isset($_FILES['pic']) && isset($_POST['access_token'])) {
                         if(!is_bool($query)){
                             $arr = mysqli_fetch_assoc($query);
                             if($arr != null) {
-                                unlink(".".explode("http://:8080/api",$arr["portrait"])[1]);
+                                unlink(".".explode("http://localhost:8080/api",$arr["portrait"])[1]);
                                 exit(json_encode(["msg"=>move_uploaded_file($_FILES["pic"]['tmp_name'], ".".explode("http://localhost:8080/api",$arr["portrait"])[1])],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
                             }
                         }
