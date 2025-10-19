@@ -71,7 +71,7 @@ class BKLiveController: UIViewController {
     lazy var hkView = MTHKView(frame: view.bounds)
     @objc func startLive(_ sender: Any) async throws {
         do {
-            try self.session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+            try self.session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetoothHFP])
             try self.session.setActive(true)
         } catch {
             //print(error)

@@ -127,6 +127,7 @@ class HomeTableViewController: BlogTableViewController {
         }
         refreshControl?.beginRefreshing()
         liveView.userListViewModel.loadFLFL(specialClass: .live) { (isSuccessful) in
+            print(self.liveView.userListViewModel.list)
             Task { @MainActor in
                 self.refreshControl?.endRefreshing()
                 if !isSuccessful {
@@ -136,6 +137,7 @@ class HomeTableViewController: BlogTableViewController {
                 self.liveView.collectionView.reloadData()
             }
         }
+        
         self.tableView.tableHeaderView = liveView.userListViewModel.list.isEmpty ? nil : self.liveView
     }
     private lazy var pulldownTipLabel: UILabel = {

@@ -2,12 +2,11 @@
   "sourceLanguage" : "zh-Hans",
   "strings" : {
     " 删除" : {
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " Delete"
+            "value" : "Delete"
           }
         }
       }

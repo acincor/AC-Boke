@@ -225,7 +225,7 @@ brew services start mysql
 ```
 
 ### 安装php
-为了给phpStorm可执行的php编译器，于是安装brew的php。
+只使用phpStorm需要配置Xdebug+PhpStorm+nginx才能支持直播功能（自行上网搜索使用），否则使用php-fpm+nginx，后者需要将`localhost`文件夹内内容搬运到`/opt/homebrew/var/www`。
 ```
 brew install php
 brew services start php
@@ -250,11 +250,11 @@ YOUR_PASSWORD
 
 nginx.conf需要进行修改。
 
-nginx.conf:83: 将`alias video`中的`video`替换成您存储直播切片的文件夹。
+nginx.conf:80: 将`alias video`中的`video`替换成您存储直播切片的文件夹。
 
-nginx.conf:84: 如果您的`rtmp-nginx-module`文件夹安装位置与我不同（或版本不同）请将根文件夹一并修改。
+nginx.conf:84: `rtmp-nginx-module`替换为`rtmp-nginx-module`文件夹安装位置。
 
-建议使用phpStorm启动项目，比较容易维护。
+直播功能由于mac不可用，新版本使用`0.0.0.0:8080`为服务器的ip，建议将api内与直播设置rtmp内的重定向链接、存储到数据库的图片链接中`localhost`以及项目内的`localhost`替换为`mac`在网络中的`ip`，并使用真机运行。
 
 ### 运行websocket项目
 

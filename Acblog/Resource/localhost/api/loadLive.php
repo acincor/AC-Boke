@@ -19,13 +19,14 @@ if(isset($_GET['access_token'])) {
             $arr = [];
             $query = mysqli_query($mysql,"select * from live where TIMESTAMPDIFF(HOUR, createTime, NOW()) < 24"." ORDER BY createTime DESC");
             while($blog = mysqli_fetch_assoc($query)) {
-                $q = mysqli_query($mysql,"select user,portrait from users where uid = ".$blog['uid']);
+                $q = mysqli_query($mysql,"select user,portrait,fans from users where uid = ".$blog['uid']);
                 if(!is_bool($q)) {
                     $array = mysqli_fetch_assoc($q);
                     if($array != NULL) {
                         $blog['user'] = $array['user'];
                         $blog['portrait'] = $array['portrait'];
                         $blog['uid'] = intval($blog['uid']);
+                        $blog['isfollowed'] = array_search(["uid"=>$_GET["uid"]],json_decode($array['fans'],true));
                         unset($blog['createTime']);
                         array_push($arr,$blog);
                     }

@@ -148,6 +148,7 @@ extension NetworkTools {
     }
     @MainActor func loadFLFL(finished: @escaping HMRequestCallBack, _ uid: String? = nil, specialClass: SpecialClass) {
         var urlString = rootHost+"/api/"
+        var type: HMRequestMethod = .POST
         if specialClass == .friend {
             urlString += "friends"
         } else if specialClass == .fans {
@@ -156,9 +157,10 @@ extension NetworkTools {
             urlString += "follow"
         } else if specialClass == .live {
             urlString += "loadLive"
+            type = .GET
         }
         urlString += ".php"
-        tokenRequest(.POST, urlString, uid != nil ? ["uid": uid!] : nil, finished: finished)
+        tokenRequest(type, urlString, uid != nil ? ["uid": uid!] : nil, finished: finished)
     }
     @MainActor func rename(rename: String,finished: @escaping HMRequestCallBack) {
         var params = [String: Any]()
