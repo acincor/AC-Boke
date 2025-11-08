@@ -81,7 +81,7 @@ class BKLiveController: UIViewController {
                 let host = localTest ? "rtmp://localhost:1935/live" : "rtmp://mhcincapi.top:1935/live"
                 let name = UserAccountViewModel.sharedUserAccount.account?.uid ?? ""
                 _ = try await connection.connect(host)
-                _ = try await stream.publish(name)
+                _ = try await stream.publish(name, type: .live)
                 //await mixer.startCapturing()
                 await mixer.startRunning()
                 startButton.isHidden = true
