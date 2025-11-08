@@ -1,4 +1,5 @@
 <?php
+header('Access-Control-Allow-Origin:*');
 $mysql = mysqli_connect("localhost", "root", "123456","ac_inc");
 if(isset($_GET['name'])) {
     $sql = "insert into live(uid) values (".$_GET['name'].");";

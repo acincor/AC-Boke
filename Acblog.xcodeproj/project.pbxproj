@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,7 +12,9 @@
 		04C1F1D32E14231A005A12EA /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = 5860758E2CAD06C700D19AB1 /* FMDB */; };
 		04C1F4022E144C14005A12EA /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 04C1F4012E144C14005A12EA /* SVProgressHUD */; };
 		04C1F4052E145271005A12EA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04C1F4042E145271005A12EA /* SnapKit */; };
+		9E0FE8C02EBE2D5800A56B5F /* RTMPHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E0FE8BF2EBE2D5800A56B5F /* RTMPHaishinKit */; };
 		9E5668DC2E3C72A1003FEDD4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 9E5668DB2E3C72A1003FEDD4 /* Kingfisher */; };
+		9EC8ECA12EBE69CB00C976F8 /* RTCHaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9EC8ECA02EBE69CB00C976F8 /* RTCHaishinKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,15 +27,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Resource/localhost/.idea/.gitignore,
-				Resource/localhost/.idea/mhcincapi.top_20250815_122837.iml,
-				Resource/localhost/.idea/modules.xml,
-				Resource/localhost/.idea/php.xml,
-				Resource/localhost/.idea/workspace.xml,
-				Resource/localhost/50x.html,
-				Resource/localhost/404.html,
-				Resource/localhost/favicon.ico,
-				Resource/localhost/index.html,
 				Resource/nginx.conf,
 				Resource/target/classes/application.properties,
 				Resource/target/classes/com/example/wss/WebSocketConfig.class,
@@ -95,16 +88,16 @@
 /* Begin PBXFrameworksBuildPhase section */
 		5879D10D2CA7CC3B000F54F0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				04C1F4022E144C14005A12EA /* SVProgressHUD in Frameworks */,
 				04C1F1D32E14231A005A12EA /* FMDB in Frameworks */,
+				9EC8ECA12EBE69CB00C976F8 /* RTCHaishinKit in Frameworks */,
 				04C1F4052E145271005A12EA /* SnapKit in Frameworks */,
 				9E5668DC2E3C72A1003FEDD4 /* Kingfisher in Frameworks */,
 				04C1F1D02E14231A005A12EA /* SRTHaishinKit in Frameworks */,
+				9E0FE8C02EBE2D5800A56B5F /* RTMPHaishinKit in Frameworks */,
 				04C1F1CF2E14231A005A12EA /* HaishinKit in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -147,8 +140,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
 				5879D1122CA7CC3B000F54F0 /* Acblog */,
 			);
@@ -160,6 +151,8 @@
 				04C1F4012E144C14005A12EA /* SVProgressHUD */,
 				04C1F4042E145271005A12EA /* SnapKit */,
 				9E5668DB2E3C72A1003FEDD4 /* Kingfisher */,
+				9E0FE8BF2EBE2D5800A56B5F /* RTMPHaishinKit */,
+				9EC8ECA02EBE69CB00C976F8 /* RTCHaishinKit */,
 			);
 			productName = Acblog;
 			productReference = 5879D1102CA7CC3B000F54F0 /* Acblog.app */;
@@ -196,7 +189,7 @@
 				04C1F4002E144C14005A12EA /* XCRemoteSwiftPackageReference "svprogresshud" */,
 				9E5668DA2E3C72A1003FEDD4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = 5879D1072CA7CC3B000F54F0;
 			projectDirPath = "";
 			projectRoot = "";
@@ -209,25 +202,21 @@
 /* Begin PBXResourcesBuildPhase section */
 		5879D10E2CA7CC3B000F54F0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5879D10C2CA7CC3B000F54F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		5879D1242CA7CC3C000F54F0 /* Debug */ = {
+		5879D1242CA7CC3C000F54F0 /* Debug configuration for PBXNativeTarget "Acblog" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -237,7 +226,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
@@ -247,9 +236,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Acblog/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "AC博客想使用您的摄像头";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AC博客想要获取你的地址";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "AC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "AC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -279,7 +269,7 @@
 			};
 			name = Debug;
 		};
-		5879D1252CA7CC3C000F54F0 /* Release */ = {
+		5879D1252CA7CC3C000F54F0 /* Release configuration for PBXNativeTarget "Acblog" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -289,7 +279,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
@@ -299,9 +289,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Acblog/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "AC博客想使用您的摄像头";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AC博客想要获取你的地址";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "AC博客想使用您的Microphone";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "AC博客想访问你的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -331,7 +322,7 @@
 			};
 			name = Release;
 		};
-		5879D1262CA7CC3C000F54F0 /* Debug */ = {
+		5879D1262CA7CC3C000F54F0 /* Debug configuration for PBXProject "Acblog" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -368,7 +359,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -402,7 +393,7 @@
 			};
 			name = Debug;
 		};
-		5879D1272CA7CC3C000F54F0 /* Release */ = {
+		5879D1272CA7CC3C000F54F0 /* Release configuration for PBXProject "Acblog" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -440,7 +431,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = P2AJHF4ZX2;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -473,19 +464,17 @@
 		5879D10B2CA7CC3B000F54F0 /* Build configuration list for PBXProject "Acblog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5879D1262CA7CC3C000F54F0 /* Debug */,
-				5879D1272CA7CC3C000F54F0 /* Release */,
+				5879D1262CA7CC3C000F54F0 /* Debug configuration for PBXProject "Acblog" */,
+				5879D1272CA7CC3C000F54F0 /* Release configuration for PBXProject "Acblog" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		5879D1232CA7CC3C000F54F0 /* Build configuration list for PBXNativeTarget "Acblog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5879D1242CA7CC3C000F54F0 /* Debug */,
-				5879D1252CA7CC3C000F54F0 /* Release */,
+				5879D1242CA7CC3C000F54F0 /* Debug configuration for PBXNativeTarget "Acblog" */,
+				5879D1252CA7CC3C000F54F0 /* Release configuration for PBXNativeTarget "Acblog" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
@@ -512,7 +501,7 @@
 			repositoryURL = "https://github.com/shogo4405/HaishinKit.swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.8;
+				minimumVersion = 2.2.0;
 			};
 		};
 		5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */ = {
@@ -559,10 +548,20 @@
 			package = 5860758D2CAD06C700D19AB1 /* XCRemoteSwiftPackageReference "fmdb" */;
 			productName = FMDB;
 		};
+		9E0FE8BF2EBE2D5800A56B5F /* RTMPHaishinKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */;
+			productName = RTMPHaishinKit;
+		};
 		9E5668DB2E3C72A1003FEDD4 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9E5668DA2E3C72A1003FEDD4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		9EC8ECA02EBE69CB00C976F8 /* RTCHaishinKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5809BEB22CAB81FD00D8132B /* XCRemoteSwiftPackageReference "HaishinKit" */;
+			productName = RTCHaishinKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,4 +1,5 @@
 <?php
+header('Access-Control-Allow-Origin:*');
 header('Content-Type:application/json; charset=utf-8');
     $mysql = mysqli_connect("localhost", "root", "123456","ac_inc");
     $sql = "create table if not exists users (".

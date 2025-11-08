@@ -16,6 +16,7 @@ if(isset($_GET['access_token'])) {
                 mysqli_query($mysql,"DELETE FROM access_tokens WHERE access_token = '".$_GET['access_token']."'");
                 exit(json_encode(["msg"=>"access_token expired!"],JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
             }
+          $uid = $array["uid"];
             $arr = [];
             $query = mysqli_query($mysql,"select * from live where TIMESTAMPDIFF(HOUR, createTime, NOW()) < 24"." ORDER BY createTime DESC");
             while($blog = mysqli_fetch_assoc($query)) {
@@ -26,7 +27,7 @@ if(isset($_GET['access_token'])) {
                         $blog['user'] = $array['user'];
                         $blog['portrait'] = $array['portrait'];
                         $blog['uid'] = intval($blog['uid']);
-                        $blog['isfollowed'] = array_search(["uid"=>$_GET["uid"]],json_decode($array['fans'],true));
+                        $blog['isfollowed'] = array_search(["uid"=>$uid],json_decode($array['fans'],true));
                         unset($blog['createTime']);
                         array_push($arr,$blog);
                     }
